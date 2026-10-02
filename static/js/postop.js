@@ -126,7 +126,7 @@
     });
     h += '</ul>';
 
-    h += '<div class="table-wrapper"><table class="schedule-table schedule-table--days"><thead><tr><th scope="col">Date</th>';
+    h += '<div class="table-wrapper"><table class="schedule-table schedule-table--stack"><thead><tr><th scope="col">Date</th>';
     sch.columns.forEach(function (c) {
       h += '<th scope="col">' + esc(c.label) + '<br><span class="schedule-drug">' + esc(c.drug) + '</span></th>';
     });
