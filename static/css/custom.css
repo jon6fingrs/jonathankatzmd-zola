@@ -165,7 +165,10 @@ body { color: var(--jk-ink); font-family: var(--jk-body); }
   .jk-brand__title { font-size: 2.3rem; }
   .jk-navwrap { padding: 0 1.25rem; }
   .jk-navbar .navbar-collapse { margin-top: .75rem; flex-basis: 100%; }
-  .jk-navbar .nav-link { padding: .6rem 0 !important; }
+  .jk-navbar .nav-link { padding: .75rem 0 !important; }
+  .jk-navbar .dropdown-menu { border: 0; background: transparent; padding: 0 0 .5rem 2.1rem; }
+  .jk-navbar .dropdown-item { padding: .55rem 0; color: var(--jk-ink); }
+  .jk-navbar .dropdown-item:hover, .jk-navbar .dropdown-item:focus { background: transparent; }
 }
 
 /* ===================================================================
@@ -590,6 +593,43 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 }
 
 /* ===================================================================
+   ARTICLES (Learn pages, Privacy)
+   =================================================================== */
+.jk-page--article .jk-page__body { max-width: 720px; font-size: 1.05rem; line-height: 1.65; }
+.jk-page--article .jk-page__body h2 { font-size: 1.35rem; margin: 2rem 0 .6rem; font-weight: 700; }
+.jk-page--article .jk-page__body p, .jk-page--article .jk-page__body li { margin-bottom: .9rem; }
+.jk-page--article .jk-page__body li { margin-bottom: .45rem; }
+.jk-page--article .jk-page__body a { color: var(--jk-accent); }
+.jk-article-nav { border-top: 1px solid var(--jk-line); margin-top: 2.5rem; padding-top: 1rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-size: .95rem; }
+.jk-article-nav a { color: var(--jk-accent); text-decoration: none; }
+.jk-article-nav a:hover { text-decoration: underline; }
+
+/* ===================================================================
+   HOME SECTIONS
+   =================================================================== */
+.jk-hero__blurb { max-width: 30rem; margin: 1rem 0 1.25rem; color: var(--jk-muted); font-size: 1.1rem; }
+.jk-hero__cta { display: flex; flex-wrap: wrap; gap: .6rem; }
+@media (max-width: 767px) { .jk-hero__cta { justify-content: center; } .jk-hero__blurb { margin-left: auto; margin-right: auto; } }
+.jk-home-section { padding: 2.5rem 0; }
+.jk-home-section--alt { background: #fff; border-top: 1px solid var(--jk-line); border-bottom: 1px solid var(--jk-line); }
+.jk-home-section .jk-sectionhead { margin-top: 0; }
+.jk-home-section__lede { max-width: 720px; color: var(--jk-muted); margin: -.25rem 0 1.25rem; }
+.jk-card--tool { position: relative; padding-top: 1.4rem; }
+.jk-card__icon { display: block; font-size: 1.6rem; line-height: 1; margin-bottom: .6rem; color: var(--jk-accent); }
+.jk-home-about { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+@media (min-width: 900px) { .jk-home-about { grid-template-columns: 1.4fr 1fr; gap: 3rem; } }
+.jk-home-about__text p { font-size: 1.02rem; line-height: 1.6; }
+.jk-home-about__links a { color: var(--jk-accent); }
+.jk-home-about__links span { margin: 0 .5rem; color: var(--jk-muted); }
+.jk-home-about__offices { background: var(--jk-soft); border-radius: 10px; padding: 1.25rem 1.4rem; }
+.jk-home-about__offices h3 { font-size: 1.15rem; margin: 0 0 .5rem; }
+.jk-phonelist { list-style: none; padding: 0; margin: 0 0 .9rem; }
+.jk-phonelist li { display: flex; justify-content: space-between; gap: 1rem; padding: .45rem 0; border-bottom: 1px solid var(--jk-line); }
+.jk-phonelist li:last-child { border-bottom: 0; }
+.jk-phonelist a { color: var(--jk-accent); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.jk-home-about__offices .jk-note a { color: var(--jk-accent); }
+
+/* ===================================================================
    FOOTER
    =================================================================== */
 .jk-footer {
@@ -597,6 +637,10 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
   padding: 2rem 0; text-align: center;
   color: var(--jk-muted); font-size: .9rem;
 }
+.jk-footer__disclaimer { max-width: 640px; margin: 0 auto 1rem; font-size: .85rem; }
+.jk-footer__links { display: flex; justify-content: center; flex-wrap: wrap; gap: 1.25rem; margin-bottom: .75rem; }
+.jk-footer__links a { color: var(--jk-ink); text-decoration: none; }
+.jk-footer__links a:hover { color: var(--jk-accent); }
 
 /* ===================================================================
    PRINT LETTERHEAD — only appears on paper

@@ -22,6 +22,9 @@ tagline_2 = "Glaucoma Specialist"
 hero_image = "images/team/jonathan-katz-cutout.png"
 about_image = "images/team/jonathan-katz.jpg"
 katzen_bio_url = "https://www.katzeneye.com/doctors/jonathan-katz/"
+katzen_url = "https://www.katzeneye.com/"
+# Main number shown in "call to schedule" blocks (Lutherville / Towson office).
+main_phone = "410-821-9490"
 # --- Plausible Analytics (self-hosted, proxied first-party) ------------
 # `src` and `api_endpoint` are served from THIS domain and proxied to
 # plausible.katz.vision by nginx, so ad blockers (which match both the
@@ -43,6 +46,8 @@ custom_events = true
 
 
 # Top navigation. `children` renders a dropdown.
+# The Videos page exists (content/videos.md) but is a draft until there are
+# videos to show, so it is not linked here.
 [[extra.menus]]
 name = "HOME"
 url = "/"
@@ -54,23 +59,47 @@ url = "/about/"
 icon = "images/nav/doctor.svg"
 
 [[extra.menus]]
-name = "VIDEOS"
-url = "/videos/"
-icon = "images/nav/video.svg"
-
-[[extra.menus]]
 name = "FOR PATIENTS"
 url = "/patients/"
 icon = "images/nav/eye.svg"
   [[extra.menus.children]]
-  name = "EYE DROPS"
+  name = "EYE DROP REFERENCE"
   url = "/patients/eye-drops/"
   [[extra.menus.children]]
-  name = "EYE DROP FORM"
+  name = "EYE DROP SCHEDULE BUILDER"
   url = "/patients/eye-drop-form/"
   [[extra.menus.children]]
   name = "POST-OP SCHEDULE"
   url = "/patients/post-op-schedule/"
+
+[[extra.menus]]
+name = "LEARN"
+url = "/learn/"
+icon = "images/nav/book.svg"
+  [[extra.menus.children]]
+  name = "WHAT IS GLAUCOMA?"
+  url = "/learn/what-is-glaucoma/"
+  [[extra.menus.children]]
+  name = "GLAUCOMA TESTING"
+  url = "/learn/glaucoma-testing/"
+  [[extra.menus.children]]
+  name = "USING EYE DROPS"
+  url = "/learn/using-eye-drops/"
+  [[extra.menus.children]]
+  name = "SLT LASER"
+  url = "/learn/slt-laser/"
+  [[extra.menus.children]]
+  name = "MIGS"
+  url = "/learn/migs/"
+  [[extra.menus.children]]
+  name = "TRABECULECTOMY"
+  url = "/learn/trabeculectomy/"
+  [[extra.menus.children]]
+  name = "TUBE SHUNT SURGERY"
+  url = "/learn/tube-shunt-surgery/"
+  [[extra.menus.children]]
+  name = "CATARACT SURGERY"
+  url = "/learn/cataract-surgery/"
 
 [[extra.menus]]
 name = "CONTACT"
@@ -82,6 +111,9 @@ icon = "images/nav/human-greeting-proximity.svg"
 name = "Lutherville / Towson"
 map_embed = "https://www.openstreetmap.org/export/embed.html?bbox=-76.62268638610841%2C39.41217537071112%2C-76.60410404205324%2C39.42251938075945&layer=mapnik&marker=39.41734756759902%2C-76.61339521408081"
 address = "1209 York Road, Lutherville, MD 21093"
+street = "1209 York Road"
+city = "Lutherville"
+zip = "21093"
 phone = "410-821-9490"
 map_url = "https://www.google.com/maps/search/?api=1&query=Katzen+Eye+Group+1209+York+Rd+Timonium+MD+21093"
 hours = [
@@ -95,6 +127,9 @@ hours = [
 name = "Rosedale"
 map_embed = "https://www.openstreetmap.org/export/embed.html?bbox=-76.48748427629472%2C39.35079464849381%2C-76.48516148328783%2C39.35208887133502&layer=mapnik&marker=39.351441762910916%2C-76.48632287979126"
 address = "Ridge Road Professional Center, 7106 Ridge Road, Rosedale, MD 21237"
+street = "7106 Ridge Road"
+city = "Rosedale"
+zip = "21237"
 phone = "410-866-2022"
 map_url = "https://www.google.com/maps/search/?api=1&query=Katzen+Eye+Group+7106+Ridge+Rd+Rosedale+MD+21237"
 hours = [
@@ -108,6 +143,9 @@ hours = [
 name = "Mercy Hospital"
 map_embed = "https://www.openstreetmap.org/export/embed.html?bbox=-76.62219285964967%2C39.28820989279401%2C-76.6036105155945%2C39.298572272043046&layer=mapnik&marker=39.29339127411664%2C-76.61290168762207"
 address = "301 Saint Paul Place, Professional Office Building, Suite 514, Baltimore, MD 21202"
+street = "301 Saint Paul Place, Suite 514"
+city = "Baltimore"
+zip = "21202"
 phone = "410-727-8380"
 map_url = "https://www.google.com/maps/search/?api=1&query=Katzen+Eye+Group+301+St+Paul+Pl+Baltimore+MD+21202"
 hours = ["Monday-Friday: 8:00am-4:00pm"]
@@ -116,6 +154,9 @@ hours = ["Monday-Friday: 8:00am-4:00pm"]
 name = "Abingdon"
 map_embed = "https://www.openstreetmap.org/export/embed.html?bbox=-76.37935638427736%2C39.42863554909507%2C-76.23069763183595%2C39.511325097840384&layer=mapnik&marker=39.46999260717818%2C-76.30502700805664"
 address = "3401 Box Hill Corporate Center Drive, Suite 202, Abingdon, MD 21009"
+street = "3401 Box Hill Corporate Center Drive, Suite 202"
+city = "Abingdon"
+zip = "21009"
 phone = "410-569-0707"
 map_url = "https://www.google.com/maps/search/?api=1&query=Katzen+Eye+Group+3401+Box+Hill+Corporate+Center+Dr+Abingdon+MD+21009"
 hours = [
@@ -131,6 +172,9 @@ hours = [
 name = "Dulaney Eye Institute"
 map_embed = "https://www.openstreetmap.org/export/embed.html?bbox=-76.62268638610841%2C39.41217537071112%2C-76.60410404205324%2C39.42251938075945&layer=mapnik&marker=39.41734756759902%2C-76.61339521408081"
 address = "901 Dulaney Valley Road, Suite 200, Towson, MD 21204"
+street = "901 Dulaney Valley Road, Suite 200"
+city = "Towson"
+zip = "21204"
 phone = "410-583-1000"
 map_url = "https://www.google.com/maps/search/?api=1&query=Dulaney+Eye+Institute+901+Dulaney+Valley+Rd+Towson+MD+21204"
 hours = ["Monday-Friday: 8:00am-4:00pm"]

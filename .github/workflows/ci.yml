@@ -1,0 +1,58 @@
+# Builds the site and runs the dosing-rule tests on every push and pull
+# request. There is no deploy step: production is still rsync + a container
+# restart (see README). A red check here means "don't deploy this".
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build:
+    name: Build site and run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Zola (same version as docker-compose.yml)
+        run: |
+          curl -sSL -o zola.tar.gz https://github.com/getzola/zola/releases/download/v0.23.3/zola-v0.23.3-x86_64-unknown-linux-gnu.tar.gz
+          tar xzf zola.tar.gz zola
+          sudo mv zola /usr/local/bin/zola
+          zola --version
+
+      - name: Build
+        run: zola build
+
+      - name: Check internal links
+        run: zola check --skip-external-links
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Dosing-rule tests
+        run: node --test 'tests/**/*.test.js'
+
+      - name: Drug data is valid JSON with the expected keys
+        run: |
+          node -e '
+            const d = require("./static/data/eye-drops.json");
+            const keys = ["generic","brand","color","use","dosage","notes","photos"];
+            const fs = require("fs");
+            let bad = 0;
+            for (const e of d) {
+              for (const k of keys) if (!(k in e)) { console.error("missing", k, "in", e.generic); bad++; }
+              for (const p of e.photos) if (!fs.existsSync("static/images/drops/" + p)) { console.error("missing photo", p, "for", e.generic); bad++; }
+            }
+            console.log(d.length, "drugs checked");
+            process.exit(bad ? 1 : 0);
+          '
+
+      - name: Upload built site
+        uses: actions/upload-artifact@v4
+        with:
+          name: public
+          path: public/
+          retention-days: 7
