@@ -1,0 +1,18 @@
+{% extends "jk-base.html" %}
+
+{% block content %}
+<section class="jk-hero">
+  <div class="container">
+    <div class="jk-hero__inner">
+      <div class="jk-hero__figure">
+        <img src="{{ get_url(path=config.extra.hero_image) }}" alt="{{ config.title }}">
+      </div>
+      <div class="jk-hero__text">
+        <h1 class="jk-hero__name">{{ config.title }}</h1>
+        <p class="jk-hero__tagline">{{ config.extra.tagline_1 }}</p>
+        <p class="jk-hero__tagline">{{ config.extra.tagline_2 }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

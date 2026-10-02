@@ -1,0 +1,139 @@
+# Template for nginx.conf — copy to nginx.conf and replace the CHANGEME
+# values. The real file is gitignored not because it holds secrets (it
+# doesn't) but because it's tied to this one deployment's container names
+# and internal routing. This template keeps the actual logic — several
+# rounds of real debugging are encoded in the comments below — without the
+# deployment-specific values.
+#
+#   cp nginx.conf.example nginx.conf
+
+server {
+    listen 80;
+    server_name _;
+    root /site/public;
+    index index.html;
+
+    # Docker's embedded DNS. Needed because every proxy_pass below targets
+    # a hostname through a `set $var` rather than literally — see the note
+    # at each proxy_pass for why.
+    resolver 127.0.0.11 valid=30s ipv6=off;
+
+    # nginx terminates plain HTTP here (Traefik does TLS in front), so any
+    # 301 nginx generates itself — directory normalisation, a missing
+    # trailing slash — would be built as http://... An HTTPS-enforcing
+    # layer in front then bounces that back to https, which hits nginx
+    # again: redirect loop. Relative redirects keep the scheme the client
+    # already used.
+    absolute_redirect off;
+    port_in_redirect off;
+
+    # Serve Zola's generated 404 page instead of nginx's built-in one.
+    # Without this, `=404` below returns nginx's bare "404 Not Found" and
+    # the site's own 404 page — and anything on it, like an analytics
+    # event — never loads.
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+
+    # ---------------------------------------------------------------
+    # OPTIONAL: first-party analytics proxy (e.g. self-hosted Plausible).
+    # Ad blockers match on both the analytics host's name ("plausible" in
+    # a hostname) and well-known paths (/js/script.js, /api/event). Proxying
+    # through this domain under different names defeats both. Delete this
+    # whole block if you aren't self-hosting analytics.
+    #
+    # CRITICAL: the event endpoint must forward the real visitor IP in
+    # X-Forwarded-For. If it's missing, or carries this server's IP instead
+    # of the visitor's, most self-hosted analytics tools' bot filters will
+    # drop the event silently — no error, just no data recorded.
+    # ---------------------------------------------------------------
+    location = /js/vx.js {
+        set $analytics_host CHANGEME.example.com;
+        proxy_pass https://$analytics_host/js/script.js;
+        proxy_set_header Host $analytics_host;
+        proxy_ssl_name $analytics_host;
+        proxy_ssl_server_name on;   # required if the upstream serves
+                                    # multiple hostnames via SNI
+        proxy_ssl_session_reuse off;
+        proxy_http_version 1.1;
+        proxy_buffering on;
+    }
+
+    location = /vx/event {
+        set $analytics_host CHANGEME.example.com;
+        proxy_pass https://$analytics_host/api/event;
+        proxy_set_header Host $analytics_host;
+        proxy_ssl_name $analytics_host;
+        proxy_ssl_server_name on;
+        proxy_ssl_session_reuse off;
+        proxy_http_version 1.1;
+        proxy_buffering on;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+    }
+
+    # ---------------------------------------------------------------
+    # OPTIONAL: legacy CMS URL migration. Add one `location =` per old URL
+    # that has real inbound links or search engine rankings worth
+    # preserving — get this list from the old CMS's own sitemap/export, not
+    # by crawling (a crawl misses unlinked pages). Delete once server logs
+    # show no more hits on these paths.
+    # ---------------------------------------------------------------
+    # location = /old-path/ { return 301 /new-path/; }
+
+    # Old media at predictable paths (e.g. WordPress's
+    # /wp-content/uploads/YYYY/MM/filename) can be mapped in bulk if the
+    # filenames carried over unchanged:
+    # location ~ "^/wp-content/uploads/[0-9]{4}/[0-9]{2}/(?<f>.+)$" {
+    #     return 301 /images/CHANGEME/$f;
+    # }
+    # Note the regex is quoted — an unquoted { } in the pattern is parsed
+    # by nginx as a config block and fails to start.
+
+    # Dead CMS admin/config paths: 410 Gone (permanently gone), not 404.
+    # Tells crawlers to drop the URL, and keeps bot noise out of the 404
+    # handler's own logging.
+    # location ~ ^/(wp-content|wp-includes|wp-json|wp-admin)/  { return 410; }
+    # location ~ ^/(wp-login\.php|xmlrpc\.php|wp-cron\.php)$   { return 410; }
+
+    location / {
+        try_files $uri $uri/ $uri/index.html =404;
+    }
+
+    # ---------------------------------------------------------------
+    # OPTIONAL: self-hosted contact-form backend (e.g. hugo-contact).
+    # Delete if the site has no backend-requiring form.
+    #
+    # Hostnames go through `set $var` rather than being written literally
+    # in proxy_pass. With a literal hostname, nginx resolves it ONCE AT
+    # STARTUP and refuses to start at all if that container isn't up yet —
+    # which took the whole site down during development, not just the
+    # form. The variable form defers resolution to request time, so nginx
+    # starts regardless, and a request to the form simply 502s if the
+    # backend is down instead of the entire site failing.
+    # ---------------------------------------------------------------
+    location /f/ {
+        set $form_backend CHANGEME-contact-form:8080;
+        proxy_pass http://$form_backend;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Origin $http_origin;
+    }
+
+    location = /form-token.js {
+        set $form_backend_token CHANGEME-contact-form:8080;
+        proxy_pass http://$form_backend_token/form-token.js;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        add_header Cache-Control "no-store" always;
+    }
+
+    location ~* \.(?:css|js|svg|png|jpg|jpeg|gif|webp|avif|woff2?)$ {
+        expires 7d;
+        access_log off;
+    }
+}
+

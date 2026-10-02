@@ -1,0 +1,21 @@
+<article class="jk-office">
+  <h3 class="jk-office__name">{{ loc.name }}</h3>
+  <div class="jk-office__grid">
+    <div class="jk-office__details">
+      <p class="jk-office__address">
+        <a href="{{ loc.map_url }}" target="_blank" rel="noopener">{{ loc.address }}</a>
+      </p>
+      <p class="jk-office__phone">
+        <a href="tel:{{ loc.phone | replace(from='-', to='') }}">{{ loc.phone }}</a>
+      </p>
+      <ul class="jk-office__hours">
+        {% for line in loc.hours %}<li>{{ line }}</li>{% endfor %}
+      </ul>
+    </div>
+    {% if loc.map_embed %}
+    <div class="jk-office__map">
+      <iframe src="{{ loc.map_embed }}" loading="lazy" title="Map: {{ loc.name }}"></iframe>
+    </div>
+    {% endif %}
+  </div>
+</article>

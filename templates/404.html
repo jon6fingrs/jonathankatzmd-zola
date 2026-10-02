@@ -1,0 +1,30 @@
+{% extends "jk-base.html" %}
+
+{# the theme wraps this block in <title> already — emit text only #}
+{% block title %}Page Not Found &mdash; {{ config.title }}{% endblock title %}
+
+{% block content %}
+<section class="jk-page jk-page--centered">
+  <div class="container">
+    <div class="jk-page__body">
+      <h1 class="jk-title">Page Not Found</h1>
+      <p>Sorry, that page doesn't exist or has moved.</p>
+      <p class="jk-morelink"><a href="{{ get_url(path='/') }}">Return to the home page</a></p>
+    </div>
+  </div>
+</section>
+{% endblock content %}
+
+{% block javascripts %}
+{{ super() }}
+{% if config.extra.plausible.enabled and config.extra.plausible.custom_events %}
+{# Sends a "404" custom event with the attempted path. Needs a matching
+   custom event goal named exactly "404" in Plausible, or it records
+   nothing. Must live in this template, not the shared layout. #}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    plausible('404', { props: { path: document.location.pathname } });
+  });
+</script>
+{% endif %}
+{% endblock javascripts %}

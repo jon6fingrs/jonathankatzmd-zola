@@ -1,0 +1,52 @@
+{# Page label shown under the site title. Empty on the home page. #}
+{% set page_label = "" %}
+{% if page is defined %}
+  {% set page_label = page.title %}
+{% elif section is defined and section.path != "/" %}
+  {% set page_label = section.title %}
+{% endif %}
+
+<header class="jk-header">
+  <nav class="navbar navbar-expand-lg jk-navbar">
+    <div class="jk-navwrap">
+      <a href="{{ get_url(path='/') }}" class="navbar-brand jk-brand">
+        <span class="jk-brand__title">{{ config.title }}</span>
+        {% if page_label %}<span class="jk-brand__page">{{ page_label }}</span>{% endif %}
+      </a>
+
+      {# three bars: the theme's CSS animates these into an X when expanded #}
+      <button type="button" class="navbar-toggler collapsed jk-toggler" data-bs-toggle="collapse"
+        data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+        <ul class="nav navbar-nav main-navigation">
+          {% for menu in config.extra.menus %}
+            {% if menu.children %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {% if menu.icon %}<img class="jk-navicon" src="{{ get_url(path=menu.icon) }}" alt="">{% endif %}{{ menu.name }}
+                </a>
+                <ul class="dropdown-menu">
+                  {% for child in menu.children %}
+                    <li><a class="dropdown-item" href="{{ get_url(path=child.url) }}"><span class="jk-navdot"></span>{{ child.name }}</a></li>
+                  {% endfor %}
+                </ul>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a href="{{ get_url(path=menu.url) }}" class="nav-link">
+                  {% if menu.icon %}<img class="jk-navicon" src="{{ get_url(path=menu.icon) }}" alt="">{% endif %}{{ menu.name }}
+                </a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,60 @@
+{% extends "jk-base.html" %}
+
+{% block page_stylesheets %}
+<link rel="stylesheet" href="{{ get_url(path='vendor/simple-datatables/simple-datatables.css', cachebust=true) }}">
+{% endblock page_stylesheets %}
+
+{% block content %}
+{% set drops = load_data(path="static/data/eye-drops.json") %}
+<section class="jk-page jk-page--fluid">
+  <div class="jk-fluidwrap">
+    <div class="jk-page__intro">
+      {{ page.content | safe }}
+    </div>
+
+    <div class="jk-tablescroll">
+      <table id="jk-drops-table" class="jk-datatable">
+        <thead>
+          <tr>
+            <th>Generic Name</th>
+            <th>Brand Name</th>
+            <th>Top Color</th>
+            <th>Use</th>
+            <th>Typical Dosage</th>
+            <th data-sortable="false" data-searchable="false">Photo</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in drops %}
+          <tr>
+            <td class="jk-td-generic">{{ d.generic }}</td>
+            <td>{{ d.brand }}</td>
+            <td class="jk-td-color" data-color="{{ d.color }}">{{ d.color }}</td>
+            <td>{{ d.use }}</td>
+            <td>{{ d.dosage }}</td>
+            <td class="jk-td-photo">{% for p in d.photos %}<img class="jk-drop" src="{{ get_url(path='images/drops/' ~ p) }}" alt="{{ d.generic }}{% if d.brand %} ({{ d.brand }}){% endif %}" loading="lazy">{% endfor %}</td>
+            <td>{{ d.notes }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+{# image lightbox #}
+<div id="jk-lightbox" class="jk-lightbox" hidden>
+  <button type="button" class="jk-lightbox__close" aria-label="Close">&times;</button>
+  <figure class="jk-lightbox__figure">
+    <img id="jk-lightbox-img" src="" alt="">
+    <figcaption id="jk-lightbox-cap"></figcaption>
+  </figure>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+{{ super() }}
+<script src="{{ get_url(path='vendor/simple-datatables/simple-datatables.js', cachebust=true) }}"></script>
+<script src="{{ get_url(path='js/droptable.js', cachebust=true) }}"></script>
+{% endblock javascripts %}

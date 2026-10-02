@@ -1,0 +1,21 @@
+{% extends "jk-base.html" %}
+
+{% block content %}
+<section class="jk-page">
+  <div class="container">
+    <div class="jk-page__body">
+      {{ section.content | safe }}
+      {% if section.pages %}
+      <div class="jk-cardgrid">
+        {% for p in section.pages %}
+        <a class="jk-card" href="{{ p.permalink }}">
+          <h3>{{ p.title }}</h3>
+          {% if p.description %}<p>{{ p.description }}</p>{% endif %}
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock content %}

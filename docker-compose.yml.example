@@ -1,0 +1,91 @@
+# Template for docker-compose.yml — copy this to docker-compose.yml and
+# fill in the placeholders. The real file is gitignored because the
+# hugo-contact block below holds actual secrets once filled in.
+#
+#   cp docker-compose.yml.example docker-compose.yml
+#
+# Three services:
+#   zola-build   — official Zola image, builds the site into /project/public
+#                  once per run, then exits. Restart this container to
+#                  rebuild after editing content.
+#   hugo-contact — self-hosted contact-form mailer (github.com/caffsoft/hugo-contact).
+#                  Sends over SMTP; needs the five env vars below.
+#   nginx        — serves the built site and proxies two things through to
+#                  look first-party: the contact form (/f/, /form-token.js)
+#                  and Plausible analytics (/js/vx.js, /vx/event), so ad
+#                  blockers that match on hostname/path don't strip them.
+#
+# Gotcha worth knowing: zola-build deletes and recreates /project/public on
+# every run. Never give nginx a SEPARATE volume mount at /site/public — it
+# will collide with that delete/recreate and nginx will fail to start with
+# "Resource busy" or similar. Mount the whole project directory into both
+# containers instead (as below) and let nginx's root point at the public/
+# subdirectory.
+
+services:
+  zola-build:
+    image: ghcr.io/getzola/zola:v0.23.3
+    container_name: CHANGEME-zola-build
+    working_dir: /project
+    volumes:
+      - /path/to/this/project:/project
+    command: ["build"]
+    restart: "no"
+
+  hugo-contact:
+    image: registry.example.com/hugo-contact   # or build from the GitHub repo
+    container_name: CHANGEME-hugo-contact
+    restart: unless-stopped
+    environment:
+      SMTP_HOST: "smtp.example.com"
+      SMTP_PORT: "587"                         # must be 587 (STARTTLS) —
+                                                # hugo-contact uses Go's
+                                                # net/smtp, which can't do
+                                                # implicit TLS on 465
+      SMTP_USERNAME: "you@example.com"
+      SMTP_PASSWORD: "CHANGEME"                # real secret — app password,
+                                                # not your account password
+      RECIPIENT_EMAIL: "you@example.com"
+      CORS_ALLOW_ORIGIN: "https://example.com" # must exactly match the
+                                                # live site origin, or the
+                                                # form returns 403
+      PORT: "8080"
+      TOKEN_SECRET: "CHANGEME"                 # real secret — generate with
+                                                # `openssl rand -base64 32`.
+                                                # Without this set explicitly,
+                                                # it regenerates on every
+                                                # container restart and
+                                                # invalidates any token a
+                                                # visitor is mid-submit with.
+
+  nginx:
+    image: nginx:alpine
+    container_name: CHANGEME-zola-nginx
+    restart: unless-stopped
+    depends_on:
+      zola-build:
+        condition: service_completed_successfully
+      hugo-contact:
+        condition: service_started
+    volumes:
+      - /path/to/this/project:/site:ro
+      - /path/to/this/project/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - default
+      - CHANGEME-traefik-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.CHANGEME.rule=Host(`example.com`)"
+      - "traefik.http.routers.CHANGEME.entrypoints=websecure"
+      - "traefik.http.routers.CHANGEME.tls.certresolver=CHANGEME"
+      - "traefik.http.routers.CHANGEME.priority=10"
+      # Pin the Docker network explicitly. If this container ever sits on
+      # more than one network, Traefik's routing can pick the wrong one —
+      # this label removes the ambiguity.
+      - "traefik.docker.network=CHANGEME-traefik-network"
+      - "traefik.http.services.CHANGEME.loadbalancer.server.port=80"
+      - "traefik.http.routers.CHANGEME.middlewares=CHANGEME-middleware-chain@file"
+
+networks:
+  CHANGEME-traefik-network:
+    external: true

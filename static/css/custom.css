@@ -1,0 +1,601 @@
+/* ===================================================================
+   FONTS — self-hosted (no request to Google on any page load)
+   Latin subset only, woff2 only; ~91KB for all five weights.
+   Files from the @fontsource packages; licences alongside them in
+   static/fonts/ (Oswald: OFL, Roboto: Apache 2.0).
+   font-display: swap so text paints immediately in a fallback and
+   reflows once the webfont lands.
+   =================================================================== */
+@font-face {
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/oswald-latin-300-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/oswald-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/roboto-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/roboto-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/roboto-latin-700-normal.woff2") format("woff2");
+}
+
+:root {
+  --jk-accent: #2a6ebb;
+  --jk-ink: #1f2937;
+  --jk-muted: #5b6573;
+  --jk-line: #d9dee5;
+  --jk-soft: #eef1f5;
+  --jk-bg: #f4f6f8;
+  --jk-head-a: #f2f4f7;   /* header gradient, left  */
+  --jk-head-b: #7d8da6;   /* header gradient, right */
+  --jk-display: "Oswald", "Arial Narrow", sans-serif;
+  --jk-body: "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html, body { background: var(--jk-bg); }
+body { color: var(--jk-ink); font-family: var(--jk-body); }
+
+/* ===================================================================
+   HEADER — full-bleed gradient
+   The theme insets .navbar as a white rounded card below 992px and
+   gives it a white background; both are overridden so the gradient
+   spans the full viewport at every width.
+   =================================================================== */
+.jk-header {
+  background: linear-gradient(100deg, var(--jk-head-a) 0%, var(--jk-head-b) 100%);
+  width: 100%;
+}
+.navbar.jk-navbar {
+  background: transparent !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  padding: 1.1rem 0 !important;
+  box-shadow: none;
+}
+.jk-navwrap {
+  width: 100%;
+  max-width: none;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.jk-brand { display: flex; flex-direction: column; line-height: 1; text-decoration: none; margin-right: auto; }
+.jk-brand__title {
+  font-family: var(--jk-display);
+  font-weight: 300;
+  font-size: 3.4rem;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: var(--jk-ink);
+}
+.jk-brand__page {
+  font-family: var(--jk-display);
+  font-weight: 400;
+  font-size: 1.1rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(31,41,55,.65);
+  margin-top: .4rem;
+}
+
+.jk-navbar .nav-link {
+  color: var(--jk-ink) !important;
+  font-family: var(--jk-display);
+  font-weight: 400;
+  font-size: 1.25rem;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  padding: .4rem 1rem !important;
+  display: inline-flex;
+  align-items: center;
+}
+.jk-navbar .nav-link:hover,
+.jk-navbar .dropdown-item:hover { color: var(--jk-accent) !important; }
+.jk-navbar .dropdown-menu { border: 1px solid var(--jk-line); border-radius: 6px; }
+.jk-navbar .dropdown-item {
+  font-family: var(--jk-display);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-size: 1rem;
+}
+.jk-navicon { width: 26px; height: 26px; margin-right: .55rem; }
+.jk-navdot {
+  display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; background: currentColor;
+  margin-right: .6rem; vertical-align: 2px; opacity: .6;
+}
+
+/* hamburger — three bars; the theme animates them into an X when open */
+.jk-toggler { border: 0; background: transparent; padding: .4rem .1rem !important; }
+.jk-toggler:focus { box-shadow: none; outline: 0; }
+.jk-toggler .navbar-toggler-icon {
+  display: block;
+  width: 30px; height: 3px;
+  background-color: var(--jk-ink);
+  background-image: none;
+  border-radius: 2px;
+  transition: all .2s ease;
+}
+.jk-toggler .navbar-toggler-icon:not(:last-child) { margin-bottom: 6px; }
+
+@media (max-width: 991px) {
+  .jk-brand__title { font-size: 2.3rem; }
+  .jk-navwrap { padding: 0 1.25rem; }
+  .jk-navbar .navbar-collapse { margin-top: .75rem; flex-basis: 100%; }
+  .jk-navbar .nav-link { padding: .6rem 0 !important; }
+}
+
+/* ===================================================================
+   PAGE SHELL
+   =================================================================== */
+#content { padding-top: 0; }
+.jk-page { padding: 2.5rem 0 4rem; }
+
+/* a max-width needs auto side margins, or the block hugs the left edge */
+.jk-page__body { max-width: 900px; margin: 0 auto; }
+.jk-page__body--wide { max-width: none; }
+.jk-page--centered .jk-page__body { text-align: center; }
+.jk-page--centered .jk-page__body > * { margin-left: auto; margin-right: auto; }
+.jk-page--centered .jk-postop,
+.jk-page--centered .jk-dropform { text-align: left; margin-left: auto; margin-right: auto; }
+
+/* full-width page area, used by the reference table */
+.jk-page--fluid { padding-top: 1.5rem; }
+.jk-fluidwrap { width: 100%; max-width: 1560px; margin: 0 auto; padding: 0 2rem; }
+.jk-page__intro { max-width: 760px; margin: 0 auto 2rem; text-align: center; }
+
+.jk-page__body h2 { font-size: 1.55rem; margin-top: 1.5rem; }
+.jk-title { text-align: center; font-weight: 700; font-size: 1.9rem; margin: 1.5rem 0 2rem; }
+.jk-rule { border: 0; border-top: 1px solid var(--jk-line); margin: 1.5rem auto; max-width: 320px; }
+
+.jk-page__body blockquote {
+  border-left: 3px solid var(--jk-accent);
+  padding-left: 1rem;
+  color: var(--jk-muted);
+  font-style: italic;
+  margin: 1.5rem 0;
+}
+
+.jk-sectionhead {
+  font-family: var(--jk-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-size: 1.55rem;
+  margin: 2.75rem 0 1.25rem;
+  padding-bottom: .5rem;
+  border-bottom: 2px solid var(--jk-line);
+}
+.jk-sectionhead:first-child { margin-top: 0; }
+
+.jk-note, .jk-disclaimer { color: var(--jk-muted); font-size: .95rem; }
+.jk-disclaimer { margin: 0; line-height: 1.9; }
+.jk-morelink { margin: 0; }
+.jk-morelink a { color: var(--jk-accent); font-weight: 500; font-size: 1.05rem; }
+.jk-status--error { color: #b42318; }
+
+/* ===================================================================
+   HOME HERO
+   Square-cropped headshot, matching the WordPress treatment
+   (aspect-ratio 1 + object-fit cover on a wide source image).
+   Sized per breakpoint because the layout changes: above 768px the
+   photo sits beside the text, below that it stacks above it and can
+   claim most of the screen width.
+   `width` is the only size dial here — aspect-ratio derives the
+   height, so no max-width/max-height caps are needed (and any left
+   in place would silently shrink it again).
+   =================================================================== */
+.jk-hero { padding: 5rem 0 6rem; }
+.jk-hero__inner { display: flex; align-items: center; justify-content: center; gap: 4.5rem; }
+.jk-hero__text { text-align: left; }
+
+.jk-hero__figure img {
+  width: min(40vw, 471px);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.jk-hero__name {
+  font-family: var(--jk-display);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: .01em;
+  font-size: 4rem;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+}
+.jk-hero__tagline { font-size: 1.7rem; color: var(--jk-muted); margin: .4rem 0; }
+
+@media (max-width: 991px) {
+  .jk-hero__figure img { width: min(44vw, 400px); }
+  .jk-hero__name { font-size: 3rem; }
+  .jk-hero__tagline { font-size: 1.4rem; }
+}
+@media (max-width: 767px) {
+  .jk-hero { padding: 2.5rem 0 3.5rem; }
+  .jk-hero__inner { flex-direction: column; gap: 1.75rem; }
+  .jk-hero__figure img { width: min(82vw, 440px); }
+  .jk-hero__text { text-align: center; }
+  .jk-hero__name { font-size: 2.5rem; }
+}
+
+/* ===================================================================
+   ABOUT
+   =================================================================== */
+.jk-biolink { text-align: center; margin: 0; }
+.jk-biolink a {
+  font-family: var(--jk-body);
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: var(--jk-ink);
+  text-decoration: none;
+}
+.jk-biolink a:hover { color: var(--jk-accent); }
+.jk-about-photo {
+  max-width: 290px; height: auto; border-radius: 6px;
+  float: right; margin: .25rem 0 1rem 1.75rem;
+}
+@media (max-width: 640px) {
+  .jk-about-photo { float: none; display: block; margin: 0 0 1.25rem; }
+}
+
+/* ===================================================================
+   PATIENTS CARDS
+   =================================================================== */
+.jk-cardgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+.jk-card {
+  display: block; background: #fff;
+  border: 1px solid var(--jk-line); border-radius: 8px;
+  padding: 1.5rem; text-decoration: none; color: inherit;
+  transition: box-shadow .15s, border-color .15s;
+}
+.jk-card:hover {
+  border-color: var(--jk-accent);
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+  color: inherit;
+}
+.jk-card h3 { font-size: 1.1rem; margin: 0 0 .4rem; }
+.jk-card p { margin: 0; font-size: .9rem; color: var(--jk-muted); }
+
+/* ===================================================================
+   CONTACT — offices
+   =================================================================== */
+.jk-office { padding: 1.75rem 0; border-bottom: 1px solid var(--jk-line); }
+.jk-office:last-of-type { border-bottom: 0; }
+.jk-office__name { font-size: 1.3rem; font-weight: 600; margin: 0 0 1rem; }
+.jk-office__grid {
+  display: grid;
+  grid-template-columns: minmax(260px,1fr) minmax(320px,1.4fr);
+  gap: 2rem;
+  align-items: start;
+}
+.jk-office__details a { color: var(--jk-accent); text-decoration: none; }
+.jk-office__details a:hover { text-decoration: underline; }
+.jk-office__address, .jk-office__phone { margin-bottom: .5rem; }
+.jk-office__hours {
+  list-style: none; padding: 0; margin: .75rem 0 0;
+  color: var(--jk-muted); font-size: .95rem;
+}
+.jk-office__map { aspect-ratio: 16/9; }
+.jk-office__map iframe {
+  width: 100%; height: 100%;
+  border: 1px solid var(--jk-line); border-radius: 6px; background: #fff;
+}
+@media (max-width: 767px) { .jk-office__grid { grid-template-columns: 1fr; } }
+
+/* ===================================================================
+   EYE DROP REFERENCE TABLE
+   Two notes on working around simple-datatables' own stylesheet:
+   - it sets `.datatable-table { width: 100% }`, so width is forced to
+     `auto` here to size to content instead of stretching edge to edge;
+   - it sets `.datatable-table > tbody > tr > td { vertical-align: top }`,
+     whose child selectors outrank a plain `.jk-datatable td` rule, so
+     the alignment below is written at matching specificity.
+   =================================================================== */
+.jk-tablescroll { display: flex; justify-content: center; overflow-x: auto; }
+.jk-tablescroll .datatable-wrapper { width: auto; max-width: 100%; }
+
+table.jk-datatable,
+table.jk-datatable.datatable-table {
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+  background: #fff;
+  font-size: 1rem;
+}
+.jk-datatable th, .jk-datatable td { border: 1px solid var(--jk-line); }
+.jk-datatable thead th { background: var(--jk-soft); font-weight: 600; }
+
+table.jk-datatable > tbody > tr > td,
+table.jk-datatable.datatable-table > tbody > tr > td,
+table.jk-datatable > thead > tr > th,
+table.jk-datatable.datatable-table > thead > tr > th {
+  vertical-align: middle;
+  text-align: center;
+  padding: .7rem .85rem;
+}
+/* the sort control holds the header label, so centre that too */
+table.jk-datatable th .datatable-sorter,
+table.jk-datatable th button { text-align: center; width: 100%; }
+
+.jk-td-generic { font-weight: 600; }
+.jk-datatable .jk-td-generic,
+.jk-datatable .jk-td-color { font-size: 1.02rem; }
+
+/* Top Color shown in its own colour */
+.jk-td-color { font-weight: 700; }
+.jk-td-color[data-color="Purple"]        { color: #7b3fb5; }
+.jk-td-color[data-color="Red"]           { color: #cc2b2b; }
+.jk-td-color[data-color="Blue"]          { color: #1f5fd0; }
+.jk-td-color[data-color="Green"]         { color: #1f8a3b; }
+.jk-td-color[data-color="Lime Green"]    { color: #6fbe1f; }
+.jk-td-color[data-color="Teal/Green"]    { color: #0f9b8e; }
+.jk-td-color[data-color="Orange"]        { color: #e07b18; }
+.jk-td-color[data-color="Yellow"]        { color: #c9a406; }
+.jk-td-color[data-color="Pink"]          { color: #e0568f; }
+.jk-td-color[data-color="Tan"]           { color: #b08347; }
+.jk-td-color[data-color="Gray"]          { color: #6b7280; }
+.jk-td-color[data-color="White"],
+.jk-td-color[data-color="Gray / White"],
+.jk-td-color[data-color="Pink / White"]  { color: #4b5563; }
+/* Vial and Tube are container types, not cap colours — left neutral */
+.jk-td-color[data-color="Vial"],
+.jk-td-color[data-color="Tube"] { color: var(--jk-muted); font-weight: 500; font-style: italic; }
+
+.jk-td-photo { white-space: nowrap; }
+img.jk-drop {
+  height: 58px; width: auto; margin: 2px;
+  cursor: zoom-in; vertical-align: middle;
+  transition: transform .12s ease;
+}
+img.jk-drop:hover { transform: scale(1.08); }
+
+.datatable-wrapper .datatable-top,
+.datatable-wrapper .datatable-bottom { padding: .6rem 0; }
+.datatable-wrapper .datatable-input,
+.datatable-wrapper .datatable-selector {
+  border: 1px solid var(--jk-line); border-radius: 4px;
+  padding: .4rem .55rem; background: #fff;
+}
+.datatable-wrapper .datatable-pagination a { color: var(--jk-ink); }
+.datatable-wrapper .datatable-pagination .datatable-active a {
+  background: var(--jk-accent); color: #fff; border-radius: 4px;
+}
+.datatable-wrapper .datatable-table th { cursor: pointer; }
+
+/* ===================================================================
+   IMAGE LIGHTBOX
+   =================================================================== */
+.jk-lightbox {
+  position: fixed; inset: 0; z-index: 1080;
+  background: rgba(17,24,39,.82);
+  display: flex; align-items: center; justify-content: center;
+  padding: 2rem;
+}
+.jk-lightbox[hidden] { display: none; }
+.jk-lightbox__figure { margin: 0; text-align: center; max-width: 92vw; max-height: 88vh; }
+.jk-lightbox__figure img {
+  max-width: 92vw; max-height: 78vh; width: auto; height: auto;
+  background: #fff; border-radius: 6px; padding: .5rem;
+}
+.jk-lightbox__figure figcaption { color: #fff; margin-top: .9rem; font-size: 1rem; }
+.jk-lightbox__close {
+  position: absolute; top: 1rem; right: 1.5rem;
+  background: transparent; border: 0; color: #fff;
+  font-size: 2.6rem; line-height: 1; cursor: pointer;
+}
+.jk-lightbox__close:hover { opacity: .75; }
+
+/* ===================================================================
+   FORMS
+   =================================================================== */
+/* eye drop form generator */
+.jk-dropform { max-width: 1400px; }
+.jk-droprow {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: .5rem .6rem; margin-bottom: .6rem;
+}
+.jk-droprow label {
+  display: inline-flex; align-items: center; gap: .4rem;
+  margin: 0; font-size: .95rem; white-space: nowrap;
+}
+.jk-in {
+  padding: .45rem .55rem; border: 1px solid var(--jk-line);
+  border-radius: 4px; background: #fff; font-size: .95rem;
+}
+.jk-in--wide { min-width: 300px; }
+.jk-in--sm { min-width: 110px; }
+.jk-in--xs { min-width: 62px; }
+input[name=topColor].jk-in { min-width: 180px; background: #fafbfc; }
+.jk-rowbtn {
+  width: 2.5rem; height: 2.5rem; border: 0; border-radius: 4px;
+  background: var(--jk-accent); color: #fff; font-size: 1.25rem; line-height: 1;
+}
+.jk-rowbtn:hover { filter: brightness(1.08); }
+
+.jk-dropform__actions, .jk-postop__actions, .jk-form__actions {
+  display: flex; gap: .6rem; margin-top: 1.25rem;
+}
+
+/* post-op form */
+.jk-postop { max-width: 520px; }
+.jk-postop label { display: block; font-weight: 500; font-size: .95rem; margin: 1rem 0 .35rem; }
+.jk-postop input, .jk-postop select {
+  width: 100%; padding: .55rem .7rem;
+  border: 1px solid var(--jk-line); border-radius: 6px;
+  background: #fff; font-size: .95rem;
+}
+
+/* contact form */
+.jk-form { max-width: 680px; margin: 1.25rem auto 0; }
+.jk-form .form-control { background: #fff; }
+
+/* ===================================================================
+   GENERATED SCHEDULES (post-op + custom drop schedule)
+   Mirrors the WordPress output styling.
+   =================================================================== */
+.jk-schedule { text-align: left; }
+.jk-schedule .surgery-name { text-align: center; font-size: 1.5em; font-weight: bold; margin: 40px 0 20px; }
+.jk-schedule .schedule-head {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+}
+.jk-schedule .schedule-head h1 { margin: 0; font-size: 2em; }
+.jk-schedule .schedule-head span { font-size: 1.2em; }
+.jk-schedule .table-wrapper { overflow-x: auto; }
+.jk-schedule .schedule-table {
+  width: 100%; border-collapse: collapse; text-align: center; background: #fff;
+}
+.jk-schedule .schedule-table th,
+.jk-schedule .schedule-table td { border: 1px solid #000; padding: 10px; }
+.jk-schedule .schedule-table th { background: #f2f2f2; font-weight: bold; }
+.jk-schedule .checkbox-spacing input[type=checkbox] { margin-right: 10px; }
+.jk-schedule .button-container { margin-top: 20px; text-align: center; }
+.jk-schedule .button-container button { margin-right: 10px; padding: .4rem 1rem; }
+
+/* ===================================================================
+   FOOTER
+   =================================================================== */
+.jk-footer {
+  border-top: 1px solid var(--jk-line);
+  padding: 2rem 0; text-align: center;
+  color: var(--jk-muted); font-size: .9rem;
+}
+
+/* ===================================================================
+   PRINT LETTERHEAD — only appears on paper
+   =================================================================== */
+.jk-printhead { display: none; }
+
+/* orientation toggle shown beside the Print/Back buttons */
+.jk-printopt {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: .9rem; color: var(--jk-muted); margin-left: .5rem;
+}
+.jk-printopt input { width: auto; }
+
+/* ===================================================================
+   PRINT
+   =================================================================== */
+@media print {
+  @page { size: letter; margin: 0.6in; }
+
+  html, body { background: #fff; }
+
+  /* strip site chrome */
+  .jk-header, .jk-footer, .button-container, .jk-title, .jk-lightbox,
+  .jk-disclaimer, .jk-morelink { display: none !important; }
+
+  /* let the printed content use the full page width */
+  .jk-page { padding: 0; }
+  .jk-page__body, .jk-page--centered .jk-page__body { max-width: none; margin: 0; }
+  .jk-page--centered .jk-page__body > * { margin-left: 0; margin-right: 0; }
+
+  /* letterhead */
+  .jk-printhead {
+    display: block !important;
+    text-align: center;
+    margin: 0 0 1.5rem;
+    padding-bottom: .6rem;
+    border-bottom: 2px solid #000;
+  }
+  .jk-printhead__name {
+    font-family: var(--jk-display);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    font-size: 22pt;
+    line-height: 1.1;
+    color: #000;
+  }
+  .jk-printhead__sub { font-size: 9pt; color: #222; margin-top: .2rem; }
+
+  /* generated schedules */
+  .jk-schedule { text-align: center; }
+  .jk-schedule .schedule-head { margin-bottom: .75rem; }
+  .jk-schedule .schedule-head h1 { font-size: 16pt; }
+  .jk-schedule .schedule-head span { font-size: 11pt; }
+  .jk-schedule .surgery-name { margin: 0 0 .75rem; font-size: 14pt; }
+  .jk-schedule .table-wrapper { overflow: visible; }
+
+  .jk-schedule .schedule-table {
+    width: 100%;
+    margin: 0 auto;
+    font-size: 9.5pt;
+    border-collapse: collapse;
+    /* keeps the outer edge solid even where cell borders meet the margin */
+    border: 1pt solid #000;
+  }
+  /* Borders were printing too faint to read. Forced dark, and
+     print-color-adjust stops the browser lightening them. */
+  .jk-schedule .schedule-table th,
+  .jk-schedule .schedule-table td {
+    /* 1pt, not 1px: at 300dpi a 1px border can land between device pixels
+       and disappear, which is why some row lines printed and others didn't
+       on the laser printer while Save-to-PDF looked fine. 1pt is ~4 device
+       pixels and always survives rasterisation. */
+    border: 1pt solid #000 !important;
+    padding: 4pt 6pt;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .jk-schedule .schedule-table th {
+    background: #e8e8e8 !important;
+    color: #000 !important;
+    font-weight: 700;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  /* Repeat the header row on every page and don't split rows — matters for
+     the 84-day trabeculectomy schedule, which runs to several pages. */
+  .jk-schedule .schedule-table thead { display: table-header-group; }
+  .jk-schedule .schedule-table tr { page-break-inside: avoid; break-inside: avoid; }
+
+  /* checkbox squares need to survive printing too */
+  .jk-schedule .checkbox-spacing { white-space: nowrap; }
+  .jk-schedule .checkbox-spacing input[type=checkbox] {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 0.75pt solid #000 !important;
+    /* explicit inline-block: with appearance:none some renderers treat these
+       as block and stack the day's doses vertically instead of in a row */
+    display: inline-block;
+    vertical-align: middle;
+    width: 9pt; height: 9pt;
+    margin: 0 4pt 0 0;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

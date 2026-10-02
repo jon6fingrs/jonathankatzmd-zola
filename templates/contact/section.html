@@ -1,0 +1,66 @@
+{% extends "jk-base.html" %}
+
+{% block content %}
+<section class="jk-page">
+  <div class="container">
+    <div class="jk-page__body jk-page__body--wide">
+
+      <h2 class="jk-sectionhead">Katzen Eye Group Offices</h2>
+      {% for loc in config.extra.offices %}
+        {% include "partials/office-card.html" %}
+      {% endfor %}
+
+      <h2 class="jk-sectionhead">Surgery Centers</h2>
+      {% for loc in config.extra.surgery_centers %}
+        {% include "partials/office-card.html" %}
+      {% endfor %}
+
+      <h2 class="jk-sectionhead">Contact</h2>
+      {{ section.content | safe }}
+
+      {% if config.extra.form.active and config.extra.form.endpoint %}
+      <form id="jk-contact-form" class="jk-form" action="{{ config.extra.form.endpoint }}" method="POST">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <input type="text" class="form-control" name="name" placeholder="Name" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <input type="email" class="form-control" name="email" placeholder="Email" required>
+          </div>
+        </div>
+        <div class="mb-3">
+          <input type="tel" class="form-control" id="jk-contact-phone" placeholder="Phone Number">
+        </div>
+        <div class="mb-3">
+          <textarea class="form-control" name="message" rows="6" placeholder="Comment or Message" required></textarea>
+        </div>
+
+        {# Spam trap: never rendered visibly (inline style so no CSS dependency).
+           hugo-contact also checks a "nickname" field, but that name is a magnet
+           for password-manager autofill — and a filled honeypot makes the server
+           silently discard the message with a 200. Omitting it is safe: the check
+           only rejects non-empty values. #}
+        <div style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="jk-form__actions">
+          <button type="submit" id="jk-contact-submit" class="btn btn-primary">Submit</button>
+          <button type="reset" class="btn btn-outline-secondary">Clear</button>
+        </div>
+        <p id="jk-contact-status" class="jk-note mt-3" role="status" aria-live="polite"></p>
+      </form>
+      {% else %}
+      <p class="jk-note">The contact form is not yet enabled.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock content %}
+
+{% block javascripts %}
+{{ super() }}
+{% if config.extra.form.active and config.extra.form.endpoint %}
+<script src="{{ get_url(path='js/contact.js', cachebust=true) }}"></script>
+{% endif %}
+{% endblock javascripts %}

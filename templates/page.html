@@ -1,0 +1,18 @@
+{% extends "jk-base.html" %}
+
+{% block content %}
+<section class="jk-page{% if page.extra.centered %} jk-page--centered{% endif %}">
+  <div class="container">
+    <div class="jk-page__body">
+      {{ page.content | safe }}
+    </div>
+  </div>
+</section>
+{% endblock content %}
+
+{% block javascripts %}
+{{ super() }}
+{% if page.extra.js %}
+<script src="{{ get_url(path=page.extra.js, cachebust=true) }}"></script>
+{% endif %}
+{% endblock javascripts %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{# Titles: the theme emitted just the page name ("About"), which is weak in a
+   browser tab and in search results. The theme wraps this block in <title>,
+   so emit text only — no <title> tag here. #}
+{% block title %}{% if page is defined and page.title %}{{ page.title }} &mdash; {{ config.title }}{% elif section is defined and section.title and section.path != "/" %}{{ section.title }} &mdash; {{ config.title }}{% else %}{{ config.title }} &mdash; Ophthalmologist &amp; Glaucoma Specialist{% endif %}{% endblock title %}
+
+{% block stylesheets %}
+{{ super() }}
+{# Fonts are self-hosted (see static/fonts/ and the @font-face block in
+   custom.css), so there are no requests to Google here. Preload just the
+   two weights needed for first paint: the masthead and body text. #}
+<link rel="preload" href="{{ get_url(path='fonts/oswald-latin-300-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ get_url(path='fonts/roboto-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{{ get_url(path='css/custom.css', cachebust=true) }}">
+{% block page_stylesheets %}{% endblock page_stylesheets %}
+{% endblock stylesheets %}
+
+{# `seo` is the last block inside <head>, so this is where the analytics
+   snippet belongs. super() keeps the theme's own meta tags. #}
+{% block seo %}
+{{ super() }}
+{# The theme emits no meta description and no Open Graph tags, so shared
+   links (Facebook, LinkedIn, iMessage, Slack) rendered with no preview.
+   Added here rather than by editing the theme. #}
+{% set pg_title = config.title %}
+{% if page is defined and page.title %}{% set pg_title = page.title ~ " — " ~ config.title %}
+{% elif section is defined and section.title and section.path != "/" %}{% set pg_title = section.title ~ " — " ~ config.title %}
+{% endif %}
+{% set pg_desc = config.description %}
+{% if page is defined and page.description %}{% set pg_desc = page.description %}
+{% elif section is defined and section.description %}{% set pg_desc = section.description %}
+{% endif %}
+<meta name="description" content="{{ pg_desc }}">
+<link rel="canonical" href="{{ current_url | default(value=config.base_url) }}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ config.title }}">
+<meta property="og:title" content="{{ pg_title }}">
+<meta property="og:description" content="{{ pg_desc }}">
+<meta property="og:url" content="{{ current_url | default(value=config.base_url) }}">
+<meta property="og:image" content="{{ get_url(path=config.extra.about_image) }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ pg_title }}">
+<meta name="twitter:description" content="{{ pg_desc }}">
+<meta name="twitter:image" content="{{ get_url(path=config.extra.about_image) }}">
+
+{% if config.extra.noindex %}
+<meta name="robots" content="noindex, nofollow">
+{% endif %}
+{% if config.extra.plausible.enabled %}
+<script defer data-domain="{{ config.extra.plausible.domain }}"{% if config.extra.plausible.api_endpoint %} data-api="{{ config.extra.plausible.api_endpoint }}"{% endif %} src="{{ config.extra.plausible.src }}"></script>
+{% if config.extra.plausible.custom_events %}
+<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+{% endif %}
+{% endif %}
+{% endblock seo %}
