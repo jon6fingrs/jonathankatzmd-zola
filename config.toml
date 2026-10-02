@@ -2,7 +2,7 @@ base_url = "https://jonathankatzmd.com"
 title = "Jonathan Katz, MD"
 description = "Jonathan Katz, MD — Ophthalmologist and Glaucoma Specialist, Katzen Eye Group, Baltimore, Maryland"
 default_language = "en"
-theme = "portio-zola"
+# No theme: all templates live in templates/ and all styling in static/css/custom.css.
 
 compile_sass = true
 minify_html = true

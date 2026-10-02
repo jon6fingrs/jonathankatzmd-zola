@@ -55,6 +55,8 @@
   --jk-body: "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 html, body { background: var(--jk-bg); }
 body { color: var(--jk-ink); font-family: var(--jk-body); }
 
@@ -142,6 +144,22 @@ body { color: var(--jk-ink); font-family: var(--jk-body); }
   transition: all .2s ease;
 }
 .jk-toggler .navbar-toggler-icon:not(:last-child) { margin-bottom: 6px; }
+/* the three bars fold into an X while the menu is open (Bootstrap toggles
+   .collapsed on the button) */
+.jk-toggler .navbar-toggler-icon:nth-child(1) { transform: rotate(45deg); transform-origin: 10% 10%; }
+.jk-toggler .navbar-toggler-icon:nth-child(2) { opacity: 0; }
+.jk-toggler .navbar-toggler-icon:nth-child(3) { transform: rotate(-45deg); transform-origin: 10% 90%; }
+.jk-toggler.collapsed .navbar-toggler-icon:nth-child(1),
+.jk-toggler.collapsed .navbar-toggler-icon:nth-child(3) { transform: rotate(0); }
+.jk-toggler.collapsed .navbar-toggler-icon:nth-child(2) { opacity: 1; }
+
+/* keyboard users can jump past the header */
+.jk-skip {
+  position: absolute; left: -10000px; top: .5rem;
+  background: #fff; color: var(--jk-accent); padding: .5rem .9rem;
+  border-radius: 4px; z-index: 2000; text-decoration: none; font-weight: 500;
+}
+.jk-skip:focus { left: .5rem; }
 
 @media (max-width: 991px) {
   .jk-brand__title { font-size: 2.3rem; }

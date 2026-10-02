@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {#- Page title: "<page> — <site>" everywhere except the home page. #}
+  {%- set pg_title = config.title ~ " — Ophthalmologist & Glaucoma Specialist" %}
+  {%- if page is defined and page.title %}{% set pg_title = page.title ~ " — " ~ config.title %}
+  {%- elif section is defined and section.title and section.path != "/" %}{% set pg_title = section.title ~ " — " ~ config.title %}
+  {%- endif %}
+  {%- set pg_desc = config.description %}
+  {%- if page is defined and page.description %}{% set pg_desc = page.description %}
+  {%- elif section is defined and section.description %}{% set pg_desc = section.description %}
+  {%- endif %}
+  <title>{% block title %}{{ pg_title }}{% endblock title %}</title>
+  <meta name="description" content="{{ pg_desc }}">
+  <meta name="theme-color" content="#7d8da6">
+  <link rel="canonical" href="{{ current_url | default(value=config.base_url) }}">
+
+  {#- Fonts are self-hosted (static/fonts/, @font-face in custom.css). Preload the
+      two weights needed for first paint: the masthead and body text. #}
+  <link rel="preload" href="{{ get_url(path='fonts/oswald-latin-300-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ get_url(path='fonts/roboto-latin-400-normal.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{ get_url(path='css/bootstrap.min.css', cachebust=true) }}">
+  <link rel="stylesheet" href="{{ get_url(path='css/custom.css', cachebust=true) }}">
+  {% block page_stylesheets %}{% endblock page_stylesheets %}
+
+  {#- Icons. Three sizes cover every browser and home-screen case; the source is
+      the 270px logo, resized at build time into static/processed_images/. #}
+  <link rel="icon" href="{{ get_url(path='images/favicon.ico') }}" sizes="any">
+  {%- set icon32 = resize_image(path="static/images/logo.png", width=32, height=32, op="fill", format="png") %}
+  {%- set icon192 = resize_image(path="static/images/logo.png", width=192, height=192, op="fill", format="png") %}
+  {%- set icon180 = resize_image(path="static/images/logo.png", width=180, height=180, op="fill", format="png") %}
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ icon32.url }}">
+  <link rel="icon" type="image/png" sizes="192x192" href="{{ icon192.url }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ icon180.url }}">
+
+  {#- Open Graph / Twitter cards so shared links get a preview. #}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ config.title }}">
+  <meta property="og:title" content="{{ pg_title }}">
+  <meta property="og:description" content="{{ pg_desc }}">
+  <meta property="og:url" content="{{ current_url | default(value=config.base_url) }}">
+  <meta property="og:image" content="{{ get_url(path=config.extra.about_image) }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ pg_title }}">
+  <meta name="twitter:description" content="{{ pg_desc }}">
+  <meta name="twitter:image" content="{{ get_url(path=config.extra.about_image) }}">
+  {%- if config.extra.noindex %}
+  <meta name="robots" content="noindex, nofollow">
+  {%- endif %}
+  {% block head_extra %}{% endblock head_extra %}
+
+  {%- if config.extra.plausible.enabled %}
+  <script defer data-domain="{{ config.extra.plausible.domain }}"{% if config.extra.plausible.api_endpoint %} data-api="{{ config.extra.plausible.api_endpoint }}"{% endif %} src="{{ config.extra.plausible.src }}"></script>
+  {%- if config.extra.plausible.custom_events %}
+  <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+  {%- endif %}
+  {%- endif %}
+</head>
+
+<body>
+  <a class="jk-skip" href="#content">Skip to content</a>
+  {% include "partials/navbar.html" %}
+
+  <main id="content">
+    {% block content %}{% endblock content %}
+  </main>
+
+  {% include "partials/footer.html" %}
+
+  {% block javascripts %}
+  <script src="{{ get_url(path='js/bootstrap.bundle.min.js', cachebust=true) }}"></script>
+  {% endblock javascripts %}
+</body>
+</html>

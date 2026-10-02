@@ -33,13 +33,13 @@
                 </a>
                 <ul class="dropdown-menu">
                   {% for child in menu.children %}
-                    <li><a class="dropdown-item" href="{{ get_url(path=child.url) }}"><span class="jk-navdot"></span>{{ child.name }}</a></li>
+                    <li><a class="dropdown-item" href="{{ get_url(path=child.url, trailing_slash=true) }}"><span class="jk-navdot"></span>{{ child.name }}</a></li>
                   {% endfor %}
                 </ul>
               </li>
             {% else %}
               <li class="nav-item">
-                <a href="{{ get_url(path=menu.url) }}" class="nav-link">
+                <a href="{{ get_url(path=menu.url, trailing_slash=true) }}" class="nav-link">
                   {% if menu.icon %}<img class="jk-navicon" src="{{ get_url(path=menu.icon) }}" alt="">{% endif %}{{ menu.name }}
                 </a>
               </li>
