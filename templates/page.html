@@ -12,7 +12,13 @@
 
 {% block javascripts %}
 {{ super() }}
-{% if page.extra.js %}
+{#- A page can load one script (`js = "js/foo.js"`) or several, in order
+    (`scripts = ["vendor/x.js", "js/foo.js"]`), via its [extra] table. #}
+{% if page.extra.scripts %}
+{% for s in page.extra.scripts %}
+<script src="{{ get_url(path=s, cachebust=true) }}"></script>
+{% endfor %}
+{% elif page.extra.js %}
 <script src="{{ get_url(path=page.extra.js, cachebust=true) }}"></script>
 {% endif %}
 {% endblock javascripts %}

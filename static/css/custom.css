@@ -488,13 +488,21 @@ input[name=topColor].jk-in { min-width: 180px; background: #fafbfc; }
 }
 
 /* post-op form */
+.jk-page__lede { max-width: 640px; margin: 0 auto 1.75rem; color: var(--jk-muted); font-size: 1.02rem; }
 .jk-postop { max-width: 520px; }
-.jk-postop label { display: block; font-weight: 500; font-size: .95rem; margin: 1rem 0 .35rem; }
+.jk-field { margin: 0 0 1rem; transition: opacity .15s; }
+.jk-field label { display: block; font-weight: 500; font-size: .95rem; margin: 0 0 .35rem; }
 .jk-postop input, .jk-postop select {
-  width: 100%; padding: .55rem .7rem;
+  width: 100%; padding: .65rem .75rem; min-height: 44px;
   border: 1px solid var(--jk-line); border-radius: 6px;
-  background: #fff; font-size: .95rem;
+  background: #fff; font-size: 1rem;
 }
+.jk-postop select:disabled, .jk-postop input:disabled { background: var(--jk-soft); color: var(--jk-muted); cursor: not-allowed; }
+.jk-postop option:disabled { color: #a3aab5; }
+.jk-field__hint { margin: .3rem 0 0; font-size: .85rem; color: var(--jk-muted); min-height: 1.1em; }
+.jk-field.is-off { opacity: .55; }
+.jk-field.is-off label { text-decoration: line-through; text-decoration-color: rgba(0,0,0,.35); }
+.jk-form__error { color: #b42318; font-weight: 500; margin: .5rem 0 0; }
 
 /* contact form */
 .jk-form { max-width: 680px; margin: 1.25rem auto 0; }
@@ -502,25 +510,64 @@ input[name=topColor].jk-in { min-width: 180px; background: #fafbfc; }
 
 /* ===================================================================
    GENERATED SCHEDULES (post-op + custom drop schedule)
-   Mirrors the WordPress output styling.
+   Mobile-first: below 640px each day is a stacked card with the drug
+   name printed above its boxes; from 640px up it is a table. Print
+   always uses the table (see @media print).
    =================================================================== */
 .jk-schedule { text-align: left; }
-.jk-schedule .surgery-name { text-align: center; font-size: 1.5em; font-weight: bold; margin: 40px 0 20px; }
 .jk-schedule .schedule-head {
-  display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
+  flex-wrap: wrap; margin-bottom: 1rem;
 }
-.jk-schedule .schedule-head h1 { margin: 0; font-size: 2em; }
-.jk-schedule .schedule-head span { font-size: 1.2em; }
+.jk-schedule .schedule-head h1, .jk-schedule .surgery-name { margin: 0 0 .35rem; font-size: 1.7rem; font-weight: 700; }
+.jk-schedule .schedule-head > span, .jk-schedule .schedule-meta { font-size: 1rem; color: var(--jk-muted); margin: 0; }
+.jk-qrbox { text-align: center; flex: 0 0 auto; }
+.jk-qr svg { display: block; background: #fff; border: 1px solid var(--jk-line); border-radius: 6px; padding: 4px; }
+.jk-qrbox__cap { font-size: .75rem; color: var(--jk-muted); margin: .35rem 0 0; max-width: 140px; }
+.schedule-legend { list-style: none; padding: 0; margin: 0 0 1rem; font-size: .95rem; }
+.schedule-legend li { margin: 0 0 .25rem; }
 .jk-schedule .table-wrapper { overflow-x: auto; }
 .jk-schedule .schedule-table {
   width: 100%; border-collapse: collapse; text-align: center; background: #fff;
 }
 .jk-schedule .schedule-table th,
-.jk-schedule .schedule-table td { border: 1px solid #000; padding: 10px; }
+.jk-schedule .schedule-table td { border: 1px solid #000; padding: 8px 10px; }
 .jk-schedule .schedule-table th { background: #f2f2f2; font-weight: bold; }
-.jk-schedule .checkbox-spacing input[type=checkbox] { margin-right: 10px; }
-.jk-schedule .button-container { margin-top: 20px; text-align: center; }
-.jk-schedule .button-container button { margin-right: 10px; padding: .4rem 1rem; }
+.jk-schedule .schedule-drug { font-weight: 400; font-size: .9em; }
+.jk-schedule .week-row td { background: var(--jk-head-b); color: #fff; font-weight: 600; text-align: left; padding: 5px 10px; font-size: .9rem; }
+.jk-schedule .week-range { font-weight: 400; opacity: .9; margin-left: .5rem; }
+.jk-schedule tr.week-odd td, .jk-schedule tr.week-odd th.day-cell { background: #fafbfc; }
+.jk-schedule .day-cell { white-space: nowrap; font-weight: 600; text-align: left; }
+.jk-schedule .day-wd { color: var(--jk-muted); font-weight: 500; margin-right: .3em; }
+.jk-boxes { display: inline-flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.jk-boxes input[type=checkbox] { width: 18px; height: 18px; margin: 0; }
+.jk-schedule .dose-none { color: #b5bcc6; }
+.jk-schedule .button-container { margin: 1.25rem 0 .5rem; text-align: center; display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; align-items: center; }
+.jk-ics-note { text-align: center; max-width: 560px; margin: 0 auto; font-size: .85rem; }
+
+/* custom drop schedule: cap swatch and daily routine list */
+.jk-schedule .routine { margin: 1.5rem 0 0; }
+.jk-schedule .routine h2 { font-size: 1.2rem; margin: 0 0 .5rem; }
+.jk-schedule .routine-table th:first-child { white-space: nowrap; }
+.jk-schedule .routine-table td { text-align: left; }
+.jk-schedule .routine-drop { display: block; margin: 2px 0; }
+
+/* phones: each day becomes a card */
+@media (max-width: 639px) {
+  .jk-schedule .schedule-table--days, .jk-schedule .schedule-table--days tbody,
+  .jk-schedule .schedule-table--days tr, .jk-schedule .schedule-table--days th,
+  .jk-schedule .schedule-table--days td { display: block; }
+  .jk-schedule .schedule-table--days thead { display: none; }
+  .jk-schedule .schedule-table--days tr { border: 1px solid var(--jk-line); border-radius: 8px; margin: 0 0 .6rem; background: #fff; overflow: hidden; }
+  .jk-schedule .schedule-table--days tr.week-row { border: 0; border-radius: 6px; margin: 1rem 0 .5rem; }
+  .jk-schedule .schedule-table--days th, .jk-schedule .schedule-table--days td { border: 0; text-align: left; }
+  .jk-schedule .schedule-table--days .day-cell { background: var(--jk-soft); padding: .5rem .8rem; }
+  .jk-schedule .schedule-table--days .dose-cell { display: flex; justify-content: space-between; align-items: center; gap: .75rem; padding: .5rem .8rem; border-top: 1px solid var(--jk-line); }
+  .jk-schedule .schedule-table--days .dose-cell::before { content: attr(data-label); font-size: .9rem; color: var(--jk-ink); }
+  .jk-schedule .schedule-table--days .dose-cell--none { display: none; }
+  .jk-boxes { justify-content: flex-end; }
+  .jk-boxes input[type=checkbox] { width: 22px; height: 22px; }
+}
 
 /* ===================================================================
    FOOTER
@@ -553,7 +600,17 @@ input[name=topColor].jk-in { min-width: 180px; background: #fafbfc; }
 
   /* strip site chrome */
   .jk-header, .jk-footer, .button-container, .jk-title, .jk-lightbox,
-  .jk-disclaimer, .jk-morelink { display: none !important; }
+  .jk-disclaimer, .jk-morelink, .jk-ics-note, .jk-skip, .jk-page__lede { display: none !important; }
+
+  /* phones print the table form too */
+  .jk-schedule .schedule-table--days { display: table; width: 100%; }
+  .jk-schedule .schedule-table--days tbody { display: table-row-group; }
+  .jk-schedule .schedule-table--days thead { display: table-header-group; }
+  .jk-schedule .schedule-table--days tr { display: table-row; border: 0; margin: 0; }
+  .jk-schedule .schedule-table--days th, .jk-schedule .schedule-table--days td { display: table-cell; text-align: center; }
+  .jk-schedule .schedule-table--days .dose-cell::before { content: none; }
+  .jk-schedule .schedule-table--days .dose-cell--none { display: table-cell; }
+  .jk-boxes { justify-content: center; }
 
   /* let the printed content use the full page width */
   .jk-page { padding: 0; }
@@ -580,12 +637,18 @@ input[name=topColor].jk-in { min-width: 180px; background: #fafbfc; }
   .jk-printhead__sub { font-size: 9pt; color: #222; margin-top: .2rem; }
 
   /* generated schedules */
-  .jk-schedule { text-align: center; }
-  .jk-schedule .schedule-head { margin-bottom: .75rem; }
-  .jk-schedule .schedule-head h1 { font-size: 16pt; }
-  .jk-schedule .schedule-head span { font-size: 11pt; }
-  .jk-schedule .surgery-name { margin: 0 0 .75rem; font-size: 14pt; }
+  .jk-schedule .schedule-head { margin-bottom: .5rem; flex-wrap: nowrap; }
+  .jk-schedule .schedule-head h1, .jk-schedule .surgery-name { font-size: 16pt; margin: 0 0 .25rem; }
+  .jk-schedule .schedule-head span, .jk-schedule .schedule-meta { font-size: 10pt; color: #000; }
+  .jk-qr svg { width: 1.1in; height: 1.1in; border: 0; padding: 0; }
+  .jk-qrbox__cap { font-size: 7pt; color: #000; }
+  .schedule-legend { font-size: 9.5pt; margin-bottom: .5rem; }
   .jk-schedule .table-wrapper { overflow: visible; }
+  .jk-schedule .week-row td { background: #ddd !important; color: #000 !important; font-size: 9pt; padding: 2pt 6pt; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .jk-schedule tr.week-odd td, .jk-schedule tr.week-odd th.day-cell { background: #fff; }
+  .jk-schedule .day-cell { text-align: left; }
+  .jk-schedule .day-wd { color: #000; }
+  .jk-schedule .dose-none { color: #999; }
 
   .jk-schedule .schedule-table {
     width: 100%;
@@ -621,8 +684,9 @@ input[name=topColor].jk-in { min-width: 180px; background: #fafbfc; }
   .jk-schedule .schedule-table tr { page-break-inside: avoid; break-inside: avoid; }
 
   /* checkbox squares need to survive printing too */
-  .jk-schedule .checkbox-spacing { white-space: nowrap; }
-  .jk-schedule .checkbox-spacing input[type=checkbox] {
+  .jk-boxes { white-space: nowrap; flex-wrap: nowrap; gap: 4pt; }
+  .jk-schedule .schedule-table th, .jk-schedule .schedule-table td { padding: 3pt 5pt; }
+  .jk-boxes input[type=checkbox] {
     -webkit-appearance: none;
     appearance: none;
     border: 0.75pt solid #000 !important;
