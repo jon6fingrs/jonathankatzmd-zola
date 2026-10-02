@@ -22,6 +22,15 @@
   ]
  },
  {
+  "generic": "Besifloxacin",
+  "brand": "Besivance",
+  "color": "Tan",
+  "use": "Antibiotic",
+  "dosage": "3x/day",
+  "notes": "",
+  "photos": []
+ },
+ {
   "generic": "Bimatoprost 0.01%",
   "brand": "Lumigan",
   "color": "Teal/Green",
@@ -55,17 +64,6 @@
   ]
  },
  {
-  "generic": "Brimonidine 0.2%",
-  "brand": "Alphagan",
-  "color": "Purple",
-  "use": "Glaucoma",
-  "dosage": "2-3x/day",
-  "notes": "Generic",
-  "photos": [
-   "STL02310.webp"
-  ]
- },
- {
   "generic": "Brimonidine 0.15%",
   "brand": "Alphagan P",
   "color": "Purple",
@@ -74,6 +72,17 @@
   "notes": "Preservative: Purite",
   "photos": [
    "alphagan-p-15.webp"
+  ]
+ },
+ {
+  "generic": "Brimonidine 0.2%",
+  "brand": "Alphagan",
+  "color": "Purple",
+  "use": "Glaucoma",
+  "dosage": "2-3x/day",
+  "notes": "Generic",
+  "photos": [
+   "STL02310.webp"
   ]
  },
  {
@@ -89,17 +98,6 @@
   ]
  },
  {
-  "generic": "Brinzolamide/Brimonidine",
-  "brand": "Simbrinza",
-  "color": "Lime Green",
-  "use": "Glaucoma",
-  "dosage": "2-3x/day",
-  "notes": "",
-  "photos": [
-   "novartis-simbrinza.webp"
-  ]
- },
- {
   "generic": "Brinzolamide",
   "brand": "Azopt",
   "color": "Orange",
@@ -109,6 +107,17 @@
   "photos": [
    "brinzolamide.jpg",
    "azopt.jpg"
+  ]
+ },
+ {
+  "generic": "Brinzolamide/Brimonidine",
+  "brand": "Simbrinza",
+  "color": "Lime Green",
+  "use": "Glaucoma",
+  "dosage": "2-3x/day",
+  "notes": "",
+  "photos": [
+   "novartis-simbrinza.webp"
   ]
  },
  {
@@ -145,6 +154,15 @@
   ]
  },
  {
+  "generic": "Ciprofloxacin",
+  "brand": "Ciloxan",
+  "color": "Tan",
+  "use": "Antibiotic",
+  "dosage": "~4x/day, Variable",
+  "notes": "Generic",
+  "photos": []
+ },
+ {
   "generic": "Cyclopentolate",
   "brand": "Cyclogyl",
   "color": "Red",
@@ -169,6 +187,24 @@
   ]
  },
  {
+  "generic": "Cyclosporine 0.1%",
+  "brand": "Vevye",
+  "color": "White",
+  "use": "Dry Eye",
+  "dosage": "2x/day",
+  "notes": "Preservative Free",
+  "photos": []
+ },
+ {
+  "generic": "Diclofenac",
+  "brand": "Voltaren",
+  "color": "Gray",
+  "use": "Non-steroidal Anti-inflammatory",
+  "dosage": "3-4x/day",
+  "notes": "Generic",
+  "photos": []
+ },
+ {
   "generic": "Difluprednate",
   "brand": "Durezol",
   "color": "Pink",
@@ -181,15 +217,14 @@
   ]
  },
  {
-  "generic": "Dorzolamide/Timolol PF",
-  "brand": "Cosopt PF",
-  "color": "Vial",
+  "generic": "Dorzolamide",
+  "brand": "Trusopt",
+  "color": "Orange",
   "use": "Glaucoma",
-  "dosage": "2x/day",
+  "dosage": "2-3x/day",
   "notes": "Generic",
   "photos": [
-   "dorz-tim-pf.jpg",
-   "cosopt-pf.jpeg"
+   "dorzolamide.jpg"
   ]
  },
  {
@@ -204,14 +239,15 @@
   ]
  },
  {
-  "generic": "Dorzolamide",
-  "brand": "Trusopt",
-  "color": "Orange",
+  "generic": "Dorzolamide/Timolol PF",
+  "brand": "Cosopt PF",
+  "color": "Vial",
   "use": "Glaucoma",
-  "dosage": "2-3x/day",
+  "dosage": "2x/day",
   "notes": "Generic",
   "photos": [
-   "dorzolamide.jpg"
+   "dorz-tim-pf.jpg",
+   "cosopt-pf.jpeg"
   ]
  },
  {
@@ -281,6 +317,24 @@
   "photos": [
    "latanoprost.jpg"
   ]
+ },
+ {
+  "generic": "Latanoprost Emulsion",
+  "brand": "Xelpros",
+  "color": "Teal/Green",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "BAK Free",
+  "photos": []
+ },
+ {
+  "generic": "Latanoprost PF",
+  "brand": "Iyuzeh",
+  "color": "Vial",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "Preservative Free",
+  "photos": []
  },
  {
   "generic": "Latanoprostene Bunod",
@@ -363,15 +417,13 @@
   ]
  },
  {
-  "generic": "Netarsudil/Latanoprost",
-  "brand": "Rocklatan",
-  "color": "White",
-  "use": "Glaucoma",
-  "dosage": "1x/day",
-  "notes": "",
-  "photos": [
-   "rocklatan.webp"
-  ]
+  "generic": "Nepafenac",
+  "brand": "Nevanac, Ilevro",
+  "color": "Gray",
+  "use": "Non-steroidal Anti-inflammatory",
+  "dosage": "1-3x/day",
+  "notes": "Generic, Multiple Concentrations",
+  "photos": []
  },
  {
   "generic": "Netarsudil",
@@ -385,6 +437,17 @@
   ]
  },
  {
+  "generic": "Netarsudil/Latanoprost",
+  "brand": "Rocklatan",
+  "color": "White",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "",
+  "photos": [
+   "rocklatan.webp"
+  ]
+ },
+ {
   "generic": "Ofloxacin",
   "brand": "Floxin",
   "color": "Tan",
@@ -395,6 +458,24 @@
    "ofloxacin.webp",
    "ofloxacin-clear-cap.webp"
   ]
+ },
+ {
+  "generic": "Omidenepag Isopropyl",
+  "brand": "Omlonti",
+  "color": "Teal/Green",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "",
+  "photos": []
+ },
+ {
+  "generic": "Perfluorohexyloctane",
+  "brand": "Miebo",
+  "color": "White",
+  "use": "Dry Eye",
+  "dosage": "4x/day",
+  "notes": "Preservative Free",
+  "photos": []
  },
  {
   "generic": "Phenylephrine",
@@ -417,6 +498,15 @@
   "photos": [
    "pilocarpine.jpg"
   ]
+ },
+ {
+  "generic": "Pilocarpine 1.25%",
+  "brand": "Vuity",
+  "color": "Green",
+  "use": "Constricting Drop",
+  "dosage": "1-2x/day",
+  "notes": "For presbyopia (near vision)",
+  "photos": []
  },
  {
   "generic": "Polymyxin B Sulfate and Trimethoprim",
@@ -442,17 +532,6 @@
   ]
  },
  {
-  "generic": "Prednisolone/Moxifloxacin/Bromfenac",
-  "brand": "Pred-Moxi-Brom",
-  "color": "Purple",
-  "use": "Steroid, Antibiotic, Non-steroidal Anti-inflammatory",
-  "dosage": "2-3x/day",
-  "notes": "Combination Drop",
-  "photos": [
-   "Pred-Moxi-Brom_8mL.png"
-  ]
- },
- {
   "generic": "Prednisolone/Bromfenac",
   "brand": "Pred-Brom",
   "color": "Green",
@@ -461,6 +540,17 @@
   "notes": "Combination Drop",
   "photos": [
    "Pred-Brom.png"
+  ]
+ },
+ {
+  "generic": "Prednisolone/Moxifloxacin/Bromfenac",
+  "brand": "Pred-Moxi-Brom",
+  "color": "Purple",
+  "use": "Steroid, Antibiotic, Non-steroidal Anti-inflammatory",
+  "dosage": "2-3x/day",
+  "notes": "Combination Drop",
+  "photos": [
+   "Pred-Moxi-Brom_8mL.png"
   ]
  },
  {

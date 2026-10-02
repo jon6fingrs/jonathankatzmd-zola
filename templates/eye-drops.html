@@ -1,50 +1,100 @@
 {% extends "base.html" %}
 
-{% block page_stylesheets %}
-<link rel="stylesheet" href="{{ get_url(path='vendor/simple-datatables/simple-datatables.css', cachebust=true) }}">
-{% endblock page_stylesheets %}
+{#
+  Eye drop reference. static/data/eye-drops.json is the single source of truth
+  (the form generator reads the same file). Everything here is rendered at build
+  time; static/js/droptable.js only filters, sorts and runs the lightbox.
+
+  Two renderings of the same rows are emitted: a table (shown from 768px up)
+  and a card list (shown below). CSS picks one; the JS filters both.
+
+  Photos are thumbnailed at build time (resize_image, 116px tall WebP, i.e. 2x
+  the 58px display size); the original file is kept for the lightbox.
+
+  Adding a drug: append to the JSON following the existing keys. The filter
+  chips are derived (in droptable.js) from the `use` values, so a new category
+  appears on its own.
+#}
 
 {% block content %}
 {% set drops = load_data(path="static/data/eye-drops.json") %}
+
 <section class="jk-page jk-page--fluid">
   <div class="jk-fluidwrap">
     <div class="jk-page__intro">
       {{ page.content | safe }}
     </div>
 
+    <div class="jk-dropfilters" id="jk-dropfilters">
+      <label class="jk-search">
+        <span class="visually-hidden">Search eye drops</span>
+        <input type="search" id="jk-drops-search" placeholder="Search by name, color, or use…" autocomplete="off">
+      </label>
+      <div class="jk-chips" role="group" aria-label="Filter by use">
+        <button type="button" class="jk-chip is-active" data-filter="" aria-pressed="true">All</button>
+        {#- one chip per distinct `use` is inserted here by droptable.js #}
+        <button type="button" class="jk-chip jk-chip--pf" data-filter="__pf" aria-pressed="false">Preservative free</button>
+      </div>
+      <p class="jk-dropcount" id="jk-drops-count" aria-live="polite">Showing {{ drops | length }} of {{ drops | length }}</p>
+    </div>
+
+    {#- ===== desktop: table ===== #}
     <div class="jk-tablescroll">
       <table id="jk-drops-table" class="jk-datatable">
         <thead>
           <tr>
-            <th>Generic Name</th>
-            <th>Brand Name</th>
-            <th>Top Color</th>
-            <th>Use</th>
-            <th>Typical Dosage</th>
-            <th data-sortable="false" data-searchable="false">Photo</th>
-            <th>Notes</th>
+            <th scope="col"><button type="button" class="jk-sort" data-sort="0" aria-sort="ascending">Generic Name</button></th>
+            <th scope="col"><button type="button" class="jk-sort" data-sort="1">Brand Name</button></th>
+            <th scope="col"><button type="button" class="jk-sort" data-sort="2">Top Color</button></th>
+            <th scope="col"><button type="button" class="jk-sort" data-sort="3">Use</button></th>
+            <th scope="col"><button type="button" class="jk-sort" data-sort="4">Typical Dosage</button></th>
+            <th scope="col">Photo</th>
+            <th scope="col">Notes</th>
           </tr>
         </thead>
         <tbody>
-          {% for d in drops %}
-          <tr>
+          {%- for d in drops %}
+          <tr data-search="{{ d.generic }} {{ d.brand }} {{ d.color }} {{ d.use }} {{ d.notes }}" data-use="{{ d.use }}"{% if "Preservative Free" in d.notes %} data-pf="1"{% endif %}>
             <td class="jk-td-generic">{{ d.generic }}</td>
             <td>{{ d.brand }}</td>
-            <td class="jk-td-color" data-color="{{ d.color }}">{{ d.color }}</td>
+            <td class="jk-td-color" data-color="{{ d.color }}">{% if d.color == "Vial" or d.color == "Tube" %}<span class="jk-swatch jk-swatch--container" data-color="{{ d.color }}" aria-hidden="true"></span>{% else %}<span class="jk-swatch" data-color="{{ d.color }}" aria-hidden="true"></span>{% endif %}{{ d.color }}</td>
             <td>{{ d.use }}</td>
             <td>{{ d.dosage }}</td>
-            <td class="jk-td-photo">{% for p in d.photos %}<img class="jk-drop" src="{{ get_url(path='images/drops/' ~ p) }}" alt="{{ d.generic }}{% if d.brand %} ({{ d.brand }}){% endif %}" loading="lazy">{% endfor %}</td>
+            <td class="jk-td-photo">{% for p in d.photos %}{% set thumb = resize_image(path="static/images/drops/" ~ p, height=116, op="fit_height", format="webp", quality=82) %}<img class="jk-drop" src="{{ thumb.url }}" width="{{ thumb.width }}" height="{{ thumb.height }}" data-full="{{ get_url(path='images/drops/' ~ p) }}" alt="{{ d.generic }}{% if d.brand %} ({{ d.brand }}){% endif %}" loading="lazy" decoding="async">{% endfor %}</td>
             <td>{{ d.notes }}</td>
           </tr>
-          {% endfor %}
+          {%- endfor %}
         </tbody>
       </table>
     </div>
+
+    {#- ===== phone: cards ===== #}
+    <ul class="jk-dropcards" id="jk-drops-cards">
+      {%- for d in drops %}
+      <li class="jk-dropcard" data-search="{{ d.generic }} {{ d.brand }} {{ d.color }} {{ d.use }} {{ d.notes }}" data-use="{{ d.use }}"{% if "Preservative Free" in d.notes %} data-pf="1"{% endif %}>
+        <div class="jk-dropcard__main">
+          <h3 class="jk-dropcard__name">{{ d.generic }}</h3>
+          {%- if d.brand %}<p class="jk-dropcard__brand">{{ d.brand }}</p>{% endif %}
+          <p class="jk-dropcard__color jk-td-color" data-color="{{ d.color }}">{% if d.color == "Vial" or d.color == "Tube" %}<span class="jk-swatch jk-swatch--container" data-color="{{ d.color }}" aria-hidden="true"></span>{% else %}<span class="jk-swatch" data-color="{{ d.color }}" aria-hidden="true"></span>{% endif %}{{ d.color }}</p>
+          <dl class="jk-dropcard__facts">
+            <dt>Use</dt><dd>{{ d.use }}</dd>
+            <dt>Dosage</dt><dd>{{ d.dosage }}</dd>
+            {%- if d.notes %}<dt>Notes</dt><dd>{{ d.notes }}</dd>{% endif %}
+          </dl>
+        </div>
+        {%- if d.photos | length > 0 %}
+        <div class="jk-dropcard__photos">{% for p in d.photos %}{% set thumb = resize_image(path="static/images/drops/" ~ p, height=116, op="fit_height", format="webp", quality=82) %}<img class="jk-drop" src="{{ thumb.url }}" width="{{ thumb.width }}" height="{{ thumb.height }}" data-full="{{ get_url(path='images/drops/' ~ p) }}" alt="{{ d.generic }}{% if d.brand %} ({{ d.brand }}){% endif %}" loading="lazy" decoding="async">{% endfor %}</div>
+        {%- endif %}
+      </li>
+      {%- endfor %}
+    </ul>
+
+    <p class="jk-dropempty" id="jk-drops-empty" hidden>No eye drops match. Try a different search or clear the filters.</p>
   </div>
 </section>
 
-{# image lightbox #}
-<div id="jk-lightbox" class="jk-lightbox" hidden>
+{#- image lightbox #}
+<div id="jk-lightbox" class="jk-lightbox" role="dialog" aria-modal="true" aria-labelledby="jk-lightbox-cap" hidden>
   <button type="button" class="jk-lightbox__close" aria-label="Close">&times;</button>
   <figure class="jk-lightbox__figure">
     <img id="jk-lightbox-img" src="" alt="">
@@ -55,6 +105,5 @@
 
 {% block javascripts %}
 {{ super() }}
-<script src="{{ get_url(path='vendor/simple-datatables/simple-datatables.js', cachebust=true) }}"></script>
 <script src="{{ get_url(path='js/droptable.js', cachebust=true) }}"></script>
 {% endblock javascripts %}
