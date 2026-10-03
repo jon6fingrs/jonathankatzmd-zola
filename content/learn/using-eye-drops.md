@@ -10,6 +10,8 @@ article = true
 
 Eye drops only work if they get into the eye, and the technique matters more than most people expect. Studies that watch patients put in drops find that many miss the eye, touch the tip to the lashes, or put in several drops at once. These steps make each drop count.
 
+{{<figure src="images/learn/eye-drop-technique.svg" alt="Two steps: looking up with the lower lid pulled down while one drop falls into the pocket, then the eye closed with a fingertip pressing the inner corner beside the nose." caption="One drop into the lower-lid pocket, then close gently and press the inner corner. Pressing keeps the medicine on the eye instead of draining into the nose and throat." />}}
+
 ## Putting in a drop
 
 1. **Wash your hands.**

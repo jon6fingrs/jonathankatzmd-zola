@@ -10,6 +10,8 @@ article = true
 
 A **cataract** is clouding of the eye's natural lens, which sits behind the pupil and focuses light onto the retina. Almost everyone develops some cataract with age; it becomes a problem when it blurs vision, dulls colors, causes glare from headlights or sunlight, or changes your glasses prescription frequently. Cataract surgery replaces the cloudy lens with a clear artificial one and is among the most common and successful operations performed.
 
+{{<figure src="images/learn/cataract-lens.svg" alt="Two cross-sections: on the left a cloudy natural lens behind the iris, on the right a thin clear lens implant held inside the same lens capsule." caption="Cataract surgery removes the cloudy lens and places a clear implant in the same capsule, behind the iris. Simplified, not to scale." />}}
+
 ## When to have surgery
 
 There is no harm in waiting as long as the cataract is not interfering with your life, and no "ripeness" is required. Surgery makes sense when the cataract limits what you want to do: driving (especially at night), reading, recognising faces, or working. Two exceptions where your doctor may recommend not waiting: a cataract that is making glaucoma harder to control or the angle narrow, and a cataract so dense that it prevents the view of the retina or optic nerve needed to monitor other eye disease.

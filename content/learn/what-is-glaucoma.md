@@ -14,6 +14,8 @@ Glaucoma is a group of eye diseases that damage the **optic nerve**, the cable t
 
 The front of the eye is filled with a clear fluid called **aqueous humor**. It is made continuously behind the iris, flows through the pupil, and drains out through a mesh of tissue called the **trabecular meshwork** in the angle where the iris meets the cornea. Eye pressure is the balance between how much fluid is made and how easily it drains. In glaucoma the drain usually works less well than it should, pressure rises, and over years the optic nerve fibers die off.
 
+{{<figure src="images/learn/aqueous-flow.svg" alt="Cross-section of the front of the eye. Fluid is made by the ciliary body, flows through the pupil, and drains out through the trabecular meshwork at the edge of the cornea." caption="Fluid is made behind the iris, flows through the pupil into the front chamber, and leaves through the drain where the iris meets the cornea. Simplified, not to scale." />}}
+
 Eye pressure is measured in millimeters of mercury (mm Hg). "Normal" is often quoted as 10 to 21 mm Hg, but the number that is safe for one person's nerve may be too high for another's. Some people develop glaucoma with pressures in the normal range (sometimes called normal-tension glaucoma), and some people have higher pressures for years without damage (ocular hypertension). That is why your doctor follows the nerve itself, not just the pressure.
 
 ## Why there are usually no symptoms

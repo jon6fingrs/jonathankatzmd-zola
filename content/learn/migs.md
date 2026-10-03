@@ -23,6 +23,8 @@ Most MIGS procedures work by improving the eye's natural drainage through the tr
 
 Which procedure fits you depends on the type and severity of glaucoma, the anatomy of your drainage angle, whether you are having cataract surgery, and your target pressure.
 
+{{<figure src="images/learn/migs-stent.svg" alt="Close-up of the drainage angle showing a tiny stent passing from the front chamber through the trabecular meshwork into Schlemm's canal." caption="A trabecular micro-stent holds open a path from the front chamber into Schlemm's canal, the channel that carries fluid out of the eye. Close-up, not to scale." />}}
+
 ## What to expect
 
 **Before.** The workup is the same as for cataract surgery, plus gonioscopy to confirm the angle is suitable. Blood thinners usually do not need to be stopped, but tell your surgeon everything you take.

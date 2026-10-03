@@ -14,6 +14,8 @@ article = true
 
 The surgeon makes a small trapdoor in the white wall of the eye (the sclera) under the upper eyelid and removes a tiny piece of tissue beneath it, creating a new path for fluid to leave the eye. The fluid collects under the conjunctiva, the thin clear skin over the white of the eye, in a small blister called a **bleb**, and is absorbed into the blood vessels there. The bleb sits under the upper lid and is not normally visible.
 
+{{<figure src="images/learn/trabeculectomy.svg" alt="Cross-section showing a small flap and opening in the eye wall near the cornea, with fluid collecting in a blister called a bleb under the conjunctiva." caption="Fluid leaves the eye through a small opening under a flap in the eye wall and collects in a bleb under the conjunctiva, where it is absorbed. Simplified, not to scale." />}}
+
 Because the body tries to heal and close any new opening, a medicine that slows scarring (mitomycin C) is applied briefly during surgery, and the surgeon places adjustable stitches in the trapdoor. In the weeks afterward these stitches may be loosened with a laser or removed in the office to fine-tune how much fluid drains. This adjustability is what allows trabeculectomy to reach low pressures, but it also means the first few months involve close follow-up.
 
 ## The day of surgery
