@@ -265,12 +265,23 @@
     // 2. daily routine: when to use each drop, every day. Drops sharing a
     // time slot are already staggered five minutes apart.
     var routine = buildRoutine(entries);
+    var note = 'Suggested times. Wait at least five minutes between different eye drops.' + (anyPill ? ' Pills can be taken with your drops; follow the pharmacy label about food.' : '');
+    // The heading appears twice: as an <h2> on screen, and as a title row
+    // inside <thead> for print. Browsers never separate a table header from
+    // its first body row and repeat it on each page, so in print the heading
+    // can't be stranded at the bottom of page 1 and labels page 2 as well.
     h += '<div class="routine"><h2>Daily routine</h2>'
-      + '<p class="routine-note">Suggested times. Wait at least five minutes between different eye drops.' + (anyPill ? ' Pills can be taken with your drops; follow the pharmacy label about food.' : '') + '</p>'
-      + '<div class="table-wrapper"><table class="schedule-table routine-table schedule-table--stack"><thead><tr>'
+      + '<p class="routine-note">' + note + '</p>'
+      + '<div class="table-wrapper"><table class="schedule-table routine-table schedule-table--stack"><thead>'
+      + '<tr class="routine-titlerow" aria-hidden="true"><th colspan="3"><span class="routine-titlerow__h">Daily routine</span><span class="routine-titlerow__note">' + note + '</span></th></tr>'
+      + '<tr>'
       + '<th scope="col">Time</th><th scope="col">' + medHead + '</th><th scope="col">Which eye</th>'
-      + '</tr></thead><tbody>';
+      + '</tr></thead>';
+    // One <tbody> per time slot: in print a slot is never split across
+    // pages, but the table as a whole may continue onto the next page
+    // (with the header row repeated) instead of leaving page 1 half empty.
     routine.forEach(function (slot) {
+      h += '<tbody class="routine-slot">';
       slot.drops.forEach(function (d, i) {
         h += '<tr' + (i === 0 ? ' class="slot-start"' : '') + '>'
           + '<th scope="row" class="day-cell">' + esc(JK.fmtTime(d.time)) + '</th>'
@@ -278,8 +289,9 @@
           + '<td data-label="Which eye" class="routine-eye">' + esc(d.entry.eye) + '</td>'
           + '</tr>';
       });
+      h += '</tbody>';
     });
-    h += '</tbody></table></div></div>';
+    h += '</table></div></div>';
 
     h += '<div class="button-container">'
       + '<button type="button" class="btn btn-primary" id="jk-dropform-print">Print</button>'

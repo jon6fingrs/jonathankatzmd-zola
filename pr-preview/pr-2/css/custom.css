@@ -583,6 +583,7 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-schedule td.routine-eye { font-weight: 600; white-space: nowrap; }
 .jk-schedule .routine-table .day-cell { width: 1%; }
 .jk-schedule .routine-table tr.slot-start th, .jk-schedule .routine-table tr.slot-start td { border-top: 2px solid #000; }
+.jk-schedule .routine-titlerow { display: none; }  /* print-only copy of the heading, see dropform.js */
 
 /* phones: each day becomes a card */
 @media (max-width: 639px) {
@@ -739,7 +740,23 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
   .jk-qr svg { width: 1.1in; height: 1.1in; border: 0; padding: 0; }
   .jk-qrbox__cap { font-size: 9pt; }
   .schedule-legend { font-size: 12pt; margin-bottom: .6rem; }
-  .jk-schedule .routine { margin-top: 14pt; break-inside: avoid; page-break-inside: avoid; }
+  /* The routine may continue onto the next page, but only between time
+     slots (each slot is its own <tbody>), with the header row repeated and
+     the heading kept with the first slot. Keeping the whole block together
+     instead left most of page 1 blank whenever it didn't quite fit. */
+  .jk-schedule .routine { margin-top: 14pt; }
+  .jk-schedule .routine-table .routine-slot { break-inside: avoid; page-break-inside: avoid; }
+  /* heading lives in the table header in print (see dropform.js) */
+  .jk-schedule .routine > h2, .jk-schedule .routine > .routine-note { display: none; }
+  .jk-schedule .routine-table { border: 0 !important; }
+  .jk-schedule .routine-table tr.routine-titlerow { display: table-row; }
+  .jk-schedule .routine-table tr.routine-titlerow th {
+    border: 0 !important; background: none !important; text-align: left;
+    padding: 0 0 6pt; font-weight: 400;
+  }
+  .routine-titlerow__h { display: block; font-size: 16pt; font-weight: 700; margin-bottom: 2pt; }
+  .routine-titlerow__note { display: block; font-size: 12pt; }
+  .jk-schedule td[data-label="Which eye"], .jk-schedule td[data-label="How often"] { white-space: nowrap; }
   .jk-schedule .routine h2 { font-size: 16pt; }
   .jk-schedule .routine-note { font-size: 12pt; margin-bottom: 6pt; }
   .jk-schedule .table-wrapper { overflow: visible; }
