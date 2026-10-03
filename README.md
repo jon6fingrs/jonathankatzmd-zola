@@ -189,7 +189,10 @@ vanish on some rows; `pt` units never round away. Checkboxes are drawn with
 display); the lightbox loads the original from `data-full`. Hero: 942px
 WebP with the PNG as `<picture>` fallback. Icons: three PNG sizes from
 `logo.png`. Zola's image crate does not read AVIF, so sources are
-JPEG/PNG/WebP/GIF.
+JPEG/PNG/WebP/GIF. The two `.avif` files in `static/images/drops/` are
+the WordPress-era originals, unreferenced by the JSON and kept only so
+old links to those exact filenames still resolve; don't list them in
+`photos`.
 
 ## Known rough edges
 
