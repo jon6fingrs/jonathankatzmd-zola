@@ -1,6 +1,6 @@
 # Builds the site and runs the dosing-rule tests on every push and pull
-# request. There is no deploy step: production is still rsync + a container
-# restart (see README). A red check here means "don't deploy this".
+# request. There is no deploy step: production is a `git pull` on the host +
+# a container restart (see README). A red check here means "don't deploy this".
 name: CI
 
 on:

@@ -17,11 +17,24 @@ operational checklist.
 No theme to clone and no theme assets to copy: everything the build needs
 is in the repo. Images are tracked in git.
 
-## Rebuilding after content edits
+## Deploying an update (after a PR is merged to master)
 
-Portainer -> Containers -> jonathankatzmd-zola-build -> Restart.
+    cd /home/jonathan/zola
+    git pull
+    docker restart jonathankatzmd-zola-build    # or Portainer -> Restart
+
 nginx keeps running and serves the new files immediately. Restart nginx
 only if nginx.conf changed.
+
+If `git pull` refuses because of local changes, a tracked file was edited
+on the host. Run `git diff` to see what changed, then `git restore <file>`.
+Host-only ignore patterns go in `.git/info/exclude`, not `.gitignore`.
+Keep backup files outside `static/`, because everything in `static/` is
+published.
+
+"Permission denied" warnings about `static/processed_images` come from
+root-owned build files. They're harmless, and
+`sudo rm -rf static/processed_images` clears them.
 
 ## Before deploying
 

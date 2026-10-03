@@ -11,6 +11,65 @@ alone.
 `nginx.conf` are real, deployed, gitignored files — never commit them. Work
 from the `.example` versions.
 
+## Working on this repo (start here in a new coding session)
+
+**Workflow.**
+1. Work on a branch and open a pull request.
+2. CI builds and tests it, and the preview workflow posts a link to a
+   live preview on the PR (see "Previewing a change" below).
+3. The owner reviews the preview, then merges.
+4. Production is updated by hand from `master` (see "Deployment model").
+5. Nothing deploys automatically.
+
+**Build and test without Docker.** Fetch the same Zola binary CI uses:
+
+```bash
+curl -sSL https://github.com/getzola/zola/releases/download/v0.23.3/zola-v0.23.3-x86_64-unknown-linux-gnu.tar.gz | tar xz zola
+./zola build && ./zola check --skip-external-links
+node --test 'tests/**/*.test.js'
+```
+
+Keep the binary out of the repo. Put it in a temp directory, or delete it
+after use.
+
+**Before calling a UI change done:**
+- Load the page with Playwright (Chromium) at 390px wide and at desktop
+  width.
+- Check that there is no horizontal scroll (see "Mobile-first
+  conventions").
+- For anything printable, also render a PDF.
+- Run `zola check`. It catches broken `@/` links.
+
+**Verifying the live site after a deploy.**
+- Fetch every page, asset and photo with `curl` and expect HTTP 200.
+- Expect `/videos/` to return 404 while it is a draft.
+- The live page should have no preview banner and no `noindex`, and
+  should include the Plausible tag and the JSON-LD block.
+- `/form-token.js` should return a token.
+- The old WordPress URLs should 301 to pages that return 200.
+- The live `js/*.js`, `css/custom.css` and `data/eye-drops.json` should
+  be byte-identical to `master`.
+- A sandboxed browser behind a TLS-intercepting proxy may reject the
+  live site's certificate. That is the sandbox, not the site. Use curl
+  with the proxy's CA bundle, and never turn off certificate checks.
+
+**Keep private details out of the repo.**
+- Never commit details of the real host: the real `nginx.conf` or
+  `docker-compose.yml`, internal hostnames or IPs, VPN or tunnel
+  topology, or secrets.
+- The `.example` files stay generic.
+- If the owner shares the real configuration to check that routing is
+  consistent, use it for checking only, and leave it out of commits, PRs
+  and docs.
+
+**What the owner values.**
+- Interactive, polished patient tools: the medication chart, the post-op
+  schedule and the schedule builder.
+- Every page working well on a phone.
+- Printouts that older patients can read easily.
+- Plain-language patient content with illustrations rather than walls of
+  text.
+
 ## What's in this repo vs. what isn't
 
 | Tracked in git | Gitignored | Why |
@@ -55,21 +114,38 @@ service in `docker-compose.yml` that builds once and exits; see that file.
 
 ## Deployment model
 
-**CI builds, it does not deploy** (PR previews aside, see above). `.github/workflows/ci.yml` runs on every
+**CI builds, it does not deploy** (PR previews aside, see below). `.github/workflows/ci.yml` runs on every
 push and PR: `zola build`, `zola check --skip-external-links`, the Node
 tests, and a sanity check of `eye-drops.json`. A red check means "don't
 deploy this". Deploys themselves are still manual:
 
-1. `rsync` the changed files to the host (`/home/jonathan/zola/` in
-   production).
-2. Restart the `zola-build` container (rebuilds `public/` from the current
-   source).
-3. Restart `nginx` too, but **only** if `nginx.conf` changed — content and
+1. Merge the PR into `master` once CI is green and the preview looks right.
+2. On the host, in the site directory (`/home/jonathan/zola/`, a git
+   clone of this repo): `git pull`.
+3. `docker restart jonathankatzmd-zola-build` (or Portainer → Restart).
+   It rebuilds `public/` from the current source and exits.
+4. Restart `nginx` too, but **only** if `nginx.conf` changed — content and
    template changes need just the `zola-build` restart, since nginx serves
    straight from the shared `public/` directory.
 
 Traefik (reverse proxy, TLS termination) and Portainer (container
 management UI) sit in front of this stack but aren't part of this repo.
+
+**Keeping the host clone pullable.**
+
+- Never edit tracked files on the host, `.gitignore` included, or
+  `git pull` aborts. Put host-only ignore patterns in
+  `.git/info/exclude`, which is never committed.
+- Don't leave backup copies (`custom.css.backup` and so on) anywhere
+  under `static/`. Zola copies everything in `static/` into the live
+  site, so a backup there gets published. Keep backups outside the repo.
+- `git clean -ndX static` is a safe dry run. It lists ignored files under
+  `static/` and deletes nothing. It should show only
+  `static/processed_images/`.
+- The container runs as root, so `static/processed_images/` comes back
+  root-owned after every build, and git can print "Permission denied"
+  warnings about it. They're harmless. `sudo rm -rf static/processed_images`
+  clears the folder, and the next build recreates it.
 
 ## Previewing a change before deploying
 
@@ -223,6 +299,23 @@ printing.** A 1px border can land between device pixels at 300dpi and
 vanish on some rows; `pt` units never round away. Checkboxes are drawn with
 `appearance: none` and a `pt` border for the same reason.
 
+**Printed schedules are large print for patients.**
+- Solid black text, 12pt minimum. No grey anywhere in print.
+- `.jk-page .container` drops its max-width in print, so the table fills
+  the paper; landscape fills the wider page.
+- The daily-routine table is built as one `<tbody class="routine-slot">`
+  per dose time with `break-inside: avoid`. A long routine breaks between
+  time slots, never through one, and it flows onto page 2 instead of
+  leaving page 1 mostly empty.
+- The table's title is a print-only row in `<thead>` (`routine-titlerow`),
+  not a heading above the table. Browsers ignore `break-after: avoid` on
+  headings, so a separate heading could be stranded at the bottom of
+  page 1. A `<thead>` row also repeats on every printed page.
+- A medication with no stop date shows "Ongoing".
+- To check print layout, render with Playwright's
+  `page.pdf({ format: 'Letter' })` in both orientations and look at the
+  PDF.
+
 **Image pipeline.** `resize_image()` writes into `static/processed_images/`
 (gitignored). Drug photos: 116px-tall WebP thumbnails (2× the 58px
 display); the lightbox loads the original from `data-full`. Hero: 942px
@@ -241,6 +334,27 @@ old links to those exact filenames still resolve; don't list them in
   extending the form with a new field requires backend changes.
 - New reference-table entries without photos show an empty photo cell;
   add a file to `static/images/drops/` and list it in `photos` to fill it.
+  Every current entry has a photo. Good sources are DailyMed label images
+  and the practice's own photos (record the source in IMAGE-SOURCES.md).
+  Crop to the bottle or pill on a plain background, like the existing
+  photos.
 - Dose-time defaults (`JK.doseTimes` in `schedule-common.js`; once-daily
   glaucoma drops at 21:00 in `dropform.js`) are conventions, not
   prescriptions; adjust there if the practice prefers different times.
+
+## Ideas parked for later
+
+The owner has seen these and chose to wait. Ask before starting any of them.
+
+- **Bottle-life calculator.** Estimates how long a bottle of drops lasts
+  from bottle size, drops per day and eyes treated, to help with refill
+  timing.
+- **Vision-loss simulator.** Shows how glaucoma field loss looks
+  compared with cataract blur.
+- **Oral prednisone.** It could go in the medication chart as a
+  reference entry. A taper in the schedule builder would need a
+  different start date for each row, which the builder doesn't support.
+  It's rarely prescribed, so it isn't added yet.
+- **Videos page.** `content/videos.md` stays `draft = true` until there
+  are videos. To publish it, set it to `false` and add it back to the nav
+  in `config.toml`.
