@@ -541,8 +541,8 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-schedule .schedule-head h1, .jk-schedule .surgery-name { margin: 0 0 .35rem; font-size: 1.7rem; font-weight: 700; }
 .jk-schedule .schedule-head > span, .jk-schedule .schedule-meta { font-size: 1.05rem; color: var(--jk-ink); margin: 0; }
 .jk-qrbox { text-align: center; flex: 0 0 auto; }
-.jk-qr svg { display: block; background: #fff; border: 1px solid var(--jk-line); border-radius: 6px; padding: 4px; }
-.jk-qrbox__cap { font-size: .8rem; color: var(--jk-ink); margin: .35rem 0 0; max-width: 140px; }
+.jk-qr svg { display: block; margin: 0 auto; background: #fff; border: 1px solid var(--jk-line); border-radius: 6px; padding: 4px; }
+.jk-qrbox__cap { font-size: .8rem; color: var(--jk-ink); margin: .35rem auto 0; max-width: 140px; }
 .schedule-legend { list-style: none; padding: 0; margin: 0 0 1rem; font-size: 1.05rem; }
 .schedule-legend li { margin: 0 0 .25rem; }
 .jk-schedule .table-wrapper { overflow-x: auto; }
