@@ -24,3 +24,12 @@ Dr. Jonathan Katz joined the Katzen Eye Group in 2019. He specializes in primary
 Dr. Katz received his medical degree from George Washington University School of Medicine in Washington, DC where he was inducted into the Alpha Omega Alpha Honor Society and graduated with distinction. He then completed an internship at Medstar Franklin Square Hospital in Baltimore, MD. After which, he and his wife moved to Atlanta, Georgia where he completed his residency in Ophthalmology and then his fellowship in Glaucoma at the world-renowned Emory Eye Center at Emory University. He is excited to bring his experience back to his home town of Baltimore, MD.
 
 Outside of the office, Dr. Katz enjoys hiking, biking, and spending time with his family.
+
+## Tools for clinicians
+
+Dr. Katz also maintains two calculators for eye care professionals:
+
+- [Ectasia Risk](https://ectasiarisk.com/) &mdash; an ectasia risk calculator for screening refractive surgery candidates.
+- [Munnerlyn Formula](https://munnerlynformula.com/) &mdash; an ablation depth calculator based on the Munnerlyn formula for laser vision correction.
+
+These are intended for clinicians and are not a substitute for an individual evaluation.

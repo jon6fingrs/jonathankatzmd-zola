@@ -6,6 +6,13 @@
       <a href="{{ get_url(path='/privacy/', trailing_slash=true) }}">Privacy</a>
       <a href="{{ config.extra.katzen_url }}" target="_blank" rel="noopener">Katzen Eye Group</a>
     </nav>
+    {%- if config.extra.clinician_sites %}
+    <p class="jk-footer__clinicians"><span>For clinicians:</span>
+      {%- for site in config.extra.clinician_sites %}
+      <a href="{{ site.url }}" target="_blank" rel="noopener">{{ site.name }}</a>{% if not loop.last %}<span aria-hidden="true">&middot;</span>{% endif %}
+      {%- endfor %}
+    </p>
+    {%- endif %}
     <p class="mb-0">&copy; {{ now() | date(format="%Y") }} {{ config.extra.copyright }}</p>
   </div>
 </footer>

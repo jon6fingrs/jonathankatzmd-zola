@@ -23,6 +23,12 @@ hero_image = "images/team/jonathan-katz-cutout.png"
 about_image = "images/team/jonathan-katz.jpg"
 katzen_bio_url = "https://www.katzeneye.com/doctors/jonathan-katz/"
 katzen_url = "https://www.katzeneye.com/"
+# Dr. Katz's calculators for eye care professionals. Linked from the footer
+# ("For clinicians") and described on the About page.
+clinician_sites = [
+  { name = "Ectasia Risk", url = "https://ectasiarisk.com/" },
+  { name = "Munnerlyn Formula", url = "https://munnerlynformula.com/" },
+]
 # Main number shown in "call to schedule" blocks (Lutherville / Towson office).
 main_phone = "410-821-9490"
 # --- Plausible Analytics (self-hosted, proxied first-party) ------------
