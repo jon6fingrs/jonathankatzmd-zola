@@ -2,7 +2,7 @@
 title = "Trabeculectomy"
 description = "Trabeculectomy creates a new drainage channel under the eyelid to lower eye pressure in advanced glaucoma. What the operation involves, the twelve-week recovery, and warning signs."
 template = "page.html"
-weight = 6
+weight = 7
 
 [extra]
 article = true

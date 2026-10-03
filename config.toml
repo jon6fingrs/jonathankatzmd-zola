@@ -80,6 +80,9 @@ icon = "images/nav/book.svg"
   name = "WHAT IS GLAUCOMA?"
   url = "/learn/what-is-glaucoma/"
   [[extra.menus.children]]
+  name = "WHAT VISION LOSS LOOKS LIKE"
+  url = "/learn/vision-loss/"
+  [[extra.menus.children]]
   name = "GLAUCOMA TESTING"
   url = "/learn/glaucoma-testing/"
   [[extra.menus.children]]

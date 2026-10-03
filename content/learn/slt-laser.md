@@ -2,7 +2,7 @@
 title = "SLT Laser"
 description = "Selective laser trabeculoplasty: an office laser that lowers eye pressure by treating the eye's drain. What it is for, what the visit is like, and what to expect afterward."
 template = "page.html"
-weight = 4
+weight = 5
 
 [extra]
 article = true

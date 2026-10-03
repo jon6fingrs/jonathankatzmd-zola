@@ -24,3 +24,18 @@ vuity.webp, methazolamide-50.jpg (Sandoz 50 mg tablet, "GG 181", which matches
 the Sandoz methazolamide label on DailyMed).
 The remaining photos date from the WordPress site (see fetch-assets.sh).
 
+
+## Vision simulator scenes (`static/images/vision/`)
+
+Everyday scenes the simulator applies its effects to. All are CC0 (public
+domain dedication), so no attribution is required; the page credits the
+photographers anyway. Converted to WebP at the largest size the source
+offers without a login.
+
+| File | Title, photographer | Source | Notes |
+|---|---|---|---|
+| night.webp | "Nighttime Traffic", Anthony Delanoix (via Unsplash) | https://commons.wikimedia.org/wiki/File:Nighttime_Traffic_(Unsplash).jpg | 1400px; streetlights and headlights give the cataract glare halos something to sit on |
+| kitchen.webp | Kitchen with subway tile, rawpixel | https://www.rawpixel.com/image/5919940/photo-image-light-public-domain-shadow | 1024px preview (full size needs a rawpixel login); straight tile lines show distortion well |
+| table.webp | "Family Breakfast", Direct Media | https://stocksnap.io/photo/family-breakfast-NIBW9OQWA8 | 960px (StockSnap's public size); faces at the center, children at the edges |
+| reading.webp | "Newspaper Magazine", Patryk Dziejma | https://stocksnap.io/photo/newspaper-magazine-FT18I6U09O | 960px; small print for the reading conditions |
+| street.webp | "Crosswalk Intersection", Peter Miranda | https://stocksnap.io/photo/crosswalk-intersection-FRIV8HI9GP | 960px; street level, curb and people for field-loss conditions |
