@@ -9,7 +9,7 @@ scripts = ["vendor/qrcode.js", "js/schedule-common.js", "js/dropform.js"]
 centered = true
 +++
 
-<p class="jk-page__lede">Add each eye drop, how many times a day it is used, and which eye. The schedule lists the drops, suggests a daily routine with the drops spaced five minutes apart, and gives a weekly checklist to print, calendar reminders, and a QR code to open it on a phone.</p>
+<p class="jk-page__lede">Add each eye drop, how many times a day it is used, and which eye. The schedule lists the drops and a daily routine with suggested times, spacing drops five minutes apart. It can be printed, added to a phone's calendar with reminders, or opened on a phone with its QR code.</p>
 
 <form id="jk-dropform" class="jk-dropform" data-source="../../data/eye-drops.json" novalidate>
   <div id="jk-dropform-rows"></div>

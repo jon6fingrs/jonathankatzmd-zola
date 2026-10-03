@@ -3,7 +3,7 @@
  * Rows are added/removed; generic and brand dropdowns are populated from
  * /data/eye-drops.json (the same file that builds the reference table) and
  * linked both ways. Output: a list of the drops, a daily routine with drops
- * spaced five minutes apart, a weekly checklist, calendar (.ics) export and a
+ * spaced five minutes apart, calendar (.ics) export and a
  * QR code of the schedule URL. Shared helpers live in schedule-common.js.
  */
 (function () {
@@ -201,14 +201,13 @@
   function dropLabel(e) {
     return e.generic + (e.brand ? ' (' + e.brand + ')' : '');
   }
+  // swatch + generic name + brand, for the routine table
   function dropHTML(e) {
     return swatchHTML(e.color).replace('<span class="jk-colorchip__text">' + esc(e.color) + '</span>', '')
-      + '<strong>' + esc(e.generic) + '</strong>' + (e.brand ? ' <span class="routine-brand">' + esc(e.brand) + '</span>' : '')
-      + ' <span class="routine-eye">' + esc(e.eye) + '</span>';
+      + '<strong>' + esc(e.generic) + '</strong>' + (e.brand ? ' <span class="routine-brand">(' + esc(e.brand) + ')</span>' : '');
   }
 
   // ---------- render ----------
-  var DOWS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   function render(entries) {
     var today = JK.date.today();
@@ -232,22 +231,21 @@
     });
     h += '</tbody></table></div>';
 
-    // 2. daily routine + weekly checklist
+    // 2. daily routine: when to use each drop, every day. Drops sharing a
+    // time slot are already staggered five minutes apart.
     var routine = buildRoutine(entries);
     h += '<div class="routine"><h2>Daily routine</h2>'
-      + '<p class="jk-note">Suggested times. Wait at least five minutes between different drops in the same eye. Tick a box after each dose.</p>'
-      + '<div class="table-wrapper"><table class="schedule-table routine-table schedule-table--stack"><thead><tr><th scope="col">Time</th><th scope="col">Drop</th>';
-    DOWS.forEach(function (d) { h += '<th scope="col" class="dow">' + d + '</th>'; });
-    h += '</tr></thead><tbody>';
+      + '<p class="routine-note">Suggested times. Wait at least five minutes between different drops.</p>'
+      + '<div class="table-wrapper"><table class="schedule-table routine-table schedule-table--stack"><thead><tr>'
+      + '<th scope="col">Time</th><th scope="col">Eye drop</th><th scope="col">Which eye</th>'
+      + '</tr></thead><tbody>';
     routine.forEach(function (slot) {
       slot.drops.forEach(function (d, i) {
         h += '<tr' + (i === 0 ? ' class="slot-start"' : '') + '>'
           + '<th scope="row" class="day-cell">' + esc(JK.fmtTime(d.time)) + '</th>'
-          + '<td data-label="Drop" class="routine-drop">' + dropHTML(d.entry) + '</td>';
-        DOWS.forEach(function (dow) {
-          h += '<td data-label="' + dow + '" class="dose-cell dow"><input type="checkbox" aria-label="' + dow + ' ' + esc(JK.fmtTime(d.time)) + ' ' + esc(dropLabel(d.entry)) + '"></td>';
-        });
-        h += '</tr>';
+          + '<td data-label="Eye drop" class="routine-drop">' + dropHTML(d.entry) + '</td>'
+          + '<td data-label="Which eye" class="routine-eye">' + esc(d.entry.eye) + '</td>'
+          + '</tr>';
       });
     });
     h += '</tbody></table></div></div>';
