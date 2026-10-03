@@ -25,11 +25,13 @@
   var SPACING_MIN = 5;     // minutes between different drops in the same slot
 
   // ---------- data ----------
-  // Pills are in the reference chart but not in the drop builder: its
-  // "which eye" and five-minute-spacing logic only make sense for drops.
+  // Pills (Tablet/Capsule in the data's colour field) are taken by mouth:
+  // their "Which eye" is fixed to "By mouth", they skip the five-minute
+  // drop spacing, and their reminders say "Take" rather than "Eye drop".
   var ORAL = { Tablet: true, Capsule: true };
+  var BY_MOUTH = 'By mouth';
+  function isOral(e) { return !!ORAL[e.color]; }
   function indexData(list) {
-    list = list.filter(function (d) { return !ORAL[d.color]; });
     drugs = list;
     byGeneric = {};
     brands = [];
@@ -57,7 +59,7 @@
 
   function swatchHTML(color) {
     if (!color) return '<span class="jk-colorchip__text">—</span>';
-    var cls = (color === 'Vial' || color === 'Tube' || color === 'Varies') ? 'jk-swatch jk-swatch--container' : 'jk-swatch';
+    var cls = (color === 'Vial' || color === 'Tube' || color === 'Varies' || ORAL[color]) ? 'jk-swatch jk-swatch--container' : 'jk-swatch';
     return '<span class="' + cls + '" data-color="' + esc(color) + '" aria-hidden="true"></span><span class="jk-colorchip__text">' + esc(color) + '</span>';
   }
 
@@ -71,7 +73,11 @@
     fillSelect(gen, drugs.map(function (d) { return { value: d.generic, label: d.generic }; }), 'Select generic name');
     fillSelect(brd, brands.map(function (b) { return { value: b.name, label: b.name }; }), 'Select brand name');
 
-    function setColor(c) { col.innerHTML = swatchHTML(c); col.setAttribute('data-color', c || ''); }
+    var eyeSel = row.querySelector('[name=eye]');
+    function setColor(c) {
+      col.innerHTML = swatchHTML(c); col.setAttribute('data-color', c || '');
+      setOral(eyeSel, !!ORAL[c]);
+    }
 
     // generic -> brand + color
     gen.addEventListener('change', function () {
@@ -101,6 +107,19 @@
     rowsEl.appendChild(row);
     renumber();
     return row;
+  }
+
+  // A pill's "Which eye" is "By mouth" and locked; switching back to a drop
+  // restores the eye choices.
+  function setOral(sel, oral) {
+    var opt = sel.querySelector('option[value="' + BY_MOUTH + '"]');
+    if (oral) {
+      if (!opt) { opt = document.createElement('option'); opt.value = BY_MOUTH; opt.textContent = BY_MOUTH; sel.appendChild(opt); }
+      sel.value = BY_MOUTH; sel.disabled = true;
+    } else {
+      if (opt) { opt.remove(); sel.value = 'Right Eye'; }
+      sel.disabled = false;
+    }
   }
 
   // The first/only row can't be deleted.
@@ -137,7 +156,7 @@
         color: d ? d.color : '',
         use: d ? d.use : '',
         times: +r.querySelector('[name=timesPerDay]').value || 1,
-        eye: r.querySelector('[name=eye]').value,
+        eye: d && ORAL[d.color] ? BY_MOUTH : r.querySelector('[name=eye]').value,
         stop: r.querySelector('[name=stopDate]').value
       });
     });
@@ -153,7 +172,7 @@
       gen.dispatchEvent(new Event('change'));
       if (e.brand) r.querySelector('[name=brandName]').value = e.brand;
       r.querySelector('[name=timesPerDay]').value = String(e.times);
-      r.querySelector('[name=eye]').value = e.eye;
+      if (!isOral(e)) r.querySelector('[name=eye]').value = e.eye;
       r.querySelector('[name=stopDate]').value = e.stop || '';
     });
     if (!entries.length) addRow();
@@ -161,8 +180,8 @@
 
   // ---------- url state ----------
   // r = one entry per row, fields separated by "|", rows by ";"
-  var EYE_CODE = { 'Right Eye': 'R', 'Left Eye': 'L', 'Both Eyes': 'B' };
-  var EYE_NAME = { R: 'Right Eye', L: 'Left Eye', B: 'Both Eyes' };
+  var EYE_CODE = { 'Right Eye': 'R', 'Left Eye': 'L', 'Both Eyes': 'B', 'By mouth': 'M' };
+  var EYE_NAME = { R: 'Right Eye', L: 'Left Eye', B: 'Both Eyes', M: 'By mouth' };
   function toParams(entries) {
     return { r: entries.map(function (e) {
       return [e.generic, e.brand, e.times, EYE_CODE[e.eye] || 'B', e.stop].join('|');
@@ -174,18 +193,20 @@
       var f = s.split('|');
       var d = byGeneric[f[0]];
       if (!d) return null;
-      return { generic: f[0], brand: f[1] || '', color: d.color, use: d.use, times: Math.min(8, Math.max(1, +f[2] || 1)), eye: EYE_NAME[f[3]] || 'Both Eyes', stop: JK.date.parseISO(f[4]) ? f[4] : '' };
+      return { generic: f[0], brand: f[1] || '', color: d.color, use: d.use, times: Math.min(8, Math.max(1, +f[2] || 1)), eye: ORAL[d.color] ? BY_MOUTH : (EYE_NAME[f[3]] && f[3] !== 'M' ? EYE_NAME[f[3]] : 'Both Eyes'), stop: JK.date.parseISO(f[4]) ? f[4] : '' };
     }).filter(Boolean);
   }
 
   // ---------- routine ----------
-  // Assign each drop its dose times, then stagger drops that share a slot
-  // by SPACING_MIN so the routine itself teaches the "wait five minutes" rule.
+  // Assign each medication its dose times, then stagger the eye drops that
+  // share a slot by SPACING_MIN so the routine itself teaches the "wait five
+  // minutes" rule. Pills in a slot are listed first, at the slot time; they
+  // don't need spacing from drops.
   // Returns [{ time:"HH:MM", drops:[{entry, time}] }] sorted by time.
   // Once-daily glaucoma drops (prostaglandins and their combinations) are
   // conventionally taken at bedtime, so that is their default slot.
   function timesFor(e) {
-    if (e.times === 1 && /Glaucoma/.test(e.use || '')) return ['21:00'];
+    if (e.times === 1 && !isOral(e) && /Glaucoma/.test(e.use || '')) return ['21:00'];
     return JK.doseTimes(e.times);
   }
   function buildRoutine(entries) {
@@ -197,8 +218,11 @@
     });
     return Object.keys(slots).sort().map(function (t) {
       // more-frequent drops first within a slot, then alphabetical
-      var list = slots[t].slice().sort(function (a, b) { return b.times - a.times || a.generic.localeCompare(b.generic); });
-      return { time: t, drops: list.map(function (e, i) { return { entry: e, time: JK.shiftTime(t, i * SPACING_MIN) }; }) };
+      var order = function (a, b) { return b.times - a.times || a.generic.localeCompare(b.generic); };
+      var pills = slots[t].filter(isOral).sort(order);
+      var drops = slots[t].filter(function (e) { return !isOral(e); }).sort(order);
+      return { time: t, drops: pills.map(function (e) { return { entry: e, time: t }; })
+        .concat(drops.map(function (e, i) { return { entry: e, time: JK.shiftTime(t, i * SPACING_MIN) }; })) };
     });
   }
 
@@ -215,13 +239,16 @@
 
   function render(entries) {
     var today = JK.date.today();
-    var h = '<div class="schedule-head"><div><h1>Eye Drop Schedule</h1>'
+    var anyPill = entries.some(isOral);
+    var title = anyPill ? 'Eye Medication Schedule' : 'Eye Drop Schedule';
+    var medHead = anyPill ? 'Medication' : 'Eye drop';
+    var h = '<div class="schedule-head"><div><h1>' + title + '</h1>'
       + '<p class="schedule-meta">Prepared ' + esc(JK.date.fmtLong(today)) + '</p></div>'
       + '<div class="jk-qrbox"><div class="jk-qr" id="jk-dropform-qr"></div><p class="jk-qrbox__cap">Scan to open this schedule on your phone</p></div></div>';
 
     // 1. the drops
     h += '<div class="table-wrapper"><table class="schedule-table schedule-table--stack"><thead><tr>'
-      + '<th scope="col">Eye drop</th><th scope="col">Cap color</th><th scope="col">How often</th><th scope="col">Which eye</th><th scope="col">Until</th>'
+      + '<th scope="col">' + medHead + '</th><th scope="col">' + (anyPill ? 'Cap color / form' : 'Cap color') + '</th><th scope="col">How often</th><th scope="col">Which eye</th><th scope="col">Until</th>'
       + '</tr></thead><tbody>';
     entries.forEach(function (e) {
       var stop = JK.date.parseISO(e.stop);
@@ -239,15 +266,15 @@
     // time slot are already staggered five minutes apart.
     var routine = buildRoutine(entries);
     h += '<div class="routine"><h2>Daily routine</h2>'
-      + '<p class="routine-note">Suggested times. Wait at least five minutes between different drops.</p>'
+      + '<p class="routine-note">Suggested times. Wait at least five minutes between different eye drops.' + (anyPill ? ' Pills can be taken with your drops; follow the pharmacy label about food.' : '') + '</p>'
       + '<div class="table-wrapper"><table class="schedule-table routine-table schedule-table--stack"><thead><tr>'
-      + '<th scope="col">Time</th><th scope="col">Eye drop</th><th scope="col">Which eye</th>'
+      + '<th scope="col">Time</th><th scope="col">' + medHead + '</th><th scope="col">Which eye</th>'
       + '</tr></thead><tbody>';
     routine.forEach(function (slot) {
       slot.drops.forEach(function (d, i) {
         h += '<tr' + (i === 0 ? ' class="slot-start"' : '') + '>'
           + '<th scope="row" class="day-cell">' + esc(JK.fmtTime(d.time)) + '</th>'
-          + '<td data-label="Eye drop" class="routine-drop">' + dropHTML(d.entry) + '</td>'
+          + '<td data-label="' + medHead + '" class="routine-drop">' + dropHTML(d.entry) + '</td>'
           + '<td data-label="Which eye" class="routine-eye">' + esc(d.entry.eye) + '</td>'
           + '</tr>';
       });
@@ -259,12 +286,12 @@
       + '<button type="button" class="btn btn-outline-primary" id="jk-dropform-ics">Add to calendar</button>'
       + '<button type="button" class="btn btn-outline-secondary" id="jk-dropform-back">Back</button>'
       + '<label class="jk-printopt"><input type="checkbox" class="jk-landscape"> Landscape</label></div>'
-      + '<p class="jk-note jk-ics-note">“Add to calendar” downloads a file that adds a daily reminder for each dose to the phone or computer calendar it is opened on. Drops without a stop date repeat until you delete them.</p>';
+      + '<p class="jk-note jk-ics-note">“Add to calendar” downloads a file that adds a daily reminder for each dose to the phone or computer calendar it is opened on. Medications without a stop date repeat until you delete them.</p>';
 
     out.innerHTML = h;
     form.hidden = true;
     out.hidden = false;
-    JK.print.title('Eye Drop Schedule');
+    JK.print.title(title);
     JK.print.setLandscape(false);
     JK.print.wireLandscape(out);
 
@@ -286,8 +313,10 @@
         var e = d.entry;
         var stop = JK.date.parseISO(e.stop);
         events.push({
-          summary: 'Eye drop: ' + dropLabel(e) + ' — ' + e.eye,
-          description: e.times + 'x a day' + (e.color ? ', ' + e.color.toLowerCase() + ' cap' : '') + '. Wait five minutes between different drops. Schedule from jonathankatzmd.com.',
+          summary: isOral(e) ? 'Take: ' + dropLabel(e) + ' (by mouth)' : 'Eye drop: ' + dropLabel(e) + ' — ' + e.eye,
+          description: isOral(e)
+            ? e.times + 'x a day by mouth. Schedule from jonathankatzmd.com.'
+            : e.times + 'x a day' + (e.color ? ', ' + e.color.toLowerCase() + ' cap' : '') + '. Wait five minutes between different drops. Schedule from jonathankatzmd.com.',
           start: today,
           end: stop || null,            // null = repeats until deleted
           time: d.time
@@ -298,7 +327,7 @@
     var text = JK.ics.build(events.map(function (ev) {
       if (!ev.end) ev.end = JK.date.addDays(ev.start, 1); // placeholder so RRULE is emitted
       return ev;
-    }), 'Eye drops');
+    }), 'Eye medications');
     // strip the placeholder UNTIL for open-ended drops
     text = text.replace(/RRULE:FREQ=DAILY;UNTIL=(\d{8})T235959/g, function (m, until) {
       var tomorrow = JK.date.toISO(JK.date.addDays(today, 1)).replace(/-/g, '');
@@ -313,12 +342,12 @@
     var entries = readRows();
     if (!entries.length) {
       rowsEl.querySelector('[name=genericName]').focus();
-      showError('Choose at least one eye drop.');
+      showError('Choose at least one medication.');
       return;
     }
     for (var i = 0; i < entries.length; i++) {
       if (entries[i].stop && !JK.date.parseISO(entries[i].stop)) {
-        showError('Drop ' + (i + 1) + ': enter the stop date as a full date, or leave it blank.');
+        showError('Medication ' + (i + 1) + ': enter the stop date as a full date, or leave it blank.');
         return;
       }
     }
@@ -339,6 +368,6 @@
       else reset();
     })
     .catch(function () {
-      rowsEl.innerHTML = '<p class="jk-status--error">Could not load the eye drop list. Please reload the page.</p>';
+      rowsEl.innerHTML = '<p class="jk-status--error">Could not load the medication list. Please reload the page.</p>';
     });
 })();

@@ -114,8 +114,10 @@ A page's `[extra]` can load scripts with `scripts = ["vendor/x.js", "js/y.js"]`
 Both the reference page (build time) and the schedule builder (runtime
 fetch) read it. Add a drug once and it appears in both, and its `use`
 value becomes a filter chip automatically. Pills use `Tablet` or `Capsule`
-as their `color`; that drives the "By mouth" chip and keeps them out of the
-drop schedule builder. Keys: `generic`, `brand`
+as their `color`; that drives the "By mouth" chip, and in the schedule
+builder it locks "Which eye" to "By mouth", skips the five-minute drop
+spacing, and words the calendar reminder "Take:". Where photos came from is
+in IMAGE-SOURCES.md. Keys: `generic`, `brand`
 (comma-separated if several), `color` (cap colour; `Vial`/`Tube` for
 containers), `use` (comma-separated categories), `dosage`, `notes`
 (`Preservative Free` in notes drives that chip), `photos` (filenames in

@@ -9,13 +9,13 @@ scripts = ["vendor/qrcode.js", "js/schedule-common.js", "js/dropform.js"]
 centered = true
 +++
 
-<p class="jk-page__lede">Add each eye drop, how many times a day it is used, and which eye. The schedule lists the drops and a daily routine with suggested times, spacing drops five minutes apart. It can be printed, added to a phone's calendar with reminders, or opened on a phone with its QR code.</p>
+<p class="jk-page__lede">Add each eye drop or eye-related pill, how many times a day it is used, and which eye. The schedule lists the drops and a daily routine with suggested times, spacing drops five minutes apart. It can be printed, added to a phone's calendar with reminders, or opened on a phone with its QR code.</p>
 
 <form id="jk-dropform" class="jk-dropform" data-source="../../data/eye-drops.json" novalidate>
   <div id="jk-dropform-rows"></div>
   <p class="jk-form__error" id="jk-dropform-error" role="alert" hidden></p>
   <div class="jk-dropform__actions">
-    <button type="button" class="btn btn-outline-primary" id="jk-dropform-add">+ Add another drop</button>
+    <button type="button" class="btn btn-outline-primary" id="jk-dropform-add">+ Add another medication</button>
     <button type="submit" class="btn btn-primary">Create schedule</button>
     <button type="button" class="btn btn-secondary" id="jk-dropform-reset">Reset</button>
   </div>
@@ -31,7 +31,7 @@ centered = true
 
 <template id="jk-dropform-row">
   <fieldset class="jk-droprow">
-    <legend class="jk-droprow__legend">Drop <span class="jk-droprow__n">1</span></legend>
+    <legend class="jk-droprow__legend">Medication <span class="jk-droprow__n">1</span></legend>
     <label class="jk-droprow__f jk-droprow__f--wide">
       <span>Generic name</span>
       <select name="genericName" class="jk-in"><option value="">Select generic name</option></select>
@@ -61,6 +61,6 @@ centered = true
       <span>Stop date <small>(optional)</small></span>
       <input type="date" name="stopDate" class="jk-in">
     </label>
-    <button type="button" class="jk-rowbtn jk-rowbtn--del" aria-label="Remove this drop">Remove</button>
+    <button type="button" class="jk-rowbtn jk-rowbtn--del" aria-label="Remove this medication">Remove</button>
   </fieldset>
 </template>
