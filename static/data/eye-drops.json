@@ -491,7 +491,9 @@
   "use": "Glaucoma",
   "dosage": "2-3x/day",
   "notes": "Generic, By mouth, Appearance varies by maker",
-  "photos": []
+  "photos": [
+   "methazolamide-50.jpg"
+  ]
  },
  {
   "generic": "Moxifloxacin",
@@ -623,7 +625,9 @@
   "use": "Constricting Drop",
   "dosage": "1-2x/day",
   "notes": "For presbyopia (near vision)",
-  "photos": []
+  "photos": [
+   "vuity.webp"
+  ]
  },
  {
   "generic": "Polymyxin B Sulfate and Trimethoprim",

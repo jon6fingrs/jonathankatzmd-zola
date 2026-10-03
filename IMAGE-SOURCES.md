@@ -19,8 +19,8 @@ tablets and capsules from other makers look different, which the chart notes.
 | systane-nighttime.jpg | Systane Nighttime, Alcon | carton front panel (cropped) |
 
 Supplied by Dr. Katz: besivance.png, ciloxan.webp, diclofenac.webp,
-iyuzeh.png, ilevro.png, omlonti.png, xelpros.jpg, miebo.png, vevye.png.
+iyuzeh.png, ilevro.png, omlonti.png, xelpros.jpg, miebo.png, vevye.png,
+vuity.webp, methazolamide-50.jpg (Sandoz 50 mg tablet, "GG 181", which matches
+the Sandoz methazolamide label on DailyMed).
 The remaining photos date from the WordPress site (see fetch-assets.sh).
 
-No suitable photo was found on DailyMed for methazolamide (labels only) or
-Vuity (not listed).
