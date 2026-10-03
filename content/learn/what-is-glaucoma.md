@@ -18,6 +18,8 @@ The front of the eye is filled with a clear fluid called **aqueous humor**. It i
 
 Eye pressure is measured in millimeters of mercury (mm Hg). "Normal" is often quoted as 10 to 21 mm Hg, but the number that is safe for one person's nerve may be too high for another's. Some people develop glaucoma with pressures in the normal range (sometimes called normal-tension glaucoma), and some people have higher pressures for years without damage (ocular hypertension). That is why your doctor follows the nerve itself, not just the pressure.
 
+To see what glaucoma does to vision, and why it goes unnoticed, try the [vision loss simulator](@/learn/vision-loss.md).
+
 ## Why there are usually no symptoms
 
 The most common form, **primary open-angle glaucoma**, takes away peripheral (side) vision first and very gradually. The two eyes overlap and the brain fills in gaps, so most people notice nothing until a great deal of nerve has already been lost. There is no pain, no redness, and no change in reading vision until late. This is why glaucoma is found at routine eye exams and why regular follow-up matters even when you feel fine.

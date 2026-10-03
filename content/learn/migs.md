@@ -2,7 +2,7 @@
 title = "MIGS"
 description = "Minimally invasive glaucoma surgery: small implants and procedures, often combined with cataract surgery, that lower pressure with a quicker recovery than traditional surgery."
 template = "page.html"
-weight = 5
+weight = 6
 
 [extra]
 article = true

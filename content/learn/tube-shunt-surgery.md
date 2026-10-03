@@ -2,7 +2,7 @@
 title = "Tube Shunt Surgery"
 description = "Glaucoma drainage devices (Ahmed, Baerveldt): a small tube and plate that drain fluid from the eye. Who they are for, the operation, and the six-week recovery."
 template = "page.html"
-weight = 7
+weight = 8
 
 [extra]
 article = true

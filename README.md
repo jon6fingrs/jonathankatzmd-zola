@@ -178,6 +178,7 @@ preview comment is the quickest way to spot a link that escaped.
 | `content/patients/post-op-schedule.md` | `templates/page.html` | form markup lives in the content file; logic in `static/js/postop-rules.js` (dosing rules, tested) + `static/js/postop.js` (UI) |
 | `content/patients/eye-drop-form.md` | `templates/page.html` | row template in the content file; logic in `static/js/dropform.js` |
 | both generators | — | share `static/js/schedule-common.js` (dates, dose times, `.ics` export, QR via `static/vendor/qrcode.js`, URL state, print helpers) |
+| `content/learn/vision-loss.md` | `templates/page.html` | the vision simulator: markup is one `<div id="jk-vision">`, everything else is built by `static/js/vision.js` (see below); scene photos in `static/images/vision/` |
 | `content/contact/_index.md` | `templates/contact/section.html` | office list driven by `config.toml`'s `[[extra.offices]]`, not by content |
 | `content/videos.md` | — | `draft = true`; not built or linked until there are videos |
 | any unmatched URL | `templates/404.html` | custom |
@@ -214,6 +215,22 @@ re-run). Place one in Markdown with the `figure` component defined in
 Zola 0.23 components take space-separated arguments; the classic
 `{{ figure(...) }}` shortcode form is not supported. Use curly quotes inside
 `alt`/`caption`, never straight double quotes.
+
+### Vision simulator
+
+`static/js/vision.js` renders eye conditions onto a photo with layered
+copies of the same image: a sharp copy with whole-image CSS/SVG filters
+(cataract, refractive blur, astigmatism, color vision), a warped copy for
+wet macular degeneration, and a blurred copy masked to the lost regions
+(glaucoma, macular degeneration, retinopathy, detachment, stroke). Masks are
+small canvases of alpha values scaled up by the browser, so they need no
+filter support. Lost regions render "filled in" (smeared, not black) by
+default, which is what patients experience; a toggle shows black. Glaucoma
+has presets plus an 8×8 "paint your own" field grid, encoded in the URL so
+the QR code carries it. Conditions are a table (`CONDITIONS`) of
+`apply(severity, ctx)` functions; add a condition by adding an entry and a
+section on the page. Scenes are in `SCENES`, with the bright points that
+cataract halos sit on. Sources for the photos are in IMAGE-SOURCES.md.
 
 ### Post-op dosing rules are tested
 
@@ -345,12 +362,11 @@ old links to those exact filenames still resolve; don't list them in
 ## Ideas parked for later
 
 The owner has seen these and chose to wait. Ask before starting any of them.
+(The vision-loss simulator from this list was built; see `learn/vision-loss`.)
 
 - **Bottle-life calculator.** Estimates how long a bottle of drops lasts
   from bottle size, drops per day and eyes treated, to help with refill
   timing.
-- **Vision-loss simulator.** Shows how glaucoma field loss looks
-  compared with cataract blur.
 - **Oral prednisone.** It could go in the medication chart as a
   reference entry. A taper in the schedule builder would need a
   different start date for each row, which the builder doesn't support.
