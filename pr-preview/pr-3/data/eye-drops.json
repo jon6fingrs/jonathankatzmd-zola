@@ -1,0 +1,768 @@
+[
+ {
+  "generic": "Acetazolamide 250 mg Tablet",
+  "brand": "Diamox",
+  "color": "Tablet",
+  "use": "Glaucoma",
+  "dosage": "2-4x/day",
+  "notes": "Generic, By mouth, Appearance varies by maker",
+  "photos": [
+   "acetazolamide-250.jpg"
+  ]
+ },
+ {
+  "generic": "Acetazolamide 500 mg ER Capsule",
+  "brand": "Diamox Sequels",
+  "color": "Capsule",
+  "use": "Glaucoma",
+  "dosage": "1-2x/day",
+  "notes": "Generic, By mouth, Extended release, Appearance varies by maker",
+  "photos": [
+   "acetazolamide-er-500.jpg"
+  ]
+ },
+ {
+  "generic": "Acyclovir",
+  "brand": "Zovirax",
+  "color": "Tablet",
+  "use": "Antiviral",
+  "dosage": "Variable",
+  "notes": "Generic, By mouth, Tablets or capsules, Appearance varies by maker",
+  "photos": [
+   "acyclovir-400.jpg",
+   "acyclovir-800.jpg"
+  ]
+ },
+ {
+  "generic": "Apraclonidine",
+  "brand": "Iopidine",
+  "color": "Purple",
+  "use": "Glaucoma",
+  "dosage": "2-3x/day",
+  "notes": "Generic",
+  "photos": [
+   "apraclonidine.gif"
+  ]
+ },
+ {
+  "generic": "Artificial Tears",
+  "brand": "Refresh Tears, Systane Ultra, Blink Tears",
+  "color": "Varies",
+  "use": "Dry Eye",
+  "dosage": "Up to 4x/day",
+  "notes": "Over the counter, Preserved; use preservative-free tears if needed more than 4x/day",
+  "photos": [
+   "refresh-tears.jpg",
+   "systane-ultra.jpg"
+  ]
+ },
+ {
+  "generic": "Artificial Tears PF",
+  "brand": "Refresh Plus, Systane Ultra PF, TheraTears PF",
+  "color": "Vial",
+  "use": "Dry Eye",
+  "dosage": "As needed",
+  "notes": "Over the counter, Preservative Free",
+  "photos": [
+   "refresh-plus.jpg"
+  ]
+ },
+ {
+  "generic": "Atropine",
+  "brand": "",
+  "color": "Red",
+  "use": "Dilating Drop",
+  "dosage": "1-3x/day",
+  "notes": "Generic",
+  "photos": [
+   "atropine.jpeg"
+  ]
+ },
+ {
+  "generic": "Besifloxacin",
+  "brand": "Besivance",
+  "color": "Tan",
+  "use": "Antibiotic",
+  "dosage": "3x/day",
+  "notes": "",
+  "photos": [
+   "besivance.png"
+  ]
+ },
+ {
+  "generic": "Bimatoprost 0.01%",
+  "brand": "Lumigan",
+  "color": "Teal/Green",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "",
+  "photos": [
+   "lumigan.jpeg"
+  ]
+ },
+ {
+  "generic": "Bimatoprost 0.03%",
+  "brand": "",
+  "color": "Teal/Green",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "Generic",
+  "photos": [
+   "bimatoprost-03.jpg"
+  ]
+ },
+ {
+  "generic": "Brimonidine 0.1%",
+  "brand": "Alphagan P",
+  "color": "Purple",
+  "use": "Glaucoma",
+  "dosage": "2-3x/day",
+  "notes": "Preservative: Purite",
+  "photos": [
+   "alphagan-p-01.png"
+  ]
+ },
+ {
+  "generic": "Brimonidine 0.15%",
+  "brand": "Alphagan P",
+  "color": "Purple",
+  "use": "Glaucoma",
+  "dosage": "2-3x/day",
+  "notes": "Preservative: Purite",
+  "photos": [
+   "alphagan-p-15.webp"
+  ]
+ },
+ {
+  "generic": "Brimonidine 0.2%",
+  "brand": "Alphagan",
+  "color": "Purple",
+  "use": "Glaucoma",
+  "dosage": "2-3x/day",
+  "notes": "Generic",
+  "photos": [
+   "STL02310.webp"
+  ]
+ },
+ {
+  "generic": "Brimonidine/Timolol",
+  "brand": "Combigan",
+  "color": "Blue",
+  "use": "Glaucoma",
+  "dosage": "2x/day",
+  "notes": "Generic",
+  "photos": [
+   "Package_31184.webp",
+   "COMBIGAN_15mL_Box_Bottle.png"
+  ]
+ },
+ {
+  "generic": "Brinzolamide",
+  "brand": "Azopt",
+  "color": "Orange",
+  "use": "Glaucoma",
+  "dosage": "2-3x/day",
+  "notes": "Generic",
+  "photos": [
+   "brinzolamide.jpg",
+   "azopt.jpg"
+  ]
+ },
+ {
+  "generic": "Brinzolamide/Brimonidine",
+  "brand": "Simbrinza",
+  "color": "Lime Green",
+  "use": "Glaucoma",
+  "dosage": "2-3x/day",
+  "notes": "",
+  "photos": [
+   "novartis-simbrinza.webp"
+  ]
+ },
+ {
+  "generic": "Bromfenac 0.07%",
+  "brand": "Prolensa",
+  "color": "Gray",
+  "use": "Non-steroidal Anti-inflammatory",
+  "dosage": "1x/day",
+  "notes": "",
+  "photos": [
+   "prolensa.jpg"
+  ]
+ },
+ {
+  "generic": "Bromfenac 0.09%",
+  "brand": "",
+  "color": "Gray",
+  "use": "Non-steroidal Anti-inflammatory",
+  "dosage": "1x/day",
+  "notes": "Generic",
+  "photos": [
+   "bromfenac-0-09.webp"
+  ]
+ },
+ {
+  "generic": "Carteolol",
+  "brand": "",
+  "color": "Yellow",
+  "use": "Glaucoma",
+  "dosage": "2x/day",
+  "notes": "Generic",
+  "photos": [
+   "Carteolol.jpg"
+  ]
+ },
+ {
+  "generic": "Ciprofloxacin",
+  "brand": "Ciloxan",
+  "color": "Tan",
+  "use": "Antibiotic",
+  "dosage": "~4x/day, Variable",
+  "notes": "Generic",
+  "photos": [
+   "ciloxan.webp"
+  ]
+ },
+ {
+  "generic": "Cyclopentolate",
+  "brand": "Cyclogyl",
+  "color": "Red",
+  "use": "Dilating Drop",
+  "dosage": "1-3x/day",
+  "notes": "Generic, Multiple Concentrations",
+  "photos": [
+   "cyclopentolate.jpg",
+   "cyclogyl.webp"
+  ]
+ },
+ {
+  "generic": "Cyclosporine",
+  "brand": "Restasis, Cequa",
+  "color": "Vial",
+  "use": "Dry Eye",
+  "dosage": "2-4x/day",
+  "notes": "Generic, Multiple Concentrations, Preservative Free",
+  "photos": [
+   "restasis.jpeg",
+   "cequa.jpeg"
+  ]
+ },
+ {
+  "generic": "Cyclosporine 0.1%",
+  "brand": "Vevye",
+  "color": "White",
+  "use": "Dry Eye",
+  "dosage": "2x/day",
+  "notes": "Preservative Free",
+  "photos": [
+   "vevye.png"
+  ]
+ },
+ {
+  "generic": "Diclofenac",
+  "brand": "Voltaren",
+  "color": "Gray",
+  "use": "Non-steroidal Anti-inflammatory",
+  "dosage": "3-4x/day",
+  "notes": "Generic",
+  "photos": [
+   "diclofenac.webp"
+  ]
+ },
+ {
+  "generic": "Difluprednate",
+  "brand": "Durezol",
+  "color": "Pink",
+  "use": "Steroid",
+  "dosage": "Variable",
+  "notes": "Generic",
+  "photos": [
+   "difluprednate.webp",
+   "durezol.webp"
+  ]
+ },
+ {
+  "generic": "Dorzolamide",
+  "brand": "Trusopt",
+  "color": "Orange",
+  "use": "Glaucoma",
+  "dosage": "2-3x/day",
+  "notes": "Generic",
+  "photos": [
+   "dorzolamide.jpg"
+  ]
+ },
+ {
+  "generic": "Dorzolamide/Timolol",
+  "brand": "Cosopt",
+  "color": "Blue",
+  "use": "Glaucoma",
+  "dosage": "2x/day",
+  "notes": "Generic",
+  "photos": [
+   "dorz-tim.webp"
+  ]
+ },
+ {
+  "generic": "Dorzolamide/Timolol PF",
+  "brand": "Cosopt PF",
+  "color": "Vial",
+  "use": "Glaucoma",
+  "dosage": "2x/day",
+  "notes": "Generic",
+  "photos": [
+   "dorz-tim-pf.jpg",
+   "cosopt-pf.jpeg"
+  ]
+ },
+ {
+  "generic": "Doxycycline",
+  "brand": "Vibramycin",
+  "color": "Capsule",
+  "use": "Dry Eye",
+  "dosage": "1-2x/day",
+  "notes": "Generic, By mouth, For eyelid inflammation (meibomian glands, rosacea), Appearance varies by maker",
+  "photos": [
+   "doxycycline-100.jpg"
+  ]
+ },
+ {
+  "generic": "Erythromycin Ointment",
+  "brand": "",
+  "color": "Tube",
+  "use": "Antibiotic",
+  "dosage": "Variable",
+  "notes": "Generic",
+  "photos": [
+   "erythomycin.webp"
+  ]
+ },
+ {
+  "generic": "Fluorometholone (FML)",
+  "brand": "FML Liquifilm, FML Forte, Flarex",
+  "color": "Pink",
+  "use": "Steroid",
+  "dosage": "Variable",
+  "notes": "Generic, Multiple Concentrations",
+  "photos": [
+   "fluorometholone.webp"
+  ]
+ },
+ {
+  "generic": "Flurbiprofen",
+  "brand": "",
+  "color": "Gray / White",
+  "use": "Non-steroidal Anti-inflammatory",
+  "dosage": "3-4x/day",
+  "notes": "Generic",
+  "photos": [
+   "flurbiprofen-gray-cap.jpg",
+   "flurbiprofen-white-cap.webp"
+  ]
+ },
+ {
+  "generic": "Gatifloxacin",
+  "brand": "Zymar",
+  "color": "Tan",
+  "use": "Antibiotic",
+  "dosage": "~4x/day, Variable",
+  "notes": "Generic",
+  "photos": [
+   "gatifloxacin.webp"
+  ]
+ },
+ {
+  "generic": "Ketorolac",
+  "brand": "Acular",
+  "color": "Gray / White",
+  "use": "Non-steroidal Anti-inflammatory",
+  "dosage": "3-4x/day",
+  "notes": "Generic",
+  "photos": [
+   "ketorolac-gray.jpg",
+   "ketorolac-white.jpg"
+  ]
+ },
+ {
+  "generic": "Latanoprost",
+  "brand": "Xalatan",
+  "color": "Teal/Green",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "Generic",
+  "photos": [
+   "latanoprost.jpg"
+  ]
+ },
+ {
+  "generic": "Latanoprost Emulsion",
+  "brand": "Xelpros",
+  "color": "Vial",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "BAK Free",
+  "photos": [
+   "xelpros.jpg"
+  ]
+ },
+ {
+  "generic": "Latanoprost PF",
+  "brand": "Iyuzeh",
+  "color": "Vial",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "Preservative Free",
+  "photos": [
+   "iyuzeh.png"
+  ]
+ },
+ {
+  "generic": "Latanoprostene Bunod",
+  "brand": "Vyzulta",
+  "color": "Teal/Green",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "",
+  "photos": [
+   "vyzulta.png"
+  ]
+ },
+ {
+  "generic": "Lifitegrast",
+  "brand": "Xiidra",
+  "color": "Vial",
+  "use": "Dry Eye",
+  "dosage": "2x/day",
+  "notes": "Preservative Free",
+  "photos": [
+   "xiidra.jpeg"
+  ]
+ },
+ {
+  "generic": "Loteprednol",
+  "brand": "Lotemax, Eysuvis",
+  "color": "Pink",
+  "use": "Steroid",
+  "dosage": "Variable",
+  "notes": "Generic, Multiple Concentrations",
+  "photos": [
+   "loteprednol.webp",
+   "lotemax.jpg",
+   "eysuvis.png"
+  ]
+ },
+ {
+  "generic": "Lotilaner",
+  "brand": "Xdemvy",
+  "color": "Tan",
+  "use": "Demodex",
+  "dosage": "2x/day",
+  "notes": "",
+  "photos": [
+   "xdemvy.png"
+  ]
+ },
+ {
+  "generic": "Lubricating Gel Drops",
+  "brand": "Refresh Liquigel, Systane Gel Drops, GenTeal Tears Severe",
+  "color": "Varies",
+  "use": "Dry Eye",
+  "dosage": "As needed, often at bedtime",
+  "notes": "Over the counter, Thicker; may blur vision briefly",
+  "photos": [
+   "refresh-liquigel.jpg"
+  ]
+ },
+ {
+  "generic": "Lubricating Ointment",
+  "brand": "Refresh PM, Systane Nighttime",
+  "color": "Tube",
+  "use": "Dry Eye",
+  "dosage": "At bedtime",
+  "notes": "Over the counter, Preservative Free",
+  "photos": [
+   "systane-nighttime.jpg"
+  ]
+ },
+ {
+  "generic": "Methazolamide 50 mg Tablet",
+  "brand": "Neptazane",
+  "color": "Tablet",
+  "use": "Glaucoma",
+  "dosage": "2-3x/day",
+  "notes": "Generic, By mouth, Appearance varies by maker",
+  "photos": [
+   "methazolamide-50.jpg"
+  ]
+ },
+ {
+  "generic": "Moxifloxacin",
+  "brand": "Vigamox",
+  "color": "Tan",
+  "use": "Antibiotic",
+  "dosage": "~4x/day, Variable",
+  "notes": "Generic",
+  "photos": [
+   "moxifloxacin.webp",
+   "vigamox.jpeg"
+  ]
+ },
+ {
+  "generic": "Neomycin/Polymyxin B/Dexamethasone",
+  "brand": "Maxitrol",
+  "color": "White",
+  "use": "Steroid, Antibiotic",
+  "dosage": "~4x/day, Variable",
+  "notes": "Generic",
+  "photos": [
+   "neo-poly-dex-gtt.jpg"
+  ]
+ },
+ {
+  "generic": "Neomycin/Polymyxin B/Dexamethasone Ointment",
+  "brand": "Maxitrol Ointment",
+  "color": "Tube",
+  "use": "Steroid, Antibiotic",
+  "dosage": "~4x/day, Variable",
+  "notes": "Generic",
+  "photos": [
+   "neo-poly-dex-ung.jpg"
+  ]
+ },
+ {
+  "generic": "Nepafenac",
+  "brand": "Nevanac, Ilevro",
+  "color": "Gray",
+  "use": "Non-steroidal Anti-inflammatory",
+  "dosage": "1-3x/day",
+  "notes": "Generic, Multiple Concentrations",
+  "photos": [
+   "ilevro.png"
+  ]
+ },
+ {
+  "generic": "Netarsudil",
+  "brand": "Rhopressa",
+  "color": "White",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "",
+  "photos": [
+   "rhopressa.webp"
+  ]
+ },
+ {
+  "generic": "Netarsudil/Latanoprost",
+  "brand": "Rocklatan",
+  "color": "White",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "",
+  "photos": [
+   "rocklatan.webp"
+  ]
+ },
+ {
+  "generic": "Ofloxacin",
+  "brand": "Floxin",
+  "color": "Tan",
+  "use": "Antibiotic",
+  "dosage": "~4x/day, Variable",
+  "notes": "Generic",
+  "photos": [
+   "ofloxacin.webp",
+   "ofloxacin-clear-cap.webp"
+  ]
+ },
+ {
+  "generic": "Omidenepag Isopropyl",
+  "brand": "Omlonti",
+  "color": "White",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "",
+  "photos": [
+   "omlonti.png"
+  ]
+ },
+ {
+  "generic": "Perfluorohexyloctane",
+  "brand": "Miebo",
+  "color": "White",
+  "use": "Dry Eye",
+  "dosage": "4x/day",
+  "notes": "Preservative Free",
+  "photos": [
+   "miebo.png"
+  ]
+ },
+ {
+  "generic": "Phenylephrine",
+  "brand": "",
+  "color": "Red",
+  "use": "Dilating Drop",
+  "dosage": "preop",
+  "notes": "Generic, Multiple Concentrations",
+  "photos": [
+   "phenylephrine.png"
+  ]
+ },
+ {
+  "generic": "Pilocarpine",
+  "brand": "",
+  "color": "Green",
+  "use": "Constricting Drop",
+  "dosage": "4x/day",
+  "notes": "Generic, Multiple Concentrations",
+  "photos": [
+   "pilocarpine.jpg"
+  ]
+ },
+ {
+  "generic": "Pilocarpine 1.25%",
+  "brand": "Vuity",
+  "color": "Green",
+  "use": "Constricting Drop",
+  "dosage": "1-2x/day",
+  "notes": "For presbyopia (near vision)",
+  "photos": [
+   "vuity.webp"
+  ]
+ },
+ {
+  "generic": "Polymyxin B Sulfate and Trimethoprim",
+  "brand": "Polytrim",
+  "color": "White",
+  "use": "Antibiotic",
+  "dosage": "~4x/day, Variable",
+  "notes": "Generic",
+  "photos": [
+   "polymyxin.webp"
+  ]
+ },
+ {
+  "generic": "Prednisolone Acetate",
+  "brand": "Pred Forte",
+  "color": "Pink / White",
+  "use": "Steroid",
+  "dosage": "Variable",
+  "notes": "Generic",
+  "photos": [
+   "pred-pink.jpg",
+   "pred-white.webp"
+  ]
+ },
+ {
+  "generic": "Prednisolone/Bromfenac",
+  "brand": "Pred-Brom",
+  "color": "Green",
+  "use": "Steroid, Non-steroidal Anti-inflammatory",
+  "dosage": "2-3x/day",
+  "notes": "Combination Drop",
+  "photos": [
+   "Pred-Brom.png"
+  ]
+ },
+ {
+  "generic": "Prednisolone/Moxifloxacin/Bromfenac",
+  "brand": "Pred-Moxi-Brom",
+  "color": "Purple",
+  "use": "Steroid, Antibiotic, Non-steroidal Anti-inflammatory",
+  "dosage": "2-3x/day",
+  "notes": "Combination Drop",
+  "photos": [
+   "Pred-Moxi-Brom_8mL.png"
+  ]
+ },
+ {
+  "generic": "Tafluprost",
+  "brand": "Zioptan",
+  "color": "Vial",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "Generic, Preservative Free",
+  "photos": [
+   "tafluprost.jpg",
+   "zioptan.jpg"
+  ]
+ },
+ {
+  "generic": "Timolol",
+  "brand": "Betimol",
+  "color": "Yellow",
+  "use": "Glaucoma",
+  "dosage": "1-2x/day",
+  "notes": "Generic, Multiple Concentrations",
+  "photos": [
+   "timolol-clear.webp",
+   "timolol-yellow.webp"
+  ]
+ },
+ {
+  "generic": "Timolol PF",
+  "brand": "Timoptic Ocudose",
+  "color": "Vial",
+  "use": "Glaucoma",
+  "dosage": "1-2x/day",
+  "notes": "Generic, Multiple Concentrations, Preservative Free",
+  "photos": [
+   "timoptic.png"
+  ]
+ },
+ {
+  "generic": "Tobramycin/Dexamethasone",
+  "brand": "Tobradex",
+  "color": "Pink",
+  "use": "Steroid, Antibiotic",
+  "dosage": "~4x/day, Variable",
+  "notes": "Generic",
+  "photos": [
+   "tobramycin-dex-gtt.webp"
+  ]
+ },
+ {
+  "generic": "Tobramycin/Dexamethasone Ointment",
+  "brand": "Tobradex Ointment",
+  "color": "Tube",
+  "use": "Steroid, Antibiotic",
+  "dosage": "~4x/day, Variable",
+  "notes": "Generic",
+  "photos": [
+   "tobradex-ung.png"
+  ]
+ },
+ {
+  "generic": "Travoprost",
+  "brand": "Travatan Z",
+  "color": "Teal/Green",
+  "use": "Glaucoma",
+  "dosage": "1x/day",
+  "notes": "Generic, Preservative Varies",
+  "photos": [
+   "travoprost.jpg",
+   "travatan-z.jpeg"
+  ]
+ },
+ {
+  "generic": "Tropicamide",
+  "brand": "",
+  "color": "Red",
+  "use": "Dilating Drop",
+  "dosage": "preop",
+  "notes": "Generic",
+  "photos": [
+   "tropicamide.jpg"
+  ]
+ },
+ {
+  "generic": "Valacyclovir",
+  "brand": "Valtrex",
+  "color": "Tablet",
+  "use": "Antiviral",
+  "dosage": "Variable",
+  "notes": "Generic, By mouth, Appearance varies by maker",
+  "photos": [
+   "valtrex-label.jpg"
+  ]
+ }
+]
