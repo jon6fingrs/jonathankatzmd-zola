@@ -1,5 +1,39 @@
 [
  {
+  "generic": "Acetazolamide 250 mg Tablet",
+  "brand": "Diamox",
+  "color": "Tablet",
+  "use": "Glaucoma",
+  "dosage": "2-4x/day",
+  "notes": "Generic, By mouth, Appearance varies by maker",
+  "photos": [
+   "acetazolamide-250.jpg"
+  ]
+ },
+ {
+  "generic": "Acetazolamide 500 mg ER Capsule",
+  "brand": "Diamox Sequels",
+  "color": "Capsule",
+  "use": "Glaucoma",
+  "dosage": "1-2x/day",
+  "notes": "Generic, By mouth, Extended release, Appearance varies by maker",
+  "photos": [
+   "acetazolamide-er-500.jpg"
+  ]
+ },
+ {
+  "generic": "Acyclovir",
+  "brand": "Zovirax",
+  "color": "Tablet",
+  "use": "Antiviral",
+  "dosage": "Variable",
+  "notes": "Generic, By mouth, Tablets or capsules, Appearance varies by maker",
+  "photos": [
+   "acyclovir-400.jpg",
+   "acyclovir-800.jpg"
+  ]
+ },
+ {
   "generic": "Apraclonidine",
   "brand": "Iopidine",
   "color": "Purple",
@@ -8,6 +42,29 @@
   "notes": "Generic",
   "photos": [
    "apraclonidine.gif"
+  ]
+ },
+ {
+  "generic": "Artificial Tears",
+  "brand": "Refresh Tears, Systane Ultra, Blink Tears",
+  "color": "Varies",
+  "use": "Dry Eye",
+  "dosage": "Up to 4x/day",
+  "notes": "Over the counter, Preserved; use preservative-free tears if needed more than 4x/day",
+  "photos": [
+   "refresh-tears.jpg",
+   "systane-ultra.jpg"
+  ]
+ },
+ {
+  "generic": "Artificial Tears PF",
+  "brand": "Refresh Plus, Systane Ultra PF, TheraTears PF",
+  "color": "Vial",
+  "use": "Dry Eye",
+  "dosage": "As needed",
+  "notes": "Over the counter, Preservative Free",
+  "photos": [
+   "refresh-plus.jpg"
   ]
  },
  {
@@ -28,7 +85,9 @@
   "use": "Antibiotic",
   "dosage": "3x/day",
   "notes": "",
-  "photos": []
+  "photos": [
+   "besivance.png"
+  ]
  },
  {
   "generic": "Bimatoprost 0.01%",
@@ -160,7 +219,9 @@
   "use": "Antibiotic",
   "dosage": "~4x/day, Variable",
   "notes": "Generic",
-  "photos": []
+  "photos": [
+   "ciloxan.webp"
+  ]
  },
  {
   "generic": "Cyclopentolate",
@@ -204,7 +265,9 @@
   "use": "Non-steroidal Anti-inflammatory",
   "dosage": "3-4x/day",
   "notes": "Generic",
-  "photos": []
+  "photos": [
+   "diclofenac.webp"
+  ]
  },
  {
   "generic": "Difluprednate",
@@ -250,6 +313,17 @@
   "photos": [
    "dorz-tim-pf.jpg",
    "cosopt-pf.jpeg"
+  ]
+ },
+ {
+  "generic": "Doxycycline",
+  "brand": "Vibramycin",
+  "color": "Capsule",
+  "use": "Dry Eye",
+  "dosage": "1-2x/day",
+  "notes": "Generic, By mouth, For eyelid inflammation (meibomian glands, rosacea), Appearance varies by maker",
+  "photos": [
+   "doxycycline-100.jpg"
   ]
  },
  {
@@ -338,7 +412,9 @@
   "use": "Glaucoma",
   "dosage": "1x/day",
   "notes": "Preservative Free",
-  "photos": []
+  "photos": [
+   "iyuzeh.png"
+  ]
  },
  {
   "generic": "Latanoprostene Bunod",
@@ -387,6 +463,39 @@
   ]
  },
  {
+  "generic": "Lubricating Gel Drops",
+  "brand": "Refresh Liquigel, Systane Gel Drops, GenTeal Tears Severe",
+  "color": "Varies",
+  "use": "Dry Eye",
+  "dosage": "As needed, often at bedtime",
+  "notes": "Over the counter, Thicker; may blur vision briefly",
+  "photos": [
+   "refresh-liquigel.jpg"
+  ]
+ },
+ {
+  "generic": "Lubricating Ointment",
+  "brand": "Refresh PM, Systane Nighttime",
+  "color": "Tube",
+  "use": "Dry Eye",
+  "dosage": "At bedtime",
+  "notes": "Over the counter, Preservative Free",
+  "photos": [
+   "systane-nighttime.jpg"
+  ]
+ },
+ {
+  "generic": "Methazolamide 50 mg Tablet",
+  "brand": "Neptazane",
+  "color": "Tablet",
+  "use": "Glaucoma",
+  "dosage": "2-3x/day",
+  "notes": "Generic, By mouth, Appearance varies by maker",
+  "photos": [
+   "methazolamide-50.jpg"
+  ]
+ },
+ {
   "generic": "Moxifloxacin",
   "brand": "Vigamox",
   "color": "Tan",
@@ -427,7 +536,9 @@
   "use": "Non-steroidal Anti-inflammatory",
   "dosage": "1-3x/day",
   "notes": "Generic, Multiple Concentrations",
-  "photos": []
+  "photos": [
+   "ilevro.png"
+  ]
  },
  {
   "generic": "Netarsudil",
@@ -514,7 +625,9 @@
   "use": "Constricting Drop",
   "dosage": "1-2x/day",
   "notes": "For presbyopia (near vision)",
-  "photos": []
+  "photos": [
+   "vuity.webp"
+  ]
  },
  {
   "generic": "Polymyxin B Sulfate and Trimethoprim",
@@ -639,6 +752,17 @@
   "notes": "Generic",
   "photos": [
    "tropicamide.jpg"
+  ]
+ },
+ {
+  "generic": "Valacyclovir",
+  "brand": "Valtrex",
+  "color": "Tablet",
+  "use": "Antiviral",
+  "dosage": "Variable",
+  "notes": "Generic, By mouth, Appearance varies by maker",
+  "photos": [
+   "valtrex-label.jpg"
   ]
  }
 ]

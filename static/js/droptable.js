@@ -47,6 +47,8 @@
   function matches(el) {
     if (state.filter === '__pf') {
       if (!el.hasAttribute('data-pf')) return false;
+    } else if (state.filter === '__oral') {
+      if (!el.hasAttribute('data-oral')) return false;
     } else if (state.filter) {
       // data-use is e.g. "Steroid, Antibiotic"; match whole categories only
       var uses = (el.getAttribute('data-use') || '').split(', ');

@@ -15,7 +15,7 @@ weight = 2
 
 Cataract Surgery, LASIK, Medical and Surgical Management of Glaucoma
 
-<img class="jk-about-photo" src="/images/team/jonathan-katz.jpg" alt="Dr. Jonathan Katz">
+<img class="jk-about-photo" src="../images/team/jonathan-katz.jpg" alt="Dr. Jonathan Katz">
 
 > "My interest in glaucoma lies in the personal relationships I am able to build with my patients as we work together to treat this life-long disease."
 

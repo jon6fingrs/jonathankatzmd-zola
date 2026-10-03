@@ -10,6 +10,8 @@ article = true
 
 A **cataract** is clouding of the eye's natural lens, which sits behind the pupil and focuses light onto the retina. Almost everyone develops some cataract with age; it becomes a problem when it blurs vision, dulls colors, causes glare from headlights or sunlight, or changes your glasses prescription frequently. Cataract surgery replaces the cloudy lens with a clear artificial one and is among the most common and successful operations performed.
 
+{{<figure src="images/learn/cataract-lens.svg" alt="Two cross-sections: on the left a cloudy natural lens behind the iris, on the right a thin clear lens implant held inside the same lens capsule." caption="Cataract surgery removes the cloudy lens and places a clear implant in the same capsule, behind the iris. Simplified, not to scale." />}}
+
 ## When to have surgery
 
 There is no harm in waiting as long as the cataract is not interfering with your life, and no "ripeness" is required. Surgery makes sense when the cataract limits what you want to do: driving (especially at night), reading, recognising faces, or working. Two exceptions where your doctor may recommend not waiting: a cataract that is making glaucoma harder to control or the angle narrow, and a cataract so dense that it prevents the view of the retina or optic nerve needed to monitor other eye disease.
@@ -33,11 +35,11 @@ Measurements of the eye's length and curvature are taken in the office to select
 
 Surgery is at an outpatient surgery center. The eye is numbed with drops or gel and you are given light sedation; you are awake but relaxed and will not see the surgery itself, only lights and colors. Through an incision about two millimeters wide, the surgeon opens the front of the lens capsule, breaks the cloudy lens up with ultrasound and removes it, and places the folded implant into the capsule where it unfolds. The incision seals itself, usually without stitches. The operation takes about 10 to 20 minutes, and you are at the center for two to three hours in all. You go home with a shield and need a driver.
 
-If a glaucoma procedure ([MIGS](/learn/migs/)) is planned at the same time, it is done through the same incision and adds a few minutes.
+If a glaucoma procedure ([MIGS](@/learn/migs.md)) is planned at the same time, it is done through the same incision and adds a few minutes.
 
 ## Recovery
 
-**Drops.** Typically an antibiotic for a week, a steroid tapered over four weeks, and an anti-inflammatory (NSAID) for four weeks; some surgeons use a combination drop. The [Post-Op Eye Drop Schedule](/patients/post-op-schedule/) tool prints this day by day. Continue your glaucoma drops in both eyes unless told otherwise.
+**Drops.** Typically an antibiotic for a week, a steroid tapered over four weeks, and an anti-inflammatory (NSAID) for four weeks; some surgeons use a combination drop. The [Post-Op Eye Drop Schedule](@/patients/post-op-schedule.md) tool prints this day by day. Continue your glaucoma drops in both eyes unless told otherwise.
 
 **Vision.** Often noticeably better by the next day, though it can take a week or two to sharpen, and longer if MIGS was added. Colors look brighter and bluer, which can be striking. Glasses, if needed, are prescribed about four weeks after surgery once the eye is stable. The second eye, if needed, is usually done one to several weeks after the first.
 

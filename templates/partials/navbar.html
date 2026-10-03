@@ -9,7 +9,7 @@
 <header class="jk-header">
   <nav class="navbar navbar-expand-lg jk-navbar">
     <div class="jk-navwrap">
-      <a href="{{ get_url(path='/') }}" class="navbar-brand jk-brand">
+      <a href="{{ get_url(path='/', trailing_slash=true) }}" class="navbar-brand jk-brand">
         <span class="jk-brand__title">{{ config.title }}</span>
         {% if page_label %}<span class="jk-brand__page">{{ page_label }}</span>{% endif %}
       </a>

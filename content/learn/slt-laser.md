@@ -14,6 +14,8 @@ article = true
 
 The laser delivers very short pulses of light that are absorbed by pigment in the drainage meshwork. The energy is low and selective, so it does not burn or scar the tissue. Instead it triggers a biological response that, over several weeks, improves how well the meshwork drains fluid. A large clinical trial (the LiGHT trial) found that SLT as a first treatment controlled pressure as well as drops in most patients, with many needing no drops at all for years afterward.
 
+{{<figure src="images/learn/slt.svg" alt="Cross-section of the front of the eye with a contact lens resting on the cornea and a laser beam aimed at the drain where the iris meets the cornea." caption="The laser is aimed through a contact lens at the trabecular meshwork, the drain at the edge of the iris. Simplified, not to scale." />}}
+
 ## Why your doctor might suggest it
 
 - To avoid or delay starting daily drops

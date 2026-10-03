@@ -1,0 +1,16 @@
+{#- Components callable from Markdown content (Zola 0.23 / Tera 2 syntax).
+
+    figure: an illustration with a caption.
+      {{<figure src="images/learn/slt.svg" alt="..." caption="..." />}}
+    Arguments are space-separated; use curly quotes inside alt/caption, never
+    straight double quotes. `src` is relative to static/ and goes through
+    get_url, so it also works under a preview sub-path. The image links to
+    itself so phone readers can open it full size and zoom. -#}
+{% component figure(src, alt="", caption="") %}
+<figure class="jk-figure">
+  <a href="{{ get_url(path=src) }}" class="jk-figure__link" aria-label="Open the illustration full size">
+    <img src="{{ get_url(path=src) }}" alt="{{ alt }}" loading="lazy" decoding="async">
+  </a>
+  {%- if caption %}<figcaption>{{ caption }}</figcaption>{% endif %}
+</figure>
+{% endcomponent %}

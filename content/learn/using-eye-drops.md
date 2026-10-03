@@ -10,6 +10,8 @@ article = true
 
 Eye drops only work if they get into the eye, and the technique matters more than most people expect. Studies that watch patients put in drops find that many miss the eye, touch the tip to the lashes, or put in several drops at once. These steps make each drop count.
 
+{{<figure src="images/learn/eye-drop-technique.svg" alt="Two steps: looking up with the lower lid pulled down while one drop falls into the pocket, then the eye closed with a fingertip pressing the inner corner beside the nose." caption="One drop into the lower-lid pocket, then close gently and press the inner corner. Pressing keeps the medicine on the eye instead of draining into the nose and throat." />}}
+
 ## Putting in a drop
 
 1. **Wash your hands.**
@@ -27,7 +29,7 @@ A single drop is about three times more than the eye can hold, so a second drop 
 
 If you use two or more different drops at the same time of day, **wait at least five minutes between them**. A second drop put in right away simply washes the first one out. Order generally does not matter, but if one of your medicines is an ointment or a gel, use it last, because it blocks anything placed after it.
 
-The [Eye Drop Schedule Builder](/patients/eye-drop-form/) lays out a daily routine with the drops already spaced five minutes apart, and can add reminders to your phone.
+The [Eye Drop Schedule Builder](@/patients/eye-drop-form.md) lays out a daily routine with the drops already spaced five minutes apart, and can add reminders to your phone.
 
 ## If you have trouble aiming
 
@@ -50,7 +52,7 @@ Most glaucoma drops contain a preservative that contact lenses absorb. Take lens
 - Keep the cap on and store at room temperature unless the label says to refrigerate (some, like latanoprost, are kept cold until opened).
 - Never let the tip touch anything. A contaminated bottle can cause an infection.
 - Most bottles should be discarded a set time after opening, often 28 days for preservative-free multidose bottles and up to several months for others. Your pharmacist can tell you for each one.
-- Cap colors follow a standard: for example teal or turquoise for prostaglandins, yellow or blue for beta blockers, orange for carbonic anhydrase inhibitors, purple for alpha agonists, pink for steroids, tan for antibiotics and gray for NSAIDs. The [Eye Drop Reference](/patients/eye-drops/) shows a photo and cap color for each drop so you can tell bottles apart.
+- Cap colors follow a standard: for example teal or turquoise for prostaglandins, yellow or blue for beta blockers, orange for carbonic anhydrase inhibitors, purple for alpha agonists, pink for steroids, tan for antibiotics and gray for NSAIDs. The [Eye Medication Reference](@/patients/eye-drops.md) shows a photo and cap color for each drop so you can tell bottles apart.
 
 ## Refills and cost
 

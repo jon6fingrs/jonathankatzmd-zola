@@ -1,0 +1,62 @@
+# Pull request previews on GitHub Pages.
+#
+# Every PR opened from a branch in this repository gets the site built and
+# published at
+#     https://<owner>.github.io/<repo>/pr-preview/pr-<number>/
+# and a comment on the PR with the link. Each new push to the PR updates it;
+# closing or merging the PR deletes it.
+#
+# Preview builds set JK_PREVIEW, which the templates use to add noindex,
+# leave out analytics, turn off the contact form (its mail backend only
+# exists on the production server) and show a "Preview build" banner.
+#
+# One-time setup, after the first preview run has created the gh-pages
+# branch:  Settings -> Pages -> Build and deployment -> Source: "Deploy from
+# a branch" -> Branch: gh-pages, folder: / (root).
+#
+# To preview a branch you are not ready to merge, open it as a draft PR.
+
+name: PR preview
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+permissions:
+  contents: write        # push the built site to the gh-pages branch
+  pull-requests: write   # post / update the comment with the preview link
+
+concurrency:
+  group: preview-${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    # PRs from forks get a read-only token and could not publish anyway.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Zola (same version as production)
+        if: github.event.action != 'closed'
+        run: |
+          curl -sSL -o zola.tar.gz https://github.com/getzola/zola/releases/download/v0.23.3/zola-v0.23.3-x86_64-unknown-linux-gnu.tar.gz
+          tar xzf zola.tar.gz zola
+          sudo mv zola /usr/local/bin/zola
+
+      - name: Build for the preview URL
+        if: github.event.action != 'closed'
+        env:
+          JK_PREVIEW: pr-${{ github.event.number }}
+        run: |
+          base="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-preview/pr-${{ github.event.number }}/"
+          zola build --base-url "$base"
+
+      - name: Publish or remove the preview
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: public
+          preview-branch: gh-pages
+          umbrella-dir: pr-preview
+          action: auto

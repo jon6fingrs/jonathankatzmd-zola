@@ -63,7 +63,7 @@ name = "FOR PATIENTS"
 url = "/patients/"
 icon = "images/nav/eye.svg"
   [[extra.menus.children]]
-  name = "EYE DROP REFERENCE"
+  name = "EYE MEDICATION REFERENCE"
   url = "/patients/eye-drops/"
   [[extra.menus.children]]
   name = "EYE DROP SCHEDULE BUILDER"

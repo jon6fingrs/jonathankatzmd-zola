@@ -18,7 +18,9 @@
       <h2 class="jk-sectionhead">Contact</h2>
       {{ section.content | safe }}
 
-      {% if config.extra.form.active and config.extra.form.endpoint %}
+      {% if get_env(name="JK_PREVIEW", default="") %}
+      <p class="jk-note">The contact form is turned off in preview builds; it only works on the live site.</p>
+      {% elif config.extra.form.active and config.extra.form.endpoint %}
       <form id="jk-contact-form" class="jk-form" action="{{ config.extra.form.endpoint }}" method="POST">
         <div class="row">
           <div class="col-md-6 mb-3">
@@ -60,7 +62,7 @@
 
 {% block javascripts %}
 {{ super() }}
-{% if config.extra.form.active and config.extra.form.endpoint %}
+{% if config.extra.form.active and config.extra.form.endpoint and not get_env(name="JK_PREVIEW", default="") %}
 <script src="{{ get_url(path='js/contact.js', cachebust=true) }}"></script>
 {% endif %}
 {% endblock javascripts %}

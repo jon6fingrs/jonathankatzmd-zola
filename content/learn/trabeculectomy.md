@@ -14,6 +14,8 @@ article = true
 
 The surgeon makes a small trapdoor in the white wall of the eye (the sclera) under the upper eyelid and removes a tiny piece of tissue beneath it, creating a new path for fluid to leave the eye. The fluid collects under the conjunctiva, the thin clear skin over the white of the eye, in a small blister called a **bleb**, and is absorbed into the blood vessels there. The bleb sits under the upper lid and is not normally visible.
 
+{{<figure src="images/learn/trabeculectomy.svg" alt="Cross-section showing a small flap and opening in the eye wall near the cornea, with fluid collecting in a blister called a bleb under the conjunctiva." caption="Fluid leaves the eye through a small opening under a flap in the eye wall and collects in a bleb under the conjunctiva, where it is absorbed. Simplified, not to scale." />}}
+
 Because the body tries to heal and close any new opening, a medicine that slows scarring (mitomycin C) is applied briefly during surgery, and the surgeon places adjustable stitches in the trapdoor. In the weeks afterward these stitches may be loosened with a laser or removed in the office to fine-tune how much fluid drains. This adjustability is what allows trabeculectomy to reach low pressures, but it also means the first few months involve close follow-up.
 
 ## The day of surgery
@@ -26,7 +28,7 @@ Tell your surgeon about blood thinners well beforehand; some may need to be paus
 
 Recovery from trabeculectomy is longer and more involved than from cataract surgery, and it is normal for vision to be blurry for several weeks while the eye settles and pressure finds its level.
 
-**Drops.** You will use a steroid drop frequently at first (often eight times a day) and taper it slowly over about twelve weeks; the steroid controls scarring as much as inflammation, so the long taper matters. An antibiotic is used for the first week and an antibiotic ointment at bedtime for about two weeks. The [Post-Op Eye Drop Schedule](/patients/post-op-schedule/) tool prints this out day by day. Your glaucoma drops in the operated eye are usually stopped; keep using drops in the other eye unless told otherwise.
+**Drops.** You will use a steroid drop frequently at first (often eight times a day) and taper it slowly over about twelve weeks; the steroid controls scarring as much as inflammation, so the long taper matters. An antibiotic is used for the first week and an antibiotic ointment at bedtime for about two weeks. The [Post-Op Eye Drop Schedule](@/patients/post-op-schedule.md) tool prints this out day by day. Your glaucoma drops in the operated eye are usually stopped; keep using drops in the other eye unless told otherwise.
 
 **Visits.** Expect to be seen the next day, then weekly for several weeks, then at increasing intervals. Pressure is checked at each visit and the bleb examined. Stitch adjustment, if needed, is done at these visits and takes a minute.
 

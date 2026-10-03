@@ -46,12 +46,16 @@
   <meta name="twitter:title" content="{{ pg_title }}">
   <meta name="twitter:description" content="{{ pg_desc }}">
   <meta name="twitter:image" content="{{ get_url(path=config.extra.about_image) }}">
-  {%- if config.extra.noindex %}
+  {#- Preview builds (GitHub Pages, see .github/workflows/preview.yml) set
+      JK_PREVIEW at build time: keep them out of search results, out of the
+      analytics, and visibly labelled. Production builds never set it. #}
+  {%- set jk_preview = get_env(name="JK_PREVIEW", default="") %}
+  {%- if config.extra.noindex or jk_preview %}
   <meta name="robots" content="noindex, nofollow">
   {%- endif %}
   {% block head_extra %}{% endblock head_extra %}
 
-  {%- if config.extra.plausible.enabled %}
+  {%- if config.extra.plausible.enabled and not jk_preview %}
   <script defer data-domain="{{ config.extra.plausible.domain }}"{% if config.extra.plausible.api_endpoint %} data-api="{{ config.extra.plausible.api_endpoint }}"{% endif %} src="{{ config.extra.plausible.src }}"></script>
   {%- if config.extra.plausible.custom_events %}
   <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
@@ -61,6 +65,9 @@
 
 <body>
   <a class="jk-skip" href="#content">Skip to content</a>
+  {%- if get_env(name="JK_PREVIEW", default="") %}
+  <div class="jk-preview-banner" role="note">Preview build ({{ get_env(name="JK_PREVIEW", default="") }}). Not the live site; the contact form and analytics are off.</div>
+  {%- endif %}
   {% include "partials/navbar.html" %}
 
   <main id="content">

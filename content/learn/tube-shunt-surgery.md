@@ -10,9 +10,11 @@ article = true
 
 A **tube shunt**, also called a glaucoma drainage device or implant, is a small silicone tube connected to a thin plate. The tube is placed just inside the front of the eye and carries fluid back to the plate, which sits on the white of the eye under the eyelid, well behind where it can be seen. Fluid collects in a reservoir around the plate and is absorbed. Common devices are the **Ahmed** valve and the **Baerveldt** and **ClearPath** implants.
 
+{{<figure src="images/learn/tube-shunt.svg" alt="Cross-section showing a thin tube entering the front chamber of the eye and running under a patch along the eye wall to a plate further back." caption="The tube carries fluid from the front chamber to the plate, which sits on the eye wall under the upper eyelid. A patch covers the tube. Simplified, not to scale." />}}
+
 ## Who it is for
 
-Tube shunts lower pressure about as well as [trabeculectomy](/learn/trabeculectomy/) and are chosen when a trabeculectomy is less likely to work or has already failed. That includes eyes with scarring from previous surgery or injury, glaucoma caused by inflammation or abnormal blood vessels (neovascular glaucoma), some eyes that have had corneal transplants or retinal surgery, and eyes where very close early follow-up would be difficult. In many practices, tube shunts are now used as a first surgery for selected patients.
+Tube shunts lower pressure about as well as [trabeculectomy](@/learn/trabeculectomy.md) and are chosen when a trabeculectomy is less likely to work or has already failed. That includes eyes with scarring from previous surgery or injury, glaucoma caused by inflammation or abnormal blood vessels (neovascular glaucoma), some eyes that have had corneal transplants or retinal surgery, and eyes where very close early follow-up would be difficult. In many practices, tube shunts are now used as a first surgery for selected patients.
 
 ## Valved and non-valved devices
 
@@ -24,7 +26,7 @@ Surgery is at an outpatient center under a local anesthetic block with sedation,
 
 ## Recovery
 
-**Drops.** A steroid drop is used frequently at first and tapered over about six weeks, an antibiotic for the first week, and an antibiotic ointment at bedtime for about two weeks. Use the [Post-Op Eye Drop Schedule](/patients/post-op-schedule/) tool to print the day-by-day plan. With a non-valved implant you will also keep using some glaucoma drops until the tube opens; your surgeon will tell you which.
+**Drops.** A steroid drop is used frequently at first and tapered over about six weeks, an antibiotic for the first week, and an antibiotic ointment at bedtime for about two weeks. Use the [Post-Op Eye Drop Schedule](@/patients/post-op-schedule.md) tool to print the day-by-day plan. With a non-valved implant you will also keep using some glaucoma drops until the tube opens; your surgeon will tell you which.
 
 **Visits.** Next day, one week, then every one to two weeks for the first six weeks, then at increasing intervals. With a non-valved device there is often a visit around the time the tube is expected to open.
 

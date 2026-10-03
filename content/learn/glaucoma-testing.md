@@ -24,6 +24,8 @@ A quick ultrasound or optical measurement of how thick the cornea is, usually do
 
 After dilating drops, your doctor examines the optic nerve directly with a lens at the slit lamp. The nerve has a central pale cup and a surrounding pink rim of nerve fibers. In glaucoma the cup enlarges as the rim thins. Your doctor notes the "cup-to-disc ratio," any notching of the rim, and small hemorrhages at the disc edge. Photographs of the nerve may be taken for comparison over the years.
 
+{{<figure src="images/learn/optic-nerve.svg" alt="Two optic nerves seen from the front: a healthy nerve with a small central cup and thick rim, and a glaucoma-damaged nerve with a large cup and thin rim." caption="As glaucoma damages nerve fibers, the rim thins and the central cup grows. Doctors track this “cup-to-disc ratio” over time. Simplified illustration." />}}
+
 ## OCT imaging
 
 **Optical coherence tomography (OCT)** is a painless scan that takes about a minute per eye. You rest your chin on the machine and look at a target while it measures, to within a few thousandths of a millimeter, the thickness of the nerve fiber layer around the optic nerve and the ganglion cell layer in the macula. The report shows your measurements in green (normal), yellow (borderline) or red (thin) against people your age, and, more importantly, tracks your own numbers from visit to visit. OCT often detects thinning before any change shows on the visual field.
