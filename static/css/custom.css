@@ -661,6 +661,9 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-footer__links { display: flex; justify-content: center; flex-wrap: wrap; gap: 1.25rem; margin-bottom: .75rem; }
 .jk-footer__links a { color: var(--jk-ink); text-decoration: none; }
 .jk-footer__links a:hover { color: var(--jk-accent); }
+.jk-footer__clinicians { display: flex; justify-content: center; flex-wrap: wrap; gap: .35rem .6rem; margin: 0 0 .75rem; font-size: .85rem; }
+.jk-footer__clinicians a { color: var(--jk-ink); }
+.jk-footer__clinicians a:hover { color: var(--jk-accent); }
 
 /* ===================================================================
    PRINT LETTERHEAD — only appears on paper
