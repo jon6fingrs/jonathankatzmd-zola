@@ -1,5 +1,32 @@
 [
  {
+  "generic": "Acetazolamide 250 mg Tablet",
+  "brand": "Diamox",
+  "color": "Tablet",
+  "use": "Glaucoma",
+  "dosage": "2-4x/day",
+  "notes": "Generic, By mouth",
+  "photos": []
+ },
+ {
+  "generic": "Acetazolamide 500 mg ER Capsule",
+  "brand": "Diamox Sequels",
+  "color": "Capsule",
+  "use": "Glaucoma",
+  "dosage": "1-2x/day",
+  "notes": "Generic, By mouth, Extended release",
+  "photos": []
+ },
+ {
+  "generic": "Acyclovir",
+  "brand": "Zovirax",
+  "color": "Tablet",
+  "use": "Antiviral",
+  "dosage": "Variable",
+  "notes": "Generic, By mouth, Tablets or capsules",
+  "photos": []
+ },
+ {
   "generic": "Apraclonidine",
   "brand": "Iopidine",
   "color": "Purple",
@@ -9,6 +36,24 @@
   "photos": [
    "apraclonidine.gif"
   ]
+ },
+ {
+  "generic": "Artificial Tears",
+  "brand": "Refresh Tears, Systane Ultra, Blink Tears",
+  "color": "Varies",
+  "use": "Dry Eye",
+  "dosage": "Up to 4x/day",
+  "notes": "Over the counter, Preserved; use preservative-free tears if needed more than 4x/day",
+  "photos": []
+ },
+ {
+  "generic": "Artificial Tears PF",
+  "brand": "Refresh Plus, Systane Ultra PF, TheraTears PF",
+  "color": "Vial",
+  "use": "Dry Eye",
+  "dosage": "As needed",
+  "notes": "Over the counter, Preservative Free",
+  "photos": []
  },
  {
   "generic": "Atropine",
@@ -253,6 +298,15 @@
   ]
  },
  {
+  "generic": "Doxycycline",
+  "brand": "Vibramycin",
+  "color": "Capsule",
+  "use": "Dry Eye",
+  "dosage": "1-2x/day",
+  "notes": "Generic, By mouth, For eyelid inflammation (meibomian glands, rosacea)",
+  "photos": []
+ },
+ {
   "generic": "Erythromycin Ointment",
   "brand": "",
   "color": "Tube",
@@ -385,6 +439,33 @@
   "photos": [
    "xdemvy.png"
   ]
+ },
+ {
+  "generic": "Lubricating Gel Drops",
+  "brand": "Refresh Liquigel, Systane Gel Drops, GenTeal Tears Severe",
+  "color": "Varies",
+  "use": "Dry Eye",
+  "dosage": "As needed, often at bedtime",
+  "notes": "Over the counter, Thicker; may blur vision briefly",
+  "photos": []
+ },
+ {
+  "generic": "Lubricating Ointment",
+  "brand": "Refresh PM, Systane Nighttime",
+  "color": "Tube",
+  "use": "Dry Eye",
+  "dosage": "At bedtime",
+  "notes": "Over the counter, Preservative Free",
+  "photos": []
+ },
+ {
+  "generic": "Methazolamide 50 mg Tablet",
+  "brand": "Neptazane",
+  "color": "Tablet",
+  "use": "Glaucoma",
+  "dosage": "2-3x/day",
+  "notes": "Generic, By mouth",
+  "photos": []
  },
  {
   "generic": "Moxifloxacin",
@@ -640,5 +721,14 @@
   "photos": [
    "tropicamide.jpg"
   ]
+ },
+ {
+  "generic": "Valacyclovir",
+  "brand": "Valtrex",
+  "color": "Tablet",
+  "use": "Antiviral",
+  "dosage": "Variable",
+  "notes": "Generic, By mouth",
+  "photos": []
  }
 ]
