@@ -1,238 +1,238 @@
-/* Post-op eye drop schedule generator.
- * Direct port of the WordPress theme's page-generate-postop-drop-schedule.php.
- * All timing rules are preserved exactly; only the runtime moved from PHP to the browser.
+/* Post-op eye drop schedule generator (UI layer).
+ *
+ * The dosing rules live in postop-rules.js (shared with the tests); the date,
+ * calendar, QR and URL helpers in schedule-common.js. This file wires the
+ * form, greys out medications that don't apply to the chosen surgery, and
+ * renders the schedule.
  */
 (function () {
   'use strict';
 
-  var ANTIBIOTIC_SURGERIES = [
-    'Cataract Surgery', 'Cataract Surgery + MIGS', 'Standalone Omni',
-    'Pterygium Surgery', 'Tube Shunt Surgery', 'Trabeculectomy'
-  ];
-  var NSAID_SURGERIES = ['Cataract Surgery', 'Cataract Surgery + MIGS'];
-  var OINTMENT_SURGERIES = ['Tube Shunt Surgery', 'Trabeculectomy'];
-  var QID_NSAIDS = ['Ketorolac', 'Diclofenac', 'Flurbiprofen'];
-  var DAILY_NSAIDS = ['Prolensa', 'Bromfenac'];
+  var R = window.JKPostopRules;
+  var JK = window.JK;
+  if (!R || !JK) return;
 
-  function durationFor(surgery) {
-    switch (surgery) {
-      case 'Tube Shunt Surgery': return 42;
-      case 'Trabeculectomy':     return 84;
-      case 'Micropulse CPC':     return 28;
-      case 'Standard CPC':       return 42;
-      case 'Standalone Omni':
-      case 'Pterygium Surgery':
-      case 'Cataract Surgery + MIGS':
-                                 return 28;
-      default:                   return 28;
-    }
-  }
+  var form = document.getElementById('jk-postop-form');
+  var out  = document.getElementById('jk-postop-result');
+  if (!form || !out) return;
+  var el = form.elements;
+  var errEl = document.getElementById('jk-postop-error');
 
-  function steroidCount(surgery, steroid, day) {
-    var taper4 = function () {
-      if (day < 7)  return 4;
-      if (day < 14) return 3;
-      if (day < 21) return 2;
-      if (day < 28) return 1;
-      return 0;
-    };
-    var taperPMB = function () {
-      if (day < 14) return 3;
-      if (day < 28) return 2;
-      return 0;
-    };
-    var taper8over42 = function () {
-      if (day < 7)  return 8;
-      if (day < 14) return 6;
-      if (day < 21) return 4;
-      if (day < 28) return 3;
-      if (day < 35) return 2;
-      if (day < 42) return 1;
-      return 0;
-    };
+  var NOT_USED = {
+    antibiotic: 'Not part of the drop regimen for this surgery.',
+    nsaid:      'Not part of the drop regimen for this surgery.',
+    ointment:   'Ointment is used only after tube shunt or trabeculectomy.'
+  };
 
-    switch (surgery) {
-      case 'Cataract Surgery':
-      case 'Cataract Surgery + MIGS':
-      case 'Standalone Omni':
-      case 'Pterygium Surgery':
-        if (steroid === 'Prednisolone Acetate') return taper4();
-        if (steroid === 'Pred-Moxi-Brom')       return taperPMB();
-        return 0;
-      case 'Tube Shunt Surgery':
-      case 'Standard CPC':
-        return taper8over42();
-      case 'Trabeculectomy':
-        if (day < 14) return 8;
-        if (day < 28) return 6;
-        if (day < 42) return 4;
-        if (day < 56) return 3;
-        if (day < 70) return 2;
-        if (day < 84) return 1;
-        return 0;
-      case 'Micropulse CPC':
-        return taper4();
-      default:
-        return 0;
-    }
+  // ---------- form gating ----------
+  function setFieldState(name, on, hint) {
+    var wrap = form.querySelector('[data-field="' + name + '"]');
+    var sel = el[name];
+    if (!wrap || !sel) return;
+    wrap.classList.toggle('is-off', !on);
+    sel.disabled = !on;
+    if (!on) sel.value = '';
+    var h = wrap.querySelector('[data-hint]');
+    if (h) h.textContent = hint || '';
   }
 
-  function nsaidCount(nsaid, day) {
-    if (QID_NSAIDS.indexOf(nsaid) !== -1)   return day < 28 ? 4 : 0;
-    if (DAILY_NSAIDS.indexOf(nsaid) !== -1) return day < 28 ? 1 : 0;
-    return 0;
-  }
-
-  // Parse "YYYY-MM-DD" without timezone drift.
-  function parseISODate(s) {
-    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
-    if (!m) return null;
-    return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
-  }
-  function addDays(d, n) {
-    return new Date(d.getTime() + n * 86400000);
-  }
-  function fmtISO(d) {
-    return d.toISOString().slice(0, 10);
-  }
-  function todayUTC() {
-    var n = new Date();
-    return new Date(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()));
-  }
-
-  function checkboxes(n) {
-    var out = '';
-    for (var i = 0; i < n; i++) out += '<input type="checkbox"> ';
-    return out;
-  }
-  function cell(count) {
-    if (count > 4) return '<td>' + count + 'x/day</td>';
-    return '<td class="checkbox-spacing">' + checkboxes(count) + '</td>';
-  }
-  function esc(s) {
-    return String(s).replace(/[&<>"]/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+  function gate() {
+    var s = el['surgery_type'].value;
+    var picked = !!s;
+    ['antibiotic', 'nsaid', 'ointment'].forEach(function (f) {
+      var on = !picked || R.applies(s, f);
+      setFieldState(f, on, on ? '' : NOT_USED[f]);
     });
+    // steroid: always on, but only the steroids with a taper for this
+    // surgery are selectable
+    var allowed = R.steroidsFor(s);
+    var ster = el['steroid'];
+    Array.prototype.forEach.call(ster.options, function (o) {
+      if (!o.value) return;
+      o.disabled = allowed.indexOf(o.value) === -1;
+    });
+    if (ster.value && allowed.indexOf(ster.value) === -1) ster.value = '';
+    var sh = form.querySelector('[data-field="steroid"] [data-hint]');
+    if (sh) sh.textContent = (picked && allowed.length === 1) ? 'Only ' + allowed[0] + ' is used for this surgery.' : '';
+    hideError();
   }
 
-  function buildSchedule(v) {
-    var surgery = v.surgeryType;
-    var start = addDays(parseISODate(v.surgeryDate) || todayUTC(), 1);
-    var duration = durationFor(surgery);
+  function showError(msg) { errEl.textContent = msg; errEl.hidden = false; }
+  function hideError() { errEl.hidden = true; }
 
-    var showAbx  = !!v.antibiotic && ANTIBIOTIC_SURGERIES.indexOf(surgery) !== -1;
-    var showSter = !!v.steroid;
-    var showNsd  = !!v.nsaid && NSAID_SURGERIES.indexOf(surgery) !== -1;
-    var showOint = !!v.ointment && OINTMENT_SURGERIES.indexOf(surgery) !== -1;
+  // ---------- read / write form state ----------
+  function readForm() {
+    return {
+      surgeryDate: el['surgery_date'].value,
+      surgeryType: el['surgery_type'].value,
+      steroid:     el['steroid'].value,
+      antibiotic:  el['antibiotic'].value,
+      nsaid:       el['nsaid'].value,
+      ointment:    el['ointment'].value
+    };
+  }
+  function fillForm(v) {
+    el['surgery_date'].value = v.surgeryDate || '';
+    el['surgery_type'].value = v.surgeryType || '';
+    gate();
+    el['steroid'].value    = v.steroid || '';
+    el['antibiotic'].value = v.antibiotic || '';
+    el['nsaid'].value      = v.nsaid || '';
+    el['ointment'].value   = v.ointment || '';
+  }
+  // short query keys keep the QR code small
+  var KEYS = { surgeryDate: 'd', surgeryType: 't', steroid: 's', antibiotic: 'a', nsaid: 'n', ointment: 'o' };
+  function toParams(v) {
+    var p = {};
+    Object.keys(KEYS).forEach(function (k) { p[KEYS[k]] = v[k] || ''; });
+    return p;
+  }
+  function fromParams(p) {
+    var v = {};
+    Object.keys(KEYS).forEach(function (k) { v[k] = p[KEYS[k]] || ''; });
+    return v;
+  }
 
-    var h = '<div class="surgery-name">' + esc(surgery) + '</div>';
-    h += '<div class="table-wrapper"><table class="schedule-table"><thead><tr><th>Date</th>';
-    if (showAbx)  h += '<th>Antibiotic (' + esc(v.antibiotic) + ')</th>';
-    if (showSter) h += '<th>Steroid ('    + esc(v.steroid)    + ')</th>';
-    if (showNsd)  h += '<th>NSAID ('      + esc(v.nsaid)      + ')</th>';
-    if (showOint) h += '<th>Ointment ('   + esc(v.ointment)   + ')</th>';
+  // ---------- rendering ----------
+  function boxes(n) {
+    var h = '<span class="jk-boxes" aria-label="' + n + ' doses">';
+    for (var i = 0; i < n; i++) h += '<input type="checkbox" aria-label="dose ' + (i + 1) + '">';
+    return h + '</span>';
+  }
+
+  function render(v) {
+    var sch = R.schedule(v);
+    var surgeryDate = JK.date.parseISO(v.surgeryDate) || JK.date.today();
+    var start = JK.date.addDays(surgeryDate, 1);
+    var last = JK.date.addDays(start, sch.duration - 1);
+    var esc = JK.esc;
+
+    var h = '<div class="schedule-head schedule-head--postop">'
+      + '<div><h1 class="surgery-name">' + esc(v.surgeryType) + '</h1>'
+      + '<p class="schedule-meta">Surgery ' + esc(JK.date.fmtLong(surgeryDate))
+      + '<br>Drops ' + esc(JK.date.fmtShort(start)) + ' through ' + esc(JK.date.fmtShort(last))
+      + ' (' + sch.duration + ' days)</p></div>'
+      + '<div class="jk-qrbox"><div class="jk-qr" id="jk-postop-qr"></div><p class="jk-qrbox__cap">Scan to open this schedule on your phone</p></div>'
+      + '</div>';
+
+    // legend: what each column is and when it stops
+    h += '<ul class="schedule-legend">';
+    sch.columns.forEach(function (c) {
+      var ph = JK.ics.phases(start, sch.duration, c.countFor);
+      var lastDay = ph.length ? ph[ph.length - 1].end : null;
+      h += '<li><strong>' + esc(c.label) + ':</strong> ' + esc(c.drug)
+        + (c.bedtime ? ' at bedtime' : '')
+        + (lastDay ? ', last dose ' + esc(JK.date.fmtShort(lastDay)) : '') + '</li>';
+    });
+    h += '</ul>';
+
+    h += '<div class="table-wrapper"><table class="schedule-table schedule-table--stack"><thead><tr><th scope="col">Date</th>';
+    sch.columns.forEach(function (c) {
+      h += '<th scope="col">' + esc(c.label) + '<br><span class="schedule-drug">' + esc(c.drug) + '</span></th>';
+    });
     h += '</tr></thead><tbody>';
 
-    for (var day = 0; day < duration; day++) {
-      h += '<tr><td>' + fmtISO(addDays(start, day)) + '</td>';
-      if (showAbx)  h += cell(day < 7 ? 4 : 0);
-      if (showSter) h += cell(steroidCount(surgery, v.steroid, day));
-      if (showNsd)  h += cell(nsaidCount(v.nsaid, day));
-      if (showOint) h += cell(day < 14 ? 1 : 0);
+    var cols = sch.columns.length + 1;
+    for (var day = 0; day < sch.duration; day++) {
+      var date = JK.date.addDays(start, day);
+      if (day % 7 === 0) {
+        var wkEnd = JK.date.addDays(start, Math.min(day + 6, sch.duration - 1));
+        h += '<tr class="week-row"><td colspan="' + cols + '">Week ' + (day / 7 + 1)
+          + ' <span class="week-range">' + esc(JK.date.fmtRange(date, wkEnd)) + '</span></td></tr>';
+      }
+      h += '<tr class="' + ((day / 7 | 0) % 2 ? 'week-odd' : 'week-even') + '">'
+        + '<th scope="row" class="day-cell"><span class="day-wd">' + esc(date.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' })) + '</span> '
+        + '<span class="day-md">' + esc(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })) + '</span></th>';
+      sch.columns.forEach(function (c) {
+        var n = c.countFor(day);
+        h += '<td data-label="' + esc(c.drug) + '" class="dose-cell' + (n ? '' : ' dose-cell--none') + '">'
+          + (n ? boxes(n) : '<span class="dose-none">—</span>') + '</td>';
+      });
       h += '</tr>';
     }
-
     h += '</tbody></table></div>';
+
     h += '<div class="button-container">'
-       + '<button type="button" onclick="window.print()">Print Schedule</button>'
-       + '<button type="button" id="jk-postop-back">Back</button>'
-       + '<label class="jk-printopt"><input type="checkbox" class="jk-landscape"> Landscape</label>'
-       + '</div>';
-    return h;
+      + '<button type="button" class="btn btn-primary" id="jk-postop-print">Print schedule</button>'
+      + '<button type="button" class="btn btn-outline-primary" id="jk-postop-ics">Add to calendar</button>'
+      + '<button type="button" class="btn btn-outline-secondary" id="jk-postop-back">Back</button>'
+      + '<label class="jk-printopt"><input type="checkbox" class="jk-landscape"> Landscape</label>'
+      + '</div>'
+      + '<p class="jk-note jk-ics-note">“Add to calendar” downloads a file that adds every dose as a reminder to the phone or computer calendar it is opened on. The last reminder is on the final day of drops.</p>';
+
+    out.innerHTML = h;
+    form.hidden = true;
+    out.hidden = false;
+
+    JK.print.title(v.surgeryType + ' Drop Schedule');
+    JK.print.setLandscape(false);
+    JK.print.wireLandscape(out);
+
+    var url = JK.url.write(toParams(v));
+    JK.qr.render(document.getElementById('jk-postop-qr'), url, 132);
+
+    document.getElementById('jk-postop-print').addEventListener('click', function () { window.print(); });
+    document.getElementById('jk-postop-ics').addEventListener('click', function () { exportICS(v, sch, start); });
+    document.getElementById('jk-postop-back').addEventListener('click', back);
+    window.scrollTo(0, 0);
   }
 
-  // See the note in dropform.js: keeps the browser's print header useful.
-  var pageTitle = document.title;
-  function printTitle(label) {
-    var brand = document.querySelector('.jk-brand__title');
-    document.title = label ? label + (brand ? ' \u2014 ' + brand.textContent.trim() : '') : pageTitle;
-  }
-
-
-  // Orientation is a print-dialog setting the page can't read, so offer it
-  // here: ticking the box injects an @page rule. Lets you try both without
-  // hunting through the dialog.
-  function setLandscape(on) {
-    var id = 'jk-page-orientation';
-    var el = document.getElementById(id);
-    if (on) {
-      if (!el) { el = document.createElement('style'); el.id = id; document.head.appendChild(el); }
-      el.textContent = '@media print{@page{size: letter landscape;}}';
-    } else if (el) {
-      el.remove();
-    }
-  }
-
-  function wireLandscape(root) {
-    var cb = root.querySelector('.jk-landscape');
-    if (!cb) return;
-    cb.checked = !!document.getElementById('jk-page-orientation');
-    cb.addEventListener('change', function () { setLandscape(cb.checked); });
-  }
-
-  function init() {
-    var form = document.getElementById('jk-postop-form');
-    var out  = document.getElementById('jk-postop-result');
-    if (!form || !out) return;
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      // form.elements[...] rather than form.<name>: named access on a form
-      // is shadowed by HTMLFormElement's own properties for some names, so
-      // elements[] is the reliable lookup.
-      var el = form.elements;
-      var v = {
-        surgeryDate: el['surgery_date'].value,
-        surgeryType: el['surgery_type'].value,
-        steroid:     el['steroid'].value,
-        antibiotic:  el['antibiotic'].value,
-        nsaid:       el['nsaid'].value,
-        ointment:    el['ointment'].value
-      };
-      if (!v.surgeryType) { el['surgery_type'].focus(); return; }
-
-      // Without at least one medication that applies to this surgery, the
-      // schedule would be a column of bare dates and nothing else. The
-      // original WordPress form required a steroid; this guards the same
-      // case, including a medication that doesn't apply to the surgery type
-      // chosen (e.g. an NSAID with a trabeculectomy).
-      var hasAbx  = v.antibiotic && ANTIBIOTIC_SURGERIES.indexOf(v.surgeryType) !== -1;
-      var hasNsd  = v.nsaid      && NSAID_SURGERIES.indexOf(v.surgeryType) !== -1;
-      var hasOint = v.ointment   && OINTMENT_SURGERIES.indexOf(v.surgeryType) !== -1;
-      if (!v.steroid && !hasAbx && !hasNsd && !hasOint) {
-        el['steroid'].focus();
-        window.alert('Select at least one medication for this surgery type.');
-        return;
-      }
-
-      out.innerHTML = buildSchedule(v);
-      form.hidden = true;
-      out.hidden = false;
-      printTitle(v.surgeryType + ' Drop Schedule');
-      // Only 2-4 columns but up to 84 rows, so portrait fits more days per
-      // page. Left in portrait by default; the checkbox overrides.
-      setLandscape(false);
-      wireLandscape(out);
-      document.getElementById('jk-postop-back').addEventListener('click', function () {
-        out.hidden = true;
-        form.hidden = false;
-        printTitle(null);
-        window.scrollTo(0, 0);
+  function exportICS(v, sch, start) {
+    var events = [];
+    sch.columns.forEach(function (c) {
+      JK.ics.phases(start, sch.duration, c.countFor).forEach(function (ph) {
+        var times = c.bedtime && ph.count === 1 ? ['21:00'] : JK.doseTimes(ph.count);
+        times.forEach(function (t, i) {
+          events.push({
+            summary: 'Eye drop: ' + c.drug + (ph.count > 1 ? ' (' + (i + 1) + ' of ' + ph.count + ' today)' : ''),
+            description: c.label + ' after ' + v.surgeryType + '. ' + ph.count + 'x/day this phase. Schedule from jonathankatzmd.com.',
+            start: ph.start, end: ph.end, time: t
+          });
+        });
       });
-      window.scrollTo(0, 0);
     });
+    var text = JK.ics.build(events, 'Eye drops: ' + v.surgeryType);
+    JK.ics.download(text, 'eye-drops-' + v.surgeryType.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.ics');
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  function back() {
+    out.hidden = true;
+    form.hidden = false;
+    JK.print.title(null);
+    JK.url.clear();
+    window.scrollTo(0, 0);
+  }
+
+  function validate(v) {
+    if (!v.surgeryType) { el['surgery_type'].focus(); showError('Choose the type of surgery.'); return false; }
+    if (v.surgeryDate && !JK.date.parseISO(v.surgeryDate)) { el['surgery_date'].focus(); showError('Enter the surgery date as a full date.'); return false; }
+    if (!R.schedule(v).columns.length) {
+      el['steroid'].focus();
+      showError('Select at least one medication that is used for this surgery.');
+      return false;
+    }
+    return true;
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = readForm();
+    if (!validate(v)) return;
+    render(v);
+  });
+  form.addEventListener('reset', function () {
+    setTimeout(gate, 0);
+    JK.url.clear();
+  });
+  el['surgery_type'].addEventListener('change', gate);
+
+  // A schedule reopened from a link or QR code renders straight away.
+  var params = JK.url.read();
+  if (params.t) {
+    var v0 = fromParams(params);
+    fillForm(v0);
+    if (validate(v0)) render(v0); else gate();
+  } else {
+    gate();
+  }
 })();

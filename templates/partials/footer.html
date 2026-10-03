@@ -1,5 +1,11 @@
 <footer class="jk-footer">
   <div class="container">
+    <p class="jk-footer__disclaimer">The information and tools on this site are for general education and convenience. They are not medical advice and do not replace the instructions you receive from your own doctor.</p>
+    <nav class="jk-footer__links" aria-label="Footer">
+      <a href="{{ get_url(path='/contact/', trailing_slash=true) }}">Contact</a>
+      <a href="{{ get_url(path='/privacy/', trailing_slash=true) }}">Privacy</a>
+      <a href="{{ config.extra.katzen_url }}" target="_blank" rel="noopener">Katzen Eye Group</a>
+    </nav>
     <p class="mb-0">&copy; {{ now() | date(format="%Y") }} {{ config.extra.copyright }}</p>
   </div>
 </footer>

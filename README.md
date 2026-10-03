@@ -7,7 +7,7 @@ this repo up cold has the context that isn't visible from the source files
 alone.
 
 **Before touching anything that handles secrets**, read
-`CREDENTIALS-AUDIT.md`. Short version: `docker-compose.yml` and
+`CREDENTIALS-AUDIT.md` if present. Short version: `docker-compose.yml` and
 `nginx.conf` are real, deployed, gitignored files — never commit them. Work
 from the `.example` versions.
 
@@ -15,163 +15,193 @@ from the `.example` versions.
 
 | Tracked in git | Gitignored | Why |
 |---|---|---|
-| `content/`, `templates/`, `static/css`, `static/js`, `static/data`, `static/fonts`, `static/vendor` | — | hand-authored source |
+| `content/`, `templates/`, `static/css`, `static/js`, `static/data`, `static/fonts`, `static/vendor`, `static/images`, `tests/` | — | hand-authored source |
 | `config.toml` | — | site config; no secrets in it |
+| `.github/workflows/ci.yml` | — | build + tests on every PR |
 | `docker-compose.yml.example` | `docker-compose.yml` | the real file has an SMTP password and a token secret |
 | `nginx.conf.example` | `nginx.conf` | the real file is tied to this one host's container names |
 | — | `public/` | build output — `zola build` regenerates it |
-| — | `themes/` | vendored external repo — cloned in, not committed |
-| (maybe) `static/images/` | — by default | real site images, large binaries; see `.gitignore` comment |
+| — | `static/processed_images/` | build output — `resize_image()` thumbnails, favicons, hero WebP |
+
+**There is no theme.** The site used to extend the `portio-zola` theme, but
+every template and nearly every style was overridden, and the theme's
+stylesheet pulled two fonts from Google on every page. Everything now lives
+in `templates/` and `static/css/custom.css`. Bootstrap 5.3 (CSS + bundle JS)
+is vendored in `static/css` and `static/js`; it is used for the navbar
+collapse/dropdown behaviour, buttons and the contact form grid.
 
 ## Setup from a fresh clone
 
 ```bash
 git clone <this-repo> && cd <this-repo>
 
-# 1. theme
-git clone https://github.com/quentin-rodriguez/portio-zola.git themes/portio-zola
-
-# 2. theme's own static assets must be merged into the project's static/.
-#    Required: Zola's image-processing functions (resize_image, used for
-#    favicons in the theme's base.html) only look in the project's own
-#    static/, not the theme's — get_url() falls back to the theme's, but
-#    resize_image() does not.
-cp -rn themes/portio-zola/static/. static/
-
-# 3. fill in the two deployment files from their templates
+# 1. fill in the two deployment files from their templates
 cp docker-compose.yml.example docker-compose.yml   # then edit the CHANGEME values
 cp nginx.conf.example nginx.conf                   # then edit the CHANGEME values
 
-# 4. images referenced by content aren't all in this repo (see .gitignore) —
-#    pull them from wherever the live site's static/images/ actually lives,
-#    or re-run the original fetch-assets.sh if this is a from-scratch WP
-#    migration rather than a restore.
-```
-
-Then build with the official Zola image (this project does NOT use a
-Zola binary installed on the host):
-
-```bash
+# 2. build with the official Zola image (this project does NOT use a Zola
+#    binary installed on the host)
 docker run --rm -v "$(pwd):/project" -w /project ghcr.io/getzola/zola:v0.23.3 build
+
+# 3. run the dosing-rule tests (any Node 18+)
+node --test 'tests/**/*.test.js'
 ```
 
-The production deployment runs this same image as a long-lived `zola-build`
+To preview locally with a plain Zola binary:
+`zola serve` or `zola build --base-url http://127.0.0.1:1111 && (cd public && python3 -m http.server 1111)`.
+
+The production deployment runs the same image as a long-lived `zola-build`
 service in `docker-compose.yml` that builds once and exits; see that file.
 
 ## Deployment model
 
-**There is no CI/CD.** Deploys are manual:
+**CI builds, it does not deploy.** `.github/workflows/ci.yml` runs on every
+push and PR: `zola build`, `zola check --skip-external-links`, the Node
+tests, and a sanity check of `eye-drops.json`. A red check means "don't
+deploy this". Deploys themselves are still manual:
 
 1. `rsync` the changed files to the host (`/home/jonathan/zola/` in
    production).
 2. Restart the `zola-build` container (rebuilds `public/` from the current
-   source — this is also how Zola itself regenerates `public/` every single
-   build, see the gotcha below).
+   source).
 3. Restart `nginx` too, but **only** if `nginx.conf` changed — content and
    template changes need just the `zola-build` restart, since nginx serves
-   straight from the shared `public/` directory and picks up fresh files
-   immediately.
+   straight from the shared `public/` directory.
 
 Traefik (reverse proxy, TLS termination) and Portainer (container
 management UI) sit in front of this stack but aren't part of this repo.
 
 ## Content → template map
 
-Not obvious from the theme alone, since several pages use custom templates
-that override the theme's defaults (Zola's resolution order: project
-`templates/` wins over `themes/<name>/templates/` for any file with a
-matching name):
-
 | Content | Template | Notes |
 |---|---|---|
-| `content/_index.md` | `templates/index.html` | home page, hero section |
-| `content/about.md`, `content/videos.md` | `templates/page.html` | generic content page |
-| `content/patients/eye-drops.md` | `templates/eye-drops.html` | renders `static/data/eye-drops.json` as an interactive table (simple-datatables, vendored in `static/vendor/`) |
-| `content/patients/eye-drop-form.md`, `content/patients/post-op-schedule.md` | `templates/page.html` | interactive generators — logic lives in `static/js/dropform.js` and `static/js/postop.js`, not in the template |
-| `content/contact/_index.md` | `templates/contact/section.html` | office list driven by `config.toml`'s `[[extra.offices]]` array, not by content |
-| any unmatched URL | `templates/404.html` | custom — the theme ships an EMPTY 404.html; this one was written from scratch |
+| `content/_index.md` | `templates/index.html` | home: hero (WebP via `resize_image`), tool cards, bio + office phones, Learn cards, Physician JSON-LD built from `config.extra.offices` |
+| `content/about.md`, `content/learn/*.md`, `content/privacy.md` | `templates/page.html` | `[extra] article = true` gives the 720px reading layout, an `<h1>`, and previous/next links within the section |
+| `content/learn/_index.md`, `content/patients/_index.md` | `templates/section.html` | card grid of the section's pages |
+| `content/patients/eye-drops.md` | `templates/eye-drops.html` | renders `static/data/eye-drops.json` twice: a table (≥768px) and a card list (phones). `static/js/droptable.js` filters both, builds the filter chips, sorts, and runs the lightbox |
+| `content/patients/post-op-schedule.md` | `templates/page.html` | form markup lives in the content file; logic in `static/js/postop-rules.js` (dosing rules, tested) + `static/js/postop.js` (UI) |
+| `content/patients/eye-drop-form.md` | `templates/page.html` | row template in the content file; logic in `static/js/dropform.js` |
+| both generators | — | share `static/js/schedule-common.js` (dates, dose times, `.ics` export, QR via `static/vendor/qrcode.js`, URL state, print helpers) |
+| `content/contact/_index.md` | `templates/contact/section.html` | office list driven by `config.toml`'s `[[extra.offices]]`, not by content |
+| `content/videos.md` | — | `draft = true`; not built or linked until there are videos |
+| any unmatched URL | `templates/404.html` | custom |
 
-`static/data/eye-drops.json` is the single source of truth for the drug
-reference table. Both the static table (`eye-drops.html`, build time) and
-the interactive form generator (`dropform.js`, runtime fetch) read the same
-file — add a drug once, it appears in both places.
+A page's `[extra]` can load scripts with `scripts = ["vendor/x.js", "js/y.js"]`
+(in order) or a single `js = "js/y.js"`.
+
+### `static/data/eye-drops.json` is the single source of truth
+
+Both the reference page (build time) and the schedule builder (runtime
+fetch) read it. Add a drug once and it appears in both, and its `use`
+value becomes a filter chip automatically. Keys: `generic`, `brand`
+(comma-separated if several), `color` (cap colour; `Vial`/`Tube` for
+containers), `use` (comma-separated categories), `dosage`, `notes`
+(`Preservative Free` in notes drives that chip), `photos` (filenames in
+`static/images/drops/`; may be empty). Photos are thumbnailed at build
+time, so any size source is fine. CI fails if a listed photo is missing.
+
+### Post-op dosing rules are tested
+
+`static/js/postop-rules.js` holds every taper and the "which medications
+apply to which surgery" table, with no DOM access, so Node can load it.
+`tests/postop-rules.test.js` pins the expected tapers. **If a rule is
+changed on purpose, update the test in the same commit**; CI runs them.
+
+## Mobile-first conventions (keep these for new pages)
+
+The site is used on phones in exam rooms and kitchens. Rules that every
+page follows and new work should too:
+
+- **Design the narrow layout first; widen with `@media (min-width: …)`.**
+  Breakpoints in use: 640px (schedule tables become cards below this),
+  768px (reference table ↔ cards; drop-builder rows stack ↔ flow),
+  900px (home about/offices two-column), 992px (Bootstrap navbar collapse).
+- **Tables need a phone rendering.** Either emit a second card markup
+  (eye-drops.html) or give each `<td>` a `data-label` and the table the
+  `schedule-table--stack` class, which turns rows into cards below 640px
+  and back into a table for print.
+- **No fixed widths on form controls.** `width: 100%` plus grid columns;
+  `min-height: 44px` for tap targets.
+- **Check `document.documentElement.scrollWidth` at 390px.** It must equal
+  the viewport width. Grid children need `min-width: 0` or
+  `minmax(0, 1fr)` columns or long drug names will overflow.
+- **Print always uses the table layout** with `pt` units (see below).
 
 ## Architecture decisions worth knowing before changing anything
 
+**Tera 2 syntax.** Zola 0.23 ships Tera 2. `{% macro %}` files, the
+`concat`/`map` filters and `is containing(...)` tests from Tera 1 are not
+available. Use `"text" in value` for substring tests, do list building in
+JS (as the filter chips do), and inline repeated markup rather than
+reaching for macros.
+
 **Two containers, not one.** `zola-build` (official Zola image, runs once,
 exits) and `nginx` (serves the output) are separate services sharing a bind
-mount, rather than a single multi-stage Dockerfile. This was deliberate:
-rebuilding after a content edit is `docker restart zola-build`, and nginx
-never needs to restart for that, so there's no serving downtime during a
-rebuild.
+mount. Rebuilding after a content edit is `docker restart zola-build`, and
+nginx never needs to restart for that, so there's no serving downtime.
 
 **Why `zola-build` and `nginx` both mount the whole project directory,
 not just `public/`.** `zola build` deletes and recreates `public/` on
 every run — you cannot `rmdir` a directory that something else has
-separately mounted. Giving nginx its own mount *at* `public/` causes
-"Resource busy" (Linux can't delete a mount point) or, with certain
-mount-option combinations, "read-only file system" errors, intermittently,
-in a way that's confusing to debug because the first build often succeeds
-before the problem shows up on the second one. The fix used throughout
-this project: mount the parent project directory (read-write for
-`zola-build`, read-only for `nginx`) into both containers, and point
-nginx's `root` at the `public/` subdirectory of its own mount. `public/`
-is then never itself a mount point for anyone.
+separately mounted. Mount the parent project directory into both
+containers (read-write for `zola-build`, read-only for `nginx`) and point
+nginx's `root` at the `public/` subdirectory.
 
 **Hostnames in `nginx.conf` go through `set $var`, never written
-literally in `proxy_pass`.** A literal hostname in `proxy_pass` is
-resolved by nginx once, at config load / container startup. If that
-hostname doesn't resolve yet — container not started, wrong startup
-order — nginx refuses to start AT ALL, taking down the whole site, not
-just the one proxied feature. The `set $var` + variable-in-proxy_pass
-pattern defers resolution to request time: nginx starts regardless, and a
-single request simply 502s if that backend happens to be down.
+literally in `proxy_pass`.** A literal hostname is resolved once at
+startup; if it doesn't resolve yet, nginx refuses to start at all. The
+variable form defers resolution to request time.
 
-**`minify_html = true` in `config.toml` strips default HTML attributes**
-(e.g. `type="submit"` is a `<button>`'s default, so minification removes
-it). Any JS that selects elements by such an attribute
-(`button[type="submit"]`) will silently match nothing in the built output
-even though it works fine against the unminified source during
-development. Select by `id` instead.
+**`minify_html = true` strips default HTML attributes** (e.g.
+`type="submit"` on a `<button>`). Select elements by `id`, not by such
+attributes.
 
-**Never read a form field as `form.<fieldname>` in JavaScript.**
-`HTMLFormElement` has its own built-in properties — `name`, `method`,
-`action`, `target`, `elements`, `length`, and a few others — which shadow
-named access to a same-named `<input>`. A field literally named `name`
-silently returns the form's own `name` attribute (a string) instead of the
-input, with no error. Always use `form.elements['fieldname']`.
+**Never read a form field as `form.<fieldname>` in JavaScript.** Use
+`form.elements['fieldname']`; `HTMLFormElement`'s own properties shadow
+same-named inputs.
 
-**A `<form>` submitted via `fetch()` defaults to
-`multipart/form-data`.** Some minimal backends (anything using Go's
-`net/http` with a plain `r.ParseForm()`, for instance) only parse
-`application/x-www-form-urlencoded` bodies — a multipart body parses to
-zero fields with no error, so every field including any anti-spam token
-reads as empty. If a self-hosted form backend is ever swapped in, send
-`URLSearchParams` from JS, not `FormData`, unless you've confirmed the
-backend actually handles multipart.
+**A `<form>` submitted via `fetch()` defaults to `multipart/form-data`.**
+hugo-contact only parses `application/x-www-form-urlencoded`, so
+`contact.js` sends `URLSearchParams`.
+
+**Nav links use `get_url(..., trailing_slash=true)`.** Without it Zola
+emits `/about` and nginx 301s every click to `/about/`.
+
+**Schedule state lives in the query string, not in storage.** Both
+generators write their form state to the URL (short keys so the QR stays
+small) and rebuild from it on load. That is what makes the QR code and
+"send a link" work with no backend, and it is why the Privacy page can say
+nothing is stored or sent.
+
+**`.ics` export uses floating local times, no TZID.** A patient's phone
+reads "08:00" as 08:00 wherever they are, which is what a drop schedule
+means. One recurring event per dose time per taper phase, `UNTIL` on the
+last day of that phase; open-ended drops (no stop date) get a daily rule
+with no `UNTIL`.
 
 **Print stylesheets use `pt`, not `px`, for anything that must survive
-printing.** `Save as PDF` renders borders as vectors and they always show;
-sending the same page to a physical printer rasterises at ~300dpi, and a
-1px CSS border can land between device pixels and silently vanish — on
-some rows but not others, since row heights repeat and some land on pixel
-boundaries and some don't. Looks like a printer bug; isn't one. `pt` units
-are large enough (~4 device pixels at 300dpi) to never round away.
+printing.** A 1px border can land between device pixels at 300dpi and
+vanish on some rows; `pt` units never round away. Checkboxes are drawn with
+`appearance: none` and a `pt` border for the same reason.
 
-**A theme's own base template can hardcode things that need separate
-patching** — this theme's `base.html` referenced a `favicon.png` it
-doesn't actually ship (only `favicon.ico`), and emitted no
-`<meta name="description">` or Open Graph tags at all. Neither is a bug in
-this project's content; both needed fixing in `templates/jk-base.html`
-(the project-level override of the theme's `base.html`) rather than by
-editing the vendored theme directly.
+**Image pipeline.** `resize_image()` writes into `static/processed_images/`
+(gitignored). Drug photos: 116px-tall WebP thumbnails (2× the 58px
+display); the lightbox loads the original from `data-full`. Hero: 942px
+WebP with the PNG as `<picture>` fallback. Icons: three PNG sizes from
+`logo.png`. Zola's image crate does not read AVIF, so sources are
+JPEG/PNG/WebP/GIF. The two `.avif` files in `static/images/drops/` are
+the WordPress-era originals, unreferenced by the JSON and kept only so
+old links to those exact filenames still resolve; don't list them in
+`photos`.
 
 ## Known rough edges
 
-- `fetch-assets.sh` (if present) is a one-time migration script that
-  pulled images from the original WordPress install's
-  `/wp-content/uploads/`. It has no ongoing purpose once that WordPress
-  install is decommissioned — keep for historical reference or delete.
-- The contact form backend (if `hugo-contact` or similar) only accepts a
-  fixed field set; extending the form with a new field requires backend
-  changes, not just a template edit.
+- `fetch-assets.sh` is a one-time migration script that pulled images from
+  the original WordPress install. Historical reference only.
+- The contact form backend (hugo-contact) only accepts a fixed field set;
+  extending the form with a new field requires backend changes.
+- New reference-table entries without photos show an empty photo cell;
+  add a file to `static/images/drops/` and list it in `photos` to fill it.
+- Dose-time defaults (`JK.doseTimes` in `schedule-common.js`; once-daily
+  glaucoma drops at 21:00 in `dropform.js`) are conventions, not
+  prescriptions; adjust there if the practice prefers different times.

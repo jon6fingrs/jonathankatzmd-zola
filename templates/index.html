@@ -1,17 +1,138 @@
-{% extends "jk-base.html" %}
+{% extends "base.html" %}
+
+{% block head_extra %}
+{#- Structured data: lets search engines show Dr. Katz as a physician with a
+    specialty, employer and practice locations. Offices come from config. #}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Physician",
+  "@id": "{{ config.base_url }}/#physician",
+  "name": "Jonathan Katz, MD",
+  "givenName": "Jonathan",
+  "familyName": "Katz",
+  "honorificSuffix": "MD",
+  "url": "{{ config.base_url }}/",
+  "image": "{{ get_url(path=config.extra.about_image) }}",
+  "description": {{ config.description | json_encode | safe }},
+  "medicalSpecialty": "Ophthalmology",
+  "knowsAbout": ["Glaucoma", "Cataract surgery", "Minimally invasive glaucoma surgery", "Trabeculectomy", "Tube shunt surgery", "Selective laser trabeculoplasty"],
+  "memberOf": [
+    { "@type": "Organization", "name": "American Academy of Ophthalmology" },
+    { "@type": "Organization", "name": "American Glaucoma Society" }
+  ],
+  "alumniOf": [
+    { "@type": "CollegeOrUniversity", "name": "George Washington University School of Medicine" },
+    { "@type": "CollegeOrUniversity", "name": "Emory University School of Medicine" }
+  ],
+  "worksFor": { "@type": "MedicalOrganization", "name": "Katzen Eye Group", "url": "{{ config.extra.katzen_url }}" },
+  "sameAs": ["{{ config.extra.katzen_bio_url }}"],
+  "telephone": "{{ config.extra.main_phone }}",
+  "areaServed": { "@type": "AdministrativeArea", "name": "Baltimore, Maryland" },
+  "location": [
+    {%- for loc in config.extra.offices %}
+    {
+      "@type": "MedicalClinic",
+      "name": "Katzen Eye Group — {{ loc.name }}",
+      "telephone": "{{ loc.phone }}",
+      "address": { "@type": "PostalAddress", "streetAddress": "{{ loc.street }}", "addressLocality": "{{ loc.city }}", "addressRegion": "MD", "postalCode": "{{ loc.zip }}", "addressCountry": "US" }
+    }{% if not loop.last %},{% endif %}
+    {%- endfor %}
+  ]
+}
+</script>
+{% endblock head_extra %}
 
 {% block content %}
+{#- Hero photo: WebP derived at build time from the PNG cutout (transparent
+    background survives), served at 2x the 471px display width; the PNG is
+    the fallback. #}
+{%- set hero_webp = resize_image(path="static/" ~ config.extra.hero_image, width=942, op="fit_width", format="webp", quality=84) %}
 <section class="jk-hero">
   <div class="container">
     <div class="jk-hero__inner">
       <div class="jk-hero__figure">
-        <img src="{{ get_url(path=config.extra.hero_image) }}" alt="{{ config.title }}">
+        <picture>
+          <source srcset="{{ hero_webp.url }}" type="image/webp">
+          <img src="{{ get_url(path=config.extra.hero_image) }}" width="{{ hero_webp.width }}" height="{{ hero_webp.height }}" alt="Dr. Jonathan Katz" fetchpriority="high">
+        </picture>
       </div>
       <div class="jk-hero__text">
         <h1 class="jk-hero__name">{{ config.title }}</h1>
         <p class="jk-hero__tagline">{{ config.extra.tagline_1 }}</p>
         <p class="jk-hero__tagline">{{ config.extra.tagline_2 }}</p>
+        <p class="jk-hero__blurb">Medical and surgical care for glaucoma, and cataract surgery, at Katzen Eye Group in the Baltimore area.</p>
+        <div class="jk-hero__cta">
+          <a class="btn btn-primary btn-lg" href="tel:{{ config.extra.main_phone | replace(from='-', to='') }}">Call {{ config.extra.main_phone }}</a>
+          <a class="btn btn-outline-secondary btn-lg" href="{{ get_url(path='/contact/', trailing_slash=true) }}">Offices &amp; hours</a>
+        </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="jk-home-section">
+  <div class="container">
+    <h2 class="jk-sectionhead">Patient tools</h2>
+    <p class="jk-home-section__lede">Interactive tools built for the exam room and the kitchen counter. Everything prints cleanly, works on a phone, and can be saved to your calendar with reminders.</p>
+    <div class="jk-cardgrid jk-cardgrid--tools">
+      <a class="jk-card jk-card--tool" href="{{ get_url(path='/patients/post-op-schedule/', trailing_slash=true) }}">
+        <span class="jk-card__icon" aria-hidden="true">&#9745;</span>
+        <h3>Post-Op Eye Drop Schedule</h3>
+        <p>Pick the surgery and the drops prescribed; get a day-by-day tapering checklist with calendar reminders and a QR code.</p>
+      </a>
+      <a class="jk-card jk-card--tool" href="{{ get_url(path='/patients/eye-drop-form/', trailing_slash=true) }}">
+        <span class="jk-card__icon" aria-hidden="true">&#128337;</span>
+        <h3>Eye Drop Schedule Builder</h3>
+        <p>List your daily drops and get a routine with suggested times, five-minute spacing, and a weekly tick-box sheet.</p>
+      </a>
+      <a class="jk-card jk-card--tool" href="{{ get_url(path='/patients/eye-drops/', trailing_slash=true) }}">
+        <span class="jk-card__icon" aria-hidden="true">&#128065;</span>
+        <h3>Eye Drop Reference</h3>
+        <p>Photos, cap colors, uses and typical dosing for the common eye drops, searchable and filterable.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="jk-home-section jk-home-section--alt">
+  <div class="container">
+    <div class="jk-home-about">
+      <div class="jk-home-about__text">
+        <h2 class="jk-sectionhead">About Dr. Katz</h2>
+        <p>Dr. Jonathan Katz is a fellowship-trained glaucoma specialist and comprehensive ophthalmologist who joined Katzen Eye Group in 2019. He treats primary and secondary glaucoma medically and surgically, from laser and minimally invasive procedures to trabeculectomy and tube shunt surgery, and performs cataract surgery. He trained at George Washington University and completed his residency and glaucoma fellowship at the Emory Eye Center.</p>
+        <p class="jk-home-about__links">
+          <a href="{{ get_url(path='/about/', trailing_slash=true) }}">Full biography</a>
+          <span aria-hidden="true">&middot;</span>
+          <a href="{{ config.extra.katzen_bio_url }}" target="_blank" rel="noopener">Profile at Katzen Eye Group</a>
+        </p>
+      </div>
+      <div class="jk-home-about__offices">
+        <h3>Appointments</h3>
+        <p>To schedule or reschedule a visit, call the office you see Dr. Katz at:</p>
+        <ul class="jk-phonelist">
+          {%- for loc in config.extra.offices %}
+          <li><span>{{ loc.name }}</span> <a href="tel:{{ loc.phone | replace(from='-', to='') }}">{{ loc.phone }}</a></li>
+          {%- endfor %}
+        </ul>
+        <p class="jk-note">Hours, addresses and maps are on the <a href="{{ get_url(path='/contact/', trailing_slash=true) }}">Contact</a> page. For urgent eye problems after hours, call your office number and follow the instructions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- set learn = get_section(path="learn/_index.md") %}
+<section class="jk-home-section">
+  <div class="container">
+    <h2 class="jk-sectionhead">Learn</h2>
+    <p class="jk-home-section__lede">Plain-language explanations of glaucoma, the tests used to follow it, and what to expect from treatment.</p>
+    <div class="jk-cardgrid">
+      {%- for p in learn.pages %}
+      <a class="jk-card" href="{{ p.permalink }}">
+        <h3>{{ p.title }}</h3>
+        {%- if p.description %}<p>{{ p.description }}</p>{% endif %}
+      </a>
+      {%- endfor %}
     </div>
   </div>
 </section>

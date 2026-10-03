@@ -21,3 +21,18 @@ nginx.conf
 # OS / editor cruft
 .DS_Store
 *.swp
+
+# Zola writes resized images here at build time (resize_image); regenerated every build.
+/static/processed_images/
+
+# Theme sample assets that `cp -rn themes/<theme>/static/. static/` used to drag in. Not part of the site.
+/static/sections/
+/static/images/about/
+/static/images/blog/
+/static/images/contact/
+/static/images/hero/
+/static/images/portfolio/
+/static/images/service/
+/static/images/skill/
+/static/fonts/LineIcons.*
+/static/fonts/slick.*

@@ -1,10 +1,17 @@
-{% extends "jk-base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
-<section class="jk-page{% if page.extra.centered %} jk-page--centered{% endif %}">
+<section class="jk-page{% if page.extra.centered %} jk-page--centered{% endif %}{% if page.extra.article %} jk-page--article{% endif %}">
   <div class="container">
     <div class="jk-page__body">
+      {% if page.extra.article %}<h1 class="jk-title">{{ page.title }}</h1>{% endif %}
       {{ page.content | safe }}
+      {% if page.extra.article and (page.lower or page.higher) %}
+      <nav class="jk-article-nav" aria-label="More to read">
+        <span>{% if page.lower %}<a href="{{ page.lower.permalink }}">&larr; {{ page.lower.title }}</a>{% endif %}</span>
+        <span>{% if page.higher %}<a href="{{ page.higher.permalink }}">{{ page.higher.title }} &rarr;</a>{% endif %}</span>
+      </nav>
+      {% endif %}
     </div>
   </div>
 </section>
@@ -12,7 +19,13 @@
 
 {% block javascripts %}
 {{ super() }}
-{% if page.extra.js %}
+{#- A page can load one script (`js = "js/foo.js"`) or several, in order
+    (`scripts = ["vendor/x.js", "js/foo.js"]`), via its [extra] table. #}
+{% if page.extra.scripts %}
+{% for s in page.extra.scripts %}
+<script src="{{ get_url(path=s, cachebust=true) }}"></script>
+{% endfor %}
+{% elif page.extra.js %}
 <script src="{{ get_url(path=page.extra.js, cachebust=true) }}"></script>
 {% endif %}
 {% endblock javascripts %}
