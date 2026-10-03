@@ -193,7 +193,9 @@
   "use": "Dry Eye",
   "dosage": "2x/day",
   "notes": "Preservative Free",
-  "photos": []
+  "photos": [
+   "vevye.png"
+  ]
  },
  {
   "generic": "Diclofenac",
@@ -321,11 +323,13 @@
  {
   "generic": "Latanoprost Emulsion",
   "brand": "Xelpros",
-  "color": "Teal/Green",
+  "color": "Vial",
   "use": "Glaucoma",
   "dosage": "1x/day",
   "notes": "BAK Free",
-  "photos": []
+  "photos": [
+   "xelpros.jpg"
+  ]
  },
  {
   "generic": "Latanoprost PF",
@@ -462,11 +466,13 @@
  {
   "generic": "Omidenepag Isopropyl",
   "brand": "Omlonti",
-  "color": "Teal/Green",
+  "color": "White",
   "use": "Glaucoma",
   "dosage": "1x/day",
   "notes": "",
-  "photos": []
+  "photos": [
+   "omlonti.png"
+  ]
  },
  {
   "generic": "Perfluorohexyloctane",
@@ -475,7 +481,9 @@
   "use": "Dry Eye",
   "dosage": "4x/day",
   "notes": "Preservative Free",
-  "photos": []
+  "photos": [
+   "miebo.png"
+  ]
  },
  {
   "generic": "Phenylephrine",
