@@ -12,7 +12,7 @@ This site is an information and patient-tools site for Dr. Jonathan Katz. It is 
 
 ## The schedule tools run in your browser
 
-The Post-Op Eye Drop Schedule, the Eye Drop Schedule Builder and the Eye Drop Reference work entirely on your device. The choices you make (surgery type, drops, dates) are **not sent to this site or anyone else**. They are kept only in the address of the page while you are using it, so that the page can be printed, reopened from a link, or shared by QR code. If you share such a link or printout, anyone who has it can see the drops and dates on it, so treat it as you would a paper prescription. Calendar files are created on your device and downloaded directly to it.
+The Post-Op Eye Drop Schedule, the Eye Drop Schedule Builder and the Eye Medication Reference work entirely on your device. The choices you make (surgery type, drops, dates) are **not sent to this site or anyone else**. They are kept only in the address of the page while you are using it, so that the page can be printed, reopened from a link, or shared by QR code. If you share such a link or printout, anyone who has it can see the drops and dates on it, so treat it as you would a paper prescription. Calendar files are created on your device and downloaded directly to it.
 
 The tools do not ask for your name, date of birth or any other identifying information, and the site has no login.
 

@@ -1,6 +1,6 @@
 +++
-title = "Eye Drops"
-description = "Reference guide to common ophthalmic medications."
+title = "Eye Medication Reference"
+description = "Photos, cap colors, uses and typical dosing for common eye drops, eye pills and artificial tears."
 template = "eye-drops.html"
 weight = 1
 +++

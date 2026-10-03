@@ -34,6 +34,7 @@
         <button type="button" class="jk-chip is-active" data-filter="" aria-pressed="true">All</button>
         {#- one chip per distinct `use` is inserted here by droptable.js #}
         <button type="button" class="jk-chip jk-chip--pf" data-filter="__pf" aria-pressed="false">Preservative free</button>
+        <button type="button" class="jk-chip jk-chip--oral" data-filter="__oral" aria-pressed="false">By mouth</button>
       </div>
       <p class="jk-dropcount" id="jk-drops-count" aria-live="polite">Showing {{ drops | length }} of {{ drops | length }}</p>
     </div>
@@ -54,10 +55,10 @@
         </thead>
         <tbody>
           {%- for d in drops %}
-          <tr data-search="{{ d.generic }} {{ d.brand }} {{ d.color }} {{ d.use }} {{ d.notes }}" data-use="{{ d.use }}"{% if "Preservative Free" in d.notes %} data-pf="1"{% endif %}>
+          <tr data-search="{{ d.generic }} {{ d.brand }} {{ d.color }} {{ d.use }} {{ d.notes }}" data-use="{{ d.use }}"{% if "Preservative Free" in d.notes %} data-pf="1"{% endif %}{% if d.color in ["Tablet", "Capsule"] %} data-oral="1"{% endif %}>
             <td class="jk-td-generic">{{ d.generic }}</td>
             <td>{{ d.brand }}</td>
-            <td class="jk-td-color" data-color="{{ d.color }}">{% if d.color == "Vial" or d.color == "Tube" %}<span class="jk-swatch jk-swatch--container" data-color="{{ d.color }}" aria-hidden="true"></span>{% else %}<span class="jk-swatch" data-color="{{ d.color }}" aria-hidden="true"></span>{% endif %}{{ d.color }}</td>
+            <td class="jk-td-color" data-color="{{ d.color }}">{% if d.color in ["Vial", "Tube", "Tablet", "Capsule", "Varies"] %}<span class="jk-swatch jk-swatch--container" data-color="{{ d.color }}" aria-hidden="true"></span>{% else %}<span class="jk-swatch" data-color="{{ d.color }}" aria-hidden="true"></span>{% endif %}{{ d.color }}</td>
             <td>{{ d.use }}</td>
             <td>{{ d.dosage }}</td>
             <td class="jk-td-photo">{% for p in d.photos %}{% set thumb = resize_image(path="static/images/drops/" ~ p, height=116, op="fit_height", format="webp", quality=82) %}<img class="jk-drop" src="{{ thumb.url }}" width="{{ thumb.width }}" height="{{ thumb.height }}" data-full="{{ get_url(path='images/drops/' ~ p) }}" alt="{{ d.generic }}{% if d.brand %} ({{ d.brand }}){% endif %}" loading="lazy" decoding="async">{% endfor %}</td>
@@ -71,11 +72,11 @@
     {#- ===== phone: cards ===== #}
     <ul class="jk-dropcards" id="jk-drops-cards">
       {%- for d in drops %}
-      <li class="jk-dropcard" data-search="{{ d.generic }} {{ d.brand }} {{ d.color }} {{ d.use }} {{ d.notes }}" data-use="{{ d.use }}"{% if "Preservative Free" in d.notes %} data-pf="1"{% endif %}>
+      <li class="jk-dropcard" data-search="{{ d.generic }} {{ d.brand }} {{ d.color }} {{ d.use }} {{ d.notes }}" data-use="{{ d.use }}"{% if "Preservative Free" in d.notes %} data-pf="1"{% endif %}{% if d.color in ["Tablet", "Capsule"] %} data-oral="1"{% endif %}>
         <div class="jk-dropcard__main">
           <h3 class="jk-dropcard__name">{{ d.generic }}</h3>
           {%- if d.brand %}<p class="jk-dropcard__brand">{{ d.brand }}</p>{% endif %}
-          <p class="jk-dropcard__color jk-td-color" data-color="{{ d.color }}">{% if d.color == "Vial" or d.color == "Tube" %}<span class="jk-swatch jk-swatch--container" data-color="{{ d.color }}" aria-hidden="true"></span>{% else %}<span class="jk-swatch" data-color="{{ d.color }}" aria-hidden="true"></span>{% endif %}{{ d.color }}</p>
+          <p class="jk-dropcard__color jk-td-color" data-color="{{ d.color }}">{% if d.color in ["Vial", "Tube", "Tablet", "Capsule", "Varies"] %}<span class="jk-swatch jk-swatch--container" data-color="{{ d.color }}" aria-hidden="true"></span>{% else %}<span class="jk-swatch" data-color="{{ d.color }}" aria-hidden="true"></span>{% endif %}{{ d.color }}</p>
           <dl class="jk-dropcard__facts">
             <dt>Use</dt><dd>{{ d.use }}</dd>
             <dt>Dosage</dt><dd>{{ d.dosage }}</dd>

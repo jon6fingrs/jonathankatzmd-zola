@@ -25,7 +25,11 @@
   var SPACING_MIN = 5;     // minutes between different drops in the same slot
 
   // ---------- data ----------
+  // Pills are in the reference chart but not in the drop builder: its
+  // "which eye" and five-minute-spacing logic only make sense for drops.
+  var ORAL = { Tablet: true, Capsule: true };
   function indexData(list) {
+    list = list.filter(function (d) { return !ORAL[d.color]; });
     drugs = list;
     byGeneric = {};
     brands = [];
@@ -53,7 +57,7 @@
 
   function swatchHTML(color) {
     if (!color) return '<span class="jk-colorchip__text">—</span>';
-    var cls = (color === 'Vial' || color === 'Tube') ? 'jk-swatch jk-swatch--container' : 'jk-swatch';
+    var cls = (color === 'Vial' || color === 'Tube' || color === 'Varies') ? 'jk-swatch jk-swatch--container' : 'jk-swatch';
     return '<span class="' + cls + '" data-color="' + esc(color) + '" aria-hidden="true"></span><span class="jk-colorchip__text">' + esc(color) + '</span>';
   }
 
