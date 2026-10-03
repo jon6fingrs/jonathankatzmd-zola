@@ -26,7 +26,7 @@ Tell your surgeon about blood thinners well beforehand; some may need to be paus
 
 Recovery from trabeculectomy is longer and more involved than from cataract surgery, and it is normal for vision to be blurry for several weeks while the eye settles and pressure finds its level.
 
-**Drops.** You will use a steroid drop frequently at first (often eight times a day) and taper it slowly over about twelve weeks; the steroid controls scarring as much as inflammation, so the long taper matters. An antibiotic is used for the first week and an antibiotic ointment at bedtime for about two weeks. The [Post-Op Eye Drop Schedule](/patients/post-op-schedule/) tool prints this out day by day. Your glaucoma drops in the operated eye are usually stopped; keep using drops in the other eye unless told otherwise.
+**Drops.** You will use a steroid drop frequently at first (often eight times a day) and taper it slowly over about twelve weeks; the steroid controls scarring as much as inflammation, so the long taper matters. An antibiotic is used for the first week and an antibiotic ointment at bedtime for about two weeks. The [Post-Op Eye Drop Schedule](@/patients/post-op-schedule.md) tool prints this out day by day. Your glaucoma drops in the operated eye are usually stopped; keep using drops in the other eye unless told otherwise.
 
 **Visits.** Expect to be seen the next day, then weekly for several weeks, then at increasing intervals. Pressure is checked at each visit and the bleb examined. Stitch adjustment, if needed, is done at these visits and takes a minute.
 

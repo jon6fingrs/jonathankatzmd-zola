@@ -33,11 +33,11 @@ Measurements of the eye's length and curvature are taken in the office to select
 
 Surgery is at an outpatient surgery center. The eye is numbed with drops or gel and you are given light sedation; you are awake but relaxed and will not see the surgery itself, only lights and colors. Through an incision about two millimeters wide, the surgeon opens the front of the lens capsule, breaks the cloudy lens up with ultrasound and removes it, and places the folded implant into the capsule where it unfolds. The incision seals itself, usually without stitches. The operation takes about 10 to 20 minutes, and you are at the center for two to three hours in all. You go home with a shield and need a driver.
 
-If a glaucoma procedure ([MIGS](/learn/migs/)) is planned at the same time, it is done through the same incision and adds a few minutes.
+If a glaucoma procedure ([MIGS](@/learn/migs.md)) is planned at the same time, it is done through the same incision and adds a few minutes.
 
 ## Recovery
 
-**Drops.** Typically an antibiotic for a week, a steroid tapered over four weeks, and an anti-inflammatory (NSAID) for four weeks; some surgeons use a combination drop. The [Post-Op Eye Drop Schedule](/patients/post-op-schedule/) tool prints this day by day. Continue your glaucoma drops in both eyes unless told otherwise.
+**Drops.** Typically an antibiotic for a week, a steroid tapered over four weeks, and an anti-inflammatory (NSAID) for four weeks; some surgeons use a combination drop. The [Post-Op Eye Drop Schedule](@/patients/post-op-schedule.md) tool prints this day by day. Continue your glaucoma drops in both eyes unless told otherwise.
 
 **Vision.** Often noticeably better by the next day, though it can take a week or two to sharpen, and longer if MIGS was added. Colors look brighter and bluer, which can be striking. Glasses, if needed, are prescribed about four weeks after surgery once the eye is stable. The second eye, if needed, is usually done one to several weeks after the first.
 

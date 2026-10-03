@@ -38,7 +38,7 @@ Other types include **pseudoexfoliation** and **pigmentary** glaucoma (material 
 
 ## How it is diagnosed
 
-No single test makes the diagnosis. Your doctor combines eye pressure, a look at the optic nerve, imaging of the nerve fiber layer (OCT), a visual field test, a measurement of corneal thickness, and a look at the drainage angle. The [Glaucoma Testing](/learn/glaucoma-testing/) page walks through each one and what to expect.
+No single test makes the diagnosis. Your doctor combines eye pressure, a look at the optic nerve, imaging of the nerve fiber layer (OCT), a visual field test, a measurement of corneal thickness, and a look at the drainage angle. The [Glaucoma Testing](@/learn/glaucoma-testing.md) page walks through each one and what to expect.
 
 ## How it is treated
 
@@ -46,9 +46,9 @@ Lost nerve fibers cannot be restored, so the goal of every treatment is to **low
 
 There are three ways to lower pressure, often used in combination:
 
-1. **Eye drops.** The most common first step. Some reduce fluid production, others improve drainage. Most are used once or twice a day, long term. See [Using Eye Drops](/learn/using-eye-drops/) for technique, and the [Eye Drop Reference](/patients/eye-drops/) for the specific drops.
-2. **Laser.** [Selective laser trabeculoplasty (SLT)](/learn/slt-laser/) treats the drain itself, takes a few minutes in the office, and can be a first treatment instead of drops or an addition to them. A different laser (iridotomy) is used for angle closure.
-3. **Surgery.** When drops and laser are not enough, surgery creates a new path for fluid. Options range from [minimally invasive glaucoma surgery (MIGS)](/learn/migs/), often done with cataract surgery, to [trabeculectomy](/learn/trabeculectomy/) and [tube shunt surgery](/learn/tube-shunt-surgery/) for more advanced disease.
+1. **Eye drops.** The most common first step. Some reduce fluid production, others improve drainage. Most are used once or twice a day, long term. See [Using Eye Drops](@/learn/using-eye-drops.md) for technique, and the [Eye Drop Reference](@/patients/eye-drops.md) for the specific drops.
+2. **Laser.** [Selective laser trabeculoplasty (SLT)](@/learn/slt-laser.md) treats the drain itself, takes a few minutes in the office, and can be a first treatment instead of drops or an addition to them. A different laser (iridotomy) is used for angle closure.
+3. **Surgery.** When drops and laser are not enough, surgery creates a new path for fluid. Options range from [minimally invasive glaucoma surgery (MIGS)](@/learn/migs.md), often done with cataract surgery, to [trabeculectomy](@/learn/trabeculectomy.md) and [tube shunt surgery](@/learn/tube-shunt-surgery.md) for more advanced disease.
 
 ## Living with glaucoma
 

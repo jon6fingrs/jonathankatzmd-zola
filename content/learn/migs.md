@@ -8,9 +8,9 @@ weight = 5
 article = true
 +++
 
-**Minimally invasive glaucoma surgery (MIGS)** is a family of procedures that lower eye pressure through very small openings, with less disruption to the eye and a faster recovery than traditional glaucoma surgery. Most are performed at the time of [cataract surgery](/learn/cataract-surgery/) through the same incision, adding a few minutes to the operation. Some can be done on their own.
+**Minimally invasive glaucoma surgery (MIGS)** is a family of procedures that lower eye pressure through very small openings, with less disruption to the eye and a faster recovery than traditional glaucoma surgery. Most are performed at the time of [cataract surgery](@/learn/cataract-surgery.md) through the same incision, adding a few minutes to the operation. Some can be done on their own.
 
-MIGS is generally for **mild to moderate open-angle glaucoma**, with the goal of lowering pressure modestly and reducing the number of drops needed. It is not usually a replacement for [trabeculectomy](/learn/trabeculectomy/) or a [tube shunt](/learn/tube-shunt-surgery/) in advanced disease, where larger pressure reductions are needed.
+MIGS is generally for **mild to moderate open-angle glaucoma**, with the goal of lowering pressure modestly and reducing the number of drops needed. It is not usually a replacement for [trabeculectomy](@/learn/trabeculectomy.md) or a [tube shunt](@/learn/tube-shunt-surgery.md) in advanced disease, where larger pressure reductions are needed.
 
 ## The main approaches
 
@@ -29,7 +29,7 @@ Which procedure fits you depends on the type and severity of glaucoma, the anato
 
 **The day of surgery.** It is done at an outpatient surgery center with numbing drops or a local block and light sedation. Combined with cataract surgery, the whole procedure typically takes 15 to 30 minutes. You go home the same day with a shield over the eye and need a driver.
 
-**After.** Vision is blurry for a day or two and improves over the first week. You will use an antibiotic drop for about a week and a steroid drop tapered over about a month; the [Post-Op Eye Drop Schedule](/patients/post-op-schedule/) tool lays this out day by day. Your usual glaucoma drops may be continued, reduced or stopped depending on your pressure at follow-up, which is checked at about one day, one week and one month. Avoid rubbing the eye, swimming and heavy lifting for the first couple of weeks.
+**After.** Vision is blurry for a day or two and improves over the first week. You will use an antibiotic drop for about a week and a steroid drop tapered over about a month; the [Post-Op Eye Drop Schedule](@/patients/post-op-schedule.md) tool lays this out day by day. Your usual glaucoma drops may be continued, reduced or stopped depending on your pressure at follow-up, which is checked at about one day, one week and one month. Avoid rubbing the eye, swimming and heavy lifting for the first couple of weeks.
 
 A small amount of blood inside the eye (hyphema) is common with angle procedures and clears within days. It can make the first few days blurrier than after cataract surgery alone.
 

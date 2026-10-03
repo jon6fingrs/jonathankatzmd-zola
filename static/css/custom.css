@@ -11,35 +11,35 @@
   font-style: normal;
   font-weight: 300;
   font-display: swap;
-  src: url("/fonts/oswald-latin-300-normal.woff2") format("woff2");
+  src: url("../fonts/oswald-latin-300-normal.woff2") format("woff2");
 }
 @font-face {
   font-family: "Oswald";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/fonts/oswald-latin-400-normal.woff2") format("woff2");
+  src: url("../fonts/oswald-latin-400-normal.woff2") format("woff2");
 }
 @font-face {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/fonts/roboto-latin-400-normal.woff2") format("woff2");
+  src: url("../fonts/roboto-latin-400-normal.woff2") format("woff2");
 }
 @font-face {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url("/fonts/roboto-latin-500-normal.woff2") format("woff2");
+  src: url("../fonts/roboto-latin-500-normal.woff2") format("woff2");
 }
 @font-face {
   font-family: "Roboto";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("/fonts/roboto-latin-700-normal.woff2") format("woff2");
+  src: url("../fonts/roboto-latin-700-normal.woff2") format("woff2");
 }
 
 :root {
@@ -152,6 +152,13 @@ body { color: var(--jk-ink); font-family: var(--jk-body); }
 .jk-toggler.collapsed .navbar-toggler-icon:nth-child(1),
 .jk-toggler.collapsed .navbar-toggler-icon:nth-child(3) { transform: rotate(0); }
 .jk-toggler.collapsed .navbar-toggler-icon:nth-child(2) { opacity: 1; }
+
+/* shown only on preview builds (JK_PREVIEW set at build time) */
+.jk-preview-banner {
+  background: #fff4ce; color: #5c4400; border-bottom: 1px solid #e8d48a;
+  text-align: center; font-size: .9rem; padding: .45rem 1rem;
+}
+@media print { .jk-preview-banner { display: none; } }
 
 /* keyboard users can jump past the header */
 .jk-skip {

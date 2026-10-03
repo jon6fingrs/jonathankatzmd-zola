@@ -55,7 +55,7 @@ service in `docker-compose.yml` that builds once and exits; see that file.
 
 ## Deployment model
 
-**CI builds, it does not deploy.** `.github/workflows/ci.yml` runs on every
+**CI builds, it does not deploy** (PR previews aside, see above). `.github/workflows/ci.yml` runs on every
 push and PR: `zola build`, `zola check --skip-external-links`, the Node
 tests, and a sanity check of `eye-drops.json`. A red check means "don't
 deploy this". Deploys themselves are still manual:
@@ -70,6 +70,26 @@ deploy this". Deploys themselves are still manual:
 
 Traefik (reverse proxy, TLS termination) and Portainer (container
 management UI) sit in front of this stack but aren't part of this repo.
+
+## Previewing a change before deploying
+
+Open a pull request (a draft is fine). `.github/workflows/preview.yml`
+builds that branch and publishes it to GitHub Pages at
+`https://<owner>.github.io/<repo>/pr-preview/pr-<number>/`, then comments the
+link on the PR. Every push updates it; closing or merging removes it.
+Preview builds set `JK_PREVIEW`, which adds `noindex`, drops analytics,
+turns off the contact form and shows a yellow "Preview build" banner. The
+production build never sets it.
+
+One-time setup: after the first preview run creates the `gh-pages` branch,
+go to Settings → Pages → Source "Deploy from a branch" → `gh-pages`, `/ (root)`.
+
+**Previews live under a sub-path, so never hard-code root paths.** In
+Markdown, link pages with Zola's internal links (`[text](@/learn/migs.md)`,
+`[text](@/contact/_index.md)`); `zola check` verifies them. In raw HTML
+inside content, use paths relative to the page (`../eye-drop-form/`). In
+templates, use `get_url(...)`. In CSS, `url("../fonts/...")`. The PR's
+preview comment is the quickest way to spot a link that escaped.
 
 ## Content → template map
 

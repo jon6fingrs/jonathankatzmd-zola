@@ -38,4 +38,4 @@ Everything on this site is general education. It is not medical advice, does not
 
 ## Questions
 
-Use the form on the [Contact](/contact/) page or call the practice.
+Use the form on the [Contact](@/contact/_index.md) page or call the practice.

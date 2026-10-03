@@ -11,7 +11,7 @@ centered = true
 
 <p class="jk-page__lede">Add each eye drop, how many times a day it is used, and which eye. The schedule lists the drops, suggests a daily routine with the drops spaced five minutes apart, and gives a weekly checklist to print, calendar reminders, and a QR code to open it on a phone.</p>
 
-<form id="jk-dropform" class="jk-dropform" data-source="/data/eye-drops.json" novalidate>
+<form id="jk-dropform" class="jk-dropform" data-source="../../data/eye-drops.json" novalidate>
   <div id="jk-dropform-rows"></div>
   <p class="jk-form__error" id="jk-dropform-error" role="alert" hidden></p>
   <div class="jk-dropform__actions">

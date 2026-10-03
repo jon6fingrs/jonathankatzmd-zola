@@ -15,4 +15,4 @@ Please follow all instructions as provided by your doctor.
 
 <hr class="jk-rule">
 
-<p class="jk-morelink"><a href="/patients/eye-drop-form/">Click here to create a custom schedule</a></p>
+<p class="jk-morelink"><a href="../eye-drop-form/">Click here to create a custom schedule</a></p>
