@@ -257,7 +257,7 @@
         + '<td data-label="Cap color" class="jk-td-color" data-color="' + esc(e.color) + '">' + swatchHTML(e.color) + '</td>'
         + '<td data-label="How often">' + e.times + 'x a day</td>'
         + '<td data-label="Which eye">' + esc(e.eye) + '</td>'
-        + '<td data-label="Until">' + (stop ? 'Last dose ' + esc(JK.date.fmtShort(stop)) : 'Until your doctor says to stop') + '</td>'
+        + '<td data-label="Until">' + (stop ? 'Last dose ' + esc(JK.date.fmtShort(stop)) : 'Ongoing') + '</td>'
         + '</tr>';
     });
     h += '</tbody></table></div>';
