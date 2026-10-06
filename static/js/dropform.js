@@ -45,11 +45,12 @@
     brands.sort(function (a, b) { return a.name.localeCompare(b.name); });
   }
 
-  // Default "Times per day" from the table's typical dosage: "2x/day" -> 2,
-  // a range like "2-3x/day" -> its lower end; anything else ("Variable",
-  // "As needed", "~4x/day, Variable", none) -> 1.
+  // Default "Times per day" from the table's typical dosage: the first
+  // "Nx/day" in it ("4x/day", "~4x/day, Variable", "Up to 4x/day" -> 4), or
+  // the lower end of a range ("2-3x/day" -> 2); anything else ("Variable",
+  // "As needed", none) -> 1.
   function defaultTimes(d) {
-    var m = /^\s*(\d+)(?:\s*-\s*\d+)?x\/day\s*$/i.exec((d && d.dosage) || '');
+    var m = /(\d+)(?:\s*-\s*\d+)?x\/day/i.exec((d && d.dosage) || '');
     return m ? Math.min(8, Math.max(1, +m[1])) : 1;
   }
 
