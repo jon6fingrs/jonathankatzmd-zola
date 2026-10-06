@@ -45,6 +45,14 @@
     brands.sort(function (a, b) { return a.name.localeCompare(b.name); });
   }
 
+  // Default "Times per day" from the table's typical dosage: "2x/day" -> 2,
+  // a range like "2-3x/day" -> its lower end; anything else ("Variable",
+  // "As needed", "~4x/day, Variable", none) -> 1.
+  function defaultTimes(d) {
+    var m = /^\s*(\d+)(?:\s*-\s*\d+)?x\/day\s*$/i.exec((d && d.dosage) || '');
+    return m ? Math.min(8, Math.max(1, +m[1])) : 1;
+  }
+
   function fillSelect(sel, items, placeholder) {
     sel.innerHTML = '';
     var o = document.createElement('option');
@@ -74,6 +82,7 @@
     fillSelect(brd, brands.map(function (b) { return { value: b.name, label: b.name }; }), 'Select brand name');
 
     var eyeSel = row.querySelector('[name=eye]');
+    var timesSel = row.querySelector('[name=timesPerDay]');
     function setColor(c) {
       col.innerHTML = swatchHTML(c); col.setAttribute('data-color', c || '');
       setOral(eyeSel, !!ORAL[c]);
@@ -84,6 +93,7 @@
       var d = byGeneric[gen.value];
       setColor(d ? d.color : '');
       if (d) {
+        timesSel.value = String(defaultTimes(d));
         var first = (d.brand || '').split(',')[0].trim();
         brd.value = first && brands.some(function (b) { return b.name === first; }) ? first : '';
       } else {
@@ -94,7 +104,10 @@
     // brand -> generic + color
     brd.addEventListener('change', function () {
       var b = brands.filter(function (x) { return x.name === brd.value; })[0];
-      if (b) { gen.value = b.generic; setColor(byGeneric[b.generic].color); }
+      if (b) {
+        gen.value = b.generic; setColor(byGeneric[b.generic].color);
+        timesSel.value = String(defaultTimes(byGeneric[b.generic]));
+      }
       else { gen.value = ''; setColor(''); }
       hideError();
     });
