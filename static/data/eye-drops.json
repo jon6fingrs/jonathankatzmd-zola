@@ -675,6 +675,28 @@
   ]
  },
  {
+  "generic": "Sodium Chloride 5% Ointment",
+  "brand": "Muro 128 Ointment",
+  "color": "Tube",
+  "use": "Corneal Edema",
+  "dosage": "Variable",
+  "notes": "Over the counter, Hypertonic saline, Apply at bedtime or as directed",
+  "photos": [
+   "muro-128-ointment.webp"
+  ]
+ },
+ {
+  "generic": "Sodium Chloride 5% Solution",
+  "brand": "Muro 128 Drops",
+  "color": "White",
+  "use": "Corneal Edema",
+  "dosage": "Variable",
+  "notes": "Over the counter, Hypertonic saline, Every 3-4 hours or as directed",
+  "photos": [
+   "muro-128-solution.jpg"
+  ]
+ },
+ {
   "generic": "Tafluprost",
   "brand": "Zioptan",
   "color": "Vial",

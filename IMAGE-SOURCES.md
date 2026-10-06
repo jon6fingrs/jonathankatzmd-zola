@@ -20,6 +20,8 @@ tablets and capsules from other makers look different, which the chart notes.
 
 Supplied by Dr. Katz: besivance.png, ciloxan.webp, diclofenac.webp,
 iyuzeh.png, ilevro.png, omlonti.png, xelpros.jpg, miebo.png, vevye.png,
+muro-128-ointment.webp and muro-128-solution.jpg (Bausch + Lomb Muro 128 cartons
+with tube and bottle, trimmed of white margin),
 vuity.webp, methazolamide-50.jpg (Sandoz 50 mg tablet, "GG 181", which matches
 the Sandoz methazolamide label on DailyMed).
 The remaining photos date from the WordPress site (see fetch-assets.sh).
