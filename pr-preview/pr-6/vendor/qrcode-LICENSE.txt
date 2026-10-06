@@ -1,3 +1,0 @@
-qrcode.js — QR Code Generator for JavaScript, v1.4.4
-Copyright (c) 2009 Kazuhiko Arase. MIT License (https://github.com/kazuhikoarase/qrcode-generator).
-Unmodified copy of the npm package "qrcode-generator" file qrcode.js.
