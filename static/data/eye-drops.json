@@ -273,7 +273,7 @@
   "generic": "Difluprednate",
   "brand": "Durezol",
   "color": "Pink",
-  "use": "Steroid",
+  "use": "Steroid, Corneal Edema",
   "dosage": "Variable",
   "notes": "Generic",
   "photos": [
@@ -442,7 +442,7 @@
   "generic": "Loteprednol",
   "brand": "Lotemax, Eysuvis",
   "color": "Pink",
-  "use": "Steroid",
+  "use": "Steroid, Corneal Edema",
   "dosage": "Variable",
   "notes": "Generic, Multiple Concentrations",
   "photos": [
@@ -644,7 +644,7 @@
   "generic": "Prednisolone Acetate",
   "brand": "Pred Forte",
   "color": "Pink / White",
-  "use": "Steroid",
+  "use": "Steroid, Corneal Edema",
   "dosage": "Variable",
   "notes": "Generic",
   "photos": [
@@ -656,7 +656,7 @@
   "generic": "Prednisolone/Bromfenac",
   "brand": "Pred-Brom",
   "color": "Green",
-  "use": "Steroid, Non-steroidal Anti-inflammatory",
+  "use": "Steroid, Non-steroidal Anti-inflammatory, Corneal Edema",
   "dosage": "2-3x/day",
   "notes": "Combination Drop",
   "photos": [
@@ -667,7 +667,7 @@
   "generic": "Prednisolone/Moxifloxacin/Bromfenac",
   "brand": "Pred-Moxi-Brom",
   "color": "Purple",
-  "use": "Steroid, Antibiotic, Non-steroidal Anti-inflammatory",
+  "use": "Steroid, Antibiotic, Non-steroidal Anti-inflammatory, Corneal Edema",
   "dosage": "2-3x/day",
   "notes": "Combination Drop",
   "photos": [
