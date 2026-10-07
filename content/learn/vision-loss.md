@@ -59,7 +59,7 @@ These are not diseases. The eye is simply focusing light in front of, behind, or
 - **Astigmatism** means the front of the eye is curved more like a football than a basketball, so the image is smeared or doubled in one direction. Lights streak and letters have ghosts.
 - **Presbyopia** is the stiffening of the lens with age, so near focus is lost in the 40s and reading glasses are needed.
 
-Glasses, contact lenses, or refractive surgery correct all of these fully. Very high nearsightedness does carry a higher lifetime risk of glaucoma and retinal detachment, so regular eye exams still matter.
+Glasses, contact lenses, or refractive surgery correct all of these fully. To see what a particular prescription does at distance, arm's length and reading distance, enter it in the [glasses prescription simulator](@/learn/glasses-prescription.md). Very high nearsightedness does carry a higher lifetime risk of glaucoma and retinal detachment, so regular eye exams still matter.
 
 ## Dry eye
 

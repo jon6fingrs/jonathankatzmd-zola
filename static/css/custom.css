@@ -922,6 +922,31 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 
 .jk-vis__noscript { background: #fff; border: 1px solid var(--jk-line); border-radius: 8px; padding: 1rem; }
 
+/* prescription mode (learn/glasses-prescription): the rotated blur layer
+   and the prescription form. vision.js sizes and rotates the layer. */
+.jk-vis__rx { position: absolute; inset: 0; overflow: hidden; }
+.jk-vis__rx[hidden] { display: none; }
+.jk-vis__rxspin { position: absolute; }
+.jk-vis__rximg { position: absolute; object-fit: cover; display: block; max-width: none; margin: 0; }
+.jk-vis__scene[hidden] { display: none; }
+.jk-vis__rxgrid {
+  display: grid; grid-template-columns: auto repeat(4, minmax(0, 1fr)); gap: .35rem .4rem; align-items: center;
+  max-width: 520px;
+}
+.jk-vis__rxgrid .form-select, .jk-vis__rxgrid .form-control {
+  font-size: 1rem; min-height: 40px; padding: .3rem 1.4rem .3rem .4rem; background-position: right .3rem center; min-width: 0;
+}
+.jk-vis__rxgrid .form-control { padding-right: .3rem; }
+.jk-vis__rxh { font-size: .8rem; font-weight: 600; color: var(--jk-muted); }
+.jk-vis__rxeye { font-weight: 600; font-size: .9rem; white-space: nowrap; }
+.jk-vis__rxeye small { display: block; font-weight: 400; color: var(--jk-muted); }
+.jk-vis__rxnote { margin: .4rem 0 0; font-size: .85rem; color: var(--jk-muted); }
+.jk-vis__agewrap { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .75rem; }
+.jk-vis__agewrap .form-control { width: 5.5rem; font-size: 1rem; min-height: 40px; }
+.jk-vis__agewrap .jk-vis__rxnote { margin: 0; flex: 1 1 14rem; }
+.jk-vis__rxlist { margin: .5rem 0 0; padding-left: 1.2rem; }
+.jk-vis__rxlist li { margin: .25rem 0; }
+
 @media print {
   .jk-vis__hint, .jk-vis__row, .jk-vis__options, .jk-vis__paint, .jk-vis__share, .jk-vis__divider { display: none !important; }
   .jk-page--article .jk-vis { width: auto; left: auto; transform: none; }

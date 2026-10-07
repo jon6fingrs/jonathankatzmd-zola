@@ -23,6 +23,17 @@
  * browser, which gives smooth, soft-edged regions with no filter support
  * needed. State lives in the query string (JK.url) so a view can be shared
  * or opened from the QR code.
+ *
+ * Prescription mode (data-mode="rx" on the root, used by
+ * content/learn/glasses-prescription.md) swaps the condition list for a
+ * glasses prescription, a viewing distance and with/without glasses. The
+ * optics are in rx-optics.js; here they become one more layer:
+ *     .jk-vis__rx      the photo blurred by different amounts along and
+ *                      across the cylinder axis. CSS filters run in an
+ *                      element's own coordinates, before its transform, so
+ *                      the blur box is rotated to the axis and the photo
+ *                      inside it rotated back: the picture stays upright and
+ *                      the smear lies along the axis.
  */
 (function () {
   'use strict';
@@ -32,6 +43,9 @@
 
   var BASE = new URL(root.getAttribute('data-base') || './', window.location.href).href;
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var MODE = root.getAttribute('data-mode') === 'rx' ? 'rx' : 'conditions';
+  var RX = window.JKRxOptics;
+  if (MODE === 'rx' && !RX) return;
 
   // ---------- scenes ----------
   // lights: bright points (percent of width/height) that cataract glare
@@ -382,6 +396,12 @@
     + '<feTurbulence type="fractalNoise" baseFrequency="0.012 0.016" numOctaves="2" seed="4" result="n"/>'
     + '<feDisplacementMap in="SourceGraphic" in2="n" scale="20" xChannelSelector="R" yChannelSelector="G"/>'
     + '</filter>'
+    // blur along x and y of the rotated box, then make the faded border
+    // opaque again (colors are unpremultiplied, so it keeps the edge color)
+    + '<filter id="jk-vis-rx" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">'
+    + '<feGaussianBlur in="SourceGraphic" stdDeviation="0 0"/>'
+    + '<feComponentTransfer><feFuncA type="linear" slope="40"/></feComponentTransfer>'
+    + '</filter>'
     + '<filter id="jk-vis-color" color-interpolation-filters="sRGB">'
     + '<feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0"/>'
     + '</filter>'
@@ -395,6 +415,7 @@
       + '<img class="jk-vis__img jk-vis__sharp" alt="">'
       + '<div class="jk-vis__wrap jk-vis__warpwrap" hidden><img class="jk-vis__img jk-vis__warp" alt=""></div>'
       + '<div class="jk-vis__wrap jk-vis__lostwrap" hidden><img class="jk-vis__img jk-vis__lost" alt=""></div>'
+      + '<div class="jk-vis__rx" hidden><div class="jk-vis__rxspin"><img class="jk-vis__rximg" alt=""></div></div>'
       + '<div class="jk-vis__overlay"></div>'
       + '<svg class="jk-vis__floaters" viewBox="0 0 100 66" preserveAspectRatio="none" aria-hidden="true"></svg>'
       + '</div>'
@@ -402,7 +423,19 @@
       + '<span class="jk-vis__tag jk-vis__tag--r" id="jk-vis-tagr" aria-hidden="true">Simulated</span>'
       + '<div class="jk-vis__divider" id="jk-vis-divider" role="slider" tabindex="0" aria-label="Compare: drag to reveal more of the normal or simulated view" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="jk-vis__knob" aria-hidden="true">&#9664;&#9654;</span></div>'
       + '</div>';
-    h += '<p class="jk-vis__hint">Drag the handle to compare. Hold <button type="button" class="jk-vis__hold" id="jk-vis-hold">Show normal</button> to see the scene without the condition.</p>';
+    h += '<p class="jk-vis__hint">Drag the handle to compare. Hold <button type="button" class="jk-vis__hold" id="jk-vis-hold">Show normal</button> to see the scene without the ' + (MODE === 'rx' ? 'blur' : 'condition') + '.</p>';
+    if (MODE === 'rx') h += buildRx(); else h += buildConditions();
+    h += '<div class="jk-vis__about" id="jk-vis-about" aria-live="polite"></div>';
+    h += '<div class="jk-vis__share">'
+      + '<button type="button" class="btn btn-outline-primary btn-sm" id="jk-vis-copy">Copy link to this view</button>'
+      + '<span class="jk-vis__copied" id="jk-vis-copied" role="status"></span>'
+      + '<div class="jk-qrbox jk-vis__qr"><div class="jk-qr" id="jk-vis-qr"></div><p class="jk-qrbox__cap">Scan to open this view on your phone</p></div>'
+      + '</div>';
+    root.innerHTML = h;
+  }
+
+  function buildConditions() {
+    var h = '';
     // scenes
     h += '<div class="jk-vis__row"><span class="jk-vis__lab">Scene</span><div class="jk-vis__scenes" role="group" aria-label="Scene">';
     SCENES.forEach(function (sc) {
@@ -421,13 +454,7 @@
       + '<div class="jk-vis__sevlabels" id="jk-vis-sevlabels" aria-hidden="true"></div></div></div>';
     h += '<div id="jk-vis-options" class="jk-vis__options"></div>';
     h += '<div id="jk-vis-paint" class="jk-vis__paint" hidden></div>';
-    h += '<div class="jk-vis__about" id="jk-vis-about" aria-live="polite"></div>';
-    h += '<div class="jk-vis__share">'
-      + '<button type="button" class="btn btn-outline-primary btn-sm" id="jk-vis-copy">Copy link to this view</button>'
-      + '<span class="jk-vis__copied" id="jk-vis-copied" role="status"></span>'
-      + '<div class="jk-qrbox jk-vis__qr"><div class="jk-qr" id="jk-vis-qr"></div><p class="jk-qrbox__cap">Scan to open this view on your phone</p></div>'
-      + '</div>';
-    root.innerHTML = h;
+    return h;
   }
 
   // Short explanations shown under the controls; the long versions are the
@@ -453,8 +480,9 @@
   function $(id) { return document.getElementById(id); }
 
   function render(opts) {
-    var cond = condById(state.cond), scene = sceneById(state.scene), s = state.sev / 100;
     stageScale = Math.max(0.35, els.stage.clientWidth / 900);
+    if (MODE === 'rx') { renderRx(opts); return; }
+    var cond = condById(state.cond), scene = sceneById(state.scene), s = state.sev / 100;
 
     var ctx = { scene: scene, opt: {}, grid: state.grid, sharpFilter: 'none', lostMask: null, lostBlur: 12, lostDim: 0.8, lostBlack: false,
       warpMask: null, warpScale: 0, overlay: 'none', overlayBlend: 'normal', floaters: 0, floaterOpacity: 0.3, astig: null, dryeye: 0, colorMatrix: null };
@@ -600,9 +628,9 @@
   function loadScene() {
     var sc = sceneById(state.scene), src = BASE + sc.file;
     els.stage.style.setProperty('--jk-ar', sc.w + ' / ' + sc.h);
-    [els.base, els.sharp, els.warp, els.lost].forEach(function (im) { if (im.getAttribute('src') !== src) im.src = src; });
+    [els.base, els.sharp, els.warp, els.lost, els.rximg].forEach(function (im) { if (im.getAttribute('src') !== src) im.src = src; });
     els.base.alt = sc.label + ', as seen with healthy vision';
-    els.sharp.alt = sc.label + ', as seen with ' + condById(state.cond).label.toLowerCase();
+    els.sharp.alt = sc.label + ', as seen ' + (MODE === 'rx' ? 'with the prescription' : 'with ' + condById(state.cond).label.toLowerCase());
   }
 
   // ---------- divider ----------
@@ -665,14 +693,16 @@
         render(); return;
       }
       if (b.id === 'jk-vis-copy') { copyLink(); return; }
+      if (MODE === 'rx') rxClick(b);
     });
-    els.sev.addEventListener('input', function () { state.sev = +els.sev.value; render({ controlsOnly: false }); });
+    if (MODE === 'rx') wireRx();
+    else els.sev.addEventListener('input', function () { state.sev = +els.sev.value; render({ controlsOnly: false }); });
     window.addEventListener('resize', debounce(function () { render({ controlsOnly: false }); }, 150));
     wireDivider();
   }
 
   function copyLink() {
-    var url = writeState();
+    var url = MODE === 'rx' ? writeRxState() : writeState();
     var done = function (ok) {
       els.copied.textContent = ok ? 'Link copied.' : 'Copy failed; use the address bar.';
       setTimeout(function () { els.copied.textContent = ''; }, 3000);
@@ -682,15 +712,232 @@
   }
   function debounce(fn, ms) { var t; return function () { clearTimeout(t); t = setTimeout(fn, ms); }; }
 
+  // ---------- prescription mode ----------
+  // Which scenes suit each viewing distance.
+  var RX_SCENES = { far: ['street', 'night'], mid: ['table', 'kitchen'], near: ['reading'] };
+  var RX_EYES = [['both', 'Both eyes'], ['od', 'Right eye'], ['os', 'Left eye']];
+  var RX_EXAMPLES = [
+    { id: 'myope', label: 'Nearsighted', age: 30, od: { sph: -3, cyl: 0, axis: 180, add: 0 }, os: { sph: -2.75, cyl: -0.5, axis: 175, add: 0 }, dist: 'far' },
+    { id: 'hyperope', label: 'Farsighted', age: 52, od: { sph: 2.5, cyl: 0, axis: 180, add: 1.5 }, os: { sph: 2.25, cyl: -0.25, axis: 90, add: 1.5 }, dist: 'near' },
+    { id: 'astig', label: 'Astigmatism', age: 35, od: { sph: 0.5, cyl: -2.5, axis: 180, add: 0 }, os: { sph: 0.25, cyl: -2.25, axis: 5, add: 0 }, dist: 'far' },
+    { id: 'presby', label: 'Reading glasses only', age: 62, od: { sph: 0, cyl: 0, axis: 180, add: 2.25 }, os: { sph: 0, cyl: 0, axis: 180, add: 2.25 }, dist: 'near' }
+  ];
+  // the "Nearsighted" example is the starting view
+  function rxFromExample(ex) {
+    return { od: RX.normalize(ex.od), os: RX.normalize(ex.os), age: ex.age, dist: ex.dist, eye: 'both', glasses: false };
+  }
+
+  function rxOptions(lo, hi, cur, zeroLabel) {
+    var h = '';
+    for (var q = Math.round(hi * 4); q >= Math.round(lo * 4); q--) {
+      var v = q / 4;
+      h += '<option value="' + v + '"' + (v === cur ? ' selected' : '') + '>' + (v === 0 && zeroLabel ? zeroLabel : RX.fmt(v)) + '</option>';
+    }
+    return h;
+  }
+
+  function buildRx() {
+    var r = state.rx, h = '';
+    h += '<div class="jk-vis__row"><span class="jk-vis__lab">Prescription</span><div>'
+      + '<div class="jk-vis__rxgrid" role="group" aria-label="Glasses prescription">'
+      + '<span></span><span class="jk-vis__rxh">Sphere</span><span class="jk-vis__rxh">Cylinder</span><span class="jk-vis__rxh">Axis</span><span class="jk-vis__rxh">Add</span>';
+    [['od', 'Right', 'OD'], ['os', 'Left', 'OS']].forEach(function (e) {
+      var x = r[e[0]], n = e[1] + ' eye ';
+      h += '<span class="jk-vis__rxeye">' + e[1] + ' <small>' + e[2] + '</small></span>'
+        + '<select class="form-select" data-rx="' + e[0] + '" data-f="sph" aria-label="' + n + 'sphere">' + rxOptions(-20, 20, x.sph, '0.00') + '</select>'
+        + '<select class="form-select" data-rx="' + e[0] + '" data-f="cyl" aria-label="' + n + 'cylinder">' + rxOptions(-8, 8, x.cyl, '0.00') + '</select>'
+        + '<input class="form-control" type="number" inputmode="numeric" min="1" max="180" step="1" data-rx="' + e[0] + '" data-f="axis" value="' + x.axis + '" aria-label="' + n + 'axis, 1 to 180 degrees">'
+        + '<select class="form-select" data-rx="' + e[0] + '" data-f="add" aria-label="' + n + 'reading add">' + rxOptions(0, 4, x.add, 'None') + '</select>';
+    });
+    h += '</div><p class="jk-vis__rxnote">Copy the numbers from your glasses prescription. OD is the right eye and OS the left. If there is no cylinder, leave it at 0.00; the axis then does not matter. "Add" is the extra power for reading in bifocals or progressives.</p></div></div>';
+    h += '<div class="jk-vis__row"><label class="jk-vis__lab" for="jk-vis-age">Age</label><div class="jk-vis__agewrap">'
+      + '<input class="form-control" type="number" inputmode="numeric" min="5" max="100" step="1" id="jk-vis-age" value="' + r.age + '">'
+      + '<span class="jk-vis__rxnote">Focusing up close gets harder with age, so age changes the near view.</span></div></div>';
+    h += '<div class="jk-vis__row"><span class="jk-vis__lab">Or try</span><div class="jk-chips" role="group" aria-label="Example prescriptions">';
+    RX_EXAMPLES.forEach(function (ex) { h += '<button type="button" class="jk-chip jk-chip--sm" data-rxex="' + ex.id + '">' + ex.label + '</button>'; });
+    h += '</div></div>';
+    h += '<div class="jk-vis__row"><span class="jk-vis__lab">Looking at</span><div><div class="jk-chips jk-vis__dists" role="group" aria-label="Viewing distance">';
+    RX.DISTANCES.forEach(function (d) { h += '<button type="button" class="jk-chip" data-rxdist="' + d.id + '" aria-pressed="false">' + d.label + '</button>'; });
+    h += '</div><p class="jk-vis__rxnote" id="jk-vis-distnote"></p></div></div>';
+    h += '<div class="jk-vis__row"><span class="jk-vis__lab">Scene</span><div class="jk-vis__scenes" role="group" aria-label="Scene">';
+    SCENES.forEach(function (sc) {
+      h += '<button type="button" class="jk-vis__scene" data-scene="' + sc.id + '" aria-pressed="false"><img src="' + BASE + sc.file + '" alt="" loading="lazy" width="' + sc.w + '" height="' + sc.h + '"><span>' + sc.label + '</span></button>';
+    });
+    h += '</div></div>';
+    h += '<div class="jk-vis__opt"><span class="jk-vis__lab">Eye</span><div class="jk-chips" role="group" aria-label="Eye">';
+    RX_EYES.forEach(function (e) { h += '<button type="button" class="jk-chip jk-chip--sm" data-rxeye="' + e[0] + '" aria-pressed="false">' + e[1] + '</button>'; });
+    h += '</div></div>';
+    h += '<div class="jk-vis__opt"><span class="jk-vis__lab">Right side shows</span><div class="jk-chips" role="group" aria-label="Right side shows">'
+      + '<button type="button" class="jk-chip jk-chip--sm" data-rxglasses="0" aria-pressed="false">Without glasses</button>'
+      + '<button type="button" class="jk-chip jk-chip--sm" data-rxglasses="1" aria-pressed="false">With these glasses</button>'
+      + '</div></div>';
+    return h;
+  }
+
+  function rxFixScene() {
+    var ok = RX_SCENES[state.rx.dist];
+    if (ok.indexOf(state.scene) < 0) state.scene = ok[0];
+  }
+
+  function readRxState() {
+    state.rx = rxFromExample(RX_EXAMPLES[0]);
+    var p = JK.url.read(), r = state.rx;
+    var od = RX.decode(p.r), os = RX.decode(p.l);
+    if (od) r.od = od;
+    if (os) r.os = os;
+    if (p.a !== undefined && isFinite(parseFloat(p.a))) r.age = clamp(Math.round(+p.a), 5, 100);
+    if (RX_SCENES[p.d]) r.dist = p.d;
+    if (RX_EYES.some(function (e) { return e[0] === p.e; })) r.eye = p.e;
+    r.glasses = p.w === '1';
+    state.scene = p.s && sceneById(p.s).id === p.s ? p.s : '';
+    rxFixScene();
+  }
+  function writeRxState() {
+    var r = state.rx;
+    return JK.url.write({ r: RX.encode(r.od), l: RX.encode(r.os), a: String(r.age), d: r.dist, e: r.eye === 'both' ? '' : r.eye, w: r.glasses ? '1' : '', s: state.scene });
+  }
+
+  function syncRxControls() {
+    var r = state.rx, ok = RX_SCENES[r.dist], d = RX.distanceById(r.dist);
+    root.querySelectorAll('[data-rx]').forEach(function (el) {
+      var v = r[el.getAttribute('data-rx')][el.getAttribute('data-f')];
+      if (document.activeElement !== el) el.value = String(v);
+    });
+    var age = $('jk-vis-age');
+    if (document.activeElement !== age) age.value = r.age;
+    function press(sel, attr, cur) {
+      root.querySelectorAll(sel).forEach(function (b) {
+        var on = b.getAttribute(attr) === cur;
+        b.classList.toggle('is-active', on); b.setAttribute('aria-pressed', String(on));
+      });
+    }
+    press('[data-rxdist]', 'data-rxdist', r.dist);
+    press('[data-rxeye]', 'data-rxeye', r.eye);
+    press('[data-rxglasses]', 'data-rxglasses', r.glasses ? '1' : '0');
+    $('jk-vis-distnote').textContent = d.label + ' is ' + metres(d.metres) + ' away: ' + d.detail + '.';
+    root.querySelectorAll('.jk-vis__scene').forEach(function (b) {
+      var id = b.getAttribute('data-scene');
+      b.hidden = ok.indexOf(id) < 0;
+      b.setAttribute('aria-pressed', String(id === state.scene));
+    });
+  }
+
+  function metres(m) {
+    if (m === Infinity) return 'far away';
+    return m < 1 ? Math.round(m * 100) + ' cm' : (Math.round(m * 10) / 10) + ' m';
+  }
+  function acuity(n) { return n >= 400 ? '20/400 or worse' : n <= 20 ? '20/20' : 'about 20/' + n; }
+
+  // px of Gaussian blur per diopter of leftover error, on a 900px stage
+  var RX_PX_PER_D = 2.2, RX_MAX_PX = 18;
+
+  function renderRx() {
+    var r = state.rx, d = RX.distanceById(r.dist);
+    var od = RX.simulate(r.od, r.age, r.dist, r.glasses), os = RX.simulate(r.os, r.age, r.dist, r.glasses);
+    var res = r.eye === 'od' ? od : r.eye === 'os' ? os : RX.better(od, os);
+
+    var sx = Math.min(RX_MAX_PX, RX_PX_PER_D * Math.abs(res.e1)) * stageScale;
+    var sy = Math.min(RX_MAX_PX, RX_PX_PER_D * Math.abs(res.e2)) * stageScale;
+    els.sharp.style.filter = 'none';
+    if (sx < 0.05 && sy < 0.05) {
+      els.rx.hidden = true;
+    } else {
+      els.rx.hidden = false;
+      var W = els.stage.clientWidth, H = els.stage.clientHeight, D = Math.ceil(Math.hypot(W, H)) + 2;
+      // the axis is written as the examiner sees the patient; from the
+      // patient's side that is the same angle turned clockwise on screen
+      var ang = res.axis % 180;
+      var sp = els.rxspin.style, im = els.rximg.style;
+      sp.width = sp.height = D + 'px';
+      sp.left = ((W - D) / 2) + 'px'; sp.top = ((H - D) / 2) + 'px';
+      sp.transform = 'rotate(' + ang + 'deg)';
+      im.width = W + 'px'; im.height = H + 'px';
+      im.left = ((D - W) / 2) + 'px'; im.top = ((D - H) / 2) + 'px';
+      im.transform = 'rotate(' + (-ang) + 'deg)';
+      root.querySelector('#jk-vis-rx feGaussianBlur').setAttribute('stdDeviation', sx.toFixed(2) + ' ' + sy.toFixed(2));
+      // re-apply so browsers that cache the filter pick up the change
+      sp.filter = 'none'; void els.rxspin.offsetWidth; sp.filter = 'url(#jk-vis-rx)';
+    }
+    els.overlay.style.backgroundImage = 'none';
+    drawFloaters(0, 0);
+
+    syncRxControls();
+    els.tagr.textContent = r.glasses ? 'With these glasses' : 'Without glasses';
+    els.about.innerHTML = rxAbout(r, d, od, os, res);
+    JK.qr.render(els.qr, writeRxState(), 112);
+  }
+
+  function rxAbout(r, d, od, os, res) {
+    var how = r.glasses ? 'with these glasses' : 'without glasses';
+    var h = '<p><strong>' + d.label + ' (' + metres(d.metres) + '), ' + how + ':</strong> ';
+    if (r.eye === 'both' && od.snellen === os.snellen) h += 'each eye ' + acuity(od.snellen) + '.';
+    else if (r.eye === 'both') h += 'right eye ' + acuity(od.snellen) + ', left eye ' + acuity(os.snellen) + '; with both eyes open, ' + acuity(res.snellen) + ', since the clearer eye mostly wins.';
+    else h += (r.eye === 'od' ? 'right' : 'left') + ' eye ' + acuity(res.snellen) + '.';
+    h += ' Normal vision is 20/20.</p><ul class="jk-vis__rxlist">';
+    [['od', 'Right eye', r.od], ['os', 'Left eye', r.os]].forEach(function (e) {
+      if (r.eye !== 'both' && r.eye !== e[0]) return;
+      var x = e[2], line = '<li><strong>' + e[1] + '</strong> (' + RX.fmt(x.sph) + (x.cyl ? ' ' + RX.fmt(x.cyl) + ' × ' + x.axis : '') + (x.add ? ', add ' + RX.fmt(x.add) : '') + '): ' + RX.describe(x) + '.';
+      var cr = RX.clearRange(x, r.age);
+      if (!cr) line += ' Without glasses, nothing is fully in focus at age ' + r.age + '.';
+      else if (cr.far === Infinity && cr.near <= 0.42) line += ' Without glasses it can focus from far away to about ' + metres(cr.near) + ' up close.';
+      else if (cr.far === Infinity) line += ' Without glasses it focuses far away but not closer than about ' + metres(cr.near) + '.';
+      else line += ' Without glasses it focuses only between about ' + metres(cr.far) + ' and ' + metres(cr.near) + '.';
+      if (Math.abs(x.cyl) >= 0.75) line += ' The astigmatism blurs at every distance until it is corrected.';
+      if (r.glasses && d.id !== 'far' && !x.add && RX.amplitude(r.age) < d.demand + 0.5) line += ' This prescription has no reading add, and at ' + r.age + ' the eye cannot do all of the close focusing itself: a reading add or reading glasses would help.';
+      h += line + '</li>';
+    });
+    h += '</ul><p class="jk-vis__rxnote">Estimates for understanding, not a measurement of anyone’s vision. <a href="#how-it-works">How this works.</a></p>';
+    return h;
+  }
+
+  function rxClick(b) {
+    var r = state.rx;
+    if (b.hasAttribute('data-rxex')) {
+      var id = b.getAttribute('data-rxex');
+      RX_EXAMPLES.forEach(function (ex) { if (ex.id === id) { var g = r.glasses; state.rx = rxFromExample(ex); state.rx.glasses = g; } });
+    } else if (b.hasAttribute('data-rxdist')) r.dist = b.getAttribute('data-rxdist');
+    else if (b.hasAttribute('data-rxeye')) r.eye = b.getAttribute('data-rxeye');
+    else if (b.hasAttribute('data-rxglasses')) r.glasses = b.getAttribute('data-rxglasses') === '1';
+    else return;
+    rxFixScene(); loadScene(); render();
+  }
+
+  function wireRx() {
+    function onField(e) {
+      var el = e.target;
+      if (el.id === 'jk-vis-age') {
+        var a = parseFloat(el.value);
+        if (!isFinite(a)) return;
+        state.rx.age = clamp(Math.round(a), 5, 100);
+      } else if (el.hasAttribute('data-rx')) {
+        var eye = el.getAttribute('data-rx'), f = el.getAttribute('data-f');
+        if (f === 'axis' && !isFinite(parseFloat(el.value))) return;
+        var x = {}; for (var k in state.rx[eye]) x[k] = state.rx[eye][k];
+        x[f] = el.value;
+        state.rx[eye] = RX.normalize(x);
+      } else return;
+      render();
+    }
+    root.addEventListener('input', onField);
+    // on change (leaving the field) show the value as it was understood
+    root.addEventListener('change', function (e) {
+      onField(e);
+      var el = e.target;
+      if (el.id === 'jk-vis-age') el.value = state.rx.age;
+      else if (el.hasAttribute('data-rx')) el.value = String(state.rx[el.getAttribute('data-rx')][el.getAttribute('data-f')]);
+    });
+  }
+
   // ---------- init ----------
-  readState();
+  if (MODE === 'rx') readRxState(); else readState();
   build();
   els = {
     stage: $('jk-vis-stage'), sim: $('jk-vis-sim'), divider: $('jk-vis-divider'), hold: $('jk-vis-hold'), tagr: $('jk-vis-tagr'),
     base: root.querySelector('.jk-vis__base'), sharp: root.querySelector('.jk-vis__sharp'), warp: root.querySelector('.jk-vis__warp'),
     lost: root.querySelector('.jk-vis__lost'), lostwrap: root.querySelector('.jk-vis__lostwrap'), warpwrap: root.querySelector('.jk-vis__warpwrap'), overlay: root.querySelector('.jk-vis__overlay'), floaters: root.querySelector('.jk-vis__floaters'),
     sev: $('jk-vis-sev'), sevlabels: $('jk-vis-sevlabels'), options: $('jk-vis-options'), paint: $('jk-vis-paint'), about: $('jk-vis-about'),
-    qr: $('jk-vis-qr'), copied: $('jk-vis-copied')
+    qr: $('jk-vis-qr'), copied: $('jk-vis-copied'),
+    rx: root.querySelector('.jk-vis__rx'), rxspin: root.querySelector('.jk-vis__rxspin'), rximg: root.querySelector('.jk-vis__rximg')
   };
   wire();
   loadScene();
