@@ -5,9 +5,17 @@
   <div class="container">
     <div class="jk-page__body">
       {{ section.content | safe }}
-      {% if section.pages %}
+      {% set also = section.extra.also | default(value=[]) %}
+      {% if section.pages or also %}
       <div class="jk-cardgrid">
         {% for p in section.pages %}
+        <a class="jk-card" href="{{ p.permalink }}">
+          <h3>{{ p.title }}</h3>
+          {% if p.description %}<p>{{ p.description }}</p>{% endif %}
+        </a>
+        {% endfor %}
+        {% for path in also %}
+        {% set p = get_page(path=path) %}
         <a class="jk-card" href="{{ p.permalink }}">
           <h3>{{ p.title }}</h3>
           {% if p.description %}<p>{{ p.description }}</p>{% endif %}
