@@ -77,6 +77,12 @@ icon = "images/nav/eye.svg"
   [[extra.menus.children]]
   name = "POST-OP SCHEDULE"
   url = "/patients/post-op-schedule/"
+  [[extra.menus.children]]
+  name = "WHAT VISION LOSS LOOKS LIKE"
+  url = "/learn/vision-loss/"
+  [[extra.menus.children]]
+  name = "GLASSES PRESCRIPTION SIMULATOR"
+  url = "/learn/glasses-prescription/"
 
 [[extra.menus]]
 name = "LEARN"
@@ -85,9 +91,6 @@ icon = "images/nav/book.svg"
   [[extra.menus.children]]
   name = "WHAT IS GLAUCOMA?"
   url = "/learn/what-is-glaucoma/"
-  [[extra.menus.children]]
-  name = "WHAT VISION LOSS LOOKS LIKE"
-  url = "/learn/vision-loss/"
   [[extra.menus.children]]
   name = "GLAUCOMA TESTING"
   url = "/learn/glaucoma-testing/"
