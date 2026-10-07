@@ -151,34 +151,6 @@ hours = [
   "Saturday: 9:00am-1:30pm",
 ]
 
-[[extra.offices]]
-name = "Mercy Hospital"
-map_embed = "https://www.openstreetmap.org/export/embed.html?bbox=-76.62219285964967%2C39.28820989279401%2C-76.6036105155945%2C39.298572272043046&layer=mapnik&marker=39.29339127411664%2C-76.61290168762207"
-address = "301 Saint Paul Place, Professional Office Building, Suite 514, Baltimore, MD 21202"
-street = "301 Saint Paul Place, Suite 514"
-city = "Baltimore"
-zip = "21202"
-phone = "410-727-8380"
-map_url = "https://www.google.com/maps/search/?api=1&query=Katzen+Eye+Group+301+St+Paul+Pl+Baltimore+MD+21202"
-hours = ["Monday-Friday: 8:00am-4:00pm"]
-
-[[extra.offices]]
-name = "Abingdon"
-map_embed = "https://www.openstreetmap.org/export/embed.html?bbox=-76.37935638427736%2C39.42863554909507%2C-76.23069763183595%2C39.511325097840384&layer=mapnik&marker=39.46999260717818%2C-76.30502700805664"
-address = "3401 Box Hill Corporate Center Drive, Suite 202, Abingdon, MD 21009"
-street = "3401 Box Hill Corporate Center Drive, Suite 202"
-city = "Abingdon"
-zip = "21009"
-phone = "410-569-0707"
-map_url = "https://www.google.com/maps/search/?api=1&query=Katzen+Eye+Group+3401+Box+Hill+Corporate+Center+Dr+Abingdon+MD+21009"
-hours = [
-  "Monday: 8:00am-4:00pm",
-  "Tuesday: 8:00am-6:00pm",
-  "Wednesday: 8:00am-5:00pm",
-  "Thursday: 8:00am-5:00pm",
-  "Friday: 8:00am-4:00pm",
-]
-
 # Surgery centers
 [[extra.surgery_centers]]
 name = "Dulaney Eye Institute"
