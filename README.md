@@ -253,9 +253,10 @@ daily routine is split into one dated table per step. The rules live in
 
 On an iPhone, only Safari adds a multi-event calendar file with "Add All";
 other browsers (Chrome, DuckDuckGo, Firefox, in-app browsers) show a
-one-event preview. Both schedule pages detect those browsers and show a
-note with an "Open this schedule in Safari" link (`JK.ios.safariNote` in
-`schedule-common.js`, using the undocumented `x-safari-https:` scheme).
+one-event preview. A page can't reliably detect those browsers (DuckDuckGo
+often reports itself as Safari) or force Safari open, so both schedule
+pages show every iPhone a short note with a "Copy link" button to paste
+into Safari (`JK.ios.safariNote` in `schedule-common.js`).
 
 ## Mobile-first conventions (keep these for new pages)
 

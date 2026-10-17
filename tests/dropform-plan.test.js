@@ -143,25 +143,21 @@ test('calendar: a stop date of tomorrow ends tomorrow; no stop date repeats fore
   assert.deepEqual(rrules, ['RRULE:FREQ=DAILY;UNTIL=20261017T235959', 'RRULE:FREQ=DAILY', 'none']);
 });
 
-test('iPhone browsers other than Safari get the "open in Safari" note', () => {
+test('the "use Safari" note shows on every iPhone/iPad browser, nowhere else', () => {
   const UA = {
     safari: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1',
     duckduckgo: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 DuckDuckGo/7 Safari/605.1.15',
     chrome: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/126.0.6478.54 Mobile/15E148 Safari/604.1',
-    firefox: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/127.0 Mobile/15E148 Safari/605.1.15',
-    googleApp: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) GSA/322.0.648915268 Mobile/15E148 Safari/604.1',
     inApp: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
     android: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36',
     mac: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15'
   };
-  const other = {};
+  const ios = {};
   for (const [k, ua] of Object.entries(UA)) {
     const ctx = { window: {}, document: { title: '', querySelector: () => null }, history: {}, navigator: { userAgent: ua, maxTouchPoints: 0 } };
     vm.createContext(ctx);
     vm.runInContext(fs.readFileSync(path.join(__dirname, '../static/js/schedule-common.js'), 'utf8'), ctx);
-    other[k] = ctx.window.JK.ios.isOtherBrowser();
+    ios[k] = ctx.window.JK.ios.isIOS();
   }
-  assert.deepEqual(other, { safari: false, duckduckgo: true, chrome: true, firefox: true, googleApp: true, inApp: true, android: false, mac: false });
-  assert.equal(loadCommon().ios.safariURL('https://jonathankatzmd.com/patients/eye-drop-form/?r=a%7Cb'),
-    'x-safari-https://jonathankatzmd.com/patients/eye-drop-form/?r=a%7Cb');
+  assert.deepEqual(ios, { safari: true, duckduckgo: true, chrome: true, inApp: true, android: false, mac: false });
 });

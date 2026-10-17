@@ -148,35 +148,41 @@
     return out;
   }
 
-  // ---------- iPhone browsers other than Safari ----------
+  // ---------- iPhone: calendar files open fully only in Safari ----------
   // Only Safari on iPhone/iPad offers "Add All" for a calendar file with
-  // several events; Chrome, DuckDuckGo, Firefox, the Google app and in-app
+  // several events; DuckDuckGo, Chrome, Firefox, the Google app and in-app
   // browsers show a one-event preview ("Multiple events aren't supported").
-  // On those, add a note under the calendar button with a link that opens
-  // the same schedule in Safari. The x-safari-https: scheme is undocumented
-  // (works on iOS 15 and 17+, not 16), so the note also says how to do it
-  // by hand. Browsers that look exactly like Safari (Brave) can't be told
-  // apart and get no note.
+  // A page can't reliably tell those browsers from Safari (DuckDuckGo often
+  // reports itself as Safari) and can't force Safari open (x-safari-https:
+  // links go to the default browser), so every iPhone gets a short note
+  // with a button that copies the schedule link to paste into Safari.
   function isIOS() {
     var ua = navigator.userAgent || '';
     return /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
   }
-  function isOtherIOSBrowser() {
-    var ua = navigator.userAgent || '';
-    if (!isIOS()) return false;
-    if (!/Safari\//.test(ua)) return true;   // in-app web views drop the Safari token
-    return /CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|DuckDuckGo|Ddg\/|GSA\/|YaBrowser|FBAN|FBAV|Instagram|LinkedInApp|Snapchat|Line\//.test(ua);
-  }
-  function safariURL(url) { return url.replace(/^(https?):\/\//, 'x-safari-$1://'); }
-  // Inserts the note after `after` (an element) when needed.
+  // Inserts the note after `after` (an element) on iPhone/iPad.
   function safariNote(after, url) {
-    if (!after || !isOtherIOSBrowser()) return;
-    var p = document.createElement('p');
+    if (!after || !isIOS()) return;
+    var p = document.createElement('div');
     p.className = 'jk-note jk-safari-note';
-    p.innerHTML = 'On iPhone, “Add to calendar” adds every reminder at once only in Safari. '
-      + '<a href="' + esc(safariURL(url)) + '">Open this schedule in Safari</a>, '
-      + 'or copy the page link and paste it into Safari.';
+    p.innerHTML = '<p>On iPhone, Safari adds all reminders at once. Using another browser? '
+      + 'Copy this link and open it in Safari.</p>'
+      + '<button type="button" class="btn btn-sm btn-outline-primary jk-safari-note__copy">Copy link</button>'
+      + '<input type="text" class="jk-safari-note__url" readonly hidden aria-label="Schedule link">';
     after.parentNode.insertBefore(p, after.nextSibling);
+    var btn = p.querySelector('button'), box = p.querySelector('input');
+    box.value = url;
+    // if the clipboard is unavailable, show the link selected for a manual copy
+    function manual() {
+      box.hidden = false; box.focus(); box.select();
+      btn.textContent = 'Copy the link above';
+    }
+    btn.addEventListener('click', function () {
+      if (!navigator.clipboard || !navigator.clipboard.writeText) { manual(); return; }
+      navigator.clipboard.writeText(url).then(function () {
+        btn.textContent = 'Link copied \u2014 paste it into Safari';
+      }, manual);
+    });
   }
 
   // ---------- qr ----------
@@ -263,7 +269,7 @@
     qr: { render: renderQR },
     url: { read: readParams, write: writeParams, clear: clearParams },
     print: { title: printTitle, setLandscape: setLandscape, wireLandscape: wireLandscape },
-    ios: { isOtherBrowser: isOtherIOSBrowser, safariURL: safariURL, safariNote: safariNote },
+    ios: { isIOS: isIOS, safariNote: safariNote },
     esc: esc
   };
 })();
