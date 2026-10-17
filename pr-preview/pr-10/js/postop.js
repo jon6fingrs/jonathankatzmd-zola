@@ -169,6 +169,7 @@
     JK.print.wireLandscape(out);
 
     var url = JK.url.write(toParams(v));
+    JK.ios.safariNote(out.querySelector('.jk-ics-note'), url);
     JK.qr.render(document.getElementById('jk-postop-qr'), url, 132);
 
     document.getElementById('jk-postop-print').addEventListener('click', function () { window.print(); });

@@ -148,6 +148,37 @@
     return out;
   }
 
+  // ---------- iPhone browsers other than Safari ----------
+  // Only Safari on iPhone/iPad offers "Add All" for a calendar file with
+  // several events; Chrome, DuckDuckGo, Firefox, the Google app and in-app
+  // browsers show a one-event preview ("Multiple events aren't supported").
+  // On those, add a note under the calendar button with a link that opens
+  // the same schedule in Safari. The x-safari-https: scheme is undocumented
+  // (works on iOS 15 and 17+, not 16), so the note also says how to do it
+  // by hand. Browsers that look exactly like Safari (Brave) can't be told
+  // apart and get no note.
+  function isIOS() {
+    var ua = navigator.userAgent || '';
+    return /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  }
+  function isOtherIOSBrowser() {
+    var ua = navigator.userAgent || '';
+    if (!isIOS()) return false;
+    if (!/Safari\//.test(ua)) return true;   // in-app web views drop the Safari token
+    return /CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|DuckDuckGo|Ddg\/|GSA\/|YaBrowser|FBAN|FBAV|Instagram|LinkedInApp|Snapchat|Line\//.test(ua);
+  }
+  function safariURL(url) { return url.replace(/^(https?):\/\//, 'x-safari-$1://'); }
+  // Inserts the note after `after` (an element) when needed.
+  function safariNote(after, url) {
+    if (!after || !isOtherIOSBrowser()) return;
+    var p = document.createElement('p');
+    p.className = 'jk-note jk-safari-note';
+    p.innerHTML = 'On iPhone, “Add to calendar” adds every reminder at once only in Safari. '
+      + '<a href="' + esc(safariURL(url)) + '">Open this schedule in Safari</a>, '
+      + 'or copy the page link and paste it into Safari.';
+    after.parentNode.insertBefore(p, after.nextSibling);
+  }
+
   // ---------- qr ----------
   // Renders into `el` (emptied first). Returns false if the library is absent.
   function renderQR(el, text, sizePx) {
@@ -232,6 +263,7 @@
     qr: { render: renderQR },
     url: { read: readParams, write: writeParams, clear: clearParams },
     print: { title: printTitle, setLandscape: setLandscape, wireLandscape: wireLandscape },
+    ios: { isOtherBrowser: isOtherIOSBrowser, safariURL: safariURL, safariNote: safariNote },
     esc: esc
   };
 })();
