@@ -5,15 +5,22 @@ template = "page.html"
 weight = 3
 
 [extra]
-scripts = ["vendor/qrcode.js", "js/schedule-common.js", "js/dropform.js"]
+scripts = ["vendor/qrcode.js", "js/schedule-common.js", "js/dropform-plan.js", "js/dropform.js"]
 centered = true
 +++
 
-<p class="jk-page__lede">Add each eye drop or eye-related pill, how many times a day it is used, and which eye. The schedule lists the drops and a daily routine with suggested times, spacing drops five minutes apart. It can be printed, added to a phone's calendar with reminders, or opened on a phone with its QR code.</p>
+<p class="jk-page__lede">Add each eye drop or eye-related pill, how often it is used, and which eye. To taper a drop, list it once per step with each step's stop date. The schedule lists the drops and a daily routine with suggested times, spacing drops five minutes apart. It can be printed, added to a phone's calendar with reminders, or opened on a phone with its QR code.</p>
 
 <form id="jk-dropform" class="jk-dropform" data-source="../../data/eye-drops.json" novalidate>
   <div id="jk-dropform-rows"></div>
   <p class="jk-form__error" id="jk-dropform-error" role="alert" hidden></p>
+  <div class="jk-form__question" id="jk-dropform-question" role="alert" hidden>
+    <p class="jk-form__question-text"></p>
+    <div class="jk-form__question-actions">
+      <button type="button" class="btn btn-primary jk-form__question-fix">Yes, let me fix the dates</button>
+      <button type="button" class="btn btn-outline-secondary jk-form__question-go">No, use them at the same time</button>
+    </div>
+  </div>
   <div class="jk-dropform__actions">
     <button type="button" class="btn btn-outline-primary" id="jk-dropform-add">+ Add another medication</button>
     <button type="submit" class="btn btn-primary">Create schedule</button>
@@ -45,10 +52,11 @@ centered = true
       <output name="topColor" class="jk-colorchip" aria-live="polite"><span class="jk-colorchip__text">—</span></output>
     </div>
     <label class="jk-droprow__f jk-droprow__f--xs">
-      <span>Times per day</span>
+      <span>How often</span>
       <select name="timesPerDay" class="jk-in">
         <option>1</option><option>2</option><option>3</option><option>4</option>
         <option>5</option><option>6</option><option>7</option><option>8</option>
+        <option value="q2h">Every 2 hours</option><option value="q1h">Every hour</option>
       </select>
     </label>
     <label class="jk-droprow__f jk-droprow__f--sm">

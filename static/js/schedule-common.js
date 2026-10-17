@@ -92,7 +92,8 @@
   }
   /*
    * events: [{ summary, description, start (Date, UTC-midnight), end (Date,
-   *            inclusive), time "HH:MM", alarm (bool) }]
+   *            inclusive; null = repeats daily with no end), time "HH:MM",
+   *            alarm (bool) }]
    * Times are written as floating local time (no TZID) on purpose: the
    * patient's calendar interprets "8:00" as 8:00 wherever they are.
    */
@@ -110,7 +111,9 @@
       lines.push('DTSTAMP:' + stamp);
       lines.push('DTSTART:' + icsDate(ev.start) + 'T' + t);
       lines.push('DTEND:' + icsDate(ev.start) + 'T' + shiftTime(ev.time, 10).replace(':', '') + '00');
-      if (ev.end && ev.end.getTime() > ev.start.getTime()) {
+      if (ev.end === null) {
+        lines.push('RRULE:FREQ=DAILY');
+      } else if (ev.end && ev.end.getTime() > ev.start.getTime()) {
         lines.push('RRULE:FREQ=DAILY;UNTIL=' + icsDate(ev.end) + 'T235959');
       }
       lines.push('SUMMARY:' + icsEscape(ev.summary));
@@ -143,6 +146,48 @@
       if (c > 0) { cur = { start: addDays(startDate, day), end: addDays(startDate, day), count: c }; out.push(cur); }
     }
     return out;
+  }
+
+  // ---------- iPhone: calendar files open fully only in Safari ----------
+  // Only Safari on iPhone/iPad offers "Add All" for a calendar file with
+  // several events; DuckDuckGo, Chrome, Firefox, the Google app and in-app
+  // browsers show a one-event preview ("Multiple events aren't supported").
+  // A page can't reliably tell those browsers from Safari (DuckDuckGo often
+  // reports itself as Safari) and can't force Safari open (x-safari-https:
+  // links go to the default browser), so every iPhone gets a short note
+  // with a button that copies the schedule link to paste into Safari.
+  // The copied link carries a marker (safari=1); a page opened from it was
+  // pasted into Safari on purpose, so it skips the note. Read it at load,
+  // before the page rewrites its own address.
+  var FROM_COPY = /[?&]safari=1(&|$)/.test(window.location.search);
+  function isIOS() {
+    var ua = navigator.userAgent || '';
+    return /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  }
+  // Inserts the note after `after` (an element) on iPhone/iPad.
+  function safariNote(after, url) {
+    if (!after || !isIOS() || FROM_COPY) return;
+    url += (url.indexOf('?') < 0 ? '?' : '&') + 'safari=1';
+    var p = document.createElement('div');
+    p.className = 'jk-note jk-safari-note';
+    p.innerHTML = '<p><strong>iPhone tip:</strong> calendar reminders are added all at once only in Safari. '
+      + 'If you are using a different browser, copy the link and open it in Safari before tapping \u201cAdd to calendar.\u201d</p>'
+      + '<button type="button" class="btn btn-sm btn-outline-secondary jk-safari-note__copy">Copy link</button>'
+      + '<input type="text" class="jk-safari-note__url" readonly hidden aria-label="Schedule link">';
+    after.parentNode.insertBefore(p, after.nextSibling);
+    var btn = p.querySelector('button'), box = p.querySelector('input');
+    box.value = url;
+    // if the clipboard is unavailable, show the link selected for a manual copy
+    function manual() {
+      box.hidden = false; box.focus(); box.select();
+      btn.textContent = 'Copy the link above';
+    }
+    btn.addEventListener('click', function () {
+      if (!navigator.clipboard || !navigator.clipboard.writeText) { manual(); return; }
+      navigator.clipboard.writeText(url).then(function () {
+        btn.textContent = 'Link copied \u2014 paste it into Safari';
+      }, manual);
+    });
   }
 
   // ---------- qr ----------
@@ -229,6 +274,7 @@
     qr: { render: renderQR },
     url: { read: readParams, write: writeParams, clear: clearParams },
     print: { title: printTitle, setLandscape: setLandscape, wireLandscape: wireLandscape },
+    ios: { isIOS: isIOS, safariNote: safariNote, fromCopy: function () { return FROM_COPY; } },
     esc: esc
   };
 })();

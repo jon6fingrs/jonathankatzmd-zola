@@ -10,12 +10,14 @@
   'use strict';
 
   var JK = window.JK;
+  var Plan = window.JKDropPlan;
   var form = document.getElementById('jk-dropform');
   var rowsEl = document.getElementById('jk-dropform-rows');
   var out = document.getElementById('jk-dropform-result');
   var tpl = document.getElementById('jk-dropform-row');
   var errEl = document.getElementById('jk-dropform-error');
-  if (!JK || !form || !rowsEl || !out || !tpl) return;
+  var qEl = document.getElementById('jk-dropform-question');
+  if (!JK || !Plan || !form || !rowsEl || !out || !tpl) return;
 
   var drugs = [];          // [{generic, brand, color, ...}]
   var byGeneric = {};      // generic -> drug
@@ -155,8 +157,9 @@
     JK.url.clear();
   }
 
-  function showError(msg) { errEl.textContent = msg; errEl.hidden = false; }
-  function hideError() { errEl.hidden = true; }
+  function showError(msg) { hideQuestion(); errEl.textContent = msg; errEl.hidden = false; }
+  function hideError() { errEl.hidden = true; hideQuestion(); }
+  function hideQuestion() { if (qEl) qEl.hidden = true; }
 
   function readRows() {
     var entries = [];
@@ -169,7 +172,7 @@
         brand: r.querySelector('[name=brandName]').value,
         color: d ? d.color : '',
         use: d ? d.use : '',
-        times: +r.querySelector('[name=timesPerDay]').value || 1,
+        times: Plan.parseFreq(r.querySelector('[name=timesPerDay]').value),
         eye: d && ORAL[d.color] ? BY_MOUTH : r.querySelector('[name=eye]').value,
         stop: r.querySelector('[name=stopDate]').value
       });
@@ -207,7 +210,7 @@
       var f = s.split('|');
       var d = byGeneric[f[0]];
       if (!d) return null;
-      return { generic: f[0], brand: f[1] || '', color: d.color, use: d.use, times: Math.min(8, Math.max(1, +f[2] || 1)), eye: ORAL[d.color] ? BY_MOUTH : (EYE_NAME[f[3]] && f[3] !== 'M' ? EYE_NAME[f[3]] : 'Both Eyes'), stop: JK.date.parseISO(f[4]) ? f[4] : '' };
+      return { generic: f[0], brand: f[1] || '', color: d.color, use: d.use, times: Plan.parseFreq(f[2]), eye: ORAL[d.color] ? BY_MOUTH : (EYE_NAME[f[3]] && f[3] !== 'M' ? EYE_NAME[f[3]] : 'Both Eyes'), stop: JK.date.parseISO(f[4]) ? f[4] : '' };
     }).filter(Boolean);
   }
 
@@ -215,28 +218,42 @@
   // Assign each medication its dose times, then stagger the eye drops that
   // share a slot by SPACING_MIN so the routine itself teaches the "wait five
   // minutes" rule. Pills in a slot are listed first, at the slot time; they
-  // don't need spacing from drops.
-  // Returns [{ time:"HH:MM", drops:[{entry, time}] }] sorted by time.
+  // don't need spacing from drops. The same drop going into each eye at the
+  // same time is one line ("Both Eyes"), not two drops five minutes apart.
+  // segs: the plan's segments active in one period.
+  // Returns [{ time:"HH:MM", drops:[{entry, eye, segs, time}] }] sorted by time.
   // Once-daily glaucoma drops (prostaglandins and their combinations) are
   // conventionally taken at bedtime, so that is their default slot.
   function timesFor(e) {
+    var fixed = Plan.fixedTimes(e.times);
+    if (fixed) return fixed;
     if (e.times === 1 && !isOral(e) && /Glaucoma/.test(e.use || '')) return ['21:00'];
     return JK.doseTimes(e.times);
   }
-  function buildRoutine(entries) {
+  function buildRoutine(segs) {
     var slots = {};
-    entries.forEach(function (e) {
-      timesFor(e).forEach(function (t) {
-        (slots[t] = slots[t] || []).push(e);
+    segs.forEach(function (s) {
+      timesFor(s.entry).forEach(function (t) {
+        var slot = slots[t] = slots[t] || {};
+        var k = s.entry.generic + '|' + s.entry.brand;
+        (slot[k] = slot[k] || { entry: s.entry, segs: [] }).segs.push(s);
       });
     });
     return Object.keys(slots).sort().map(function (t) {
+      var items = Object.keys(slots[t]).map(function (k) {
+        var it = slots[t][k];
+        it.eye = Plan.eyeLabel(it.segs.map(function (s) { return s.side; }));
+        return it;
+      });
       // more-frequent drops first within a slot, then alphabetical
-      var order = function (a, b) { return b.times - a.times || a.generic.localeCompare(b.generic); };
-      var pills = slots[t].filter(isOral).sort(order);
-      var drops = slots[t].filter(function (e) { return !isOral(e); }).sort(order);
-      return { time: t, drops: pills.map(function (e) { return { entry: e, time: t }; })
-        .concat(drops.map(function (e, i) { return { entry: e, time: JK.shiftTime(t, i * SPACING_MIN) }; })) };
+      var order = function (a, b) {
+        return Plan.dosesPerDay(b.entry.times) - Plan.dosesPerDay(a.entry.times) || a.entry.generic.localeCompare(b.entry.generic);
+      };
+      var pills = items.filter(function (it) { return isOral(it.entry); }).sort(order);
+      var drops = items.filter(function (it) { return !isOral(it.entry); }).sort(order);
+      pills.forEach(function (it) { it.time = t; });
+      drops.forEach(function (it, i) { it.time = JK.shiftTime(t, i * SPACING_MIN); });
+      return { time: t, drops: pills.concat(drops) };
     });
   }
 
@@ -249,10 +266,27 @@
       + '<strong>' + esc(e.generic) + '</strong>' + (e.brand ? ' <span class="routine-brand">(' + esc(e.brand) + ')</span>' : '');
   }
 
+  // "Until" cell for one row. A later taper step shows when it starts; a
+  // "Both Eyes" row whose eyes start on different days says which eye waits.
+  function datesText(segs, stop, today) {
+    var fmt = JK.date.fmtShort;
+    var last = stop ? 'Last dose ' + fmt(stop) : 'Ongoing';
+    if (!segs.length) return stop ? 'Finished ' + fmt(stop) : last;
+    var later = segs.filter(function (s) { return s.start > today; });
+    if (!later.length) return last;
+    if (later.length === segs.length) {
+      return 'Starts ' + fmt(segs[0].start) + (stop ? ', last dose ' + fmt(stop) : ', then ongoing');
+    }
+    return last + ' (' + Plan.SIDE_NAME[later[0].side] + ' starts ' + fmt(later[0].start) + ')';
+  }
+
   // ---------- render ----------
 
   function render(entries) {
     var today = JK.date.today();
+    var p = Plan.plan(entries, today);
+    var periods = Plan.periods(p.segs, today);
+    var tapered = periods.length > 1;
     var anyPill = entries.some(isOral);
     var title = anyPill ? 'Eye Medication Schedule' : 'Eye Drop Schedule';
     var medHead = anyPill ? 'Medication' : 'Eye drop';
@@ -261,51 +295,65 @@
       + '<div class="jk-qrbox"><div class="jk-qr" id="jk-dropform-qr"></div><p class="jk-qrbox__cap">Scan to open this schedule on your phone</p></div></div>';
 
     // 1. the drops
+    var untilHead = tapered ? 'When' : 'Until';
     h += '<div class="table-wrapper"><table class="schedule-table schedule-table--stack"><thead><tr>'
-      + '<th scope="col">' + medHead + '</th><th scope="col">' + (anyPill ? 'Cap color / form' : 'Cap color') + '</th><th scope="col">How often</th><th scope="col">Which eye</th><th scope="col">Until</th>'
+      + '<th scope="col">' + medHead + '</th><th scope="col">' + (anyPill ? 'Cap color / form' : 'Cap color') + '</th><th scope="col">How often</th><th scope="col">Which eye</th><th scope="col">' + untilHead + '</th>'
       + '</tr></thead><tbody>';
-    entries.forEach(function (e) {
+    entries.forEach(function (e, i) {
       var stop = JK.date.parseISO(e.stop);
+      var rowSegs = p.segs.filter(function (s) { return s.row === i + 1; });
       h += '<tr>'
         + '<th scope="row" class="day-cell"><strong>' + esc(e.generic) + '</strong>' + (e.brand ? '<br><span class="routine-brand">' + esc(e.brand) + '</span>' : '') + '</th>'
         + '<td data-label="Cap color" class="jk-td-color" data-color="' + esc(e.color) + '">' + swatchHTML(e.color) + '</td>'
-        + '<td data-label="How often">' + e.times + 'x a day</td>'
+        + '<td data-label="How often">' + esc(Plan.freqLabel(e.times)) + '</td>'
         + '<td data-label="Which eye">' + esc(e.eye) + '</td>'
-        + '<td data-label="Until">' + (stop ? 'Last dose ' + esc(JK.date.fmtShort(stop)) : 'Ongoing') + '</td>'
+        + '<td data-label="' + untilHead + '">' + esc(datesText(rowSegs, stop, today)) + '</td>'
         + '</tr>';
     });
     h += '</tbody></table></div>';
 
     // 2. daily routine: when to use each drop, every day. Drops sharing a
-    // time slot are already staggered five minutes apart.
-    var routine = buildRoutine(entries);
+    // time slot are already staggered five minutes apart. A taper gets one
+    // routine per step, headed with its dates.
+    var routines = periods.map(function (per) { return { period: per, slots: buildRoutine(per.segs) }; });
     var note = 'Suggested times. Wait at least five minutes between different eye drops.' + (anyPill ? ' Pills can be taken with your drops; follow the pharmacy label about food.' : '');
-    // The heading appears twice: as an <h2> on screen, and as a title row
-    // inside <thead> for print. Browsers never separate a table header from
-    // its first body row and repeat it on each page, so in print the heading
-    // can't be stranded at the bottom of page 1 and labels page 2 as well.
-    h += '<div class="routine"><h2>Daily routine</h2>'
-      + '<p class="routine-note">' + note + '</p>'
-      + '<div class="table-wrapper"><table class="schedule-table routine-table schedule-table--stack"><thead>'
-      + '<tr class="routine-titlerow" aria-hidden="true"><th colspan="3"><span class="routine-titlerow__h">Daily routine</span><span class="routine-titlerow__note">' + note + '</span></th></tr>'
-      + '<tr>'
-      + '<th scope="col">Time</th><th scope="col">' + medHead + '</th><th scope="col">Which eye</th>'
-      + '</tr></thead>';
-    // One <tbody> per time slot: in print a slot is never split across
-    // pages, but the table as a whole may continue onto the next page
-    // (with the header row repeated) instead of leaving page 1 half empty.
-    routine.forEach(function (slot) {
-      h += '<tbody class="routine-slot">';
-      slot.drops.forEach(function (d, i) {
-        h += '<tr' + (i === 0 ? ' class="slot-start"' : '') + '>'
-          + '<th scope="row" class="day-cell">' + esc(JK.fmtTime(d.time)) + '</th>'
-          + '<td data-label="' + medHead + '" class="routine-drop">' + dropHTML(d.entry) + '</td>'
-          + '<td data-label="Which eye" class="routine-eye">' + esc(d.entry.eye) + '</td>'
-          + '</tr>';
+    if (!routines.length) {
+      h += '<div class="routine"><h2>Daily routine</h2><p class="routine-note">Every medication on this schedule has finished.</p></div>';
+    }
+    routines.forEach(function (r) {
+      var per = r.period, heading = 'Daily routine';
+      if (tapered) {
+        heading += ': ' + (per.end
+          ? (per.end.getTime() === per.start.getTime() ? JK.date.fmtShort(per.start) : JK.date.fmtShort(per.start) + ' – ' + JK.date.fmtShort(per.end))
+          : 'from ' + JK.date.fmtShort(per.start));
+      }
+      // The heading appears twice: as an <h2> on screen, and as a title row
+      // inside <thead> for print. Browsers never separate a table header from
+      // its first body row and repeat it on each page, so in print the heading
+      // can't be stranded at the bottom of page 1 and labels page 2 as well.
+      h += '<div class="routine"><h2>' + esc(heading) + '</h2>'
+        + '<p class="routine-note">' + note + '</p>'
+        + '<div class="table-wrapper"><table class="schedule-table routine-table schedule-table--stack"><thead>'
+        + '<tr class="routine-titlerow" aria-hidden="true"><th colspan="3"><span class="routine-titlerow__h">' + esc(heading) + '</span><span class="routine-titlerow__note">' + note + '</span></th></tr>'
+        + '<tr>'
+        + '<th scope="col">Time</th><th scope="col">' + medHead + '</th><th scope="col">Which eye</th>'
+        + '</tr></thead>';
+      // One <tbody> per time slot: in print a slot is never split across
+      // pages, but the table as a whole may continue onto the next page
+      // (with the header row repeated) instead of leaving page 1 half empty.
+      r.slots.forEach(function (slot) {
+        h += '<tbody class="routine-slot">';
+        slot.drops.forEach(function (d, i) {
+          h += '<tr' + (i === 0 ? ' class="slot-start"' : '') + '>'
+            + '<th scope="row" class="day-cell">' + esc(JK.fmtTime(d.time)) + '</th>'
+            + '<td data-label="' + medHead + '" class="routine-drop">' + dropHTML(d.entry) + '</td>'
+            + '<td data-label="Which eye" class="routine-eye">' + esc(d.eye) + '</td>'
+            + '</tr>';
+        });
+        h += '</tbody>';
       });
-      h += '</tbody>';
+      h += '</table></div></div>';
     });
-    h += '</table></div></div>';
 
     h += '<div class="button-container">'
       + '<button type="button" class="btn btn-primary" id="jk-dropform-print">Print</button>'
@@ -322,44 +370,72 @@
     JK.print.wireLandscape(out);
 
     var url = JK.url.write(toParams(entries));
+    JK.ios.safariNote(out.querySelector('.jk-ics-note'), url);
     JK.qr.render(document.getElementById('jk-dropform-qr'), url, 132);
 
     document.getElementById('jk-dropform-print').addEventListener('click', function () { window.print(); });
-    document.getElementById('jk-dropform-ics').addEventListener('click', function () { exportICS(entries, routine, today); });
+    document.getElementById('jk-dropform-ics').addEventListener('click', function () { JK.ics.download(buildICS(routines), 'eye-drop-schedule.ics'); });
     document.getElementById('jk-dropform-back').addEventListener('click', function () {
       out.hidden = true; form.hidden = false; JK.print.title(null); JK.url.clear(); window.scrollTo(0, 0);
     });
     window.scrollTo(0, 0);
   }
 
-  function exportICS(entries, routine, today) {
+  // One daily reminder per dose for each routine period, running from the
+  // later of the period start and the drop's start until the earlier of the
+  // period end and the drop's stop date (none = repeats until deleted). A
+  // "Both Eyes" line whose eyes stop on different days becomes one reminder
+  // per eye so each can end on its own date.
+  function buildICS(routines) {
     var events = [];
-    routine.forEach(function (slot) {
-      slot.drops.forEach(function (d) {
-        var e = d.entry;
-        var stop = JK.date.parseISO(e.stop);
-        events.push({
-          summary: isOral(e) ? 'Take: ' + dropLabel(e) + ' (by mouth)' : 'Eye drop: ' + dropLabel(e) + ' — ' + e.eye,
-          description: isOral(e)
-            ? e.times + 'x a day by mouth. Schedule from jonathankatzmd.com.'
-            : e.times + 'x a day' + (e.color ? ', ' + e.color.toLowerCase() + ' cap' : '') + '. Wait five minutes between different drops. Schedule from jonathankatzmd.com.',
-          start: today,
-          end: stop || null,            // null = repeats until deleted
-          time: d.time
+    function minEnd(a, b) { return a === null ? b : b === null ? a : (a < b ? a : b); }
+    routines.forEach(function (r) {
+      r.slots.forEach(function (slot) {
+        slot.drops.forEach(function (d) {
+          var ends = d.segs.map(function (s) { return minEnd(s.end || null, r.period.end); });
+          var same = ends.every(function (x) { return (x && x.getTime()) === (ends[0] && ends[0].getTime()); });
+          var groups = same ? [{ eye: d.eye, end: ends[0] }]
+            : d.segs.map(function (s, i) { return { eye: Plan.SIDE_NAME[s.side], end: ends[i] }; });
+          groups.forEach(function (g) {
+            var e = d.entry;
+            events.push({
+              summary: isOral(e) ? 'Take: ' + dropLabel(e) + ' (by mouth)' : 'Eye drop: ' + dropLabel(e) + ' — ' + g.eye,
+              description: (isOral(e)
+                ? Plan.freqLabel(e.times) + ' by mouth.'
+                : Plan.freqLabel(e.times) + (e.color ? ', ' + e.color.toLowerCase() + ' cap' : '') + '. Wait five minutes between different drops.') + ' Schedule from jonathankatzmd.com.',
+              start: r.period.start,
+              end: g.end,                 // null = repeats until deleted
+              time: d.time
+            });
+          });
         });
       });
     });
-    // an event with no end still needs a daily rule
-    var text = JK.ics.build(events.map(function (ev) {
-      if (!ev.end) ev.end = JK.date.addDays(ev.start, 1); // placeholder so RRULE is emitted
-      return ev;
-    }), 'Eye medications');
-    // strip the placeholder UNTIL for open-ended drops
-    text = text.replace(/RRULE:FREQ=DAILY;UNTIL=(\d{8})T235959/g, function (m, until) {
-      var tomorrow = JK.date.toISO(JK.date.addDays(today, 1)).replace(/-/g, '');
-      return until === tomorrow ? 'RRULE:FREQ=DAILY' : m;
+    return JK.ics.build(events, 'Eye medications');
+  }
+
+  // ---------- taper question ----------
+  // Rows for the same medication and eye that don't read as a taper (two
+  // without a stop date, the same stop date twice, or the dose not going
+  // down) might be a taper with a date missing. Ask before guessing; "no"
+  // uses them at the same time.
+  function askTaper(questions, entries) {
+    var lines = questions.map(function (q) {
+      return q.generic + ', ' + q.eye.toLowerCase() + ' (medications ' + q.rows.join(' and ') + ')';
     });
-    JK.ics.download(text, 'eye-drop-schedule.ics');
+    qEl.querySelector('.jk-form__question-text').textContent =
+      'Was this supposed to be a taper? ' + lines.join('; ') + ' ' + (questions.length > 1 ? 'are' : 'is')
+      + ' listed more than once. In a taper, each step needs its own stop date, later than the step before, with fewer doses a day. Only the last step can be left without a stop date.';
+    errEl.hidden = true;
+    qEl.hidden = false;
+    var fix = qEl.querySelector('.jk-form__question-fix'), go = qEl.querySelector('.jk-form__question-go');
+    fix.onclick = function () {
+      hideQuestion();
+      var r = rowsEl.querySelectorAll('.jk-droprow')[questions[0].rows[0] - 1];
+      if (r) r.querySelector('[name=stopDate]').focus();
+    };
+    go.onclick = function () { hideQuestion(); render(entries); };
+    fix.focus();
   }
 
   // ---------- events ----------
@@ -377,6 +453,12 @@
         return;
       }
     }
+    var p = Plan.plan(entries, JK.date.today());
+    if (p.past.length) {
+      showError('Medication ' + p.past[0] + ': the stop date has already passed. Change it, or leave it blank.');
+      return;
+    }
+    if (p.questions.length && qEl) { askTaper(p.questions, entries); return; }
     render(entries);
   });
   document.getElementById('jk-dropform-add').addEventListener('click', function () {
