@@ -156,13 +156,18 @@
   // reports itself as Safari) and can't force Safari open (x-safari-https:
   // links go to the default browser), so every iPhone gets a short note
   // with a button that copies the schedule link to paste into Safari.
+  // The copied link carries a marker (safari=1); a page opened from it was
+  // pasted into Safari on purpose, so it skips the note. Read it at load,
+  // before the page rewrites its own address.
+  var FROM_COPY = /[?&]safari=1(&|$)/.test(window.location.search);
   function isIOS() {
     var ua = navigator.userAgent || '';
     return /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
   }
   // Inserts the note after `after` (an element) on iPhone/iPad.
   function safariNote(after, url) {
-    if (!after || !isIOS()) return;
+    if (!after || !isIOS() || FROM_COPY) return;
+    url += (url.indexOf('?') < 0 ? '?' : '&') + 'safari=1';
     var p = document.createElement('div');
     p.className = 'jk-note jk-safari-note';
     p.innerHTML = '<p>On iPhone, Safari adds all reminders at once. Using another browser? '
@@ -269,7 +274,7 @@
     qr: { render: renderQR },
     url: { read: readParams, write: writeParams, clear: clearParams },
     print: { title: printTitle, setLandscape: setLandscape, wireLandscape: wireLandscape },
-    ios: { isIOS: isIOS, safariNote: safariNote },
+    ios: { isIOS: isIOS, safariNote: safariNote, fromCopy: function () { return FROM_COPY; } },
     esc: esc
   };
 })();
