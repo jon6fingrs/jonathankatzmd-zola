@@ -176,7 +176,7 @@ preview comment is the quickest way to spot a link that escaped.
 | `content/learn/_index.md`, `content/patients/_index.md` | `templates/section.html` | card grid of the section's pages |
 | `content/patients/eye-drops.md` | `templates/eye-drops.html` | renders `static/data/eye-drops.json` twice: a table (≥768px) and a card list (phones). `static/js/droptable.js` filters both, builds the filter chips, sorts, and runs the lightbox |
 | `content/patients/post-op-schedule.md` | `templates/page.html` | form markup lives in the content file; logic in `static/js/postop-rules.js` (dosing rules, tested) + `static/js/postop.js` (UI) |
-| `content/patients/eye-drop-form.md` | `templates/page.html` | row template in the content file; logic in `static/js/dropform.js` |
+| `content/patients/eye-drop-form.md` | `templates/page.html` | row template in the content file; logic in `static/js/dropform-plan.js` (tapers, tested) + `static/js/dropform.js` (UI) |
 | both generators | — | share `static/js/schedule-common.js` (dates, dose times, `.ics` export, QR via `static/vendor/qrcode.js`, URL state, print helpers) |
 | `content/learn/vision-loss.md` | `templates/page.html` | the vision simulator: markup is one `<div id="jk-vision">`, everything else is built by `static/js/vision.js` (see below); scene photos in `static/images/vision/` |
 | `content/contact/_index.md` | `templates/contact/section.html` | office list driven by `config.toml`'s `[[extra.offices]]`, not by content |
@@ -238,6 +238,18 @@ cataract halos sit on. Sources for the photos are in IMAGE-SOURCES.md.
 apply to which surgery" table, with no DOM access, so Node can load it.
 `tests/postop-rules.test.js` pins the expected tapers. **If a rule is
 changed on purpose, update the test in the same commit**; CI runs them.
+
+### Schedule builder tapers
+
+In the Eye Drop Schedule Builder, the same medication listed more than
+once for the same eye is a taper: rows are sorted by stop date and each
+step starts the day after the previous one stops (a "Both Eyes" row counts
+for each eye). Rows that don't read as a taper (two without a stop date,
+the same stop date twice, or the dose not going down) make the form ask
+"Was this supposed to be a taper?"; "No" runs them at the same time. The
+daily routine is split into one dated table per step. The rules live in
+`static/js/dropform-plan.js` (no DOM) and are pinned by
+`tests/dropform-plan.test.js`, which also covers the calendar export.
 
 ## Mobile-first conventions (keep these for new pages)
 
@@ -356,7 +368,8 @@ old links to those exact filenames still resolve; don't list them in
   Crop to the bottle or pill on a plain background, like the existing
   photos.
 - Dose-time defaults (`JK.doseTimes` in `schedule-common.js`; once-daily
-  glaucoma drops at 21:00 in `dropform.js`) are conventions, not
+  glaucoma drops at 21:00 in `dropform.js`; every hour / every 2 hours
+  run 8 AM to 10 PM in `dropform-plan.js`) are conventions, not
   prescriptions; adjust there if the practice prefers different times.
 
 ## Ideas parked for later

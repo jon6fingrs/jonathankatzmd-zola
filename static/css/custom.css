@@ -507,7 +507,7 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 }
 .jk-rowbtn:hover { border-color: #b42318; }
 @media (min-width: 768px) {
-  .jk-droprow { grid-template-columns: 2fr 1.4fr 1fr .7fr 1fr 1.1fr auto; align-items: end; }
+  .jk-droprow { grid-template-columns: 2fr 1.4fr 1fr .95fr 1fr 1.1fr auto; align-items: end; }
   .jk-droprow__legend { grid-column: 1 / -1; }
   .jk-rowbtn { align-self: end; min-height: 44px; }
 }
@@ -532,6 +532,13 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-field.is-off { opacity: .55; }
 .jk-field.is-off label { text-decoration: line-through; text-decoration-color: rgba(0,0,0,.35); }
 .jk-form__error { color: #b42318; font-weight: 500; margin: .5rem 0 0; }
+/* eye drop builder: "was this supposed to be a taper?" */
+.jk-form__question {
+  margin: .75rem 0 0; padding: .85rem 1rem; max-width: 760px;
+  border: 1px solid #e0b252; border-left-width: 4px; border-radius: 6px; background: #fff8e6;
+}
+.jk-form__question-text { margin: 0 0 .65rem; }
+.jk-form__question-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
 
 /* contact form */
 .jk-form { max-width: 680px; margin: 1.25rem auto 0; }
