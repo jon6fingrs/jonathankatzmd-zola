@@ -256,7 +256,8 @@ other browsers (Chrome, DuckDuckGo, Firefox, in-app browsers) show a
 one-event preview. A page can't reliably detect those browsers (DuckDuckGo
 often reports itself as Safari) or force Safari open, so both schedule
 pages show every iPhone a short note with a "Copy link" button to paste
-into Safari (`JK.ios.safariNote` in `schedule-common.js`).
+into Safari (`JK.ios.safariNote` in `schedule-common.js`). The copied link
+ends in `safari=1`; a page opened from it skips the note.
 
 ## Mobile-first conventions (keep these for new pages)
 

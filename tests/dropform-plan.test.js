@@ -125,7 +125,7 @@ test('frequency values from the form and URL', () => {
 
 // ---------- calendar export ----------
 function loadCommon() {
-  const ctx = { window: {}, document: { title: '', querySelector: () => null }, history: {} };
+  const ctx = { window: { location: { search: '' } }, document: { title: '', querySelector: () => null }, history: {} };
   vm.createContext(ctx);
   vm.runInContext(fs.readFileSync(path.join(__dirname, '../static/js/schedule-common.js'), 'utf8'), ctx);
   return ctx.window.JK;
@@ -154,10 +154,23 @@ test('the "use Safari" note shows on every iPhone/iPad browser, nowhere else', (
   };
   const ios = {};
   for (const [k, ua] of Object.entries(UA)) {
-    const ctx = { window: {}, document: { title: '', querySelector: () => null }, history: {}, navigator: { userAgent: ua, maxTouchPoints: 0 } };
+    const ctx = { window: { location: { search: '' } }, document: { title: '', querySelector: () => null }, history: {}, navigator: { userAgent: ua, maxTouchPoints: 0 } };
     vm.createContext(ctx);
     vm.runInContext(fs.readFileSync(path.join(__dirname, '../static/js/schedule-common.js'), 'utf8'), ctx);
     ios[k] = ctx.window.JK.ios.isIOS();
   }
   assert.deepEqual(ios, { safari: true, duckduckgo: true, chrome: true, inApp: true, android: false, mac: false });
+});
+
+test('a page opened from the copied link (safari=1) skips the note', () => {
+  const run = search => {
+    const ctx = { window: { location: { search } }, document: { title: '', querySelector: () => null }, history: {}, navigator: { userAgent: 'iPhone', maxTouchPoints: 0 } };
+    vm.createContext(ctx);
+    vm.runInContext(fs.readFileSync(path.join(__dirname, '../static/js/schedule-common.js'), 'utf8'), ctx);
+    return ctx.window.JK.ios.fromCopy();
+  };
+  assert.equal(run('?r=x&safari=1'), true);
+  assert.equal(run('?safari=1'), true);
+  assert.equal(run('?r=x'), false);
+  assert.equal(run('?r=x&safari=10'), false);
 });
