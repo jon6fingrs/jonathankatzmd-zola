@@ -170,9 +170,9 @@
     url += (url.indexOf('?') < 0 ? '?' : '&') + 'safari=1';
     var p = document.createElement('div');
     p.className = 'jk-note jk-safari-note';
-    p.innerHTML = '<p>On iPhone, Safari adds all reminders at once. Using another browser? '
-      + 'Copy this link and open it in Safari.</p>'
-      + '<button type="button" class="btn btn-sm btn-outline-primary jk-safari-note__copy">Copy link</button>'
+    p.innerHTML = '<p><strong>iPhone tip:</strong> calendar reminders are added all at once only in Safari. '
+      + 'If you are using a different browser, copy the link and open it in Safari before tapping \u201cAdd to calendar.\u201d</p>'
+      + '<button type="button" class="btn btn-sm btn-outline-secondary jk-safari-note__copy">Copy link</button>'
       + '<input type="text" class="jk-safari-note__url" readonly hidden aria-label="Schedule link">';
     after.parentNode.insertBefore(p, after.nextSibling);
     var btn = p.querySelector('button'), box = p.querySelector('input');
