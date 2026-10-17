@@ -251,6 +251,12 @@ daily routine is split into one dated table per step. The rules live in
 `static/js/dropform-plan.js` (no DOM) and are pinned by
 `tests/dropform-plan.test.js`, which also covers the calendar export.
 
+On an iPhone, only Safari adds a multi-event calendar file with "Add All";
+other browsers (Chrome, DuckDuckGo, Firefox, in-app browsers) show a
+one-event preview. Both schedule pages detect those browsers and show a
+note with an "Open this schedule in Safari" link (`JK.ios.safariNote` in
+`schedule-common.js`, using the undocumented `x-safari-https:` scheme).
+
 ## Mobile-first conventions (keep these for new pages)
 
 The site is used on phones in exam rooms and kitchens. Rules that every

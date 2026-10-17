@@ -370,6 +370,7 @@
     JK.print.wireLandscape(out);
 
     var url = JK.url.write(toParams(entries));
+    JK.ios.safariNote(out.querySelector('.jk-ics-note'), url);
     JK.qr.render(document.getElementById('jk-dropform-qr'), url, 132);
 
     document.getElementById('jk-dropform-print').addEventListener('click', function () { window.print(); });
