@@ -247,7 +247,10 @@ step starts the day after the previous one stops (a "Both Eyes" row counts
 for each eye). Rows that don't read as a taper (two without a stop date,
 the same stop date twice, or the dose not going down) make the form ask
 "Was this supposed to be a taper?"; "No" runs them at the same time. The
-daily routine is split into one dated table per step. The rules live in
+daily routine is split into one dated table per step. "Every other day" is the
+last "How often" choice (rarely used); it ranks below once a day, so it can end a taper: it
+doses on the step's first day and every second day after, at the once-a-day
+time, and the calendar repeats it every 2 days (`INTERVAL=2`). The rules live in
 `static/js/dropform-plan.js` (no DOM) and are pinned by
 `tests/dropform-plan.test.js`, which also covers the calendar export.
 

@@ -224,19 +224,25 @@
   // Returns [{ time:"HH:MM", drops:[{entry, eye, segs, time}] }] sorted by time.
   // Once-daily glaucoma drops (prostaglandins and their combinations) are
   // conventionally taken at bedtime, so that is their default slot.
+  // Every-other-day drops take the once-a-day time on their dose days.
   function timesFor(e) {
     var fixed = Plan.fixedTimes(e.times);
     if (fixed) return fixed;
-    if (e.times === 1 && !isOral(e) && /Glaucoma/.test(e.use || '')) return ['21:00'];
-    return JK.doseTimes(e.times);
+    var n = Plan.dosesOnDoseDay(e.times);
+    if (n === 1 && !isOral(e) && /Glaucoma/.test(e.use || '')) return ['21:00'];
+    return JK.doseTimes(n);
   }
-  function buildRoutine(segs) {
+  // `start`: the first day of the period, to find each every-other-day
+  // drop's first dose day in it (item.first). Drops on different days are
+  // kept apart, so "Both Eyes" only merges eyes dosed on the same days.
+  function buildRoutine(segs, start) {
     var slots = {};
     segs.forEach(function (s) {
+      var first = Plan.everyDays(s.entry.times) > 1 ? Plan.firstDoseDay(s, start) : null;
       timesFor(s.entry).forEach(function (t) {
         var slot = slots[t] = slots[t] || {};
-        var k = s.entry.generic + '|' + s.entry.brand;
-        (slot[k] = slot[k] || { entry: s.entry, segs: [] }).segs.push(s);
+        var k = s.entry.generic + '|' + s.entry.brand + (first ? '|' + JK.date.toISO(first) : '');
+        (slot[k] = slot[k] || { entry: s.entry, segs: [], first: first }).segs.push(s);
       });
     });
     return Object.keys(slots).sort().map(function (t) {
@@ -261,15 +267,19 @@
     return e.generic + (e.brand ? ' (' + e.brand + ')' : '');
   }
   // swatch + generic name + brand, for the routine table
-  function dropHTML(e) {
+  // `first`: first dose day of an every-other-day drop in this period
+  function dropHTML(e, first) {
     return swatchHTML(e.color).replace('<span class="jk-colorchip__text">' + esc(e.color) + '</span>', '')
-      + '<strong>' + esc(e.generic) + '</strong>' + (e.brand ? ' <span class="routine-brand">(' + esc(e.brand) + ')</span>' : '');
+      + '<strong>' + esc(e.generic) + '</strong>' + (e.brand ? ' <span class="routine-brand">(' + esc(e.brand) + ')</span>' : '')
+      + (first ? '<span class="routine-freq">' + esc(Plan.freqLabel(e.times)) + ', starting ' + esc(JK.date.fmtShort(first)) + '</span>' : '');
   }
 
   // "Until" cell for one row. A later taper step shows when it starts; a
   // "Both Eyes" row whose eyes start on different days says which eye waits.
   function datesText(segs, stop, today) {
     var fmt = JK.date.fmtShort;
+    // every other day: the last dose may fall the day before the stop date
+    if (stop && segs.length && segs[0].end) stop = Plan.lastDoseDay(segs[0]);
     var last = stop ? 'Last dose ' + fmt(stop) : 'Ongoing';
     if (!segs.length) return stop ? 'Finished ' + fmt(stop) : last;
     var later = segs.filter(function (s) { return s.start > today; });
@@ -315,7 +325,7 @@
     // 2. daily routine: when to use each drop, every day. Drops sharing a
     // time slot are already staggered five minutes apart. A taper gets one
     // routine per step, headed with its dates.
-    var routines = periods.map(function (per) { return { period: per, slots: buildRoutine(per.segs) }; });
+    var routines = periods.map(function (per) { return { period: per, slots: buildRoutine(per.segs, per.start) }; });
     var note = 'Suggested times. Wait at least five minutes between different eye drops.' + (anyPill ? ' Pills can be taken with your drops; follow the pharmacy label about food.' : '');
     if (!routines.length) {
       h += '<div class="routine"><h2>Daily routine</h2><p class="routine-note">Every medication on this schedule has finished.</p></div>';
@@ -346,7 +356,7 @@
         slot.drops.forEach(function (d, i) {
           h += '<tr' + (i === 0 ? ' class="slot-start"' : '') + '>'
             + '<th scope="row" class="day-cell">' + esc(JK.fmtTime(d.time)) + '</th>'
-            + '<td data-label="' + medHead + '" class="routine-drop">' + dropHTML(d.entry) + '</td>'
+            + '<td data-label="' + medHead + '" class="routine-drop">' + dropHTML(d.entry, d.first) + '</td>'
             + '<td data-label="Which eye" class="routine-eye">' + esc(d.eye) + '</td>'
             + '</tr>';
         });
@@ -396,15 +406,18 @@
           var same = ends.every(function (x) { return (x && x.getTime()) === (ends[0] && ends[0].getTime()); });
           var groups = same ? [{ eye: d.eye, end: ends[0] }]
             : d.segs.map(function (s, i) { return { eye: Plan.SIDE_NAME[s.side], end: ends[i] }; });
+          var start = d.first || r.period.start;
           groups.forEach(function (g) {
             var e = d.entry;
+            if (g.end && start > g.end) return;   // no dose day left in this period
             events.push({
               summary: isOral(e) ? 'Take: ' + dropLabel(e) + ' (by mouth)' : 'Eye drop: ' + dropLabel(e) + ' — ' + g.eye,
               description: (isOral(e)
                 ? Plan.freqLabel(e.times) + ' by mouth.'
                 : Plan.freqLabel(e.times) + (e.color ? ', ' + e.color.toLowerCase() + ' cap' : '') + '. Wait five minutes between different drops.') + ' Schedule from jonathankatzmd.com.',
-              start: r.period.start,
+              start: start,
               end: g.end,                 // null = repeats until deleted
+              interval: Plan.everyDays(e.times),
               time: d.time
             });
           });
