@@ -93,7 +93,7 @@
   /*
    * events: [{ summary, description, start (Date, UTC-midnight), end (Date,
    *            inclusive; null = repeats daily with no end), time "HH:MM",
-   *            alarm (bool) }]
+   *            interval (days between repeats, default 1), alarm (bool) }]
    * Times are written as floating local time (no TZID) on purpose: the
    * patient's calendar interprets "8:00" as 8:00 wherever they are.
    */
@@ -111,10 +111,11 @@
       lines.push('DTSTAMP:' + stamp);
       lines.push('DTSTART:' + icsDate(ev.start) + 'T' + t);
       lines.push('DTEND:' + icsDate(ev.start) + 'T' + shiftTime(ev.time, 10).replace(':', '') + '00');
+      var rule = 'RRULE:FREQ=DAILY' + (ev.interval > 1 ? ';INTERVAL=' + ev.interval : '');
       if (ev.end === null) {
-        lines.push('RRULE:FREQ=DAILY');
+        lines.push(rule);
       } else if (ev.end && ev.end.getTime() > ev.start.getTime()) {
-        lines.push('RRULE:FREQ=DAILY;UNTIL=' + icsDate(ev.end) + 'T235959');
+        lines.push(rule + ';UNTIL=' + icsDate(ev.end) + 'T235959');
       }
       lines.push('SUMMARY:' + icsEscape(ev.summary));
       if (ev.description) lines.push('DESCRIPTION:' + icsEscape(ev.description));

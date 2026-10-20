@@ -33,21 +33,44 @@
   function addDays(d, n) { return new Date(d.getTime() + n * DAY); }
 
   // ---------- frequency ----------
-  // "How often" is 1-8 times a day, or every hour / every 2 hours while
-  // awake (8 AM to 10 PM).
+  // "How often" is 1-8 times a day, every hour / every 2 hours while awake
+  // (8 AM to 10 PM), or once every other day. An every-other-day step doses
+  // on its first day and every second day after that.
   var FREQ = {
+    qod: { label: 'Every other day', every: 2 },
     q1h: { label: 'Every hour', times: ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'] },
     q2h: { label: 'Every 2 hours', times: ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'] }
   };
-  // form/URL value -> 1..8 or 'q1h'/'q2h'
+  // form/URL value -> 1..8 or 'q1h'/'q2h'/'qod'
   function parseFreq(v) {
     if (FREQ[v]) return v;
     return Math.min(8, Math.max(1, (+v) | 0 || 1));
   }
-  function dosesPerDay(times) { return FREQ[times] ? FREQ[times].times.length : +times; }
+  // days between dose days: 2 for every other day, else 1
+  function everyDays(times) { return (FREQ[times] && FREQ[times].every) || 1; }
+  // average doses a day; orders taper steps (every other day < 1x a day)
+  function dosesPerDay(times) {
+    if (!FREQ[times]) return +times;
+    return FREQ[times].times ? FREQ[times].times.length : 1 / FREQ[times].every;
+  }
+  // doses on a dose day (1 for every other day)
+  function dosesOnDoseDay(times) { return FREQ[times] && !FREQ[times].times ? 1 : dosesPerDay(times); }
   function freqLabel(times) { return FREQ[times] ? FREQ[times].label : times + 'x a day'; }
   // fixed clock times for q1h/q2h, else null (the caller spreads N doses)
-  function fixedTimes(times) { return FREQ[times] ? FREQ[times].times.slice() : null; }
+  function fixedTimes(times) { return FREQ[times] && FREQ[times].times ? FREQ[times].times.slice() : null; }
+  // last dose day of a segment with a stop date: the stop date, or for
+  // every other day the dose day on or before it
+  function lastDoseDay(seg) {
+    var every = everyDays(seg.entry.times);
+    return addDays(seg.end, -(Math.round((seg.end - seg.start) / DAY) % every));
+  }
+  // first dose day of segment `seg` on or after `day`
+  function firstDoseDay(seg, day) {
+    if (day <= seg.start) return seg.start;
+    var every = everyDays(seg.entry.times);
+    var n = Math.ceil(Math.round((day - seg.start) / DAY) / every) * every;
+    return addDays(seg.start, n);
+  }
 
   // ---------- eyes ----------
   var SIDES = { 'Right Eye': ['R'], 'Left Eye': ['L'], 'Both Eyes': ['R', 'L'], 'By mouth': ['M'] };
@@ -155,13 +178,14 @@
       // the last period runs until its last stop date, or stays open
       var end = i + 1 < starts.length ? addDays(starts[i + 1], -1)
         : active.every(function (s) { return s.end; }) && active.length
-          ? new Date(Math.max.apply(null, active.map(function (s) { return s.end.getTime(); }))) : null;
+          ? new Date(Math.max.apply(null, active.map(function (s) { return lastDoseDay(s).getTime(); }))) : null;
       return { start: start, end: end, segs: active };
     }).filter(function (p) { return p.segs.length; });
   }
 
   return {
-    parseFreq: parseFreq, dosesPerDay: dosesPerDay, freqLabel: freqLabel, fixedTimes: fixedTimes,
+    parseFreq: parseFreq, dosesPerDay: dosesPerDay, dosesOnDoseDay: dosesOnDoseDay, freqLabel: freqLabel,
+    fixedTimes: fixedTimes, everyDays: everyDays, firstDoseDay: firstDoseDay, lastDoseDay: lastDoseDay,
     eyeLabel: eyeLabel, SIDE_NAME: SIDE_NAME,
     plan: plan, periods: periods
   };

@@ -174,3 +174,37 @@ test('a page opened from the copied link (safari=1) skips the note', () => {
   assert.equal(run('?r=x'), false);
   assert.equal(run('?r=x&safari=10'), false);
 });
+
+test('every other day: last step of a taper, dosed from its first day', () => {
+  const p = P.plan([row(2, 'Right Eye', '2026-10-22'), row(1, 'Right Eye', '2026-10-29'), row('qod', 'Right Eye', '2026-11-12')], TODAY);
+  assert.deepEqual(p.questions, []);
+  assert.deepEqual(segList(p.segs), ['1R 10-16..10-22', '2R 10-23..10-29', '3R 10-30..11-12']);
+  const qod = p.segs[2];
+  assert.equal(P.firstDoseDay(qod, d('2026-10-16')).toISOString().slice(0, 10), '2026-10-30');
+  assert.equal(P.firstDoseDay(qod, d('2026-10-30')).toISOString().slice(0, 10), '2026-10-30');
+  assert.equal(P.firstDoseDay(qod, d('2026-10-31')).toISOString().slice(0, 10), '2026-11-01');   // off day -> next dose day
+  assert.equal(P.firstDoseDay(qod, d('2026-11-01')).toISOString().slice(0, 10), '2026-11-01');
+  assert.equal(P.lastDoseDay(qod).toISOString().slice(0, 10), '2026-11-11');   // Nov 12 is an off day
+  assert.equal(P.lastDoseDay(p.segs[1]).toISOString().slice(0, 10), '2026-10-29');   // daily: the stop date
+  assert.equal(P.freqLabel('qod'), 'Every other day');
+  assert.equal(P.parseFreq('qod'), 'qod');
+  assert.equal(P.everyDays('qod'), 2);
+  assert.equal(P.everyDays(1), 1);
+  assert.equal(P.dosesOnDoseDay('qod'), 1);
+  assert.equal(P.fixedTimes('qod'), null);
+});
+
+test('every other day ranks below once a day', () => {
+  // qod -> 1x is the dose going up: asked, not tapered
+  const up = P.plan([row('qod', 'Left Eye', '2026-10-22'), row(1, 'Left Eye', '2026-10-29')], TODAY);
+  assert.equal(up.questions.length, 1);
+});
+
+test('calendar: every-other-day reminders repeat every 2 days', () => {
+  const JK = loadCommon();
+  const ics = JK.ics.build([
+    { summary: 'a', start: d('2026-10-30'), end: d('2026-11-12'), time: '09:00', interval: 2 },
+    { summary: 'b', start: d('2026-10-30'), end: null, time: '09:00', interval: 2 }
+  ], 't');
+  assert.deepEqual(ics.match(/RRULE:[^\r]*/g), ['RRULE:FREQ=DAILY;INTERVAL=2;UNTIL=20261112T235959', 'RRULE:FREQ=DAILY;INTERVAL=2']);
+});

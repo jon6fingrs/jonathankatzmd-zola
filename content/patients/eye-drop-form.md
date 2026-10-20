@@ -54,7 +54,7 @@ centered = true
     <label class="jk-droprow__f jk-droprow__f--xs">
       <span>How often</span>
       <select name="timesPerDay" class="jk-in">
-        <option>1</option><option>2</option><option>3</option><option>4</option>
+        <option>1</option><option value="qod">Every other day</option><option>2</option><option>3</option><option>4</option>
         <option>5</option><option>6</option><option>7</option><option>8</option>
         <option value="q2h">Every 2 hours</option><option value="q1h">Every hour</option>
       </select>

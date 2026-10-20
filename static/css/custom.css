@@ -592,6 +592,7 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-schedule .routine-note { font-size: 1.05rem; margin: 0 0 .75rem; }
 .jk-schedule .routine-drop { text-align: left; }
 .jk-schedule .routine-brand { font-weight: 400; }
+.jk-schedule .routine-freq { display: block; font-size: .9em; font-weight: 600; font-style: italic; }
 .jk-schedule td.routine-eye { font-weight: 600; white-space: nowrap; }
 .jk-schedule .routine-table .day-cell { width: 1%; }
 .jk-schedule .routine-table tr.slot-start th, .jk-schedule .routine-table tr.slot-start td { border-top: 2px solid #000; }
