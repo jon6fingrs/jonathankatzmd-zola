@@ -239,18 +239,21 @@ test('times move with wake-up and bedtime', () => {
   // waking an hour earlier moves the morning most and bedtime not at all
   const sevenToTen = { wake: 7 * 60, bed: 22 * 60 };
   assert.deepEqual(P.fitDay(['09:00', '15:00', '21:00'], sevenToTen), ['08:00', '14:30', '21:00']);
-  // midnight bedtime: hourly doses stop at 11 PM, others stay on the same day
+  // midnight bedtime: the last hourly dose is at midnight
   const late = { wake: 9 * 60, bed: 24 * 60 };
-  assert.equal(P.fixedTimes('q1h', late).slice(-1)[0], '23:00');
+  assert.equal(P.fixedTimes('q1h', late).slice(-1)[0], '24:00');
   assert.deepEqual(P.fixedTimes('qpm', late), ['23:00']);
 });
 
 test('wake-up / bedtime in the link', () => {
   assert.deepEqual(P.parseDay('0630', '2300'), { wake: 390, bed: 1380 });
-  assert.deepEqual(P.parseDay('0700', '2400'), { wake: 420, bed: 1440 });
+  assert.deepEqual(P.parseDay('0700', '0000'), { wake: 420, bed: 1440 });   // midnight
+  assert.deepEqual(P.parseDay('1500', '0700'), { wake: 900, bed: 1860 });   // night shift
   assert.deepEqual(P.parseDay(undefined, undefined), P.DAY_DEFAULT);
-  assert.deepEqual(P.parseDay('2200', '0800'), P.DAY_DEFAULT);   // nonsense -> default
+  assert.deepEqual(P.parseDay('2500', '0800'), P.DAY_DEFAULT);   // nonsense -> default
+  assert.deepEqual(P.parseDay('0800', '1000'), { wake: 480, bed: 1320 });   // 2-hour day -> 14 hours
   assert.equal(P.dayParam(390), '0630');
+  assert.equal(P.dayParam(1860), '0700');
   assert.equal(P.isDefaultDay(P.parseDay('0800', '2200')), true);
 });
 
@@ -260,4 +263,29 @@ test('morning is an hour after waking, evening an hour before bed', () => {
   assert.deepEqual(P.fixedTimes('qpm', day), ['22:00']);
   // 8 AM dose of 4x a day never lands before waking
   assert.deepEqual(P.fitDay(['08:00', '12:00', '16:00', '20:00'], day), ['06:30', '11:15', '16:00', '20:45']);
+});
+
+test('night shift: a day that runs past midnight', () => {
+  const night = P.parseDay('1500', '0700');   // up at 3 PM, to bed at 7 AM
+  assert.deepEqual(P.fixedTimes('qam', night), ['16:00']);
+  assert.deepEqual(P.fixedTimes('qpm', night), ['30:00']);   // 6 AM the next morning
+  assert.deepEqual(P.fitDay(['09:00', '15:00', '21:00'], night), ['16:00', '23:00', '30:00']);
+  const q2h = P.fixedTimes('q2h', night);
+  assert.equal(q2h[0], '15:00');
+  assert.equal(q2h[q2h.length - 1], '31:00');
+  // the times sort in the order of the patient's day
+  assert.deepEqual(q2h.slice().sort(), q2h);
+});
+
+test('calendar: a dose after midnight is on the next date', () => {
+  const JK = loadCommon();
+  assert.equal(JK.fmtTime('26:30'), '2:30 AM');
+  assert.equal(JK.fmtTime('24:00'), '12:00 AM');
+  const ics = JK.ics.build([
+    { summary: 'a', start: d('2026-10-24'), end: d('2026-10-30'), time: '26:30' },
+    { summary: 'b', start: d('2026-10-24'), end: null, time: '23:55' }
+  ], 't');
+  assert.deepEqual(ics.match(/DTSTART:[^\r]*/g), ['DTSTART:20261025T023000', 'DTSTART:20261024T235500']);
+  assert.deepEqual(ics.match(/DTEND:[^\r]*/g), ['DTEND:20261025T024000', 'DTEND:20261024T235900']);
+  assert.match(ics, /UNTIL=20261031T235959/);
 });

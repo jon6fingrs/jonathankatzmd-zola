@@ -306,25 +306,30 @@
   // Shown above the daily routine (not printed). Changing either one
   // redraws the schedule in place, so the times, the calendar file and the
   // QR code all follow.
+  // Any wake-up time, so night shifts work; bedtime is offered from 8 to
+  // 20 hours after it and may be the next morning.
   function dayOptions(from, to, sel) {
     var h = '';
     for (var m = from; m <= to; m += 30) {
-      h += '<option value="' + m + '"' + (m === sel ? ' selected' : '') + '>'
-        + (m === 1440 ? '12:00 AM (midnight)' : esc(JK.fmtTime(Plan.dayParam(m).replace(/(\d\d)$/, ':$1')))) + '</option>';
+      var label = JK.fmtTime(Plan.dayParam(m).replace(/(\d\d)$/, ':$1'));
+      if (m % 1440 === 0) label += ' (midnight)';
+      else if (m % 1440 === 720) label += ' (noon)';
+      h += '<option value="' + m + '"' + (m === sel ? ' selected' : '') + '>' + esc(label) + '</option>';
     }
     return h;
   }
   function dayHTML() {
     return '<div class="jk-daytimes"><p class="jk-daytimes__text">The times below fit a day from waking up to bedtime. Change them to match your day before adding reminders to your calendar.</p>'
       + '<div class="jk-daytimes__fields">'
-      + '<label class="jk-daytimes__f"><span>Wake up</span><select id="jk-day-wake" class="jk-in">' + dayOptions(5 * 60, 11 * 60, day.wake) + '</select></label>'
-      + '<label class="jk-daytimes__f"><span>Bedtime</span><select id="jk-day-bed" class="jk-in">' + dayOptions(20 * 60, 24 * 60, day.bed) + '</select></label>'
+      + '<label class="jk-daytimes__f"><span>Wake up</span><select id="jk-day-wake" class="jk-in">' + dayOptions(0, 1410, day.wake) + '</select></label>'
+      + '<label class="jk-daytimes__f"><span>Bedtime</span><select id="jk-day-bed" class="jk-in">' + dayOptions(day.wake + Plan.AWAKE_MIN, day.wake + Plan.AWAKE_MAX, day.bed) + '</select></label>'
       + '</div></div>';
   }
   function wireDay(entries) {
     ['jk-day-wake', 'jk-day-bed'].forEach(function (id) {
       document.getElementById(id).addEventListener('change', function () {
-        day = { wake: +document.getElementById('jk-day-wake').value, bed: +document.getElementById('jk-day-bed').value };
+        // a new wake-up keeps the bedtime's clock time if it still fits
+        day = Plan.makeDay(+document.getElementById('jk-day-wake').value, +document.getElementById('jk-day-bed').value % 1440);
         render(entries, true);
         document.getElementById(id).focus();
       });

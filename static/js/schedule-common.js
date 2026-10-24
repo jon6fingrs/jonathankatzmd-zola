@@ -65,17 +65,17 @@
     return out;
   }
   function pad(n) { return (n < 10 ? '0' : '') + n; }
-  // "09:00" -> "9:00 AM"
+  // "09:00" -> "9:00 AM"; past 24:00 is the next morning ("26:30" -> "2:30 AM")
   function fmtTime(hhmm) {
-    var p = hhmm.split(':'), h = +p[0], m = p[1];
+    var p = hhmm.split(':'), h = +p[0] % 24, m = p[1];
     var ap = h >= 12 ? 'PM' : 'AM';
     h = h % 12; if (h === 0) h = 12;
     return h + ':' + m + ' ' + ap;
   }
-  // add minutes to "HH:MM"
+  // add minutes to "HH:MM" (up to 47:59, for a day that runs past midnight)
   function shiftTime(hhmm, minutes) {
     var p = hhmm.split(':'), t = (+p[0]) * 60 + (+p[1]) + minutes;
-    t = Math.max(0, Math.min(23 * 60 + 59, t));
+    t = Math.max(0, Math.min(47 * 60 + 59, t));
     return pad(Math.floor(t / 60)) + ':' + pad(t % 60);
   }
 
@@ -96,6 +96,8 @@
    *            interval (days between repeats, default 1), alarm (bool) }]
    * Times are written as floating local time (no TZID) on purpose: the
    * patient's calendar interprets "8:00" as 8:00 wherever they are.
+   * A time past 24:00 ("26:30", a night-shift dose after midnight) is
+   * 2:30 AM on the day after each date.
    */
   function buildICS(events, calName) {
     var stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
@@ -105,12 +107,15 @@
       'X-WR-CALNAME:' + icsEscape(calName || 'Eye Drop Schedule')
     ];
     events.forEach(function (ev, i) {
+      if (+ev.time.split(':')[0] >= 24) {
+        ev = Object.assign({}, ev, { time: shiftTime(ev.time, -24 * 60), start: addDays(ev.start, 1), end: ev.end && addDays(ev.end, 1) });
+      }
       var t = ev.time.replace(':', '') + '00';
       lines.push('BEGIN:VEVENT');
       lines.push('UID:' + stamp + '-' + i + '@jonathankatzmd.com');
       lines.push('DTSTAMP:' + stamp);
       lines.push('DTSTART:' + icsDate(ev.start) + 'T' + t);
-      lines.push('DTEND:' + icsDate(ev.start) + 'T' + shiftTime(ev.time, 10).replace(':', '') + '00');
+      lines.push('DTEND:' + icsDate(ev.start) + 'T' + (ev.time > '23:49' ? '23:59' : shiftTime(ev.time, 10)).replace(':', '') + '00');
       var rule = 'RRULE:FREQ=DAILY' + (ev.interval > 1 ? ';INTERVAL=' + ev.interval : '');
       if (ev.end === null) {
         lines.push(rule);
