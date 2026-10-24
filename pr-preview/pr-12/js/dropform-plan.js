@@ -77,9 +77,13 @@
   // and the doses between them are spaced to fit, so moving the wake-up
   // time from 8 to 7 moves the morning dose to 8 and the midday doses a
   // little, but leaves the evening alone.
-  // Times are minutes after midnight in `day`; bed can be 1440 (midnight).
+  // A day can run past midnight (night shifts): `day.bed` is minutes after
+  // the midnight before waking, so up to 2 days' worth, and dose times
+  // after midnight are written past 24:00 ("26:30" = 2:30 AM the next
+  // morning). They still sort in the order of the patient's day.
+  // Bedtime is 8 to 20 hours after waking.
   var DAY_DEFAULT = { wake: 8 * 60, bed: 22 * 60 };
-  var LAST = 23 * 60 + 45;   // latest dose time on the same calendar day
+  var AWAKE_MIN = 8 * 60, AWAKE_MAX = 20 * 60;
   function toMin(hhmm) { var p = hhmm.split(':'); return (+p[0]) * 60 + (+p[1]); }
   function toHHMM(m) { return pad(Math.floor(m / 60)) + ':' + pad(m % 60); }
   function pad(n) { return (n < 10 ? '0' : '') + n; }
@@ -91,25 +95,31 @@
     var from = day.wake + 60, scale = (day.bed - 60 - from) / (b - a);
     return base.map(function (t) {
       var m = Math.round((from + (toMin(t) - a) * scale) / 15) * 15;
-      return toHHMM(Math.max(day.wake, Math.min(day.bed, LAST, m)));
+      return toHHMM(Math.max(day.wake, Math.min(day.bed, m)));
     });
   }
   // every `step` minutes from waking up until bedtime
   function stepTimes(step, day) {
     var out = [];
-    for (var m = day.wake; m <= Math.min(day.bed, 23 * 60); m += step) out.push(toHHMM(m));
+    for (var m = day.wake; m <= day.bed; m += step) out.push(toHHMM(m));
     return out;
   }
-  // "0730" (URL) <-> minutes; null if not a sensible wake-up / bedtime
-  function parseDay(w, b) {
-    function m(s) { var x = /^(\d{2})(\d{2})$/.exec(s || ''); return x && +x[2] < 60 ? (+x[1]) * 60 + (+x[2]) : null; }
-    var wake = m(w), bed = m(b);
-    if (wake === null) wake = DAY_DEFAULT.wake;
-    if (bed === null) bed = DAY_DEFAULT.bed;
-    if (wake < 4 * 60 || wake > 12 * 60 || bed < 18 * 60 || bed > 24 * 60) return { wake: DAY_DEFAULT.wake, bed: DAY_DEFAULT.bed };
-    return { wake: wake, bed: bed };
+  // wake-up and a bedtime clock time ("0730", minutes after midnight or as
+  // a URL value) -> a day; a bedtime too soon or too long after waking
+  // becomes 14 hours after it, the length of the default day
+  function makeDay(wake, bedClock) {
+    var awake = ((bedClock - wake) % 1440 + 1440) % 1440;
+    if (awake < AWAKE_MIN || awake > AWAKE_MAX) awake = DAY_DEFAULT.bed - DAY_DEFAULT.wake;
+    return { wake: wake, bed: wake + awake };
   }
-  function dayParam(m) { return pad(Math.floor(m / 60)) + pad(m % 60); }
+  function parseDay(w, b) {
+    function m(s) { var x = /^(\d{2})(\d{2})$/.exec(s || ''); return x && +x[1] < 24 && +x[2] < 60 ? (+x[1]) * 60 + (+x[2]) : null; }
+    var wake = m(w), bed = m(b);
+    if (wake === null || bed === null) return { wake: DAY_DEFAULT.wake, bed: DAY_DEFAULT.bed };
+    return makeDay(wake, bed);
+  }
+  // minutes -> "0730", as a clock time
+  function dayParam(m) { m %= 1440; return pad(Math.floor(m / 60)) + pad(m % 60); }
   function isDefaultDay(day) { return day.wake === DAY_DEFAULT.wake && day.bed === DAY_DEFAULT.bed; }
 
   // last dose day of a segment with a stop date: the stop date, or for
@@ -239,7 +249,7 @@
 
   return {
     parseFreq: parseFreq, dosesPerDay: dosesPerDay, dosesOnDoseDay: dosesOnDoseDay, freqLabel: freqLabel,
-    fixedTimes: fixedTimes, fitDay: fitDay, DAY_DEFAULT: DAY_DEFAULT, parseDay: parseDay, dayParam: dayParam, isDefaultDay: isDefaultDay,
+    fixedTimes: fixedTimes, fitDay: fitDay, DAY_DEFAULT: DAY_DEFAULT, AWAKE_MIN: AWAKE_MIN, AWAKE_MAX: AWAKE_MAX, makeDay: makeDay, parseDay: parseDay, dayParam: dayParam, isDefaultDay: isDefaultDay,
     everyDays: everyDays, firstDoseDay: firstDoseDay, lastDoseDay: lastDoseDay,
     eyeLabel: eyeLabel, SIDE_NAME: SIDE_NAME,
     plan: plan, periods: periods
