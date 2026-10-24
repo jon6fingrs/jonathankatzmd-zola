@@ -208,3 +208,56 @@ test('calendar: every-other-day reminders repeat every 2 days', () => {
   ], 't');
   assert.deepEqual(ics.match(/RRULE:[^\r]*/g), ['RRULE:FREQ=DAILY;INTERVAL=2;UNTIL=20261112T235959', 'RRULE:FREQ=DAILY;INTERVAL=2']);
 });
+
+test('once a day: morning and evening', () => {
+  assert.equal(P.parseFreq('qam'), 'qam');
+  assert.equal(P.parseFreq('qpm'), 'qpm');
+  assert.equal(P.parseFreq('1'), 1);   // links made before morning/evening
+  assert.equal(P.freqLabel('qam'), '1x a day, morning');
+  assert.equal(P.freqLabel('qpm'), '1x a day, evening');
+  assert.equal(P.dosesPerDay('qam'), 1);
+  assert.deepEqual(P.fixedTimes('qam'), ['09:00']);
+  assert.deepEqual(P.fixedTimes('qpm'), ['21:00']);
+  // 2x -> 1x evening is a taper; morning -> evening is not
+  assert.deepEqual(P.plan([row(2, 'Left Eye', '2026-10-22'), row('qpm', 'Left Eye', '')], TODAY).questions, []);
+  assert.equal(P.plan([row('qam', 'Left Eye', '2026-10-22'), row('qpm', 'Left Eye', '')], TODAY).questions.length, 1);
+});
+
+test('the default day (8 AM to 10 PM) keeps the usual times', () => {
+  const day = P.DAY_DEFAULT;
+  assert.deepEqual(P.fitDay(['08:00', '12:00', '16:00', '20:00'], day), ['08:00', '12:00', '16:00', '20:00']);
+  assert.deepEqual(P.fixedTimes('q2h', day), ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']);
+  assert.equal(P.fixedTimes('q1h', day).length, 15);
+  assert.equal(P.dosesPerDay('q1h'), 15);
+  assert.equal(P.dosesPerDay('q2h'), 8);
+});
+
+test('times move with wake-up and bedtime', () => {
+  const early = { wake: 6 * 60, bed: 20 * 60 };   // whole day two hours earlier
+  assert.deepEqual(P.fitDay(['09:00', '15:00', '21:00'], early), ['07:00', '13:00', '19:00']);
+  assert.deepEqual(P.fixedTimes('q2h', early), ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00']);
+  // waking an hour earlier moves the morning most and bedtime not at all
+  const sevenToTen = { wake: 7 * 60, bed: 22 * 60 };
+  assert.deepEqual(P.fitDay(['09:00', '15:00', '21:00'], sevenToTen), ['08:00', '14:30', '21:00']);
+  // midnight bedtime: hourly doses stop at 11 PM, others stay on the same day
+  const late = { wake: 9 * 60, bed: 24 * 60 };
+  assert.equal(P.fixedTimes('q1h', late).slice(-1)[0], '23:00');
+  assert.deepEqual(P.fixedTimes('qpm', late), ['23:00']);
+});
+
+test('wake-up / bedtime in the link', () => {
+  assert.deepEqual(P.parseDay('0630', '2300'), { wake: 390, bed: 1380 });
+  assert.deepEqual(P.parseDay('0700', '2400'), { wake: 420, bed: 1440 });
+  assert.deepEqual(P.parseDay(undefined, undefined), P.DAY_DEFAULT);
+  assert.deepEqual(P.parseDay('2200', '0800'), P.DAY_DEFAULT);   // nonsense -> default
+  assert.equal(P.dayParam(390), '0630');
+  assert.equal(P.isDefaultDay(P.parseDay('0800', '2200')), true);
+});
+
+test('morning is an hour after waking, evening an hour before bed', () => {
+  const day = { wake: 6 * 60 + 30, bed: 23 * 60 };
+  assert.deepEqual(P.fixedTimes('qam', day), ['07:30']);
+  assert.deepEqual(P.fixedTimes('qpm', day), ['22:00']);
+  // 8 AM dose of 4x a day never lands before waking
+  assert.deepEqual(P.fitDay(['08:00', '12:00', '16:00', '20:00'], day), ['06:30', '11:15', '16:00', '20:45']);
+});
