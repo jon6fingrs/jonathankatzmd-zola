@@ -9,7 +9,7 @@ scripts = ["vendor/qrcode.js", "js/schedule-common.js", "js/dropform-plan.js", "
 centered = true
 +++
 
-<p class="jk-page__lede">Add each eye drop or eye-related pill, how often it is used, and which eye. To taper a drop, list it once per step with each step's stop date. The schedule lists the drops and a daily routine with suggested times, spacing drops five minutes apart. It can be printed, added to a phone's calendar with reminders, or opened on a phone with its QR code.</p>
+<p class="jk-page__lede">Add each eye drop or eye-related pill, how often it is used, and which eye. To taper a drop, list it once per step with each step's stop date. The schedule lists the drops and a daily routine with suggested times, spacing drops five minutes apart; the times can be moved to fit when you wake up and go to bed. It can be printed, added to a phone's calendar with reminders, or opened on a phone with its QR code.</p>
 
 <form id="jk-dropform" class="jk-dropform" data-source="../../data/eye-drops.json" novalidate>
   <div id="jk-dropform-rows"></div>
@@ -54,7 +54,7 @@ centered = true
     <label class="jk-droprow__f jk-droprow__f--xs">
       <span>How often</span>
       <select name="timesPerDay" class="jk-in">
-        <option>1</option><option>2</option><option>3</option><option>4</option>
+        <option value="qam">1 (morning)</option><option value="qpm">1 (evening)</option><option>2</option><option>3</option><option>4</option>
         <option>5</option><option>6</option><option>7</option><option>8</option>
         <option value="q2h">Every 2 hours</option><option value="q1h">Every hour</option><option value="qod">Every other day</option>
       </select>

@@ -33,15 +33,19 @@
   function addDays(d, n) { return new Date(d.getTime() + n * DAY); }
 
   // ---------- frequency ----------
-  // "How often" is 1-8 times a day, every hour / every 2 hours while awake
-  // (8 AM to 10 PM), or once every other day. An every-other-day step doses
-  // on its first day and every second day after that.
+  // "How often" is once a day in the morning or the evening, 2-8 times a
+  // day, every hour / every 2 hours while awake, or once every other day.
+  // An every-other-day step doses on its first day and every second day
+  // after that. A bare 1 (links made before morning/evening existed) is
+  // still read as once a day.
   var FREQ = {
+    qam: { label: '1x a day, morning', times: ['09:00'] },
+    qpm: { label: '1x a day, evening', times: ['21:00'] },
     qod: { label: 'Every other day', every: 2 },
-    q1h: { label: 'Every hour', times: ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'] },
-    q2h: { label: 'Every 2 hours', times: ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'] }
+    q1h: { label: 'Every hour', step: 60 },
+    q2h: { label: 'Every 2 hours', step: 120 }
   };
-  // form/URL value -> 1..8 or 'q1h'/'q2h'/'qod'
+  // form/URL value -> 1..8 or 'qam'/'qpm'/'q1h'/'q2h'/'qod'
   function parseFreq(v) {
     if (FREQ[v]) return v;
     return Math.min(8, Math.max(1, (+v) | 0 || 1));
@@ -50,14 +54,74 @@
   function everyDays(times) { return (FREQ[times] && FREQ[times].every) || 1; }
   // average doses a day; orders taper steps (every other day < 1x a day)
   function dosesPerDay(times) {
-    if (!FREQ[times]) return +times;
-    return FREQ[times].times ? FREQ[times].times.length : 1 / FREQ[times].every;
+    var f = FREQ[times];
+    if (!f) return +times;
+    if (f.every) return 1 / f.every;
+    return f.step ? stepTimes(f.step, DAY_DEFAULT).length : f.times.length;
   }
   // doses on a dose day (1 for every other day)
-  function dosesOnDoseDay(times) { return FREQ[times] && !FREQ[times].times ? 1 : dosesPerDay(times); }
+  function dosesOnDoseDay(times) { return FREQ[times] && FREQ[times].every ? 1 : dosesPerDay(times); }
   function freqLabel(times) { return FREQ[times] ? FREQ[times].label : times + 'x a day'; }
-  // fixed clock times for q1h/q2h, else null (the caller spreads N doses)
-  function fixedTimes(times) { return FREQ[times] && FREQ[times].times ? FREQ[times].times.slice() : null; }
+  // set times for morning/evening and q1h/q2h on `day`, else null (the
+  // caller spreads N doses and fits them with fitDay)
+  function fixedTimes(times, day) {
+    var f = FREQ[times];
+    if (f && f.step) return stepTimes(f.step, day || DAY_DEFAULT);
+    return f && f.times ? fitDay(f.times, day) : null;
+  }
+
+  // ---------- the patient's day ----------
+  // Dose times are written for a day from 8 AM to 10 PM: the morning dose
+  // at 9, an hour after waking, and the evening dose at 9 PM, an hour
+  // before bed. For another day those two move with wake-up and bedtime
+  // and the doses between them are spaced to fit, so moving the wake-up
+  // time from 8 to 7 moves the morning dose to 8 and the midday doses a
+  // little, but leaves the evening alone.
+  // A day can run past midnight (night shifts): `day.bed` is minutes after
+  // the midnight before waking, so up to 2 days' worth, and dose times
+  // after midnight are written past 24:00 ("26:30" = 2:30 AM the next
+  // morning). They still sort in the order of the patient's day.
+  // Bedtime is 8 to 20 hours after waking.
+  var DAY_DEFAULT = { wake: 8 * 60, bed: 22 * 60 };
+  var AWAKE_MIN = 8 * 60, AWAKE_MAX = 20 * 60;
+  function toMin(hhmm) { var p = hhmm.split(':'); return (+p[0]) * 60 + (+p[1]); }
+  function toHHMM(m) { return pad(Math.floor(m / 60)) + ':' + pad(m % 60); }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  // base times ("HH:MM", for an 8 AM-10 PM day) moved onto `day`, to the
+  // nearest quarter hour, never before waking or after bedtime
+  function fitDay(base, day) {
+    day = day || DAY_DEFAULT;
+    var a = DAY_DEFAULT.wake + 60, b = DAY_DEFAULT.bed - 60;
+    var from = day.wake + 60, scale = (day.bed - 60 - from) / (b - a);
+    return base.map(function (t) {
+      var m = Math.round((from + (toMin(t) - a) * scale) / 15) * 15;
+      return toHHMM(Math.max(day.wake, Math.min(day.bed, m)));
+    });
+  }
+  // every `step` minutes from waking up until bedtime
+  function stepTimes(step, day) {
+    var out = [];
+    for (var m = day.wake; m <= day.bed; m += step) out.push(toHHMM(m));
+    return out;
+  }
+  // wake-up and a bedtime clock time ("0730", minutes after midnight or as
+  // a URL value) -> a day; a bedtime too soon or too long after waking
+  // becomes 14 hours after it, the length of the default day
+  function makeDay(wake, bedClock) {
+    var awake = ((bedClock - wake) % 1440 + 1440) % 1440;
+    if (awake < AWAKE_MIN || awake > AWAKE_MAX) awake = DAY_DEFAULT.bed - DAY_DEFAULT.wake;
+    return { wake: wake, bed: wake + awake };
+  }
+  function parseDay(w, b) {
+    function m(s) { var x = /^(\d{2})(\d{2})$/.exec(s || ''); return x && +x[1] < 24 && +x[2] < 60 ? (+x[1]) * 60 + (+x[2]) : null; }
+    var wake = m(w), bed = m(b);
+    if (wake === null || bed === null) return { wake: DAY_DEFAULT.wake, bed: DAY_DEFAULT.bed };
+    return makeDay(wake, bed);
+  }
+  // minutes -> "0730", as a clock time
+  function dayParam(m) { m %= 1440; return pad(Math.floor(m / 60)) + pad(m % 60); }
+  function isDefaultDay(day) { return day.wake === DAY_DEFAULT.wake && day.bed === DAY_DEFAULT.bed; }
+
   // last dose day of a segment with a stop date: the stop date, or for
   // every other day the dose day on or before it
   function lastDoseDay(seg) {
@@ -185,7 +249,8 @@
 
   return {
     parseFreq: parseFreq, dosesPerDay: dosesPerDay, dosesOnDoseDay: dosesOnDoseDay, freqLabel: freqLabel,
-    fixedTimes: fixedTimes, everyDays: everyDays, firstDoseDay: firstDoseDay, lastDoseDay: lastDoseDay,
+    fixedTimes: fixedTimes, fitDay: fitDay, DAY_DEFAULT: DAY_DEFAULT, AWAKE_MIN: AWAKE_MIN, AWAKE_MAX: AWAKE_MAX, makeDay: makeDay, parseDay: parseDay, dayParam: dayParam, isDefaultDay: isDefaultDay,
+    everyDays: everyDays, firstDoseDay: firstDoseDay, lastDoseDay: lastDoseDay,
     eyeLabel: eyeLabel, SIDE_NAME: SIDE_NAME,
     plan: plan, periods: periods
   };

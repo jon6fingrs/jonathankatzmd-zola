@@ -25,6 +25,7 @@
   var esc = JK.esc;
 
   var SPACING_MIN = 5;     // minutes between different drops in the same slot
+  var day = Plan.DAY_DEFAULT;   // { wake, bed } in minutes; set on the schedule
 
   // ---------- data ----------
   // Pills (Tablet/Capsule in the data's colour field) are taken by mouth:
@@ -32,7 +33,7 @@
   // drop spacing, and their reminders say "Take" rather than "Eye drop".
   var ORAL = { Tablet: true, Capsule: true };
   var BY_MOUTH = 'By mouth';
-  function isOral(e) { return !!ORAL[e.color]; }
+  function isOral(e) { return !!(e && ORAL[e.color]); }
   function indexData(list) {
     drugs = list;
     byGeneric = {};
@@ -50,11 +51,17 @@
   // Default "Times per day" from the table's typical dosage: the first
   // "Nx/day" in it ("4x/day", "~4x/day, Variable", "Up to 4x/day" -> 4), or
   // the lower end of a range ("2-3x/day" -> 2); anything else ("Variable",
-  // "As needed", none) -> 1.
+  // "As needed", none) -> once a day.
   function defaultTimes(d) {
     var m = /(\d+)(?:\s*-\s*\d+)?x\/day/i.exec((d && d.dosage) || '');
-    return m ? Math.min(8, Math.max(1, +m[1])) : 1;
+    return onceADay(d, m ? Math.min(8, Math.max(1, +m[1])) : 1);
   }
+  // Once-daily glaucoma drops (prostaglandins and their combinations) are
+  // conventionally taken at bedtime, so once a day defaults to the evening
+  // for them and the morning for everything else. Also reads links made
+  // before morning/evening existed, which say just 1.
+  function eveningDrop(d) { return !isOral(d) && /Glaucoma/.test((d && d.use) || ''); }
+  function onceADay(d, times) { return times === 1 ? (eveningDrop(d) ? 'qpm' : 'qam') : times; }
 
   function fillSelect(sel, items, placeholder) {
     sel.innerHTML = '';
@@ -153,6 +160,7 @@
     out.hidden = true;
     form.hidden = false;
     hideError();
+    day = Plan.DAY_DEFAULT;
     JK.print.title(null);
     JK.url.clear();
   }
@@ -197,12 +205,15 @@
 
   // ---------- url state ----------
   // r = one entry per row, fields separated by "|", rows by ";"
+  // w, b = wake-up and bedtime ("0700"), left out when they are the default
   var EYE_CODE = { 'Right Eye': 'R', 'Left Eye': 'L', 'Both Eyes': 'B', 'By mouth': 'M' };
   var EYE_NAME = { R: 'Right Eye', L: 'Left Eye', B: 'Both Eyes', M: 'By mouth' };
   function toParams(entries) {
-    return { r: entries.map(function (e) {
+    var p = { r: entries.map(function (e) {
       return [e.generic, e.brand, e.times, EYE_CODE[e.eye] || 'B', e.stop].join('|');
     }).join(';') };
+    if (!Plan.isDefaultDay(day)) { p.w = Plan.dayParam(day.wake); p.b = Plan.dayParam(day.bed); }
+    return p;
   }
   function fromParams(p) {
     if (!p.r) return [];
@@ -210,7 +221,7 @@
       var f = s.split('|');
       var d = byGeneric[f[0]];
       if (!d) return null;
-      return { generic: f[0], brand: f[1] || '', color: d.color, use: d.use, times: Plan.parseFreq(f[2]), eye: ORAL[d.color] ? BY_MOUTH : (EYE_NAME[f[3]] && f[3] !== 'M' ? EYE_NAME[f[3]] : 'Both Eyes'), stop: JK.date.parseISO(f[4]) ? f[4] : '' };
+      return { generic: f[0], brand: f[1] || '', color: d.color, use: d.use, times: onceADay(d, Plan.parseFreq(f[2])), eye: ORAL[d.color] ? BY_MOUTH : (EYE_NAME[f[3]] && f[3] !== 'M' ? EYE_NAME[f[3]] : 'Both Eyes'), stop: JK.date.parseISO(f[4]) ? f[4] : '' };
     }).filter(Boolean);
   }
 
@@ -222,15 +233,14 @@
   // same time is one line ("Both Eyes"), not two drops five minutes apart.
   // segs: the plan's segments active in one period.
   // Returns [{ time:"HH:MM", drops:[{entry, eye, segs, time}] }] sorted by time.
-  // Once-daily glaucoma drops (prostaglandins and their combinations) are
-  // conventionally taken at bedtime, so that is their default slot.
   // Every-other-day drops take the once-a-day time on their dose days.
+  // All times are fitted to the patient's wake-up and bedtime (`day`).
   function timesFor(e) {
-    var fixed = Plan.fixedTimes(e.times);
+    var fixed = Plan.fixedTimes(e.times, day);
     if (fixed) return fixed;
     var n = Plan.dosesOnDoseDay(e.times);
-    if (n === 1 && !isOral(e) && /Glaucoma/.test(e.use || '')) return ['21:00'];
-    return JK.doseTimes(n);
+    if (n === 1) return Plan.fixedTimes(onceADay(e, 1), day);
+    return Plan.fitDay(JK.doseTimes(n), day);
   }
   // `start`: the first day of the period, to find each every-other-day
   // drop's first dose day in it (item.first). Drops on different days are
@@ -292,7 +302,49 @@
 
   // ---------- render ----------
 
-  function render(entries) {
+  // ---------- wake-up / bedtime ----------
+  // Shown above the daily routine (not printed). Changing either one
+  // redraws the rest of the schedule around it, so the times, the calendar
+  // file and the QR code all follow. The menus themselves stay put, and on
+  // a touch screen the menu is let go of (blurred) before the redraw:
+  // phones reopen the picker of a focused menu when the page around it
+  // changes. A mouse or keyboard keeps focus, so arrow keys still work.
+  // Any wake-up time, so night shifts work; bedtime is offered from 8 to
+  // 20 hours after it and may be the next morning.
+  function dayOptions(from, to, sel) {
+    var h = '';
+    for (var m = from; m <= to; m += 30) {
+      var label = JK.fmtTime(Plan.dayParam(m).replace(/(\d\d)$/, ':$1'));
+      if (m % 1440 === 0) label += ' (midnight)';
+      else if (m % 1440 === 720) label += ' (noon)';
+      h += '<option value="' + m + '"' + (m === sel ? ' selected' : '') + '>' + esc(label) + '</option>';
+    }
+    return h;
+  }
+  function dayHTML() {
+    return '<div class="jk-daytimes"><p class="jk-daytimes__text">The times below fit a day from waking up to bedtime. Change them to match your day before adding reminders to your calendar.</p>'
+      + '<div class="jk-daytimes__fields">'
+      + '<label class="jk-daytimes__f"><span>Wake up</span><select id="jk-day-wake" class="jk-in">' + dayOptions(0, 1410, day.wake) + '</select></label>'
+      + '<label class="jk-daytimes__f"><span>Bedtime</span><select id="jk-day-bed" class="jk-in">' + dayOptions(day.wake + Plan.AWAKE_MIN, day.wake + Plan.AWAKE_MAX, day.bed) + '</select></label>'
+      + '</div></div>';
+  }
+  function wireDay(entries) {
+    ['jk-day-wake', 'jk-day-bed'].forEach(function (id) {
+      var sel = document.getElementById(id), touch = false;
+      sel.addEventListener('pointerdown', function (e) { touch = e.pointerType !== 'mouse'; });
+      sel.addEventListener('keydown', function () { touch = false; });
+      sel.addEventListener('change', function () {
+        if (touch) sel.blur();
+        // a new wake-up keeps the bedtime's clock time if it still fits
+        day = Plan.makeDay(+document.getElementById('jk-day-wake').value, +document.getElementById('jk-day-bed').value % 1440);
+        render(entries, true);
+      });
+    });
+  }
+
+  // `again`: redrawn for a new wake-up/bedtime; keep the scroll position
+  // and print orientation
+  function render(entries, again) {
     var today = JK.date.today();
     var p = Plan.plan(entries, today);
     var periods = Plan.periods(p.segs, today);
@@ -321,6 +373,8 @@
         + '</tr>';
     });
     h += '</tbody></table></div>';
+
+    h += dayHTML();
 
     // 2. daily routine: when to use each drop, every day. Drops sharing a
     // time slot are already staggered five minutes apart. A taper gets one
@@ -372,11 +426,28 @@
       + '<label class="jk-printopt"><input type="checkbox" class="jk-landscape"> Landscape</label></div>'
       + '<p class="jk-note jk-ics-note">“Add to calendar” downloads a file that adds a daily reminder for each dose to the phone or computer calendar it is opened on. Medications without a stop date repeat until you delete them.</p>';
 
-    out.innerHTML = h;
+    var keep = again && out.querySelector('.jk-daytimes');
+    if (keep) {
+      // swap in everything but the wake-up/bedtime box; refresh its
+      // bedtime choices, which depend on the wake-up time
+      var tmp = document.createElement('div');
+      tmp.innerHTML = h;
+      var fresh = tmp.querySelector('.jk-daytimes');
+      Array.prototype.slice.call(out.childNodes).forEach(function (n) { if (n !== keep) out.removeChild(n); });
+      while (tmp.firstChild !== fresh) out.insertBefore(tmp.firstChild, keep);
+      tmp.removeChild(fresh);
+      while (tmp.firstChild) out.appendChild(tmp.firstChild);
+      var bed = keep.querySelector('#jk-day-bed');
+      if (document.activeElement !== bed) bed.innerHTML = fresh.querySelector('#jk-day-bed').innerHTML;
+      bed.value = String(day.bed);
+    } else {
+      out.innerHTML = h;
+      wireDay(entries);
+    }
     form.hidden = true;
     out.hidden = false;
     JK.print.title(title);
-    JK.print.setLandscape(false);
+    if (!again) JK.print.setLandscape(false);
     JK.print.wireLandscape(out);
 
     var url = JK.url.write(toParams(entries));
@@ -388,7 +459,7 @@
     document.getElementById('jk-dropform-back').addEventListener('click', function () {
       out.hidden = true; form.hidden = false; JK.print.title(null); JK.url.clear(); window.scrollTo(0, 0);
     });
-    window.scrollTo(0, 0);
+    if (!again) window.scrollTo(0, 0);
   }
 
   // One daily reminder per dose for each routine period, running from the
@@ -484,7 +555,9 @@
     .then(function (r) { return r.json(); })
     .then(function (list) {
       indexData(list);
-      var entries = fromParams(JK.url.read());
+      var params = JK.url.read();
+      day = Plan.parseDay(params.w, params.b);
+      var entries = fromParams(params);
       if (entries.length) { fillRows(entries); render(entries); }
       else reset();
     })
