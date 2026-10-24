@@ -305,9 +305,10 @@
   // ---------- wake-up / bedtime ----------
   // Shown above the daily routine (not printed). Changing either one
   // redraws the rest of the schedule around it, so the times, the calendar
-  // file and the QR code all follow. The menus themselves stay put: a
-  // rebuilt menu would lose focus, and focusing it again reopens the
-  // picker on a phone.
+  // file and the QR code all follow. The menus themselves stay put, and on
+  // a touch screen the menu is let go of (blurred) before the redraw:
+  // phones reopen the picker of a focused menu when the page around it
+  // changes. A mouse or keyboard keeps focus, so arrow keys still work.
   // Any wake-up time, so night shifts work; bedtime is offered from 8 to
   // 20 hours after it and may be the next morning.
   function dayOptions(from, to, sel) {
@@ -329,7 +330,11 @@
   }
   function wireDay(entries) {
     ['jk-day-wake', 'jk-day-bed'].forEach(function (id) {
-      document.getElementById(id).addEventListener('change', function () {
+      var sel = document.getElementById(id), touch = false;
+      sel.addEventListener('pointerdown', function (e) { touch = e.pointerType !== 'mouse'; });
+      sel.addEventListener('keydown', function () { touch = false; });
+      sel.addEventListener('change', function () {
+        if (touch) sel.blur();
         // a new wake-up keeps the bedtime's clock time if it still fits
         day = Plan.makeDay(+document.getElementById('jk-day-wake').value, +document.getElementById('jk-day-bed').value % 1440);
         render(entries, true);
