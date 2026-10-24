@@ -304,8 +304,10 @@
 
   // ---------- wake-up / bedtime ----------
   // Shown above the daily routine (not printed). Changing either one
-  // redraws the schedule in place, so the times, the calendar file and the
-  // QR code all follow.
+  // redraws the rest of the schedule around it, so the times, the calendar
+  // file and the QR code all follow. The menus themselves stay put: a
+  // rebuilt menu would lose focus, and focusing it again reopens the
+  // picker on a phone.
   // Any wake-up time, so night shifts work; bedtime is offered from 8 to
   // 20 hours after it and may be the next morning.
   function dayOptions(from, to, sel) {
@@ -331,7 +333,6 @@
         // a new wake-up keeps the bedtime's clock time if it still fits
         day = Plan.makeDay(+document.getElementById('jk-day-wake').value, +document.getElementById('jk-day-bed').value % 1440);
         render(entries, true);
-        document.getElementById(id).focus();
       });
     });
   }
@@ -420,13 +421,29 @@
       + '<label class="jk-printopt"><input type="checkbox" class="jk-landscape"> Landscape</label></div>'
       + '<p class="jk-note jk-ics-note">“Add to calendar” downloads a file that adds a daily reminder for each dose to the phone or computer calendar it is opened on. Medications without a stop date repeat until you delete them.</p>';
 
-    out.innerHTML = h;
+    var keep = again && out.querySelector('.jk-daytimes');
+    if (keep) {
+      // swap in everything but the wake-up/bedtime box; refresh its
+      // bedtime choices, which depend on the wake-up time
+      var tmp = document.createElement('div');
+      tmp.innerHTML = h;
+      var fresh = tmp.querySelector('.jk-daytimes');
+      Array.prototype.slice.call(out.childNodes).forEach(function (n) { if (n !== keep) out.removeChild(n); });
+      while (tmp.firstChild !== fresh) out.insertBefore(tmp.firstChild, keep);
+      tmp.removeChild(fresh);
+      while (tmp.firstChild) out.appendChild(tmp.firstChild);
+      var bed = keep.querySelector('#jk-day-bed');
+      if (document.activeElement !== bed) bed.innerHTML = fresh.querySelector('#jk-day-bed').innerHTML;
+      bed.value = String(day.bed);
+    } else {
+      out.innerHTML = h;
+      wireDay(entries);
+    }
     form.hidden = true;
     out.hidden = false;
     JK.print.title(title);
     if (!again) JK.print.setLandscape(false);
     JK.print.wireLandscape(out);
-    wireDay(entries);
 
     var url = JK.url.write(toParams(entries));
     JK.ios.safariNote(out.querySelector('.jk-ics-note'), url);
