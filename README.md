@@ -114,6 +114,11 @@ service in `docker-compose.yml` that builds once and exits; see that file.
 
 ## Deployment model
 
+**Moving to Cloudflare Pages.** CI now also deploys every green push to
+`master` to Cloudflare Pages, and `functions/` replaces the nginx proxies
+and hugo-contact. Setup and cutover steps are in SETUP.md, "Cloudflare
+Pages". Until cutover, the homelab host below is still the live site.
+
 **CI builds, it does not deploy** (PR previews aside, see below). `.github/workflows/ci.yml` runs on every
 push and PR: `zola build`, `zola check --skip-external-links`, the Node
 tests, and a sanity check of `eye-drops.json`. A red check means "don't
