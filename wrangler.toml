@@ -1,0 +1,13 @@
+# Cloudflare Pages project. GitHub Actions deploys it (.github/workflows/ci.yml);
+# see SETUP.md, "Cloudflare". Secrets (Fastmail login, recipient, token key)
+# are NOT here: set them in the Cloudflare dashboard, never in this file.
+name = "jonathankatzmd"
+pages_build_output_dir = "public"
+compatibility_date = "2026-09-01"
+
+[vars]
+SMTP_HOST = "smtp.fastmail.com"
+SMTP_PORT = "465"
+# Self-hosted Plausible that /js/vx.js and /vx/event forward to.
+PLAUSIBLE_HOST = "plausible.katz.vision"
+PLAUSIBLE_SCRIPT = "/js/script.js"

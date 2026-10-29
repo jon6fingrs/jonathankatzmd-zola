@@ -36,3 +36,7 @@ nginx.conf
 /static/images/skill/
 /static/fonts/LineIcons.*
 /static/fonts/slick.*
+
+# Local secrets for `wrangler pages dev` (Fastmail login etc.). Never commit.
+.dev.vars
+.wrangler/
