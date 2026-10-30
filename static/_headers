@@ -17,3 +17,5 @@ https://:version.:project.pages.dev/*
   Cache-Control: public, max-age=604800
 /processed_images/*
   Cache-Control: public, max-age=604800
+/vendor/*
+  Cache-Control: public, max-age=604800

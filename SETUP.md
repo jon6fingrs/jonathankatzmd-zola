@@ -13,6 +13,9 @@ Pages project `jonathankatzmd` by the `deploy` job in
     /form-token.js, /f/contact   contact form (replaces hugo-contact); sends
                                  through Fastmail SMTP (functions/_lib/smtp.js)
     /js/vx.js, /vx/event         first-party Plausible proxy
+    /wp-*, /xmlrpc.php           old WordPress URLs: drug photos 301 to
+                                 /images/drops/, everything else 410
+    static/_redirects            old WordPress page URLs -> Zola pages (301)
     static/_headers              cache headers; noindex on *.pages.dev
 
 Non-secret settings (SMTP host and port, Plausible host) are in
