@@ -10,4 +10,4 @@ SMTP_HOST = "smtp.fastmail.com"
 SMTP_PORT = "465"
 # Self-hosted Plausible that /js/vx.js and /vx/event forward to.
 PLAUSIBLE_HOST = "plausible.katz.vision"
-PLAUSIBLE_SCRIPT = "/js/script.js"
+PLAUSIBLE_SCRIPT = "/js/script.outbound-links.js"
