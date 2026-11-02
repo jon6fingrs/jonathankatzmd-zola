@@ -27,9 +27,10 @@ Outside of the office, Dr. Katz enjoys hiking, biking, and spending time with hi
 
 ## Tools for clinicians
 
-Dr. Katz also maintains two calculators for eye care professionals:
+Dr. Katz also maintains these tools for eye care professionals:
 
 - [Ectasia Risk](https://ectasiarisk.com/) &mdash; an ectasia risk calculator for screening refractive surgery candidates.
 - [Munnerlyn Formula](https://munnerlynformula.com/) &mdash; an ablation depth calculator based on the Munnerlyn formula for laser vision correction.
+- [op.report](https://op.report/) &mdash; an operative note generator that turns a surgeon's own templates into a draft note in their own words, ready to review and sign (patent pending).
 
 These are intended for clinicians and are not a substitute for an individual evaluation.
