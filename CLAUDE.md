@@ -22,6 +22,29 @@ the workflow.
   To confirm a deploy went out, check the "Deploy to Cloudflare Pages" job
   on the merge commit's CI run.
 
+Background on the move off the home server (the owner's write-up, covering
+this site and three others):
+https://thehelpfulidiot.com/moving-four-websites-off-my-home-server-to-cloudflare-pages/
+
+## Cloudflare Pages, in this repo
+
+- `static/_redirects`: old WordPress page URLs, 301 to Zola pages.
+  `/x` and `/x/` are separate paths there, so list both forms when adding
+  a redirect.
+- `static/_headers`: cache headers, plus `noindex` on every `*.pages.dev`
+  copy so only the real domain is indexed. A path that matches two
+  `Cache-Control` rules gets both, so keep the rules from overlapping.
+- `functions/`: the contact form (`/f/contact`, `/form-token.js`, sending
+  through Fastmail SMTP), the Plausible analytics proxy (`/js/vx.js`,
+  `/vx/event`), and old `/wp-*` URLs (drug photos 301, everything else
+  410). Routing follows the folder layout; there is no `_routes.json`.
+- `templates/404.html` gives a real 404. Without it Cloudflare would serve
+  the home page with a 200 for unknown URLs.
+- Secrets live in the Cloudflare dashboard and only take effect on the next
+  deploy (re-run CI). Non-secret settings are in `wrangler.toml`.
+- Deploys use wrangler pinned to 4.156.0 in `ci.yml`, so the version
+  doesn't change on its own.
+
 ## Before calling a change done
 
 - CI is green on the PR.

@@ -10,6 +10,8 @@ alone.
 `master` builds and deploys it automatically. There is no home server to
 pull onto or restart any more. Secrets (SMTP login, token secret) are
 Cloudflare and GitHub secrets, never files in the repo; see SETUP.md.
+The owner's write-up of the move:
+https://thehelpfulidiot.com/moving-four-websites-off-my-home-server-to-cloudflare-pages/
 
 ## Working on this repo (start here in a new coding session)
 
