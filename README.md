@@ -6,41 +6,44 @@ Ophthalmology practice website, migrated from WordPress to
 this repo up cold has the context that isn't visible from the source files
 alone.
 
-**Before touching anything that handles secrets**, read
-`CREDENTIALS-AUDIT.md` if present. Short version: `docker-compose.yml` and
-`nginx.conf` are real, deployed, gitignored files — never commit them. Work
-from the `.example` versions.
+**Hosting.** The site runs on Cloudflare Pages. Merging a PR into
+`master` builds and deploys it automatically. There is no home server to
+pull onto or restart any more. Secrets (SMTP login, token secret) are
+Cloudflare and GitHub secrets, never files in the repo; see SETUP.md.
+The owner's write-up of the move:
+https://thehelpfulidiot.com/moving-four-websites-off-my-home-server-to-cloudflare-pages/
 
 ## Working on this repo (start here in a new coding session)
 
 **Workflow.**
-1. Work on a branch and open a pull request.
-2. CI builds and tests it, and the preview workflow posts a link to a
-   live preview on the PR (see "Previewing a change" below).
+1. Work on a branch and open a pull request (a draft is fine).
+2. CI (`.github/workflows/ci.yml`) builds the site with Zola, runs
+   `zola check` and the Node tests. The preview workflow publishes the
+   branch and comments a preview link on the PR (see "Previewing a change"
+   below).
 3. The owner reviews the preview, then merges.
-4. Production is updated by hand from `master` (see "Deployment model").
-5. Nothing deploys automatically.
+4. Merging into `master` deploys to Cloudflare Pages automatically, but
+   only if CI is green (see "Deployment model"). Nothing else needs
+   doing after the merge.
 
-**Build and test without Docker.** Fetch the same Zola binary CI uses:
-
-```bash
-curl -sSL https://github.com/getzola/zola/releases/download/v0.23.3/zola-v0.23.3-x86_64-unknown-linux-gnu.tar.gz | tar xz zola
-./zola build && ./zola check --skip-external-links
-node --test 'tests/**/*.test.js'
-```
-
-Keep the binary out of the repo. Put it in a temp directory, or delete it
-after use.
+**Don't install Zola locally.** The PR's CI run and preview build are the
+build check: they catch template errors, broken `@/` links and failing
+tests before anything goes live. Open the PR and read the check results
+instead of downloading a Zola binary. The Node tests need no Zola, so
+`node --test 'tests/**/*.test.js'` is still fine to run locally when you
+change dosing logic.
 
 **Before calling a UI change done:**
-- Load the page with Playwright (Chromium) at 390px wide and at desktop
-  width.
+- Open the PR and wait for the preview link.
+- Load the preview page with Playwright (Chromium) at 390px wide and at
+  desktop width, or ask the owner to check it on a phone.
 - Check that there is no horizontal scroll (see "Mobile-first
   conventions").
-- For anything printable, also render a PDF.
-- Run `zola check`. It catches broken `@/` links.
+- For anything printable, also render a PDF of the preview page.
+- Make sure CI's "Build site and run tests" check is green.
 
-**Verifying the live site after a deploy.**
+**Verifying the live site after a deploy.** Only when asked, or after
+changes to `functions/`, `static/_redirects` or `static/_headers`:
 - Fetch every page, asset and photo with `curl` and expect HTTP 200.
 - Expect `/videos/` to return 404 while it is a draft.
 - The live page should have no preview banner and no `noindex`, and
@@ -54,13 +57,10 @@ after use.
   with the proxy's CA bundle, and never turn off certificate checks.
 
 **Keep private details out of the repo.**
-- Never commit details of the real host: the real `nginx.conf` or
-  `docker-compose.yml`, internal hostnames or IPs, VPN or tunnel
-  topology, or secrets.
-- The `.example` files stay generic.
-- If the owner shares the real configuration to check that routing is
-  consistent, use it for checking only, and leave it out of commits, PRs
-  and docs.
+- Never commit secrets (SMTP passwords, `TOKEN_SECRET`, API tokens),
+  `.dev.vars`, or details of the owner's home network.
+- If the owner shares real configuration to check something, use it for
+  checking only, and leave it out of commits, PRs and docs.
 
 **What the owner values.**
 - Interactive, polished patient tools: the medication chart, the post-op
@@ -76,9 +76,8 @@ after use.
 |---|---|---|
 | `content/`, `templates/`, `static/css`, `static/js`, `static/data`, `static/fonts`, `static/vendor`, `static/images`, `tests/` | — | hand-authored source |
 | `config.toml` | — | site config; no secrets in it |
-| `.github/workflows/ci.yml` | — | build + tests on every PR |
-| `docker-compose.yml.example` | `docker-compose.yml` | the real file has an SMTP password and a token secret |
-| `nginx.conf.example` | `nginx.conf` | the real file is tied to this one host's container names |
+| `.github/workflows/ci.yml`, `preview.yml` | — | build + tests on every PR, PR previews, deploy on merge |
+| `functions/`, `wrangler.toml`, `static/_redirects`, `static/_headers` | `.dev.vars`, `.wrangler/` | Cloudflare Pages: contact form, analytics proxy, redirects, headers |
 | — | `public/` | build output — `zola build` regenerates it |
 | — | `static/processed_images/` | build output — `resize_image()` thumbnails, favicons, hero WebP |
 
@@ -91,66 +90,30 @@ collapse/dropdown behaviour, buttons and the contact form grid.
 
 ## Setup from a fresh clone
 
-```bash
-git clone <this-repo> && cd <this-repo>
-
-# 1. fill in the two deployment files from their templates
-cp docker-compose.yml.example docker-compose.yml   # then edit the CHANGEME values
-cp nginx.conf.example nginx.conf                   # then edit the CHANGEME values
-
-# 2. build with the official Zola image (this project does NOT use a Zola
-#    binary installed on the host)
-docker run --rm -v "$(pwd):/project" -w /project ghcr.io/getzola/zola:v0.23.3 build
-
-# 3. run the dosing-rule tests (any Node 18+)
-node --test 'tests/**/*.test.js'
-```
-
-To preview locally with a plain Zola binary:
-`zola serve` or `zola build --base-url http://127.0.0.1:1111 && (cd public && python3 -m http.server 1111)`.
-
-The production deployment runs the same image as a long-lived `zola-build`
-service in `docker-compose.yml` that builds once and exits; see that file.
+Nothing to set up for normal work: edit, push a branch, open a PR, and let
+CI and the preview build it. To test Cloudflare Functions (contact form,
+redirects) locally, see SETUP.md, "Local test".
 
 ## Deployment model
 
-**Moving to Cloudflare Pages.** CI now also deploys every green push to
-`master` to Cloudflare Pages, and `functions/` replaces the nginx proxies
-and hugo-contact. Setup and cutover steps are in SETUP.md, "Cloudflare
-Pages". Until cutover, the homelab host below is still the live site.
+**Cloudflare Pages, deployed by CI.** `.github/workflows/ci.yml` runs on
+every push and PR: `zola build`, `zola check --skip-external-links`, the
+Node tests, and a sanity check of `eye-drops.json`. On a push to `master`
+(that is, a merged PR), a green build is then deployed to the Cloudflare
+Pages project `jonathankatzmd` by the "Deploy to Cloudflare Pages" job. A
+red check never deploys.
 
-**CI builds, it does not deploy** (PR previews aside, see below). `.github/workflows/ci.yml` runs on every
-push and PR: `zola build`, `zola check --skip-external-links`, the Node
-tests, and a sanity check of `eye-drops.json`. A red check means "don't
-deploy this". Deploys themselves are still manual:
+- The deploy uses the exact `public/` the tests ran against.
+- `functions/` replaces the old nginx proxies and hugo-contact: the
+  contact form (`/f/contact`, `/form-token.js`), the Plausible proxy
+  (`/js/vx.js`, `/vx/event`) and old WordPress URLs.
+- To check a deploy, look at the "Deploy to Cloudflare Pages" job on the
+  merge commit's CI run.
+- To roll back, revert the PR (or re-deploy an older build from the
+  Cloudflare dashboard).
 
-1. Merge the PR into `master` once CI is green and the preview looks right.
-2. On the host, in the site directory (`/home/jonathan/zola/`, a git
-   clone of this repo): `git pull`.
-3. `docker restart jonathankatzmd-zola-build` (or Portainer → Restart).
-   It rebuilds `public/` from the current source and exits.
-4. Restart `nginx` too, but **only** if `nginx.conf` changed — content and
-   template changes need just the `zola-build` restart, since nginx serves
-   straight from the shared `public/` directory.
-
-Traefik (reverse proxy, TLS termination) and Portainer (container
-management UI) sit in front of this stack but aren't part of this repo.
-
-**Keeping the host clone pullable.**
-
-- Never edit tracked files on the host, `.gitignore` included, or
-  `git pull` aborts. Put host-only ignore patterns in
-  `.git/info/exclude`, which is never committed.
-- Don't leave backup copies (`custom.css.backup` and so on) anywhere
-  under `static/`. Zola copies everything in `static/` into the live
-  site, so a backup there gets published. Keep backups outside the repo.
-- `git clean -ndX static` is a safe dry run. It lists ignored files under
-  `static/` and deletes nothing. It should show only
-  `static/processed_images/`.
-- The container runs as root, so `static/processed_images/` comes back
-  root-owned after every build, and git can print "Permission denied"
-  warnings about it. They're harmless. `sudo rm -rf static/processed_images`
-  clears the folder, and the next build recreates it.
+Setup, secrets and the contact form's mail settings are in SETUP.md,
+"Cloudflare Pages".
 
 ## Previewing a change before deploying
 
@@ -167,7 +130,7 @@ go to Settings → Pages → Source "Deploy from a branch" → `gh-pages`, `/ (r
 
 **Previews live under a sub-path, so never hard-code root paths.** In
 Markdown, link pages with Zola's internal links (`[text](@/learn/migs.md)`,
-`[text](@/contact/_index.md)`); `zola check` verifies them. In raw HTML
+`[text](@/contact/_index.md)`); CI's `zola check` verifies them. In raw HTML
 inside content, use paths relative to the page (`../eye-drop-form/`). In
 templates, use `get_url(...)`. In CSS, `url("../fonts/...")`. The PR's
 preview comment is the quickest way to spot a link that escaped.
@@ -295,23 +258,6 @@ available. Use `"text" in value` for substring tests, do list building in
 JS (as the filter chips do), and inline repeated markup rather than
 reaching for macros.
 
-**Two containers, not one.** `zola-build` (official Zola image, runs once,
-exits) and `nginx` (serves the output) are separate services sharing a bind
-mount. Rebuilding after a content edit is `docker restart zola-build`, and
-nginx never needs to restart for that, so there's no serving downtime.
-
-**Why `zola-build` and `nginx` both mount the whole project directory,
-not just `public/`.** `zola build` deletes and recreates `public/` on
-every run — you cannot `rmdir` a directory that something else has
-separately mounted. Mount the parent project directory into both
-containers (read-write for `zola-build`, read-only for `nginx`) and point
-nginx's `root` at the `public/` subdirectory.
-
-**Hostnames in `nginx.conf` go through `set $var`, never written
-literally in `proxy_pass`.** A literal hostname is resolved once at
-startup; if it doesn't resolve yet, nginx refuses to start at all. The
-variable form defers resolution to request time.
-
 **`minify_html = true` strips default HTML attributes** (e.g.
 `type="submit"` on a `<button>`). Select elements by `id`, not by such
 attributes.
@@ -320,12 +266,12 @@ attributes.
 `form.elements['fieldname']`; `HTMLFormElement`'s own properties shadow
 same-named inputs.
 
-**A `<form>` submitted via `fetch()` defaults to `multipart/form-data`.**
-hugo-contact only parses `application/x-www-form-urlencoded`, so
-`contact.js` sends `URLSearchParams`.
+**The contact form posts `URLSearchParams`.** `contact.js` sends the form
+as `application/x-www-form-urlencoded`; `functions/f/contact.js` reads it
+with `request.formData()`.
 
 **Nav links use `get_url(..., trailing_slash=true)`.** Without it Zola
-emits `/about` and nginx 301s every click to `/about/`.
+emits `/about` and every click takes a redirect to `/about/`.
 
 **Schedule state lives in the query string, not in storage.** Both
 generators write their form state to the URL (short keys so the QR stays
@@ -375,8 +321,8 @@ old links to those exact filenames still resolve; don't list them in
 
 - `fetch-assets.sh` is a one-time migration script that pulled images from
   the original WordPress install. Historical reference only.
-- The contact form backend (hugo-contact) only accepts a fixed field set;
-  extending the form with a new field requires backend changes.
+- The contact form backend (`functions/f/contact.js`) only reads name,
+  email and message; a new form field needs a change there too.
 - New reference-table entries without photos show an empty photo cell;
   add a file to `static/images/drops/` and list it in `photos` to fill it.
   Every current entry has a photo. Good sources are DailyMed label images
