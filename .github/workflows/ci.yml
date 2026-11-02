@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Zola (same version as docker-compose.yml)
+      - name: Install Zola (same version as preview.yml)
         run: |
           curl -sSL -o zola.tar.gz https://github.com/getzola/zola/releases/download/v0.23.3/zola-v0.23.3-x86_64-unknown-linux-gnu.tar.gz
           tar xzf zola.tar.gz zola

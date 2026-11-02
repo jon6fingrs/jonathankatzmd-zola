@@ -78,7 +78,6 @@ changes to `functions/`, `static/_redirects` or `static/_headers`:
 | `config.toml` | — | site config; no secrets in it |
 | `.github/workflows/ci.yml`, `preview.yml` | — | build + tests on every PR, PR previews, deploy on merge |
 | `functions/`, `wrangler.toml`, `static/_redirects`, `static/_headers` | `.dev.vars`, `.wrangler/` | Cloudflare Pages: contact form, analytics proxy, redirects, headers |
-| `docker-compose.yml.example`, `nginx.conf.example` | `docker-compose.yml`, `nginx.conf` | retired home-server setup, kept for reference only |
 | — | `public/` | build output — `zola build` regenerates it |
 | — | `static/processed_images/` | build output — `resize_image()` thumbnails, favicons, hero WebP |
 

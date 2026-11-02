@@ -9,8 +9,8 @@ the workflow.
 - The site is hosted on **Cloudflare Pages**. Merging a PR into `master`
   builds and deploys it automatically, but only if CI is green.
 - There is **no home server**. Never tell the owner to `git pull`, restart
-  containers, or touch nginx/Docker/Portainer after a merge. The
-  `docker-compose.yml.example` and `nginx.conf.example` files are retired.
+  containers, or touch nginx/Docker/Portainer after a merge; that setup
+  has been removed from the repo.
 - Work on a branch, push it, and **open a PR (draft is fine) to get a
   preview**. The preview workflow comments a link on the PR:
   `https://jon6fingrs.github.io/jonathankatzmd-zola/pr-preview/pr-<number>/`.
