@@ -57,7 +57,7 @@ Allergy and dry eye often occur together, and each makes the other worse.
 
 **Cool the eyes.** A cool compress, and artificial tears kept in the refrigerator, calm the itch and rinse the allergen away.
 
-**Allergy eye drops.** Drops such as ketotifen and olopatadine are sold without a prescription. They block histamine and also steady the allergy cells so they release less. They work within minutes, and they work best used every day through your season, not only when the eyes itch. Most are used once or twice a day.
+**Allergy eye drops.** Drops such as ketotifen (Zaditor, Alaway) and olopatadine (Pataday) are sold without a prescription; both are pictured in the [Eye Medication Reference](@/patients/eye-drops.md). They block histamine and also steady the allergy cells so they release less. They work within minutes, and they work best used every day through your season, not only when the eyes itch. Most are used once or twice a day.
 
 **Allergy pills** help the nose more than the eyes, and they can dry the eyes out. If your eyes are the main problem, drops usually do better.
 
