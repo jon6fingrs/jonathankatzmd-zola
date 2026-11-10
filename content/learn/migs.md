@@ -6,9 +6,16 @@ weight = 70
 
 [extra]
 article = true
+js = "js/procedure.js"
 +++
 
 **Minimally invasive glaucoma surgery (MIGS)** is a family of procedures that lower eye pressure through very small openings, with less disruption to the eye and a faster recovery than traditional glaucoma surgery. Most are performed at the time of [cataract surgery](@/learn/cataract-surgery.md) through the same incision, adding a few minutes to the operation. Some can be done on their own.
+
+Press **Play** to see a stent being placed in the drain, one of the most common kinds of MIGS, or tap a step to go through it at your own pace.
+
+<div id="jk-proc" class="jk-lpi" data-proc="migs">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
+</div>
 
 MIGS is generally for **mild to moderate open-angle glaucoma**, with the goal of lowering pressure modestly and reducing the number of drops needed. It is not usually a replacement for [trabeculectomy](@/learn/trabeculectomy.md) or a [tube shunt](@/learn/tube-shunt-surgery.md) in advanced disease, where larger pressure reductions are needed.
 

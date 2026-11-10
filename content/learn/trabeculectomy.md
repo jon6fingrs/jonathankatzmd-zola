@@ -6,9 +6,16 @@ weight = 80
 
 [extra]
 article = true
+js = "js/procedure.js"
 +++
 
 **Trabeculectomy** is the traditional glaucoma operation and still one of the most effective ways to lower eye pressure. It is used when drops and laser cannot bring pressure to target, when glaucoma is advanced or progressing, or when a very low pressure is needed to protect a badly damaged nerve.
+
+Press **Play** to see how the operation makes a new drain, or tap a step to go through it at your own pace.
+
+<div id="jk-proc" class="jk-lpi" data-proc="trab">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
+</div>
 
 ## How it works
 

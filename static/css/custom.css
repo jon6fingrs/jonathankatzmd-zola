@@ -1057,3 +1057,25 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-lpi.jk-sink:fullscreen .jk-sink__about { font-size: 1.25rem; }
 .jk-lpi.jk-sink:fullscreen .jk-chip { font-size: 1.05rem; }
 @media print { .jk-sink__pic { position: static; } .jk-sink__controls { display: none; } }
+
+/* Procedure demos (static/js/procedure.js: SLT, MIGS, trabeculectomy, tube).
+   Use the .jk-lpi box; a single drawing is centred, and numbered step
+   buttons sit between the drawing and the Play button. */
+.jk-lpi__views--one { max-width: 760px; margin: 0 auto; }
+@media (min-width: 768px) { .jk-lpi__views.jk-lpi__views--one { grid-template-columns: minmax(0, 1fr); } }
+.jk-proc__steps { list-style: none; padding: 0; margin: .75rem 0 0; display: flex; flex-wrap: wrap; gap: .4rem; justify-content: center; }
+.jk-page--article .jk-page__body .jk-proc__steps { margin-bottom: 0; padding-left: 0; }
+.jk-proc__steps li { margin: 0; }
+.jk-proc__step {
+  display: inline-flex; align-items: center; gap: .4rem; min-height: 40px; padding: .3rem .75rem .3rem .35rem;
+  border: 1px solid var(--jk-line); border-radius: 999px; background: #fff; color: var(--jk-ink); font: inherit; font-size: .9rem; cursor: pointer;
+}
+.jk-proc__step span { display: inline-flex; align-items: center; justify-content: center; width: 1.7rem; height: 1.7rem; border-radius: 50%; background: var(--jk-soft); font-weight: 700; font-size: .85rem; }
+.jk-proc__step:hover { border-color: var(--jk-accent); }
+.jk-proc__step.is-done span { background: #dbeafe; color: var(--jk-accent); }
+.jk-proc__step.is-active { border-color: var(--jk-accent); color: var(--jk-accent); }
+.jk-proc__step.is-active span { background: var(--jk-accent); color: #fff; }
+.jk-proc__step:focus-visible { outline: 3px solid var(--jk-accent); outline-offset: 2px; }
+.jk-lpi:fullscreen .jk-lpi__views--one { max-width: calc((100vh - 18rem) * 1.4); }
+.jk-lpi:fullscreen .jk-proc__step { font-size: 1.05rem; }
+@media print { .jk-proc__steps { display: none; } }

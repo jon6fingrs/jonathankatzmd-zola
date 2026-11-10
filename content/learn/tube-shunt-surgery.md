@@ -6,9 +6,16 @@ weight = 90
 
 [extra]
 article = true
+js = "js/procedure.js"
 +++
 
 A **tube shunt**, also called a glaucoma drainage device or implant, is a small silicone tube connected to a thin plate. The tube is placed just inside the front of the eye and carries fluid back to the plate, which sits on the white of the eye under the eyelid, well behind where it can be seen. Fluid collects in a reservoir around the plate and is absorbed. Common devices are the **Ahmed** valve and the **Baerveldt** and **ClearPath** implants.
+
+Press **Play** to see how the tube and plate are placed and how fluid drains, or tap a step to go through it at your own pace.
+
+<div id="jk-proc" class="jk-lpi" data-proc="tube">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
+</div>
 
 {{<figure src="images/learn/tube-shunt.svg" alt="Cross-section showing a thin tube entering the front chamber of the eye and running under a patch along the eye wall to a plate further back." caption="The tube carries fluid from the front chamber to the plate, which sits on the eye wall under the upper eyelid. A patch covers the tube. Simplified, not to scale." />}}
 

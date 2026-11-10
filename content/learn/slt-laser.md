@@ -6,9 +6,16 @@ weight = 50
 
 [extra]
 article = true
+js = "js/procedure.js"
 +++
 
 **Selective laser trabeculoplasty (SLT)** is an office procedure that lowers eye pressure by treating the trabecular meshwork, the eye's natural drain. It takes a few minutes, is done at a slit lamp much like an eye exam, and has no cuts or stitches. It is used for open-angle glaucoma and ocular hypertension, either as a first treatment instead of drops or alongside them.
+
+Press **Play** to see the laser treat the drain, or tap a step to go through it at your own pace.
+
+<div id="jk-proc" class="jk-lpi" data-proc="slt">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
+</div>
 
 ## How it works
 
