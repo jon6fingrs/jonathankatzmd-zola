@@ -36,17 +36,25 @@ test('turning the faucet down approaches venous pressure but never reaches it', 
 
 test('only a new drain can take pressure below venous pressure', () => {
   assert.ok(P('trab', 'less', 'cpc', 'side') < M.PV);
-  assert.ok(P('trab') > 10 && P('trab') < 16);
+  assert.ok(P('trab') > 10 && P('trab') < 13);
   assert.ok(P('tube') > P('trab'));
+  // the bigger operations lower pressure more than MIGS
+  assert.ok(P('tube') < P('migs') - 1);
 });
 
-test('diminishing returns: the second treatment of a kind adds less than the first', () => {
-  const drop = (first, second) => [P() - P(first), P(first) - P(first, second)];
-  for (const [a, b] of [['less', 'cpc'], ['cpc', 'less'], ['slt', 'migs'], ['migs', 'slt'], ['slt', 'main']]) {
-    const [d1, d2] = drop(a, b);
-    assert.ok(d2 > 0 && d2 < d1, a + ' then ' + b + ': ' + d1 + ', ' + d2);
-    assert.ok(d2 < P() - P(b), b + ' adds less after ' + a + ' than alone');
+test('diminishing returns: a second treatment of the same kind adds less than it does alone', () => {
+  for (const [a, b] of [['less', 'cpc'], ['cpc', 'less'], ['slt', 'migs'], ['migs', 'slt'], ['slt', 'main'], ['main', 'slt']]) {
+    const d2 = P(a) - P(a, b);
+    assert.ok(d2 > 0, a + ' then ' + b + ' still helps');
+    assert.ok(d2 < P() - P(b), b + ' adds less after ' + a + ' (' + d2 + ') than alone');
   }
+  // two of the same strength: the second adds less than the first
+  assert.ok(P('slt') - P('slt', 'main') < P() - P('slt'));
+  assert.ok(P('less') - P('less', 'cpc') < P() - P('less'));
+});
+
+test('MIGS alone lands in the mid teens, as usually quoted', () => {
+  assert.ok(P('migs') >= 14 && P('migs') <= 16.5, String(P('migs')));
 });
 
 test('diminishing returns across kinds: each helps less once another is on', () => {
