@@ -264,6 +264,27 @@ x,y=P(301,170,True); b+=label(650,268,'Opening in','start',20,'600',BLUE)+label(
 b+=f'<line x1="400" y1="10" x2="400" y2="390" stroke="#e5e7eb" stroke-width="2"/>'
 figs['iridotomy']=('A narrow drainage angle before laser iridotomy, and the open angle after it',800,400,b)
 
+# 10. YAG capsulotomy: cloudy capsule behind the implant, then the laser opening
+def capsule(th0):  # the cloudy back of the capsule, from angle th0 (degrees above the axis) upward
+    x0=385+100*math.cos(math.radians(th0)); y0=400-222*math.sin(math.radians(th0))
+    s=f'<path d="M{x0:.1f},{y0:.1f} A100,222 0 0,0 442,218" fill="none" stroke="#94a3b8" stroke-width="9" stroke-linecap="round"/>'
+    for th in range(max(th0,4),54,7):
+        x=385+100*math.cos(math.radians(th)); y=400-222*math.sin(math.radians(th))
+        s+=f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2"/>'
+    return s
+b='<clipPath id="yl"><rect x="0" y="0" width="396" height="400"/></clipPath><clipPath id="yr"><rect x="404" y="0" width="396" height="400"/></clipPath>'
+b+=f'<g clip-path="url(#yl)"><g transform="{T}">{eye("iol")}{capsule(0)}</g></g>'
+laser=f'<path d="M150,380 L470,380" stroke="#16a34a" stroke-width="5" marker-end="url(#ahg)"/>'
+b+=f'<g clip-path="url(#yr)"><g transform="{T2}">{eye("iol")}{capsule(20)}{laser}</g></g>'
+b+=label(200,34,'Cloudy capsule','middle',24,'700')+label(604,34,'After YAG laser','middle',24,'700')
+x,y=P(385,330); b+=label(14,84,'Lens implant','start',20)+leader(84,92,x,y)
+x,y=P(462,262); b+=label(390,70,'Cloudy capsule','end',20,'600','#475569')+label(390,94,'behind the implant','end',20,'400','#475569')+leader(330,102,x,y)
+x,y=P(250,290); b+=label(60,372,'Iris','end',20)+leader(66,366,P(274,280)[0],P(274,280)[1])
+x,y=P(483,372,True); b+='<g stroke="#fff" stroke-width="6" paint-order="stroke" stroke-linejoin="round">'+label(790,236,'Opening in','end',20,'600',BLUE)+label(790,260,'the capsule','end',20,'400',BLUE)+'</g>'+leader(752,268,x,y)
+b+=label(412,356,'Laser','start',22,'700','#15803d')
+b+=f'<line x1="400" y1="10" x2="400" y2="390" stroke="#e5e7eb" stroke-width="2"/>'
+figs['yag-capsulotomy']=('A cloudy capsule behind the lens implant, and the clear opening the YAG laser makes in it',800,400,b)
+
 for name,(title,w,h,body) in figs.items():
     open(os.path.join(OUT,name+'.svg'),'w').write(svg(w,h,body,title))
     print(name, os.path.getsize(os.path.join(OUT,name+'.svg')),'bytes')
