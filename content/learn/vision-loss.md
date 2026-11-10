@@ -15,6 +15,8 @@ Different eye conditions damage vision in different patterns, and the pattern te
   <p class="jk-vis__noscript">The simulator needs JavaScript. Each condition is also described in words below.</p>
 </div>
 
+For conditions that get worse over time (glaucoma, cataract, macular degeneration, diabetic retinopathy and retinal detachment), press **Play** to watch the change from early to advanced. It is sped up: in real life it takes months or years, or hours to days for a detachment.
+
 **Two things the pictures cannot show.** First, the simulator shows one eye at a time. With both eyes open the fields overlap, so damage in one eye is often hidden by the other, which is one reason eye disease goes unnoticed. Second, missing areas are not experienced as black holes. The brain fills them in with its best guess, so a person with advanced glaucoma sees a complete picture with pieces quietly absent from it. The "filled in" rendering is the realistic one; the black rendering is there because it makes the extent of the loss easier to appreciate.
 
 These simulations are approximations for understanding, not a diagnosis or a measurement. If any of them look like your own vision, make an appointment; if you have a new curtain, shadow, or shower of floaters, call the same day.

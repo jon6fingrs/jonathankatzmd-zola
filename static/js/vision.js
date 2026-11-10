@@ -26,8 +26,11 @@
  *
  * Prescription mode (data-mode="rx" on the root, used by
  * content/learn/glasses-prescription.md) swaps the condition list for a
- * glasses prescription, a viewing distance and with/without glasses. The
- * optics are in rx-optics.js; here they become one more layer:
+ * glasses prescription and a viewing distance. The divider then compares
+ * with these glasses (left) and without glasses (right), since with the
+ * right glasses the left side would usually just match normal vision. The
+ * optics are in rx-optics.js; here they become one more layer on each side
+ * (.jk-vis__rx--with sits over the base photo, under the clipped side):
  *     .jk-vis__rx      the photo blurred by different amounts along and
  *                      across the cylinder axis. CSS filters run in an
  *                      element's own coordinates, before its transform, so
@@ -61,14 +64,15 @@
 
   // ---------- conditions ----------
   // Each has: label, the scene it opens on, severity labels for the slider,
-  // optional `options` (a second control row), and `apply(s, ctx)` where
+  // optional `options` (a second control row), `progressive` (offers a
+  // Play button that runs the slider from start to end), and `apply(s, ctx)` where
   // s is severity 0..1. `apply` returns nothing; it mutates ctx.* fields
   // that render() then writes to the layers.
   var SEVERITY_DEFAULT = ['Mild', 'Moderate', 'Advanced'];
 
   var CONDITIONS = [
     {
-      id: 'glaucoma', label: 'Glaucoma', scene: 'table', severity: ['Early', 'Moderate', 'Advanced'],
+      id: 'glaucoma', progressive: true, label: 'Glaucoma', scene: 'table', severity: ['Early', 'Moderate', 'Advanced'],
       options: [
         { key: 'pattern', label: 'Pattern', values: [['arcuate', 'Typical'], ['nasal', 'Nasal step'], ['paracentral', 'Near the center'], ['tunnel', 'Tunnel'], ['paint', 'Paint your own']] },
         { key: 'eye', label: 'Eye', values: [['r', 'Right eye'], ['l', 'Left eye']] },
@@ -82,7 +86,7 @@
       }
     },
     {
-      id: 'cataract', label: 'Cataract', scene: 'night', severity: SEVERITY_DEFAULT,
+      id: 'cataract', progressive: true, label: 'Cataract', scene: 'night', severity: SEVERITY_DEFAULT,
       apply: function (s, ctx) {
         ctx.sharpFilter = 'blur(' + px(0.4 + 2.2 * s) + ') contrast(' + (1 - 0.3 * s).toFixed(2) + ') sepia(' + (0.5 * s).toFixed(2) + ') brightness(' + (1 + 0.05 * s).toFixed(2) + ') saturate(' + (1 - 0.2 * s).toFixed(2) + ')';
         var g = [];
@@ -96,7 +100,7 @@
       }
     },
     {
-      id: 'amd', label: 'Macular degeneration', scene: 'table', severity: ['Early', 'Intermediate', 'Advanced'],
+      id: 'amd', progressive: true, label: 'Macular degeneration', scene: 'table', severity: ['Early', 'Intermediate', 'Advanced'],
       options: [{ key: 'type', label: 'Type', values: [['dry', 'Dry'], ['wet', 'Wet']] }],
       apply: function (s, ctx) {
         var wet = ctx.opt.type === 'wet';
@@ -113,7 +117,7 @@
       }
     },
     {
-      id: 'dr', label: 'Diabetic retinopathy', scene: 'street', severity: SEVERITY_DEFAULT,
+      id: 'dr', progressive: true, label: 'Diabetic retinopathy', scene: 'street', severity: SEVERITY_DEFAULT,
       apply: function (s, ctx) {
         ctx.sharpFilter = 'blur(' + px(0.3 + 2.2 * s) + ') contrast(' + (1 - 0.15 * s).toFixed(2) + ')';
         ctx.lostMask = blobMask(3 + Math.round(8 * s), 0.045 + 0.06 * s, 7);
@@ -124,7 +128,7 @@
       }
     },
     {
-      id: 'rd', label: 'Retinal detachment', scene: 'street', severity: ['Starting', 'Spreading', 'Near the center'],
+      id: 'rd', progressive: true, label: 'Retinal detachment', scene: 'street', severity: ['Starting', 'Spreading', 'Near the center'],
       options: [{ key: 'side', label: 'Curtain from', values: [['top', 'Above'], ['bottom', 'Below'], ['left', 'The left'], ['right', 'The right']] }],
       apply: function (s, ctx) {
         ctx.lostMask = curtainMask(ctx.opt.side, 0.12 + 0.55 * s);
@@ -402,6 +406,10 @@
     + '<feGaussianBlur in="SourceGraphic" stdDeviation="0 0"/>'
     + '<feComponentTransfer><feFuncA type="linear" slope="40"/></feComponentTransfer>'
     + '</filter>'
+    + '<filter id="jk-vis-rxw" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">'
+    + '<feGaussianBlur in="SourceGraphic" stdDeviation="0 0"/>'
+    + '<feComponentTransfer><feFuncA type="linear" slope="40"/></feComponentTransfer>'
+    + '</filter>'
     + '<filter id="jk-vis-color" color-interpolation-filters="sRGB">'
     + '<feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0"/>'
     + '</filter>'
@@ -411,6 +419,7 @@
     var h = SVG_DEFS;
     h += '<div class="jk-vis__stage" id="jk-vis-stage" style="--jk-ar: 3 / 2">'
       + '<img class="jk-vis__img jk-vis__base" alt="">'
+      + (MODE === 'rx' ? '<div class="jk-vis__rx jk-vis__rx--with" hidden><div class="jk-vis__rxspin"><img class="jk-vis__rximg" alt=""></div></div>' : '')
       + '<div class="jk-vis__sim" id="jk-vis-sim">'
       + '<img class="jk-vis__img jk-vis__sharp" alt="">'
       + '<div class="jk-vis__wrap jk-vis__warpwrap" hidden><img class="jk-vis__img jk-vis__warp" alt=""></div>'
@@ -419,11 +428,13 @@
       + '<div class="jk-vis__overlay"></div>'
       + '<svg class="jk-vis__floaters" viewBox="0 0 100 66" preserveAspectRatio="none" aria-hidden="true"></svg>'
       + '</div>'
-      + '<span class="jk-vis__tag jk-vis__tag--l" aria-hidden="true">Normal</span>'
+      + '<span class="jk-vis__tag jk-vis__tag--l" aria-hidden="true">' + (MODE === 'rx' ? 'With these glasses' : 'Normal') + '</span>'
       + '<span class="jk-vis__tag jk-vis__tag--r" id="jk-vis-tagr" aria-hidden="true">Simulated</span>'
       + '<div class="jk-vis__divider" id="jk-vis-divider" role="slider" tabindex="0" aria-label="Compare: drag to reveal more of the normal or simulated view" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="jk-vis__knob" aria-hidden="true">&#9664;&#9654;</span></div>'
       + '</div>';
-    h += '<p class="jk-vis__hint">Drag the handle to compare. Hold <button type="button" class="jk-vis__hold" id="jk-vis-hold">Show normal</button> to see the scene without the ' + (MODE === 'rx' ? 'blur' : 'condition') + '.</p>';
+    h += MODE === 'rx'
+      ? '<p class="jk-vis__hint">Drag the handle to compare with and without glasses. Hold <button type="button" class="jk-vis__hold" id="jk-vis-hold">With glasses</button> to see the whole scene through these glasses.</p>'
+      : '<p class="jk-vis__hint">Drag the handle to compare. Hold <button type="button" class="jk-vis__hold" id="jk-vis-hold">Show normal</button> to see the scene without the condition.</p>';
     if (MODE === 'rx') h += buildRx(); else h += buildConditions();
     h += '<div class="jk-vis__about" id="jk-vis-about" aria-live="polite"></div>';
     h += '<div class="jk-vis__share">'
@@ -450,8 +461,10 @@
     h += '</div></div>';
     // severity
     h += '<div class="jk-vis__row jk-vis__row--sev"><label class="jk-vis__lab" for="jk-vis-sev">How far along</label>'
+      + '<div class="jk-vis__sevctl">'
+      + '<button type="button" class="btn btn-outline-primary btn-sm jk-vis__play" id="jk-vis-play" hidden>&#9654; Play</button>'
       + '<div class="jk-vis__sevwrap"><input type="range" id="jk-vis-sev" min="0" max="100" step="1" value="55">'
-      + '<div class="jk-vis__sevlabels" id="jk-vis-sevlabels" aria-hidden="true"></div></div></div>';
+      + '<div class="jk-vis__sevlabels" id="jk-vis-sevlabels" aria-hidden="true"></div></div></div></div>';
     h += '<div id="jk-vis-options" class="jk-vis__options"></div>';
     h += '<div id="jk-vis-paint" class="jk-vis__paint" hidden></div>';
     return h;
@@ -529,9 +542,55 @@
 
     // controls
     if (!opts || !opts.controlsOnly === false) syncControls(cond, scene);
+    else if (play) els.sev.value = state.sev;
     els.tagr.textContent = cond.label;
     var url = writeState();
-    JK.qr.render(els.qr, url, 112);
+    if (!(opts && opts.noQr)) JK.qr.render(els.qr, url, 112);
+  }
+
+  // ---------- play ----------
+  // Runs the severity slider from the start to the end over PLAY_MS, so a
+  // progressive condition can be watched getting worse. Frames are capped
+  // at about 15 a second: each render rebuilds the masks. Reduced motion
+  // steps through the three stages instead.
+  var PLAY_MS = 9000, play = null, paused = false;
+  function setPlayButton() {
+    var on = !!play;
+    els.play.innerHTML = on ? '&#10074;&#10074; Pause' : '&#9654; Play';
+    els.play.setAttribute('aria-label', on ? 'Pause' : 'Play: watch it progress');
+    els.play.classList.toggle('is-active', on);
+  }
+  // Play starts from the beginning; after Pause it carries on from there.
+  function startPlay() {
+    play = { raf: 0, timer: 0 };
+    setPlayButton();
+    if (!paused || state.sev >= 100) { state.sev = 0; render({ noQr: true }); }
+    paused = false;
+    var from = state.sev, t0 = performance.now(), last = 0;
+    if (REDUCED) {
+      var stops = [0, 50, 100].filter(function (v) { return v > from; });
+      (function next() {
+        play.timer = setTimeout(function () {
+          state.sev = stops.shift(); render({ noQr: !!stops.length });
+          if (stops.length) next(); else stopPlay();
+        }, 1800);
+      })();
+      return;
+    }
+    function tick(now) {
+      var v = Math.min(100, from + (now - t0) / PLAY_MS * 100);
+      if (now - last > 66 || v >= 100) { last = now; state.sev = Math.round(v); render({ noQr: true }); }
+      if (v >= 100) { stopPlay(); return; }
+      play.raf = requestAnimationFrame(tick);
+    }
+    play.raf = requestAnimationFrame(tick);
+  }
+  function stopPlay() {
+    if (!play) return;
+    cancelAnimationFrame(play.raf); clearTimeout(play.timer);
+    play = null;
+    setPlayButton();
+    render();
   }
 
   function setMask(el, dataUrl) {
@@ -590,6 +649,7 @@
       b.classList.toggle('is-active', on); b.setAttribute('aria-pressed', String(on));
     });
     els.sev.value = state.sev;
+    els.play.hidden = !cond.progressive;
     els.sevlabels.innerHTML = (cond.severity || SEVERITY_DEFAULT).map(function (l) { return '<span>' + l + '</span>'; }).join('');
     // options
     var h = '';
@@ -628,9 +688,9 @@
   function loadScene() {
     var sc = sceneById(state.scene), src = BASE + sc.file;
     els.stage.style.setProperty('--jk-ar', sc.w + ' / ' + sc.h);
-    [els.base, els.sharp, els.warp, els.lost, els.rximg].forEach(function (im) { if (im.getAttribute('src') !== src) im.src = src; });
-    els.base.alt = sc.label + ', as seen with healthy vision';
-    els.sharp.alt = sc.label + ', as seen ' + (MODE === 'rx' ? 'with the prescription' : 'with ' + condById(state.cond).label.toLowerCase());
+    [els.base, els.sharp, els.warp, els.lost, els.rx.img, els.rxw && els.rxw.img].forEach(function (im) { if (im && im.getAttribute('src') !== src) im.src = src; });
+    els.base.alt = sc.label + ', as seen ' + (MODE === 'rx' ? 'with these glasses' : 'with healthy vision');
+    els.sharp.alt = sc.label + ', as seen ' + (MODE === 'rx' ? 'without glasses' : 'with ' + condById(state.cond).label.toLowerCase());
   }
 
   // ---------- divider ----------
@@ -675,6 +735,8 @@
     root.addEventListener('click', function (e) {
       var b = e.target.closest('button');
       if (!b || !root.contains(b)) return;
+      if (b.id === 'jk-vis-play') { if (play) { stopPlay(); paused = true; } else startPlay(); return; }
+      if (!b.classList.contains('jk-vis__hold')) { paused = false; if (play) stopPlay(); }
       if (b.hasAttribute('data-scene')) { state.scene = b.getAttribute('data-scene'); loadScene(); render(); return; }
       if (b.hasAttribute('data-cond')) {
         var c = condById(b.getAttribute('data-cond'));
@@ -696,7 +758,7 @@
       if (MODE === 'rx') rxClick(b);
     });
     if (MODE === 'rx') wireRx();
-    else els.sev.addEventListener('input', function () { state.sev = +els.sev.value; render({ controlsOnly: false }); });
+    else els.sev.addEventListener('input', function () { paused = false; if (play) stopPlay(); state.sev = +els.sev.value; render({ controlsOnly: false }); });
     window.addEventListener('resize', debounce(function () { render({ controlsOnly: false }); }, 150));
     wireDivider();
   }
@@ -724,7 +786,7 @@
   ];
   // the "Nearsighted" example is the starting view
   function rxFromExample(ex) {
-    return { od: RX.normalize(ex.od), os: RX.normalize(ex.os), age: ex.age, dist: ex.dist, eye: 'both', glasses: false };
+    return { od: RX.normalize(ex.od), os: RX.normalize(ex.os), age: ex.age, dist: ex.dist, eye: 'both' };
   }
 
   function rxOptions(lo, hi, cur, zeroLabel) {
@@ -767,10 +829,6 @@
     h += '<div class="jk-vis__opt"><span class="jk-vis__lab">Eye</span><div class="jk-chips" role="group" aria-label="Eye">';
     RX_EYES.forEach(function (e) { h += '<button type="button" class="jk-chip jk-chip--sm" data-rxeye="' + e[0] + '" aria-pressed="false">' + e[1] + '</button>'; });
     h += '</div></div>';
-    h += '<div class="jk-vis__opt"><span class="jk-vis__lab">Right side shows</span><div class="jk-chips" role="group" aria-label="Right side shows">'
-      + '<button type="button" class="jk-chip jk-chip--sm" data-rxglasses="0" aria-pressed="false">Without glasses</button>'
-      + '<button type="button" class="jk-chip jk-chip--sm" data-rxglasses="1" aria-pressed="false">With these glasses</button>'
-      + '</div></div>';
     return h;
   }
 
@@ -788,13 +846,12 @@
     if (p.a !== undefined && isFinite(parseFloat(p.a))) r.age = clamp(Math.round(+p.a), 5, 100);
     if (RX_SCENES[p.d]) r.dist = p.d;
     if (RX_EYES.some(function (e) { return e[0] === p.e; })) r.eye = p.e;
-    r.glasses = p.w === '1';
     state.scene = p.s && sceneById(p.s).id === p.s ? p.s : '';
     rxFixScene();
   }
   function writeRxState() {
     var r = state.rx;
-    return JK.url.write({ r: RX.encode(r.od), l: RX.encode(r.os), a: String(r.age), d: r.dist, e: r.eye === 'both' ? '' : r.eye, w: r.glasses ? '1' : '', s: state.scene });
+    return JK.url.write({ r: RX.encode(r.od), l: RX.encode(r.os), a: String(r.age), d: r.dist, e: r.eye === 'both' ? '' : r.eye, s: state.scene });
   }
 
   function syncRxControls() {
@@ -813,7 +870,6 @@
     }
     press('[data-rxdist]', 'data-rxdist', r.dist);
     press('[data-rxeye]', 'data-rxeye', r.eye);
-    press('[data-rxglasses]', 'data-rxglasses', r.glasses ? '1' : '0');
     $('jk-vis-distnote').textContent = d.label + ' is ' + metres(d.metres) + ' away: ' + d.detail + '.';
     root.querySelectorAll('.jk-vis__scene').forEach(function (b) {
       var id = b.getAttribute('data-scene');
@@ -831,48 +887,58 @@
   // px of Gaussian blur per diopter of leftover error, on a 900px stage
   var RX_PX_PER_D = 2.2, RX_MAX_PX = 18;
 
-  function renderRx() {
-    var r = state.rx, d = RX.distanceById(r.dist);
-    var od = RX.simulate(r.od, r.age, r.dist, r.glasses), os = RX.simulate(r.os, r.age, r.dist, r.glasses);
-    var res = r.eye === 'od' ? od : r.eye === 'os' ? os : RX.better(od, os);
+  // one eye's (or the binocular) result for this distance
+  function rxView(r, glasses) {
+    var od = RX.simulate(r.od, r.age, r.dist, glasses), os = RX.simulate(r.os, r.age, r.dist, glasses);
+    return { od: od, os: os, res: r.eye === 'od' ? od : r.eye === 'os' ? os : RX.better(od, os) };
+  }
 
+  // Blur one rx layer (L: {wrap, spin, img}) by the leftover error in res.
+  function rxLayer(L, filterId, res) {
     var sx = Math.min(RX_MAX_PX, RX_PX_PER_D * Math.abs(res.e1)) * stageScale;
     var sy = Math.min(RX_MAX_PX, RX_PX_PER_D * Math.abs(res.e2)) * stageScale;
+    if (sx < 0.05 && sy < 0.05) { L.wrap.hidden = true; return; }
+    L.wrap.hidden = false;
+    var W = els.stage.clientWidth, H = els.stage.clientHeight, D = Math.ceil(Math.hypot(W, H)) + 2;
+    // the axis is written as the examiner sees the patient; from the
+    // patient's side that is the same angle turned clockwise on screen
+    var ang = res.axis % 180;
+    var sp = L.spin.style, im = L.img.style;
+    sp.width = sp.height = D + 'px';
+    sp.left = ((W - D) / 2) + 'px'; sp.top = ((H - D) / 2) + 'px';
+    sp.transform = 'rotate(' + ang + 'deg)';
+    im.width = W + 'px'; im.height = H + 'px';
+    im.left = ((D - W) / 2) + 'px'; im.top = ((D - H) / 2) + 'px';
+    im.transform = 'rotate(' + (-ang) + 'deg)';
+    root.querySelector('#' + filterId + ' feGaussianBlur').setAttribute('stdDeviation', sx.toFixed(2) + ' ' + sy.toFixed(2));
+    // re-apply so browsers that cache the filter pick up the change
+    sp.filter = 'none'; void L.spin.offsetWidth; sp.filter = 'url(#' + filterId + ')';
+  }
+
+  function renderRx() {
+    var r = state.rx, d = RX.distanceById(r.dist);
+    var without = rxView(r, false), withg = rxView(r, true);
     els.sharp.style.filter = 'none';
-    if (sx < 0.05 && sy < 0.05) {
-      els.rx.hidden = true;
-    } else {
-      els.rx.hidden = false;
-      var W = els.stage.clientWidth, H = els.stage.clientHeight, D = Math.ceil(Math.hypot(W, H)) + 2;
-      // the axis is written as the examiner sees the patient; from the
-      // patient's side that is the same angle turned clockwise on screen
-      var ang = res.axis % 180;
-      var sp = els.rxspin.style, im = els.rximg.style;
-      sp.width = sp.height = D + 'px';
-      sp.left = ((W - D) / 2) + 'px'; sp.top = ((H - D) / 2) + 'px';
-      sp.transform = 'rotate(' + ang + 'deg)';
-      im.width = W + 'px'; im.height = H + 'px';
-      im.left = ((D - W) / 2) + 'px'; im.top = ((D - H) / 2) + 'px';
-      im.transform = 'rotate(' + (-ang) + 'deg)';
-      root.querySelector('#jk-vis-rx feGaussianBlur').setAttribute('stdDeviation', sx.toFixed(2) + ' ' + sy.toFixed(2));
-      // re-apply so browsers that cache the filter pick up the change
-      sp.filter = 'none'; void els.rxspin.offsetWidth; sp.filter = 'url(#jk-vis-rx)';
-    }
+    rxLayer(els.rx, 'jk-vis-rx', without.res);
+    rxLayer(els.rxw, 'jk-vis-rxw', withg.res);
     els.overlay.style.backgroundImage = 'none';
     drawFloaters(0, 0);
 
     syncRxControls();
-    els.tagr.textContent = r.glasses ? 'With these glasses' : 'Without glasses';
-    els.about.innerHTML = rxAbout(r, d, od, os, res);
+    els.tagr.textContent = 'Without glasses';
+    els.about.innerHTML = rxAbout(r, d, without, withg);
     JK.qr.render(els.qr, writeRxState(), 112);
   }
 
-  function rxAbout(r, d, od, os, res) {
-    var how = r.glasses ? 'with these glasses' : 'without glasses';
-    var h = '<p><strong>' + d.label + ' (' + metres(d.metres) + '), ' + how + ':</strong> ';
-    if (r.eye === 'both' && od.snellen === os.snellen) h += 'each eye ' + acuity(od.snellen) + '.';
-    else if (r.eye === 'both') h += 'right eye ' + acuity(od.snellen) + ', left eye ' + acuity(os.snellen) + '; with both eyes open, ' + acuity(res.snellen) + ', since the clearer eye mostly wins.';
-    else h += (r.eye === 'od' ? 'right' : 'left') + ' eye ' + acuity(res.snellen) + '.';
+  function rxAcuities(r, v) {
+    if (r.eye === 'both' && v.od.snellen === v.os.snellen) return 'each eye ' + acuity(v.od.snellen);
+    if (r.eye === 'both') return 'right eye ' + acuity(v.od.snellen) + ', left eye ' + acuity(v.os.snellen) + ' (with both eyes open, ' + acuity(v.res.snellen) + ', since the clearer eye mostly wins)';
+    return (r.eye === 'od' ? 'right' : 'left') + ' eye ' + acuity(v.res.snellen);
+  }
+
+  function rxAbout(r, d, without, withg) {
+    var h = '<p><strong>' + d.label + ' (' + metres(d.metres) + '):</strong> '
+      + 'without glasses, ' + rxAcuities(r, without) + '; with these glasses, ' + rxAcuities(r, withg) + '.';
     h += ' Normal vision is 20/20.</p><ul class="jk-vis__rxlist">';
     [['od', 'Right eye', r.od], ['os', 'Left eye', r.os]].forEach(function (e) {
       if (r.eye !== 'both' && r.eye !== e[0]) return;
@@ -883,7 +949,7 @@
       else if (cr.far === Infinity) line += ' Without glasses it focuses far away but not closer than about ' + metres(cr.near) + '.';
       else line += ' Without glasses it focuses only between about ' + metres(cr.far) + ' and ' + metres(cr.near) + '.';
       if (Math.abs(x.cyl) >= 0.75) line += ' The astigmatism blurs at every distance until it is corrected.';
-      if (r.glasses && d.id !== 'far' && !x.add && RX.amplitude(r.age) < d.demand + 0.5) line += ' This prescription has no reading add, and at ' + r.age + ' the eye cannot do all of the close focusing itself: a reading add or reading glasses would help.';
+      if (d.id !== 'far' && !x.add && RX.amplitude(r.age) < d.demand + 0.5) line += ' This prescription has no reading add, and at ' + r.age + ' the eye cannot do all of the close focusing itself: a reading add or reading glasses would help.';
       h += line + '</li>';
     });
     h += '</ul><p class="jk-vis__rxnote">Estimates for understanding, not a measurement of anyone’s vision. <a href="#how-it-works">How this works.</a></p>';
@@ -894,10 +960,9 @@
     var r = state.rx;
     if (b.hasAttribute('data-rxex')) {
       var id = b.getAttribute('data-rxex');
-      RX_EXAMPLES.forEach(function (ex) { if (ex.id === id) { var g = r.glasses; state.rx = rxFromExample(ex); state.rx.glasses = g; } });
+      RX_EXAMPLES.forEach(function (ex) { if (ex.id === id) state.rx = rxFromExample(ex); });
     } else if (b.hasAttribute('data-rxdist')) r.dist = b.getAttribute('data-rxdist');
     else if (b.hasAttribute('data-rxeye')) r.eye = b.getAttribute('data-rxeye');
-    else if (b.hasAttribute('data-rxglasses')) r.glasses = b.getAttribute('data-rxglasses') === '1';
     else return;
     rxFixScene(); loadScene(); render();
   }
@@ -936,9 +1001,10 @@
     base: root.querySelector('.jk-vis__base'), sharp: root.querySelector('.jk-vis__sharp'), warp: root.querySelector('.jk-vis__warp'),
     lost: root.querySelector('.jk-vis__lost'), lostwrap: root.querySelector('.jk-vis__lostwrap'), warpwrap: root.querySelector('.jk-vis__warpwrap'), overlay: root.querySelector('.jk-vis__overlay'), floaters: root.querySelector('.jk-vis__floaters'),
     sev: $('jk-vis-sev'), sevlabels: $('jk-vis-sevlabels'), options: $('jk-vis-options'), paint: $('jk-vis-paint'), about: $('jk-vis-about'),
-    qr: $('jk-vis-qr'), copied: $('jk-vis-copied'),
-    rx: root.querySelector('.jk-vis__rx'), rxspin: root.querySelector('.jk-vis__rxspin'), rximg: root.querySelector('.jk-vis__rximg')
+    qr: $('jk-vis-qr'), copied: $('jk-vis-copied'), play: $('jk-vis-play'),
+    rx: rxEls(root.querySelector('.jk-vis__sim .jk-vis__rx')), rxw: rxEls(root.querySelector('.jk-vis__rx--with'))
   };
+  function rxEls(wrap) { return wrap ? { wrap: wrap, spin: wrap.querySelector('.jk-vis__rxspin'), img: wrap.querySelector('.jk-vis__rximg') } : null; }
   wire();
   loadScene();
   setSplit(50);

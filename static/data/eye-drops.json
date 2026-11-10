@@ -732,6 +732,17 @@
   ]
  },
  {
+  "generic": "Tobramycin",
+  "brand": "Tobrex",
+  "color": "Tan / White",
+  "use": "Antibiotic",
+  "dosage": "~4x/day, Variable",
+  "notes": "Generic",
+  "photos": [
+   "tobramycin.jpg"
+  ]
+ },
+ {
   "generic": "Tobramycin/Dexamethasone",
   "brand": "Tobradex",
   "color": "Pink",
