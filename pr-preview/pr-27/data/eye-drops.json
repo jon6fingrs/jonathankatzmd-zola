@@ -384,6 +384,17 @@
   ]
  },
  {
+  "generic": "Ketotifen",
+  "brand": "Zaditor, Alaway",
+  "color": "White",
+  "use": "Allergy",
+  "dosage": "2x/day",
+  "notes": "Over the counter",
+  "photos": [
+   "ketotifen.jpg"
+  ]
+ },
+ {
   "generic": "Latanoprost",
   "brand": "Xalatan",
   "color": "Teal/Green",
@@ -572,6 +583,17 @@
   "photos": [
    "ofloxacin.webp",
    "ofloxacin-clear-cap.webp"
+  ]
+ },
+ {
+  "generic": "Olopatadine",
+  "brand": "Pataday",
+  "color": "White",
+  "use": "Allergy",
+  "dosage": "1-2x/day",
+  "notes": "Over the counter, Multiple Concentrations",
+  "photos": [
+   "olopatadine.jpg"
   ]
  },
  {
