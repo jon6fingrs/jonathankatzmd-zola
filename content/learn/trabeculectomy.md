@@ -9,7 +9,7 @@ article = true
 js = "js/procedure.js"
 +++
 
-**Trabeculectomy** is the traditional glaucoma operation and still one of the most effective ways to lower eye pressure. It is used when drops and laser cannot bring pressure to target, when glaucoma is advanced or progressing, or when a very low pressure is needed to protect a badly damaged nerve.
+**Trabeculectomy** is the traditional glaucoma operation and still one of the most effective ways to lower eye pressure. It is used when drops and laser cannot bring pressure to target, when glaucoma is advanced or progressing, or when a very low pressure is needed to protect a badly damaged nerve. It can usually reach lower pressures than a [tube shunt](@/learn/tube-shunt-surgery.md), which is the better choice in eyes likely to scar, such as those with previous surgery; each operation has its own uses.
 
 Press **Play** to see how the operation makes a new drain, or tap a step to go through it at your own pace.
 

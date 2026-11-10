@@ -43,7 +43,7 @@
     { id: 'trab', group: 'new', label: 'Trabeculectomy', where: 'new',
       about: '<strong>Trabeculectomy</strong> makes a new drain: a small opening in the wall of the eye, so fluid collects in a pocket (bleb) under the upper eyelid and is absorbed there. It bypasses the veins, so it can take the level lower than drops or laser can.', link: ['../trabeculectomy/', 'Trabeculectomy'] },
     { id: 'tube', group: 'new', label: 'Tube shunt', where: 'new',
-      about: '<strong>A tube shunt</strong> is a new drain made of a tiny tube that carries fluid to a plate on the wall of the eye, where it is absorbed. Like a trabeculectomy it bypasses the veins.', link: ['../tube-shunt-surgery/', 'Tube shunt surgery'] }
+      about: '<strong>A tube shunt</strong> is a new drain made of a tiny tube that carries fluid to a plate on the wall of the eye, where it is absorbed. Like a trabeculectomy it bypasses the veins. It usually does not go quite as low, but it holds up better in eyes that scar.', link: ['../tube-shunt-surgery/', 'Tube shunt surgery'] }
   ];
   var GROUPS = [['faucet', 'Turn down the faucet'], ['drain', 'Open the drains'], ['new', 'Add a new drain']];
 

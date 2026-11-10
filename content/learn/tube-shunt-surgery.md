@@ -21,7 +21,7 @@ Press **Play** to see how the tube and plate are placed and how fluid drains, or
 
 ## Who it is for
 
-Tube shunts lower pressure about as well as [trabeculectomy](@/learn/trabeculectomy.md) and are chosen when a trabeculectomy is less likely to work or has already failed. That includes eyes with scarring from previous surgery or injury, glaucoma caused by inflammation or abnormal blood vessels (neovascular glaucoma), some eyes that have had corneal transplants or retinal surgery, and eyes where very close early follow-up would be difficult. In many practices, tube shunts are now used as a first surgery for selected patients.
+A tube shunt and a [trabeculectomy](@/learn/trabeculectomy.md) are the two main glaucoma operations, and each has its own uses. A trabeculectomy can usually reach a lower pressure, so it is often preferred when the nerve needs a very low target and the eye has not had surgery before. A tube shunt does not usually get the pressure quite as low, but it holds up better in eyes where a trabeculectomy is likely to scar closed, or already has. That was the finding of the Tube Versus Trabeculectomy (TVT) studies. Tubes are chosen for eyes with scarring from previous surgery or injury, glaucoma caused by inflammation or abnormal blood vessels (neovascular glaucoma), some eyes that have had corneal transplants or retinal surgery, and eyes where very close early follow-up would be difficult. In many practices, tube shunts are now used as a first surgery for selected patients.
 
 ## Valved and non-valved devices
 
