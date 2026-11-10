@@ -1,6 +1,6 @@
 +++
 title = "MIGS"
-description = "Minimally invasive glaucoma surgery: small implants and procedures, often combined with cataract surgery, that lower pressure with a quicker recovery than traditional surgery. With step-by-step animations of a stent, a goniotomy and viscodilation."
+description = "Minimally invasive glaucoma surgery: small implants and procedures, often combined with cataract surgery, that lower pressure with a quicker recovery than traditional surgery. With step-by-step animations of a stent, a goniotomy, viscodilation, and viscodilation combined with a stent."
 template = "page.html"
 weight = 70
 
@@ -11,7 +11,7 @@ js = "js/procedure.js"
 
 **Minimally invasive glaucoma surgery (MIGS)** is a family of procedures that lower eye pressure through very small openings, with less disruption to the eye and a faster recovery than traditional glaucoma surgery. Most are performed at the time of [cataract surgery](@/learn/cataract-surgery.md) through the same incision, adding a few minutes to the operation. Some can be done on their own.
 
-The animation shows three of the most common kinds: a **stent**, a **goniotomy** and **viscodilation**. Choose one, then press **Play**, or tap a step to go through it at your own pace. They are often combined in a single operation.
+The animation shows three of the most common kinds, a **stent**, a **goniotomy** and **viscodilation**, and one common combination, **viscodilation with a stent**. Choose one, then press **Play**, or tap a step to go through it at your own pace.
 
 <div id="jk-proc" class="jk-lpi" data-proc="migs">
   <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
@@ -28,7 +28,7 @@ Most MIGS procedures work by improving the eye's natural drainage through the tr
 - **Viscodilation**, also called canaloplasty (for example with OMNI or iTrack). A fine catheter is threaded along Schlemm's canal and a clear gel is released as it is drawn back, stretching the canal and the small channels that carry fluid away from it. Nothing is implanted.
 - **Subconjunctival micro-shunts** (XEN gel stent). A soft tube drains fluid under the conjunctiva, the thin skin over the white of the eye, forming a small reservoir ("bleb") similar to a trabeculectomy but with a smaller operation. This is used for somewhat more advanced disease.
 
-**These are often combined.** Viscodilation and goniotomy treat different parts of the same drain, so they are commonly done together in one operation (OMNI does both), and either can be paired with a stent. Any of them can be done with cataract surgery or on its own ("standalone").
+**These are often combined.** Viscodilation and goniotomy treat different parts of the same drain, so they are commonly done together in one operation (OMNI does both), and either can be paired with a stent, as the last animation above shows. Any of them can be done with cataract surgery or on its own ("standalone").
 
 A different kind of treatment, the [micropulse or CPC laser](@/learn/cyclophotocoagulation.md), lowers pressure by reducing how much fluid the eye makes. It is not MIGS and has its own page.
 
