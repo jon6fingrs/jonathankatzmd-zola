@@ -864,6 +864,8 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-vis__wrap .jk-vis__img { inset: -6%; width: 112%; height: 112%; }
 .jk-vis .jk-chip { min-height: 36px; }
 .jk-vis__overlay { position: absolute; inset: 0; pointer-events: none; }
+/* Play: pre-rendered frames that vision.js cross-fades */
+.jk-vis__key { position: absolute; inset: 0; will-change: opacity; }
 .jk-vis__floaters { position: absolute; inset: 0; width: 100%; height: 100%; filter: blur(0.6px); pointer-events: none; }
 .jk-vis__floaters[hidden] { display: none; }
 .jk-vis__floater { animation: jk-vis-drift 18s ease-in-out infinite alternate; }

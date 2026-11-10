@@ -542,55 +542,113 @@
 
     // controls
     if (!opts || !opts.controlsOnly === false) syncControls(cond, scene);
-    else if (play) els.sev.value = state.sev;
     els.tagr.textContent = cond.label;
     var url = writeState();
     if (!(opts && opts.noQr)) JK.qr.render(els.qr, url, 112);
+    return ctx;
   }
 
   // ---------- play ----------
-  // Runs the severity slider from the start to the end over PLAY_MS, so a
-  // progressive condition can be watched getting worse. Frames are capped
-  // at about 15 a second: each render rebuilds the masks. Reduced motion
-  // steps through the three stages instead.
-  var PLAY_MS = 9000, play = null, paused = false;
+  // Runs a progressive condition from Early to Advanced over PLAY_MS.
+  // Re-rendering every frame flickers: each step swaps in a new mask image
+  // (the browser shows nothing until it is decoded) and changes blur radii
+  // that the browser re-rasterizes in visible jumps. So Play first renders
+  // PLAY_KEYS still frames, copies the simulated layers of each into the
+  // stage, and then only cross-fades between neighbouring frames, which the
+  // browser composites smoothly. Reduced motion steps through three stages.
+  var PLAY_MS = 9000, PLAY_KEYS = 13, play = null, paused = false;
   function setPlayButton() {
     var on = !!play;
     els.play.innerHTML = on ? '&#10074;&#10074; Pause' : '&#9654; Play';
     els.play.setAttribute('aria-label', on ? 'Pause' : 'Play: watch it progress');
     els.play.classList.toggle('is-active', on);
   }
-  // Play starts from the beginning; after Pause it carries on from there.
   function startPlay() {
-    play = { raf: 0, timer: 0 };
-    setPlayButton();
-    if (!paused || state.sev >= 100) { state.sev = 0; render({ noQr: true }); }
+    if (!paused || state.sev >= 100) state.sev = 0;
     paused = false;
-    var from = state.sev, t0 = performance.now(), last = 0;
+    var from = state.sev;
+    play = { raf: 0, timer: 0, keys: null };
+    setPlayButton();
     if (REDUCED) {
       var stops = [0, 50, 100].filter(function (v) { return v > from; });
+      render({ noQr: true });
       (function next() {
         play.timer = setTimeout(function () {
           state.sev = stops.shift(); render({ noQr: !!stops.length });
+          els.sev.value = state.sev;
           if (stops.length) next(); else stopPlay();
         }, 1800);
       })();
       return;
     }
-    function tick(now) {
-      var v = Math.min(100, from + (now - t0) / PLAY_MS * 100);
-      if (now - last > 66 || v >= 100) { last = now; state.sev = Math.round(v); render({ noQr: true }); }
-      if (v >= 100) { stopPlay(); return; }
-      play.raf = requestAnimationFrame(tick);
-    }
-    play.raf = requestAnimationFrame(tick);
+    play.keys = buildKeys();
+    showKeys(from); // in the same task, so the build never shows on screen
+    els.sev.value = from;
+    // let the browser paint the frames once before fading between them
+    play.raf = requestAnimationFrame(function () {
+      play.raf = requestAnimationFrame(function (t0) {
+        var start = t0 - from / 100 * PLAY_MS;
+        function tick(now) {
+          var v = Math.min(100, (now - start) / PLAY_MS * 100);
+          showKeys(v);
+          var r = Math.round(v);
+          if (r !== state.sev) { state.sev = r; els.sev.value = r; }
+          if (v >= 100) { stopPlay(); return; }
+          play.raf = requestAnimationFrame(tick);
+        }
+        play.raf = requestAnimationFrame(tick);
+      });
+    });
   }
-  function stopPlay() {
+  // One copy of the simulated layers per frame, stacked inside .jk-vis__sim
+  // under the floaters (which stay live, so they do not double up).
+  function buildKeys() {
+    var keys = [], sev0 = state.sev;
+    for (var k = 0; k < PLAY_KEYS; k++) {
+      state.sev = Math.round(k / (PLAY_KEYS - 1) * 100);
+      var ctx = render({ noQr: true });
+      var key = document.createElement('div');
+      key.className = 'jk-vis__key';
+      [els.sharp, els.warpwrap, els.lostwrap, els.overlay].forEach(function (el) { key.appendChild(el.cloneNode(true)); });
+      // the warp filter's strength changes with severity: give each frame its own copy
+      if (ctx.warpMask) {
+        var f = root.querySelector('#jk-vis-warp').cloneNode(true);
+        f.id = 'jk-vis-warp-k' + k;
+        root.querySelector('.jk-vis__defs defs').appendChild(f);
+        key.querySelector('.jk-vis__warp').style.filter = 'url(#' + f.id + ')';
+        key.warpFilter = f;
+      }
+      key.floaters = [ctx.floaters, ctx.floaterOpacity];
+      key.style.visibility = 'hidden';
+      els.sim.insertBefore(key, els.floaters);
+      keys.push(key);
+    }
+    state.sev = sev0;
+    return keys;
+  }
+  function showKeys(v) {
+    var x = v / 100 * (PLAY_KEYS - 1), i = Math.min(PLAY_KEYS - 2, Math.floor(x)), f = x - i;
+    play.keys.forEach(function (key, k) {
+      var vis = k === i || k === i + 1 || k === i + 2; // i+2 at 0 so it is painted before it is needed
+      key.style.visibility = vis ? 'visible' : 'hidden';
+      key.style.opacity = k === i ? '1' : k === i + 1 ? f.toFixed(3) : '0';
+    });
+    var near = play.keys[f < 0.5 ? i : i + 1].floaters;
+    drawFloaters(near[0], near[1]);
+  }
+  // now: drop the frames at once (another control was used, so the view is
+  // about to change anyway)
+  function stopPlay(now) {
     if (!play) return;
     cancelAnimationFrame(play.raf); clearTimeout(play.timer);
+    var keys = play.keys;
     play = null;
     setPlayButton();
     render();
+    // the real layers may need a moment to decode their new mask: keep the
+    // frames over them until then
+    function drop() { keys.forEach(function (key) { if (key.warpFilter) key.warpFilter.remove(); key.remove(); }); }
+    if (keys) { if (now) drop(); else setTimeout(drop, 250); }
   }
 
   function setMask(el, dataUrl) {
@@ -600,8 +658,13 @@
     el.style.webkitMaskRepeat = 'no-repeat'; el.style.maskRepeat = 'no-repeat';
   }
 
+  var floatersDrawn = '';
   function drawFloaters(n, opacity) {
     var svg = els.floaters;
+    // redrawing restarts the drift animation, so only redraw on a change
+    var sig = n + ':' + opacity;
+    if (sig === floatersDrawn) return;
+    floatersDrawn = sig;
     if (!n) { svg.innerHTML = ''; svg.hidden = true; return; }
     svg.hidden = false;
     var rnd = lcg(11 + n), h = '';
@@ -736,7 +799,7 @@
       var b = e.target.closest('button');
       if (!b || !root.contains(b)) return;
       if (b.id === 'jk-vis-play') { if (play) { stopPlay(); paused = true; } else startPlay(); return; }
-      if (!b.classList.contains('jk-vis__hold')) { paused = false; if (play) stopPlay(); }
+      if (!b.classList.contains('jk-vis__hold')) { paused = false; if (play) stopPlay(true); }
       if (b.hasAttribute('data-scene')) { state.scene = b.getAttribute('data-scene'); loadScene(); render(); return; }
       if (b.hasAttribute('data-cond')) {
         var c = condById(b.getAttribute('data-cond'));
@@ -758,7 +821,7 @@
       if (MODE === 'rx') rxClick(b);
     });
     if (MODE === 'rx') wireRx();
-    else els.sev.addEventListener('input', function () { paused = false; if (play) stopPlay(); state.sev = +els.sev.value; render({ controlsOnly: false }); });
+    else els.sev.addEventListener('input', function () { paused = false; if (play) stopPlay(true); state.sev = +els.sev.value; render({ controlsOnly: false }); });
     window.addEventListener('resize', debounce(function () { render({ controlsOnly: false }); }, 150));
     wireDivider();
   }
