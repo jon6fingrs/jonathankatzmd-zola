@@ -31,7 +31,7 @@
     { id: 'less', group: 'faucet', label: 'Drops: make less fluid', where: 'faucet',
       about: '<strong>Drops that turn down the faucet</strong> (timolol, dorzolamide, brinzolamide, brimonidine) make the eye produce less fluid. The level falls toward the vein-pressure line but cannot go under it.', link: ['../using-eye-drops/', 'Using eye drops'] },
     { id: 'cpc', group: 'faucet', label: 'Micropulse / CPC laser', where: 'faucet',
-      about: '<strong>Cyclophotocoagulation</strong> is a laser applied to the outside of the eye. It quiets the tissue that makes the fluid, turning down the faucet for months or years. Like the drops, it cannot take the level below the vein-pressure line.' },
+      about: '<strong>Cyclophotocoagulation</strong> is a laser applied to the outside of the eye. It quiets the tissue that makes the fluid, turning down the faucet for months or years. Like the drops, it cannot take the level below the vein-pressure line.', link: ['../cyclophotocoagulation/', 'Micropulse and CPC laser'] },
     { id: 'side', group: 'drain', label: 'Drops: open the side drain', where: 'side',
       about: '<strong>Prostaglandin drops</strong> (latanoprost, travoprost, bimatoprost, tafluprost) open up the eye&rsquo;s second, smaller way out. They are used once a day and are often the first drop tried. The side drain can only carry a share of what the faucet makes.', link: ['../using-eye-drops/', 'Using eye drops'] },
     { id: 'main', group: 'drain', label: 'Drops: open the main drain', where: 'main',

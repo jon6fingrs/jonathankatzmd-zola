@@ -117,6 +117,9 @@ icon = "images/nav/book.svg"
   name = "TUBE SHUNT SURGERY"
   url = "/learn/tube-shunt-surgery/"
   [[extra.menus.children]]
+  name = "MICROPULSE / CPC LASER"
+  url = "/learn/cyclophotocoagulation/"
+  [[extra.menus.children]]
   name = "CATARACT SURGERY"
   url = "/learn/cataract-surgery/"
   [[extra.menus.children]]

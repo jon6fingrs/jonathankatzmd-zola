@@ -26,7 +26,7 @@ Most MIGS procedures work by improving the eye's natural drainage through the tr
 - **Trabecular micro-stents** (iStent, Hydrus). Tiny implants, smaller than a grain of rice, placed in the drainage meshwork to hold a path open from the front of the eye into Schlemm's canal. They stay in permanently and are not visible or felt.
 - **Canal procedures** (OMNI, goniotomy with the Kahook Dual Blade, gonioscopy-assisted transluminal trabeculotomy). Rather than implanting a device, the surgeon opens or dilates the meshwork and canal directly. OMNI combines dilating the canal with cutting a strip of meshwork and can be done with cataract surgery or alone ("standalone Omni").
 - **Subconjunctival micro-shunts** (XEN gel stent). A soft tube drains fluid under the conjunctiva, the thin skin over the white of the eye, forming a small reservoir ("bleb") similar to a trabeculectomy but with a smaller operation. This is used for somewhat more advanced disease.
-- **Cyclophotocoagulation** (micropulse or standard CPC) is a laser applied to the outside of the eye to reduce fluid production. It is not an angle procedure but is often grouped with less invasive options, and is used when other surgery is not suitable or has not worked.
+- **[Cyclophotocoagulation](@/learn/cyclophotocoagulation.md)** (micropulse or standard CPC) is a laser applied to the outside of the eye to reduce fluid production. It is not an angle procedure but is often grouped with less invasive options, and is used when other surgery is not suitable or has not worked.
 
 Which procedure fits you depends on the type and severity of glaucoma, the anatomy of your drainage angle, whether you are having cataract surgery, and your target pressure.
 

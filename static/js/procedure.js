@@ -1,8 +1,8 @@
 /* Step-by-step procedure demos for the Learn pages: SLT, MIGS,
- * trabeculectomy and tube shunt. A page has one
+ * trabeculectomy, tube shunt and cyclophotocoagulation. A page has one
  *     <div id="jk-proc" class="jk-lpi" data-proc="slt"></div>
- * and this file builds it. SLT has two variants (standard, and direct SLT
- * without a contact lens) switched by chips; see `variants`.
+ * and this file builds it. SLT (standard, direct) and cyclophotocoagulation (micropulse, standard)
+ * each have two variants switched by chips; see `variants`.
  *
  * Each procedure is an entry in PROCS: one or two drawings (inline SVG,
  * using the same eye geometry as tools/learn-figures.py) and a list of
@@ -168,6 +168,105 @@
     };
   }
 
+  // ---------- cyclophotocoagulation: micropulse and standard ----------
+  // A probe on the white of the eye, just behind the cornea, sends laser
+  // energy through the wall to the ciliary body, which makes the fluid.
+  // Micropulse sweeps the probe along the upper and lower halves; standard
+  // (continuous-wave) CPC treats a row of separate spots. Both skip the
+  // 3 and 9 o'clock positions.
+  var CPC_ARCS = [[200, 340], [20, 160]]; // degrees, screen angles: upper half, then lower half
+  function cpcPt(deg, r) { var a = deg * Math.PI / 180; return [280 + r * Math.cos(a), 210 + r * Math.sin(a)]; }
+  function cpcArc(a0, a1, r) { var p0 = cpcPt(a0, r), p1 = cpcPt(a1, r); return 'M' + p0[0].toFixed(1) + ',' + p0[1].toFixed(1) + ' A' + r + ',' + r + ' 0 0,1 ' + p1[0].toFixed(1) + ',' + p1[1].toFixed(1); }
+  function cpcSide() {
+    var h = svgOpen('60 -40 560 445', 'Side view: a probe on the white of the eye sends laser energy to the tissue that makes the fluid');
+    h += eyeSide()
+      + '<path id="cpc-quiet" d="M312,118 C340,106 372,98 400,96 C392,130 372,160 340,170 C326,160 314,142 312,118 Z" fill="#9ca3af" opacity="0"/>'
+      + '<g id="cpc-make">' + arrow('cpc-m1', 'M352,168 C344,186 334,200 322,212') + arrow('cpc-m2', 'M366,160 C362,182 352,204 338,222') + arrow('cpc-m3', 'M338,172 C330,184 322,192 314,198') + '</g>'
+      + '<circle id="cpc-glow" cx="352" cy="118" r="0" fill="#bbf7d0" stroke="' + GREEN + '" stroke-width="3"/>'
+      + '<line id="cpc-beam" x1="349" y1="72" x2="352" y2="112" stroke="' + GREEN + '" stroke-width="4" stroke-linecap="round" opacity="0"/>'
+      + '<g id="cpc-probe" opacity="0"><line x1="347" y1="66" x2="322" y2="-30" stroke="#4b5563" stroke-width="20" stroke-linecap="round"/><line x1="347" y1="66" x2="322" y2="-30" stroke="#d1d5db" stroke-width="13" stroke-linecap="round"/>'
+      + '<path d="M334,70 L360,63 L361,69 L335,76 Z" fill="#4b5563"/></g>'
+      + txt(210, 392, 'Iris', 'end') + lead(216, 386, 280, 290)
+      + txt(440, 330, 'Lens', 'start') + lead(436, 324, 420, 324)
+      + '<g id="cpc-lab-cb">' + txt(450, 150, 'Ciliary body:', 'start') + txt(450, 174, 'makes the fluid', 'start', INK, 400) + lead(446, 146, 384, 124) + '</g>'
+      + '<g id="cpc-lab-probe" opacity="0">' + txt(70, -8, 'Laser probe on the', 'start', '#374151') + txt(70, 16, 'white of the eye', 'start', '#374151', 400) + lead(236, 4, 322, 2, '#374151') + '</g>'
+      + '<g id="cpc-lab-less" opacity="0">' + txt(450, 150, 'Ciliary body:', 'start', BLUE) + txt(450, 174, 'makes less fluid', 'start', BLUE, 400) + lead(446, 146, 384, 124, BLUE) + '</g>';
+    return h + '</svg>';
+  }
+  function cpcFront(micro) {
+    var h = svgOpen('0 0 560 420', 'Front view: where the laser is applied around the eye'), i, k;
+    h += '<circle cx="280" cy="210" r="198" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>'
+      + '<circle cx="280" cy="210" r="118" fill="url(#pr-irisg)" stroke="#3f2a1a" stroke-width="2"/>'
+      + '<circle cx="280" cy="210" r="34" fill="#0b0f14"/>'
+      + '<circle cx="280" cy="210" r="146" fill="none" stroke="#f2b8b5" stroke-width="20" opacity="0.55"/>';
+    if (micro) {
+      CPC_ARCS.forEach(function (a, n) {
+        h += '<path id="cpc-arc' + n + '" d="' + cpcArc(a[0], a[1], 146) + '" pathLength="1" fill="none" stroke="' + GREEN + '" stroke-width="12" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1" opacity="0.8"/>';
+      });
+    } else {
+      h += '<g id="cpc-spots">';
+      CPC_ARCS.forEach(function (a) { for (k = 0; k < 9; k++) { var p = cpcPt(a[0] + (a[1] - a[0]) * k / 8, 146); h += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="7" fill="#bbf7d0" stroke="' + GREEN + '" stroke-width="2" opacity="0"/>'; } });
+      h += '</g>';
+    }
+    h += '<g id="cpc-fprobe" opacity="0"><circle r="13" fill="#d1d5db" stroke="#4b5563" stroke-width="4"/><circle r="4" fill="' + GREEN + '"/></g>'
+      + txt(16, 30, 'Ciliary body: a ring', 'start') + txt(16, 54, 'under the white of the eye', 'start', MUTED, 400, 18) + lead(150, 62, 184, 104)
+      + txt(16, 404, 'Iris', 'start') + lead(56, 396, 200, 280)
+      + '<g id="cpc-lab-skip" opacity="0">' + txt(544, 404, 'The sides are skipped', 'end', '#374151', 600, 20) + lead(470, 384, 428, 216, '#374151') + '</g>';
+    return h + '</svg>';
+  }
+  var CPC_VARIANTS = [['cpc', 'Micropulse'], ['cwcpc', 'Standard CPC']];
+  function cpcProc(micro) {
+    var probe = { label: 'Probe', dur: 1800,
+      caption: '<strong>Numbing and the probe.</strong> The eye is numbed, usually with an injection of anesthetic beside the eye, so you feel no pain. A small probe is then rested on the white of the eye, just behind the edge of the cornea. Nothing enters the eye.',
+      draw: function (p) { var e = ease(p); op('cpc-probe', e); at('cpc-probe', 'transform', 'translate(' + (-8 * (1 - e)).toFixed(1) + ',' + (-30 * (1 - e)).toFixed(1) + ')'); op('cpc-lab-probe', e); } };
+    var laser = { label: 'Laser', dur: micro ? 5200 : 4400,
+      caption: micro
+        ? '<strong>The laser.</strong> The probe is swept slowly back and forth along the upper half of the eye, then the lower half. The laser is delivered in very short bursts with rests between them, which is gentler on the tissue. The two sides are skipped.'
+        : '<strong>The laser.</strong> The probe is moved from spot to spot around the eye, with a steady pulse of laser at each one. The two sides are skipped.',
+      draw: function (p) {
+        var on = p > 0 && p < 1, half = p < 0.5 ? 0 : 1, q = clamp(p * 2 - half, 0, 1), pos, i;
+        op('cpc-lab-skip', p > 0 ? 1 : 0);
+        if (micro) {
+          // two passes over each half: out and back
+          var sweep = q < 0.5 ? q * 2 : 2 - q * 2, a = CPC_ARCS[half];
+          pos = cpcPt(a[0] + (a[1] - a[0]) * sweep, 146);
+          at('cpc-arc0', 'stroke-dashoffset', p <= 0 ? 1 : half ? 0 : 1 - Math.min(1, q * 2));
+          at('cpc-arc1', 'stroke-dashoffset', p >= 1 ? 0 : half ? 1 - Math.min(1, q * 2) : 1);
+          var beat = on ? 0.6 + 0.4 * Math.sin(p * 260) : 0;
+          at('cpc-glow', 'r', 16 * beat); op('cpc-glow', on ? 0.85 : 0); op('cpc-beam', on ? 1 : 0);
+        } else {
+          var spots = document.querySelectorAll('#cpc-spots circle'), n = Math.round(p * spots.length), x = (p * spots.length) % 1;
+          for (i = 0; i < spots.length; i++) spots[i].style.opacity = i < n ? 1 : 0;
+          var idx = clamp(Math.floor(p * spots.length), 0, spots.length - 1);
+          pos = [+spots[idx].getAttribute('cx'), +spots[idx].getAttribute('cy')];
+          var pulse = on ? Math.max(0, Math.sin(Math.PI * clamp(x * 1.4, 0, 1))) : 0;
+          at('cpc-glow', 'r', 18 * pulse); op('cpc-glow', pulse); op('cpc-beam', pulse > 0.05 ? 1 : 0);
+        }
+        op('cpc-fprobe', on ? 1 : 0);
+        at('cpc-fprobe', 'transform', 'translate(' + pos[0].toFixed(1) + ',' + pos[1].toFixed(1) + ')');
+      } };
+    var later = { label: 'Weeks later', dur: 2600,
+      caption: '<strong>Over the next weeks.</strong> The treated tissue makes less fluid, like a faucet turned down, and the pressure falls. The full effect takes about four to six weeks. The laser can be repeated if more effect is needed.',
+      draw: function (p) {
+        var e = ease(p), i;
+        op('cpc-quiet', 0.45 * e); op('cpc-m2', 1 - e); op('cpc-m3', 1 - e); at('cpc-m1', 'stroke-width', 4 - 1.5 * e);
+        op('cpc-lab-cb', 1 - e); op('cpc-lab-less', e);
+        if (p > 0) {
+          var gone = 1 - ease(clamp(p * 3, 0, 1));
+          op('cpc-probe', gone); op('cpc-lab-probe', gone); op('cpc-lab-skip', gone);
+          if (micro) { op('cpc-arc0', 0.8 * (1 - 0.7 * e)); op('cpc-arc1', 0.8 * (1 - 0.7 * e)); }
+          else { var spots = document.querySelectorAll('#cpc-spots circle'); for (i = 0; i < spots.length; i++) spots[i].style.opacity = (1 - 0.7 * e).toFixed(2); }
+        } else if (micro) { op('cpc-arc0', 0.8); op('cpc-arc1', 0.8); }
+      } };
+    return {
+      variants: CPC_VARIANTS,
+      views: [['Side view', cpcSide], ['Front view', function () { return cpcFront(micro); }]],
+      intro: '<strong>Before.</strong> The fluid inside the eye is made by the ciliary body, a ring of tissue hidden behind the iris, under the white of the eye. This laser treats that tissue from the outside.'
+        + (micro ? ' Micropulse delivers it in short bursts while the probe is swept along.' : ' Standard CPC delivers it as a row of separate spots.'),
+      steps: [probe, laser, later]
+    };
+  }
+
   // ---------- MIGS (close-up of the angle) ----------
   function wy(x, inner) { return (inner ? 330 : 230) - x * 0.31; }
   var MS = [372, wy(372, 1) + 8], M_ANG = -62;
@@ -250,6 +349,8 @@
   var PROCS = {
     slt: sltProc(false),
     dslt: sltProc(true),
+    cpc: cpcProc(true),
+    cwcpc: cpcProc(false),
     migs: {
       views: [['Close-up of the drain', migsSvg]],
       intro: '<strong>Before.</strong> A close-up of the drain. Fluid has to pass through the meshwork to reach the canal behind it, and in glaucoma the meshwork resists it.',
