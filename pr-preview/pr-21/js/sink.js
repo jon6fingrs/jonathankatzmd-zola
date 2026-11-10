@@ -6,10 +6,10 @@
  * eye pressure. Each treatment chip changes one of those, and the level
  * settles to the new balance.
  *
- * The numbers come from the usual steady-state balance (Goldmann):
- *     made = side drain + main drain x (P - back pressure) + new drain x (P - its back pressure)
- * with round example values for one imaginary eye. They are for
- * understanding, not a prediction of anyone's result; the page says so.
+ * The numbers come from sink-model.js (loaded first), which keeps the
+ * physiology honest: nothing but a new drain takes the level below venous
+ * pressure, and stacked treatments give diminishing returns. They are round
+ * examples for one imaginary eye; the page says so.
  *
  * Layout: on a phone the picture sticks to the top of the screen while the
  * chips scroll under it, so a tap and its effect are on screen together.
@@ -17,49 +17,37 @@
 (function () {
   'use strict';
   var root = document.getElementById('jk-sink');
-  if (!root) return;
+  var MODEL = window.JKSinkModel;
+  if (!root || !MODEL) return;
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var FONT = 'font-family="Roboto, Helvetica Neue, Helvetica, Arial, sans-serif"';
   var INK = '#1f2937', BLUE = '#2a6ebb', MUTED = '#5b6573', WATER = '#93c5fd';
 
-  // ---------- the model ----------
-  // F: fluid made; C: how easily the main drain lets it through; U: side
-  // drain; PE: back pressure in the veins the main drain empties into.
-  var BASE = { F: 2.4, C: 0.11, U: 0.25 }, HEALTHY_C = 0.27, PE = 9;
-  // where: which part of the sink the treatment acts on
+  // ---------- the treatments ----------
+  var PV = MODEL.PV, HEALTHY_C = MODEL.C_HEALTHY, BASE = { C: MODEL.C_GLAUCOMA };
+  // where: which part of the sink the treatment acts on; the size of its
+  // effect is in sink-model.js under the same id
   var TREATMENTS = [
-    { id: 'less', group: 'faucet', label: 'Drops: make less fluid', where: 'faucet', apply: function (m) { m.F *= 0.72; },
-      about: '<strong>Drops that turn down the faucet</strong> (timolol, dorzolamide, brinzolamide, brimonidine) make the eye produce less fluid.', link: ['../using-eye-drops/', 'Using eye drops'] },
-    { id: 'cpc', group: 'faucet', label: 'Micropulse / CPC laser', where: 'faucet', apply: function (m) { m.F *= 0.65; },
-      about: '<strong>Cyclophotocoagulation</strong> is a laser applied to the outside of the eye. It quiets the tissue that makes the fluid, turning down the faucet for months or years.' },
-    { id: 'side', group: 'drain', label: 'Drops: open the side drain', where: 'side', apply: function (m) { m.U = 1.15; },
-      about: '<strong>Prostaglandin drops</strong> (latanoprost, travoprost, bimatoprost, tafluprost) open up the eye&rsquo;s second, smaller way out. They are used once a day and are often the first drop tried.', link: ['../using-eye-drops/', 'Using eye drops'] },
-    { id: 'main', group: 'drain', label: 'Drops: open the main drain', where: 'main', apply: function (m) { m.C *= 1.3; },
-      about: '<strong>Netarsudil</strong> (Rhopressa) relaxes the main drain so fluid passes through it more easily.', link: ['../using-eye-drops/', 'Using eye drops'] },
-    { id: 'slt', group: 'drain', label: 'SLT laser', where: 'main', apply: function (m) { m.C *= 1.55; },
+    { id: 'less', group: 'faucet', label: 'Drops: make less fluid', where: 'faucet',
+      about: '<strong>Drops that turn down the faucet</strong> (timolol, dorzolamide, brinzolamide, brimonidine) make the eye produce less fluid. The level falls toward the vein-pressure line but cannot go under it.', link: ['../using-eye-drops/', 'Using eye drops'] },
+    { id: 'cpc', group: 'faucet', label: 'Micropulse / CPC laser', where: 'faucet',
+      about: '<strong>Cyclophotocoagulation</strong> is a laser applied to the outside of the eye. It quiets the tissue that makes the fluid, turning down the faucet for months or years. Like the drops, it cannot take the level below the vein-pressure line.' },
+    { id: 'side', group: 'drain', label: 'Drops: open the side drain', where: 'side',
+      about: '<strong>Prostaglandin drops</strong> (latanoprost, travoprost, bimatoprost, tafluprost) open up the eye&rsquo;s second, smaller way out. They are used once a day and are often the first drop tried. The side drain can only carry a share of what the faucet makes.', link: ['../using-eye-drops/', 'Using eye drops'] },
+    { id: 'main', group: 'drain', label: 'Drops: open the main drain', where: 'main',
+      about: '<strong>Netarsudil</strong> (Rhopressa) relaxes the main drain so fluid passes through it more easily, and slightly lowers the pressure in the veins it empties into.', link: ['../using-eye-drops/', 'Using eye drops'] },
+    { id: 'slt', group: 'drain', label: 'SLT laser', where: 'main',
       about: '<strong>SLT laser</strong> treats the main drain itself. Over a few weeks the drain clears and lets more fluid through. Nothing is cut.', link: ['../slt-laser/', 'SLT laser'] },
-    { id: 'migs', group: 'drain', label: 'MIGS', where: 'main', apply: function (m) { m.C *= 1.5; },
+    { id: 'migs', group: 'drain', label: 'MIGS', where: 'main',
       about: '<strong>MIGS</strong> (a tiny stent, or opening part of the drain) gives fluid a shortcut past the clogged part of the main drain. It is often done with cataract surgery.', link: ['../migs/', 'MIGS'] },
-    { id: 'trab', group: 'new', label: 'Trabeculectomy', where: 'new', drain: [0.2, 6], apply: function () {},
-      about: '<strong>Trabeculectomy</strong> makes a new drain: a small opening in the wall of the eye, so fluid collects in a pocket (bleb) under the upper eyelid and is absorbed there.', link: ['../trabeculectomy/', 'Trabeculectomy'] },
-    { id: 'tube', group: 'new', label: 'Tube shunt', where: 'new', drain: [0.13, 7], apply: function () {},
-      about: '<strong>A tube shunt</strong> is a new drain made of a tiny tube that carries fluid to a plate on the wall of the eye, where it is absorbed.', link: ['../tube-shunt-surgery/', 'Tube shunt surgery'] }
+    { id: 'trab', group: 'new', label: 'Trabeculectomy', where: 'new',
+      about: '<strong>Trabeculectomy</strong> makes a new drain: a small opening in the wall of the eye, so fluid collects in a pocket (bleb) under the upper eyelid and is absorbed there. It bypasses the veins, so it can take the level lower than drops or laser can.', link: ['../trabeculectomy/', 'Trabeculectomy'] },
+    { id: 'tube', group: 'new', label: 'Tube shunt', where: 'new',
+      about: '<strong>A tube shunt</strong> is a new drain made of a tiny tube that carries fluid to a plate on the wall of the eye, where it is absorbed. Like a trabeculectomy it bypasses the veins.', link: ['../tube-shunt-surgery/', 'Tube shunt surgery'] }
   ];
   var GROUPS = [['faucet', 'Turn down the faucet'], ['drain', 'Open the drains'], ['new', 'Add a new drain']];
 
-  function solve(on, healthy) {
-    var m = { F: BASE.F, C: healthy ? HEALTHY_C : BASE.C, U: BASE.U }, num, den;
-    var extra = [];
-    TREATMENTS.forEach(function (t) { if (on[t.id]) { t.apply(m); if (t.drain) extra.push(t.drain); } });
-    num = m.F - m.U + m.C * PE; den = m.C;
-    extra.forEach(function (d) { num += d[0] * d[1]; den += d[0]; });
-    var P = Math.max(8, num / den);
-    m.P = P;
-    m.mainFlow = Math.max(0, m.C * (P - PE));
-    m.newFlow = 0; extra.forEach(function (d) { m.newFlow += Math.max(0, d[0] * (P - d[1])); });
-    m.hasNew = extra.length > 0;
-    return m;
-  }
+  var solve = MODEL.solve;
 
   // ---------- the picture ----------
   var BOWL = { x0: 150, x1: 410, top: 120, bottom: 340 };
@@ -85,6 +73,7 @@
       + '<rect id="sink-surface" x="' + BOWL.x0 + '" width="260" y="300" height="3" fill="#3b82f6"/>'
       + '</g>'
       + '<line x1="' + BOWL.x0 + '" y1="' + levelY(21) + '" x2="' + BOWL.x1 + '" y2="' + levelY(21) + '" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6 5"/>'
+      + '<line id="sink-pvline" x1="' + BOWL.x0 + '" x2="' + BOWL.x1 + '" y1="' + levelY(PV) + '" y2="' + levelY(PV) + '" stroke="#1e3a8a" stroke-width="1.5" stroke-dasharray="2 5"/>'
       // side drain (left wall), new drain (right wall), main drain (bottom)
       + '<path d="M' + BOWL.x0 + ',306 L112,306 L112,372" fill="none" stroke="#6b7280" stroke-width="16" stroke-linejoin="round"/>'
       + '<path d="M' + BOWL.x0 + ',306 L112,306 L112,372" fill="none" stroke="#fff" stroke-width="11" stroke-linejoin="round"/>'
@@ -115,6 +104,8 @@
       + txt(100, 418, 'Side drain', 'middle')
       + txt(BOWL.x1 - 8, levelY(21) - 8, 'High', 'end', '#b91c1c', 600, 17)
       + txt(BOWL.x1 - 8, levelY(21) + 20, 'Usual range', 'end', '#1e3a8a', 600, 17)
+      + '<g id="sink-pvlab">' + txt(BOWL.x0 + 8, levelY(PV) - 7, 'Vein pressure: the floor', 'start', '#1e3a8a', 600, 15)
+      + txt(BOWL.x0 + 8, levelY(PV) + 16, 'for drops and laser', 'start', '#1e3a8a', 400, 15) + '</g>'
       // gauge
       + '<g id="sink-gauge"><rect x="398" y="14" width="150" height="86" rx="10" fill="#fff" stroke="#d9dee5" stroke-width="2"/>'
       + txt(473, 36, 'Eye pressure', 'middle', MUTED, 600, 15)
@@ -142,7 +133,7 @@
   function $(id) { return document.getElementById(id); }
   var el = {
     water: $('sink-water'), surface: $('sink-surface'), stream: $('sink-stream'), mainflow: $('sink-mainflow'), sideflow: $('sink-sideflow'),
-    newg: $('sink-new'), newflow: $('sink-newflow'), newlab: $('sink-newlab'), clog: $('sink-clog'), ring: $('sink-ring'), num: $('sink-num'),
+    newg: $('sink-new'), newflow: $('sink-newflow'), newlab: $('sink-newlab'), pvline: $('sink-pvline'), pvlab: $('sink-pvlab'), clog: $('sink-clog'), ring: $('sink-ring'), num: $('sink-num'),
     about: $('jk-sink-about'), full: $('jk-sink-full')
   };
 
@@ -162,12 +153,15 @@
     el.surface.setAttribute('y', (y - 1.5).toFixed(1));
     var sw = 3 + v.F * 4.5;
     el.stream.setAttribute('x', (282 - sw / 2).toFixed(1)); el.stream.setAttribute('width', sw.toFixed(1)); el.stream.setAttribute('height', Math.max(0, y - 96).toFixed(1));
-    var mw = Math.min(36, 1 + v.mainFlow * 11);
+    var mw = Math.min(36, v.mainFlow < 0.01 ? 0 : 1 + v.mainFlow * 11);
     el.mainflow.setAttribute('x', (280 - mw / 2).toFixed(1)); el.mainflow.setAttribute('width', mw.toFixed(1));
     el.sideflow.setAttribute('stroke-width', Math.min(10, 1 + v.U * 6).toFixed(1));
     el.newflow.setAttribute('stroke-width', Math.min(12, 1 + v.newFlow * 6).toFixed(1));
     el.newg.style.opacity = v.newShow.toFixed(2);
     el.clog.style.opacity = clamp((HEALTHY_C - v.C) / (HEALTHY_C - BASE.C), 0, 1).toFixed(2);
+    var py = levelY(v.pv).toFixed(1);
+    el.pvline.setAttribute('y1', py); el.pvline.setAttribute('y2', py);
+    el.pvlab.setAttribute('transform', 'translate(0,' + (levelY(v.pv) - levelY(PV)).toFixed(1) + ')');
     el.num.textContent = String(Math.round(v.P));
     el.num.setAttribute('fill', v.P > 21.4 ? '#b91c1c' : INK);
   }
@@ -188,7 +182,7 @@
   }
   function update() {
     var m = solve(on, healthy);
-    target = { P: m.P, F: m.F, C: m.C, U: m.U, mainFlow: m.mainFlow, newFlow: m.newFlow, newShow: m.hasNew ? 1 : 0 };
+    target = { P: m.P, F: m.F, C: m.C, U: m.U, pv: m.pv, mainFlow: m.mainFlow, newFlow: m.newFlow, newShow: m.hasNew ? 1 : 0 };
     el.newlab.textContent = on.tube && !on.trab ? 'Tube and plate' : on.trab && !on.tube ? 'Bleb' : 'New drain';
     root.querySelectorAll('[data-treat]').forEach(function (b) {
       var a = !!on[b.getAttribute('data-treat')]; b.classList.toggle('is-active', a); b.setAttribute('aria-pressed', String(a));
