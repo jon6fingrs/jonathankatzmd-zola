@@ -46,13 +46,12 @@ When the haze bothers you: when it gets in the way of driving, reading or the th
 
 ## The visit
 
-1. Drops are placed in the eye to dilate the pupil, and often one to prevent a pressure rise, plus a numbing drop.
+1. Drops are placed in the eye to dilate the pupil. Some doctors add a drop to prevent a pressure rise.
 2. You sit at the laser, which looks like the slit lamp used for your exams, with your chin and forehead on the rests.
-3. A contact lens may be placed on the eye to steady it and focus the laser.
-4. The doctor applies the laser. You will see flashes and hear a soft click with each pulse. It does not hurt, and it is over in a minute or two.
-5. Your pressure may be checked again before you leave.
+3. The doctor applies the laser. You will see flashes and hear a soft click with each pulse. It does not hurt, and it is over in a minute or two. Usually nothing touches the eye; some doctors use a contact lens to focus the laser, with a numbing drop first.
+4. You can go home right away. A pressure check afterward is not usually needed; your doctor may do one if you have glaucoma or are at higher risk.
 
-If both eyes need it, they are usually treated on separate visits. **Bring a driver**: the dilating drops blur your vision for several hours.
+If both eyes need it, they can often be treated at the same visit, because the laser is so safe. Some doctors prefer separate visits. **Bring a driver**: the dilating drops blur your vision for several hours.
 
 ## After the laser
 
@@ -68,7 +67,7 @@ If both eyes need it, they are usually treated on separate visits. **Bring a dri
 
 YAG capsulotomy is one of the safest procedures in eye care. Problems are uncommon.
 
-- **A temporary rise in eye pressure** in the first hours. This matters most if you have glaucoma, which is why a preventive drop is used and pressure is checked.
+- **A temporary rise in eye pressure** in the first hours. It is uncommon and usually settles on its own. It matters most if you have glaucoma, in which case your doctor may use a preventive drop or check your pressure.
 - **Floaters** that stay noticeable beyond the first few weeks, in a small number of people.
 - **Retinal detachment** is rare, but the risk is slightly higher after the laser, more so in very nearsighted eyes. The warning signs are the ones listed above.
 - **Swelling of the central retina** (macular edema) is rare and is treated with drops.
@@ -76,7 +75,7 @@ YAG capsulotomy is one of the safest procedures in eye care. Problems are uncomm
 
 ## If you have glaucoma
 
-The laser is safe with glaucoma, including after a [trabeculectomy](@/learn/trabeculectomy.md), [tube shunt](@/learn/tube-shunt-surgery.md) or [MIGS](@/learn/migs.md). Your pressure is watched more closely afterward, and your doctor may add a pressure-lowering drop for the day. A clear capsule also gives a better view of the optic nerve and sharper [scans and visual field tests](@/learn/glaucoma-testing.md).
+The laser is safe with glaucoma, including after a [trabeculectomy](@/learn/trabeculectomy.md), [tube shunt](@/learn/tube-shunt-surgery.md) or [MIGS](@/learn/migs.md). Your doctor may add a pressure-lowering drop for the day or check your pressure afterward. A clear capsule also gives a better view of the optic nerve and sharper [scans and visual field tests](@/learn/glaucoma-testing.md).
 
 ## Questions worth asking
 
