@@ -538,9 +538,19 @@
       + '<g id="tf-lab-dry" opacity="0">' + txt(TEAR_SPOTS[1][0], 252, 'Dry spot', 'middle', '#b91c1c', 700, 20) + '</g>';
     return h + '</svg>';
   }
-  var DYE_SPOTS = [[-30, -38, 26, 15, -20], [34, 6, 30, 16, 25], [-44, 34, 22, 13, 10], [22, -52, 18, 11, 40], [58, 44, 16, 10, -30]];
-  function tearFront() {
-    var h = svgOpen('0 0 560 420', 'The front of the eye stained with a yellow-green dye, as the doctor sees it'), i, s;
+  // What the dye shows differs by kind. Not enough oil: the film breaks up
+  // fast, in patches scattered all over. Not enough tears: the line of tears
+  // along the lower lid is thin, and the dry band sits low on the eye, where
+  // it is most exposed. [dx, dy, rx, ry, rotation]
+  var DYE_SPOTS = {
+    tears: [],
+    tearsevap: [[-58, -50, 15, 9, -20], [-8, -66, 12, 8, 30], [48, -44, 16, 9, 15], [-70, 4, 13, 8, 60], [-22, -8, 17, 10, -35], [34, 10, 14, 9, 40], [74, -4, 12, 8, -10], [-44, 52, 15, 9, 20], [8, 60, 16, 9, -25], [56, 54, 13, 8, 35]],
+    tearsaq: [[-62, 46, 30, 13, 8], [-4, 62, 34, 14, 0], [58, 48, 30, 13, -8], [-28, 26, 20, 10, -15], [30, 28, 20, 10, 15]]
+  };
+  var DYE_LABEL = { tears: 'Even color: a smooth film', tearsevap: 'Patches all over, within seconds', tearsaq: 'Thin tear line, dry band low down' };
+  function tearFront(key) {
+    var h = svgOpen('0 0 560 420', 'The front of the eye stained with a yellow-green dye, as the doctor sees it'), i, sp, spots = DYE_SPOTS[key];
+    var lake = key === 'tearsaq' ? 381 : 364; // how far the line of tears along the lower lid reaches up
     h += '<clipPath id="tf-eyeclip"><path d="M60,214 Q280,40 500,214 Q280,388 60,214 Z"/></clipPath>'
       + '<path d="M60,214 Q280,40 500,214 Q280,388 60,214 Z" fill="#fff" stroke="' + INK + '" stroke-width="3"/>'
       + '<g clip-path="url(#tf-eyeclip)">'
@@ -548,14 +558,16 @@
       + '<circle cx="280" cy="214" r="112" fill="#65a30d"/><circle cx="280" cy="214" r="112" fill="#bef264" opacity="0.75"/>'
       + '<circle cx="280" cy="214" r="40" fill="#1a2e05" opacity="0.55"/>'
       + '<g id="tf-fspots" fill="#14532d" opacity="0">';
-    for (i = 0; i < DYE_SPOTS.length; i++) { s = DYE_SPOTS[i]; h += '<ellipse cx="' + (280 + s[0]) + '" cy="' + (214 + s[1]) + '" rx="' + s[2] + '" ry="' + s[3] + '" transform="rotate(' + s[4] + ' ' + (280 + s[0]) + ' ' + (214 + s[1]) + ')"/>'; }
+    for (i = 0; i < spots.length; i++) { sp = spots[i]; h += '<ellipse cx="' + (280 + sp[0]) + '" cy="' + (214 + sp[1]) + '" rx="' + sp[2] + '" ry="' + sp[3] + '" transform="rotate(' + sp[4] + ' ' + (280 + sp[0]) + ' ' + (214 + sp[1]) + ')"/>'; }
     h += '</g>'
-      + '<path id="tf-flid" d="M40,20 L520,20 L520,214 Q280,40 40,214 Z" fill="#f1c7a8" stroke="#b07d5b" stroke-width="2"/>'
+      + '<path d="M60,214 Q280,388 500,214 Q280,' + lake + ' 60,214 Z" fill="#a3e635" stroke="#65a30d" stroke-width="1"/>'
+      // the upper lid: tall enough that nothing shows above it as it comes down
+      + '<path id="tf-flid" d="M20,-400 L540,-400 L540,214 Q280,40 20,214 Z" fill="#f1c7a8" stroke="#b07d5b" stroke-width="2"/>'
       + '</g>'
       + '<path d="M60,214 Q280,40 500,214" fill="none" stroke="' + INK + '" stroke-width="5"/>'
-      + txt(20, 404, 'Yellow-green dye in the tears', 'start', '#3f6212', 600, 20)
-      + '<g id="tf-flab-dry" opacity="0">' + txt(540, 404, 'Dark patches: dry spots', 'end', '#14532d', 600, 20) + '</g>'
-      + '<g id="tf-flab-ok" opacity="0">' + txt(540, 404, 'Even color: smooth film', 'end', '#3f6212', 600, 20) + '</g>';
+      + txt(20, 30, 'Line of tears along the lower lid' + (key === 'tearsaq' ? ': thin' : ''), 'start', '#3f6212', 600, 18) + lead(150, 40, 250, lake === 381 ? 300 : 294, '#3f6212')
+      + '<g id="tf-flab-dye">' + txt(20, 404, 'Yellow-green dye in the tears', 'start', '#3f6212', 600, 20) + '</g>'
+      + '<g id="tf-flab-end" opacity="0">' + txt(20, 404, DYE_LABEL[key], 'start', key === 'tears' ? '#3f6212' : '#14532d', 600, 20) + '</g>';
     return h + '</svg>';
   }
   var TEAR_VARIANTS = [['tears', 'Healthy'], ['tearsevap', 'Not enough oil'], ['tearsaq', 'Not enough tears']];
@@ -575,14 +587,14 @@
       : key === 'tearsaq' ? 'Here the tear glands make too little of the watery part, so the film starts out thin.' : 'A healthy film has all three layers.';
     return {
       variants: TEAR_VARIANTS,
-      views: [['A slice through the tear film', function () { return tearSlice(key); }], ['With dye, as the doctor sees it', tearFront]],
+      views: [['A slice through the tear film', function () { return tearSlice(key); }], ['With dye, as the doctor sees it', function () { return tearFront(key); }]],
       intro: '<strong>The tear film.</strong> A thin film of tears covers the front of the eye. It has three layers: mucus that helps it stick, water, and a skin of oil on top that slows evaporation. ' + why,
       steps: [
         { label: 'Blink', dur: 1700, caption: '<strong>A blink.</strong> The eyelid sweeps across and spreads a fresh, smooth film of tears over the surface.',
           draw: function (p, t) {
             var e = ease(p), lidX = p > 0 && p < 1 ? lerp(-10, 720, e) : (p >= 1 ? 720 : -10);
             tearDraw(v, 1, lidX, p > 0 && p < 1);
-            at('tf-flid', 'transform', 'translate(0,' + (p > 0 && p < 1 ? (190 * Math.sin(Math.PI * p)).toFixed(1) : '0') + ')');
+            at('tf-flid', 'transform', 'translate(0,' + (p > 0 && p < 1 ? (176 * Math.sin(Math.PI * p)).toFixed(1) : '0') + ')');
             at('tf-timer', 'opacity', p >= 1 ? 1 : 0);
           } },
         { label: 'Eye open', dur: 5200, caption: healthy
@@ -595,13 +607,126 @@
           } },
         { label: healthy ? 'Result' : 'What you feel', dur: 2200, caption: healthy
             ? '<strong>A smooth surface.</strong> A smooth tear film is the first lens of the eye, so vision stays clear and the eye feels comfortable. With dye, the doctor sees an even color.'
-            : '<strong>What you feel.</strong> Dry spots sting, burn or feel gritty, and they blur vision until the next blink. The irritation can also set off a flood of watery reflex tears, which is why a dry eye often waters. With dye, the doctor sees the dry spots as dark patches.',
-          draw: function (p) { var e = ease(p); op('tf-flab-dry', healthy ? 0 : e); op('tf-flab-ok', healthy ? e : 0); } }
+            : '<strong>What you feel.</strong> Dry spots sting, burn or feel gritty, and they blur vision until the next blink. The irritation can also set off a flood of watery reflex tears, which is why a dry eye often waters. '
+              + (key === 'tearsevap' ? 'With dye, the doctor sees dark patches open up all over the surface within a few seconds of a blink.' : 'With dye, the doctor sees only a thin line of tears along the lower lid, and a dry band low on the eye where it is most exposed.'),
+          draw: function (p) { op('tf-flab-end', ease(p)); op('tf-flab-dye', 1 - ease(p)); } }
       ]
     };
   }
 
+  // ---------- lid care: warm compress, massage, clean ----------
+  // An upper eyelid cut through, hanging over the eye (the geometry of
+  // eyelid-glands.svg): a blocked oil gland is warmed, emptied and cleaned.
+  function lidcareSvg() {
+    var h = svgOpen('0 0 560 420', 'An eyelid cut through, with a blocked oil gland, hanging over the surface of the eye'), k;
+    h += '<rect x="20" y="346" width="520" height="56" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>'
+      + '<rect id="lc-water" x="20" y="334" width="520" height="12" fill="#93c5fd"/>'
+      + '<line id="lc-oil-bad" x1="20" y1="334" x2="540" y2="334" stroke="#f59e0b" stroke-width="4" stroke-dasharray="14 40" stroke-linecap="round"/>'
+      + '<line id="lc-oil-good" x1="20" y1="322" x2="540" y2="322" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" opacity="0"/>'
+      + '<g id="lc-evap" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linecap="round">';
+    [60, 100, 140, 420, 460, 500].forEach(function (x) { h += '<path d="M' + x + ',316 q-8,-11 0,-22 q8,-11 0,-22" marker-end="url(#pr-ahm)"/>'; });
+    h += '</g>'
+      + '<path d="M210,40 L350,40 L350,266 Q350,306 310,306 L250,306 Q210,306 210,266 Z" fill="#f1c7a8" stroke="#b07d5b" stroke-width="2"/>'
+      + '<path id="lc-red" d="M250,306 L310,306 Q342,306 348,278 L212,278 Q218,306 250,306 Z" fill="#f87171" opacity="0.55"/>';
+    for (k = 0; k < 3; k++) h += '<path d="M' + (226 + k * 10) + ',304 q-14,16 -30,' + (18 + k * 4) + '" fill="none" stroke="' + INK + '" stroke-width="2.5" stroke-linecap="round"/>';
+    h += '<g id="lc-crust" fill="#fef3c7" stroke="#b45309" stroke-width="1"><circle cx="214" cy="310" r="4"/><circle cx="222" cy="304" r="3.5"/><circle cx="204" cy="316" r="3.5"/><circle cx="232" cy="309" r="3"/></g>'
+      + '<path id="lc-gland" fill="#fbbf24" stroke="#b45309" stroke-width="2"/>'
+      + '<path d="M300,262 L300,306" stroke="#b45309" stroke-width="7" stroke-linecap="round"/><path id="lc-duct" d="M300,262 L300,296" stroke="#fde68a" stroke-width="3.5" stroke-linecap="round"/>'
+      + '<ellipse id="lc-plug" cx="300" cy="305" rx="10" ry="7" fill="#fef3c7" stroke="#92400e" stroke-width="2"/>'
+      + '<path id="lc-drop" d="M300,308 C300,316 304,320 318,321" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" opacity="0"/>'
+      // warm compress against the front of the lid, with heat
+      + '<g id="lc-compress" opacity="0"><rect x="150" y="50" width="56" height="230" rx="16" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>'
+      + '<g fill="none" stroke="#dc2626" stroke-width="3" stroke-linecap="round"><path d="M226,90 q10,10 0,22 q-10,12 0,24"/><path d="M226,160 q10,10 0,22 q-10,12 0,24"/><path d="M226,226 q10,10 0,22"/></g></g>'
+      + '<g id="lc-finger" opacity="0"><rect x="150" y="-20" width="56" height="130" rx="28" fill="#f1c7a8" stroke="#b07d5b" stroke-width="2"/><path d="M162,92 Q178,104 194,92" fill="none" stroke="#b07d5b" stroke-width="2"/></g>'
+      + '<g id="lc-wipe" opacity="0"><rect x="150" y="296" width="60" height="24" rx="8" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/></g>'
+      + txt(280, 386, 'Surface of the eye', 'middle', '#1e3a8a', 600, 18)
+      + txt(370, 80, 'Eyelid', 'start') + lead(366, 74, 344, 80)
+      + '<g id="lc-lab-block">' + txt(380, 180, 'Oil gland, blocked', 'start', '#92400e') + txt(380, 204, 'with thick oil', 'start', '#92400e', 400) + lead(376, 174, 318, 180, '#92400e') + '</g>'
+      + '<g id="lc-lab-flow" opacity="0">' + txt(380, 180, 'Oil gland, flowing', 'start', '#b45309') + lead(376, 174, 316, 180, '#b45309') + '</g>'
+      + '<g id="lc-lab-compress" opacity="0">' + txt(20, 40, 'Warm compress', 'start', '#b91c1c') + '</g>'
+      + '<g id="lc-lab-finger" opacity="0">' + txt(20, 40, 'Gentle massage', 'start', '#7c4a2a') + txt(20, 64, 'toward the lashes', 'start', '#7c4a2a', 400) + '</g>'
+      + '<g id="lc-lab-wipe" opacity="0">' + txt(20, 230, 'Lid wipe along', 'start', '#0369a1') + txt(20, 254, 'the lash line', 'start', '#0369a1', 400) + '</g>';
+    return h + '</svg>';
+  }
+  function lcGland(w) { // the gland sac, wide when blocked
+    return 'M' + (300 - w) + ',90 Q300,60 ' + (300 + w) + ',90 L' + (300 + w) + ',240 Q300,272 ' + (300 - w) + ',240 Z';
+  }
+  var LIDCARE = {
+    views: [['An eyelid, cut through', lidcareSvg]],
+    intro: '<strong>A blocked gland.</strong> The oil glands open along the edge of the eyelid, just behind the lashes. Here the oil has turned thick and plugged the opening, so little reaches the tears and they evaporate. The lid edge is red, with crusts on the lashes.',
+    steps: [
+      { label: 'Warm', dur: 2600, caption: '<strong>Warm compress.</strong> Hold something comfortably warm against the closed lids for 5 to 10 minutes. The warmth melts the thick oil, the way butter softens.',
+        draw: function (p) {
+          var e = ease(p), inn = ease(clamp(p * 3, 0, 1));
+          op('lc-compress', inn); at('lc-compress', 'transform', 'translate(' + (-50 * (1 - inn)).toFixed(1) + ',0)'); op('lc-lab-compress', inn);
+          at('lc-gland', 'd', lcGland(26)); at('lc-gland', 'fill', p > 0.5 ? '#fcd34d' : '#fbbf24');
+        } },
+      { label: 'Massage', dur: 2600, caption: '<strong>Massage.</strong> Straight afterward, roll a clean finger gently along the lid toward the lashes: downward on the upper lid, upward on the lower lid. The softened oil is pushed out of the gland.',
+        draw: function (p) {
+          var e = ease(p);
+          op('lc-finger', p > 0 && p < 1 ? 1 : 0); at('lc-finger', 'transform', 'translate(0,' + (190 * e).toFixed(1) + ')'); op('lc-lab-finger', p > 0 && p < 1 ? 1 : 0);
+          op('lc-plug', 1 - ease(clamp(p * 2.5, 0, 1))); op('lc-drop', ease(clamp(p * 2 - 0.6, 0, 1))); at('lc-duct', 'd', 'M300,262 L300,' + (296 + 10 * e).toFixed(1));
+          op('lc-lab-block', 1 - e); op('lc-lab-flow', e);
+          if (p > 0) { at('lc-gland', 'd', lcGland(26 - 10 * e)); at('lc-gland', 'fill', p > 0.6 ? '#fde68a' : '#fcd34d'); op('lc-compress', 0); op('lc-lab-compress', 0); }
+        } },
+      { label: 'Clean', dur: 2200, caption: '<strong>Clean the lid edge.</strong> Wipe along the base of the lashes with a lid wipe or lid cleanser. This clears crusts and the bacteria and mites that feed the inflammation.',
+        draw: function (p) {
+          var e = ease(p);
+          op('lc-wipe', p > 0 && p < 1 ? 1 : 0); at('lc-wipe', 'transform', 'translate(' + (26 * Math.sin(p * Math.PI * 3)).toFixed(1) + ',0)'); op('lc-lab-wipe', p > 0 && p < 1 ? 1 : 0);
+          op('lc-crust', 1 - e);
+        } },
+      { label: 'Weeks later', dur: 2400, caption: '<strong>With daily care, over two to four weeks.</strong> The glands keep flowing, a smooth layer of oil covers the tears again, the tears stop evaporating, and the redness settles. It works as long as it is kept up.',
+        draw: function (p) { var e = ease(p); op('lc-oil-good', e); op('lc-oil-bad', 1 - e); op('lc-evap', 1 - e); op('lc-red', 0.55 * (1 - e)); at('lc-water', 'y', 334 - 12 * e); at('lc-water', 'height', 12 + 12 * e); } }
+    ]
+  };
+
+  // ---------- punctal plug ----------
+  function plugSvg() {
+    var cx = 250, cy = 200, h = svgOpen('0 0 560 420', 'The front of an eye, with the tear drains at the inner corner');
+    var eye = 'M' + (cx - 170) + ',' + cy + ' Q' + cx + ',' + (cy - 167) + ' ' + (cx + 170) + ',' + cy + ' Q' + cx + ',' + (cy + 167) + ' ' + (cx - 170) + ',' + cy + ' Z';
+    h += '<clipPath id="pg-clip"><path d="' + eye + '"/></clipPath><path d="' + eye + '" fill="#fff" stroke="' + INK + '" stroke-width="3"/>'
+      + '<g clip-path="url(#pg-clip)"><circle cx="' + cx + '" cy="' + cy + '" r="62" fill="#5b8bb5" stroke="#2c4f6e" stroke-width="2"/><circle cx="' + cx + '" cy="' + cy + '" r="25" fill="#111827"/><circle cx="' + (cx + 14) + '" cy="' + (cy - 16) + '" r="7" fill="#fff"/>'
+      + '<path id="pg-lake" fill="#93c5fd" opacity="0.92"/></g>'
+      + '<path d="M' + (cx - 170) + ',' + cy + ' Q' + cx + ',' + (cy - 167) + ' ' + (cx + 170) + ',' + cy + '" fill="none" stroke="' + INK + '" stroke-width="5"/>'
+      + '<path d="M' + (cx - 170) + ',' + cy + ' Q' + cx + ',' + (cy + 167) + ' ' + (cx + 170) + ',' + cy + '" fill="none" stroke="' + INK + '" stroke-width="3"/>'
+      // the two drain channels joining and running down to the nose
+      + '<path d="M' + (cx + 150) + ',' + (cy - 16) + ' C' + (cx + 190) + ',' + (cy - 30) + ' ' + (cx + 214) + ',' + (cy - 14) + ' ' + (cx + 226) + ',' + (cy + 4) + '" fill="none" stroke="#1d4ed8" stroke-width="5" stroke-linecap="round" opacity="0.55"/>'
+      + '<path d="M' + (cx + 152) + ',' + (cy + 22) + ' C' + (cx + 190) + ',' + (cy + 34) + ' ' + (cx + 214) + ',' + (cy + 22) + ' ' + (cx + 226) + ',' + (cy + 4) + '" fill="none" stroke="#1d4ed8" stroke-width="5" stroke-linecap="round" opacity="0.55"/>'
+      + '<path d="M' + (cx + 226) + ',' + (cy - 8) + ' C' + (cx + 244) + ',' + (cy - 8) + ' ' + (cx + 248) + ',' + (cy + 20) + ' ' + (cx + 242) + ',' + (cy + 50) + ' C' + (cx + 236) + ',' + (cy + 90) + ' ' + (cx + 244) + ',' + (cy + 130) + ' ' + (cx + 256) + ',' + (cy + 170) + '" fill="none" stroke="#1d4ed8" stroke-width="9" stroke-linecap="round" opacity="0.4"/>'
+      + '<circle cx="' + (cx + 150) + '" cy="' + (cy - 16) + '" r="5" fill="' + INK + '"/><circle cx="' + (cx + 152) + '" cy="' + (cy + 22) + '" r="5" fill="' + INK + '"/>'
+      + '<g id="pg-flow-up">' + arrow('pg-fu', 'M' + (cx + 104) + ',' + (cy - 14) + ' L' + (cx + 138) + ',' + (cy - 16), BLUE, 3.5) + '</g>'
+      + '<g id="pg-flow-low">' + arrow('pg-fl', 'M' + (cx + 104) + ',' + (cy + 30) + ' L' + (cx + 140) + ',' + (cy + 23), BLUE, 3.5) + '</g>'
+      + '<g id="pg-plug" opacity="0"><rect x="' + (cx + 141) + '" y="' + (cy + 12) + '" width="22" height="9" rx="4.5" fill="#0f9b8e" stroke="#0b6b62" stroke-width="2"/><rect x="' + (cx + 147) + '" y="' + (cy + 19) + '" width="10" height="16" rx="4" fill="#0f9b8e" stroke="#0b6b62" stroke-width="2"/>'
+      + '<line id="pg-tool" x1="' + (cx + 152) + '" y1="' + (cy + 10) + '" x2="' + (cx + 250) + '" y2="' + (cy - 130) + '" stroke="#6b7280" stroke-width="5" stroke-linecap="round"/></g>'
+      + txt(20, 30, 'Drain openings', 'start') + txt(20, 54, 'at the inner corner', 'start', MUTED, 400, 18) + lead(180, 40, cx + 146, cy - 20)
+      + txt(540, 400, 'To the nose', 'end', MUTED, 400, 18)
+      + '<g id="pg-lab-thin">' + txt(20, 400, 'Few tears on the eye', 'start', '#b91c1c') + '</g>'
+      + '<g id="pg-lab-plug" opacity="0">' + txt(540, 60, 'Plug', 'end', '#0b6b62', 700) + lead(496, 66, cx + 160, cy + 16, '#0b6b62') + '</g>'
+      + '<g id="pg-lab-full" opacity="0">' + txt(20, 400, 'Your own tears stay longer', 'start', BLUE) + '</g>';
+    return h + '</svg>';
+  }
+  function plugLake(e) { // the line of tears along the lower lid, thin to full
+    var cx = 250, cy = 200, inner = cy + 158 - 40 * e;
+    return 'M' + (cx - 170) + ',' + cy + ' Q' + cx + ',' + (cy + 167) + ' ' + (cx + 170) + ',' + cy + ' Q' + cx + ',' + inner.toFixed(1) + ' ' + (cx - 170) + ',' + cy + ' Z';
+  }
+  var PLUG = {
+    views: [['The front of the eye', plugSvg]],
+    intro: '<strong>Before.</strong> Tears leave the eye through two small openings at the inner corner of the lids and drain into the nose. When the eye makes too few tears, what little there is drains away quickly.',
+    steps: [
+      { label: 'Plug', dur: 2400, caption: '<strong>The plug.</strong> In the office, after a numbing drop, a tiny soft plug is slipped into the lower drain opening. It takes a few seconds. You may be aware of it at the corner of the lid for a day or two.',
+        draw: function (p) {
+          var e = ease(p), out = ease(clamp(p * 3 - 2, 0, 1));
+          op('pg-plug', p > 0 ? 1 : 0); at('pg-plug', 'transform', 'translate(' + (36 * (1 - ease(clamp(p * 1.5, 0, 1)))).toFixed(1) + ',' + (-50 * (1 - ease(clamp(p * 1.5, 0, 1)))).toFixed(1) + ')');
+          op('pg-tool', 1 - out); op('pg-lab-plug', e); op('pg-flow-low', 1 - ease(clamp(p * 1.5, 0, 1)));
+        } },
+      { label: 'Tears stay', dur: 2800, caption: '<strong>Your own tears stay longer.</strong> With the lower drain closed, tears build up along the lid and keep the surface wet. The upper drain still works, so the eye does not usually overflow. Some plugs dissolve over months; others stay until they are removed.',
+        draw: function (p) { var e = ease(p); at('pg-lake', 'd', plugLake(e)); op('pg-lab-thin', 1 - e); op('pg-lab-full', e); } }
+    ]
+  };
+
   var PROCS = {
+    lidcare: LIDCARE,
+    plug: PLUG,
     tears: tearProc('tears'),
     tearsevap: tearProc('tearsevap'),
     tearsaq: tearProc('tearsaq'),
