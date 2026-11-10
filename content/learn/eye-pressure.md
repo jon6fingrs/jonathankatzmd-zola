@@ -28,9 +28,9 @@ In the most common kind of glaucoma, the faucet is normal. The main drain is par
 
 ## Three ways to lower the level
 
-**Turn down the faucet.** Some [drops](@/learn/using-eye-drops.md) (timolol, dorzolamide, brinzolamide, brimonidine) make the eye produce less fluid. So does cyclophotocoagulation, a laser applied to the outside of the eye.
+**Turn down the faucet.** Some [drops](@/learn/using-eye-drops.md) (timolol, dorzolamide, brinzolamide, brimonidine) make the eye produce less fluid. So does [cyclophotocoagulation](@/learn/cyclophotocoagulation.md) (micropulse or standard CPC), a laser applied to the outside of the eye.
 
-**Open the drains.** Prostaglandin drops (latanoprost and its relatives) open the side drain, and netarsudil relaxes the main one. The [SLT laser](@/learn/slt-laser.md), standard or direct, treats the main drain so it clears itself. [MIGS](@/learn/migs.md) gives fluid a shortcut past the clogged part.
+**Open the drains.** Prostaglandin drops (latanoprost and its relatives) open the side drain, and netarsudil relaxes the main one. The [SLT laser](@/learn/slt-laser.md), standard or direct, treats the main drain so it clears itself. [MIGS](@/learn/migs.md) (a stent, a goniotomy or viscodilation) gives fluid a shortcut past the clogged part.
 
 **Add a new drain.** A [trabeculectomy](@/learn/trabeculectomy.md) or a [tube shunt](@/learn/tube-shunt-surgery.md) makes a new way out of the eye. These lower pressure the most and are used when the other steps are not enough.
 

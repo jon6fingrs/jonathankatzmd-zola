@@ -1,6 +1,6 @@
 +++
 title = "MIGS"
-description = "Minimally invasive glaucoma surgery: small implants and procedures, often combined with cataract surgery, that lower pressure with a quicker recovery than traditional surgery. With a step-by-step animation of a stent being placed."
+description = "Minimally invasive glaucoma surgery: small implants and procedures, often combined with cataract surgery, that lower pressure with a quicker recovery than traditional surgery. With step-by-step animations of a stent, a goniotomy and viscodilation."
 template = "page.html"
 weight = 70
 
@@ -11,7 +11,7 @@ js = "js/procedure.js"
 
 **Minimally invasive glaucoma surgery (MIGS)** is a family of procedures that lower eye pressure through very small openings, with less disruption to the eye and a faster recovery than traditional glaucoma surgery. Most are performed at the time of [cataract surgery](@/learn/cataract-surgery.md) through the same incision, adding a few minutes to the operation. Some can be done on their own.
 
-Press **Play** to see a stent being placed in the drain, one of the most common kinds of MIGS, or tap a step to go through it at your own pace.
+The animation shows three of the most common kinds: a **stent**, a **goniotomy** and **viscodilation**. Choose one, then press **Play**, or tap a step to go through it at your own pace. They are often combined in a single operation.
 
 <div id="jk-proc" class="jk-lpi" data-proc="migs">
   <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
@@ -24,9 +24,13 @@ MIGS is generally for **mild to moderate open-angle glaucoma**, with the goal of
 Most MIGS procedures work by improving the eye's natural drainage through the trabecular meshwork and the channel behind it (Schlemm's canal).
 
 - **Trabecular micro-stents** (iStent, Hydrus). Tiny implants, smaller than a grain of rice, placed in the drainage meshwork to hold a path open from the front of the eye into Schlemm's canal. They stay in permanently and are not visible or felt.
-- **Canal procedures** (OMNI, goniotomy with the Kahook Dual Blade, gonioscopy-assisted transluminal trabeculotomy). Rather than implanting a device, the surgeon opens or dilates the meshwork and canal directly. OMNI combines dilating the canal with cutting a strip of meshwork and can be done with cataract surgery or alone ("standalone Omni").
+- **Goniotomy** (for example with the Kahook Dual Blade, or the cutting step of OMNI). A strip of the meshwork is removed or opened along part of the ring, so fluid reaches the canal directly. Nothing is implanted. A longer version that opens more of the ring is called a trabeculotomy.
+- **Viscodilation**, also called canaloplasty (for example with OMNI or iTrack). A fine catheter is threaded along Schlemm's canal and a clear gel is released as it is drawn back, stretching the canal and the small channels that carry fluid away from it. Nothing is implanted.
 - **Subconjunctival micro-shunts** (XEN gel stent). A soft tube drains fluid under the conjunctiva, the thin skin over the white of the eye, forming a small reservoir ("bleb") similar to a trabeculectomy but with a smaller operation. This is used for somewhat more advanced disease.
-- **Cyclophotocoagulation** (micropulse or standard CPC) is a laser applied to the outside of the eye to reduce fluid production. It is not an angle procedure but is often grouped with less invasive options, and is used when other surgery is not suitable or has not worked.
+
+**These are often combined.** Viscodilation and goniotomy treat different parts of the same drain, so they are commonly done together in one operation (OMNI does both), and either can be paired with a stent. Any of them can be done with cataract surgery or on its own ("standalone").
+
+A different kind of treatment, the [micropulse or CPC laser](@/learn/cyclophotocoagulation.md), lowers pressure by reducing how much fluid the eye makes. It is not MIGS and has its own page.
 
 Which procedure fits you depends on the type and severity of glaucoma, the anatomy of your drainage angle, whether you are having cataract surgery, and your target pressure.
 
