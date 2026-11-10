@@ -1063,6 +1063,7 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
    buttons sit between the drawing and the Play button. */
 .jk-lpi__views--one { max-width: 760px; margin: 0 auto; }
 @media (min-width: 768px) { .jk-lpi__views.jk-lpi__views--one { grid-template-columns: minmax(0, 1fr); } }
+.jk-proc__variants { justify-content: center; margin-bottom: .6rem; }
 .jk-proc__steps { list-style: none; padding: 0; margin: .75rem 0 0; display: flex; flex-wrap: wrap; gap: .4rem; justify-content: center; }
 .jk-page--article .jk-page__body .jk-proc__steps { margin-bottom: 0; padding-left: 0; }
 .jk-proc__steps li { margin: 0; }

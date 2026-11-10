@@ -1,7 +1,8 @@
 /* Step-by-step procedure demos for the Learn pages: SLT, MIGS,
  * trabeculectomy and tube shunt. A page has one
  *     <div id="jk-proc" class="jk-lpi" data-proc="slt"></div>
- * and this file builds it.
+ * and this file builds it. SLT has two variants (standard, and direct SLT
+ * without a contact lens) switched by chips; see `variants`.
  *
  * Each procedure is an entry in PROCS: one or two drawings (inline SVG,
  * using the same eye geometry as tools/learn-figures.py) and a list of
@@ -69,28 +70,38 @@
     return s;
   }
 
-  // ---------- SLT ----------
-  var SLT_SPOTS = 40;
-  function sltSide() {
-    var h = svgOpen('40 -10 540 430', 'Side view: the laser is aimed through a contact lens at the drain');
-    h += '<g id="slt-lens" opacity="0"><path d="M58,262 C64,170 140,86 250,52 L298,92 C190,128 110,250 110,330 L80,330 Z" fill="#e0e7ff" stroke="#6366f1" stroke-width="2" opacity="0.85"/></g>';
+  // ---------- SLT, standard and direct ----------
+  // Standard SLT is aimed through a mirrored contact lens. Direct SLT (DSLT)
+  // uses no lens: the machine tracks the eye and sends the pulses straight
+  // through the edge of the cornea (the limbus) to the drain underneath.
+  function sltSide(direct) {
+    var h = svgOpen('40 -10 540 430', direct ? 'Side view: the laser passes through the edge of the cornea to the drain, with no contact lens' : 'Side view: the laser is aimed through a contact lens at the drain');
+    if (!direct) h += '<g id="slt-lens" opacity="0"><path d="M58,262 C64,170 140,86 250,52 L298,92 C190,128 110,250 110,330 L80,330 Z" fill="#e0e7ff" stroke="#6366f1" stroke-width="2" opacity="0.85"/></g>';
     h += eyeSide();
     h += '<g id="slt-clog" fill="#7c2d12">';
     [[296, 108], [302, 112], [298, 117], [304, 106], [301, 121], [295, 113]].forEach(function (c) { h += '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="2.2"/>'; });
     h += '</g>'
-      + '<g id="slt-flow" opacity="0">' + arrow('slt-f1', 'M232,182 C252,158 274,136 294,118') + arrow('slt-f2', 'M318,96 C344,82 372,72 404,66') + '</g>'
-      + '<line id="slt-beam" x1="50" y1="184" x2="292" y2="114" stroke="' + GREEN + '" stroke-width="3" stroke-linecap="round" opacity="0"/>'
-      + '<circle id="slt-flash" cx="300" cy="112" r="0" fill="#bbf7d0" stroke="' + GREEN + '" stroke-width="3"/>'
-      + '<g id="slt-lab-lens" opacity="0">' + txt(56, 40, 'Contact lens', 'start', '#4f46e5') + lead(150, 48, 190, 104, '#4f46e5') + '</g>'
-      + txt(380, 12, 'Drain', 'start') + txt(380, 34, '(trabecular meshwork)', 'start', MUTED, 400, 18) + lead(376, 18, 304, 106)
+      + '<g id="slt-flow" opacity="0">' + arrow('slt-f1', 'M232,182 C252,158 274,136 294,118') + arrow('slt-f2', 'M318,96 C344,82 372,72 404,66') + '</g>';
+    if (direct) {
+      h += '<line id="slt-aim" x1="50" y1="97" x2="288" y2="97" stroke="' + GREEN + '" stroke-width="2" stroke-dasharray="7 7" stroke-linecap="round" opacity="0"/>'
+        + '<line id="slt-beam" x1="50" y1="97" x2="290" y2="97" stroke="' + GREEN + '" stroke-width="3" stroke-linecap="round" opacity="0"/>'
+        + '<circle id="slt-flash" cx="298" cy="104" r="0" fill="#bbf7d0" stroke="' + GREEN + '" stroke-width="3"/>'
+        + '<g id="slt-lab-lens" opacity="0">' + txt(56, 40, 'No contact lens:', 'start', '#15803d') + txt(56, 64, 'nothing touches the eye', 'start', '#15803d', 400) + '</g>'
+        + '<g id="slt-lab-laser" opacity="0">' + txt(56, 128, 'Laser', 'start', '#15803d', 700) + '</g>';
+    } else {
+      h += '<line id="slt-beam" x1="50" y1="184" x2="292" y2="114" stroke="' + GREEN + '" stroke-width="3" stroke-linecap="round" opacity="0"/>'
+        + '<circle id="slt-flash" cx="300" cy="112" r="0" fill="#bbf7d0" stroke="' + GREEN + '" stroke-width="3"/>'
+        + '<g id="slt-lab-lens" opacity="0">' + txt(56, 40, 'Contact lens', 'start', '#4f46e5') + lead(150, 48, 190, 104, '#4f46e5') + '</g>'
+        + '<g id="slt-lab-laser" opacity="0">' + txt(56, 214, 'Laser', 'start', '#15803d', 700) + '</g>';
+    }
+    h += txt(380, 12, 'Drain', 'start') + txt(380, 34, '(trabecular meshwork)', 'start', MUTED, 400, 18) + lead(376, 18, 304, 106)
       + txt(210, 392, 'Iris', 'end') + lead(216, 386, 280, 290)
       + txt(440, 330, 'Lens', 'start') + lead(436, 324, 420, 324)
-      + '<g id="slt-lab-laser" opacity="0">' + txt(56, 214, 'Laser', 'start', '#15803d', 700) + '</g>'
       + '<g id="slt-lab-flow" opacity="0">' + txt(420, 110, 'Fluid drains', 'start', BLUE) + txt(420, 134, 'more easily', 'start', BLUE, 400) + '</g>';
     return h + '</svg>';
   }
-  function sltRing() {
-    var c = [280, 210], h = svgOpen('0 0 560 420', 'Around the drain: the laser spots are placed all the way around the eye');
+  function sltRing(direct) {
+    var c = [280, 210], n = direct ? 60 : 40, rr = direct ? 170 : 157, h = svgOpen('0 0 560 420', 'Around the drain: the laser spots are placed all the way around the eye');
     h += '<circle cx="280" cy="210" r="196" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>'
       + '<circle cx="280" cy="210" r="168" fill="url(#pr-tm)" stroke="#b45309" stroke-width="1.5"/>'
       + '<circle cx="280" cy="210" r="146" fill="url(#pr-irisg)" stroke="#3f2a1a" stroke-width="2"/>'
@@ -100,15 +111,18 @@
       var a = i / 60 * Math.PI * 2 + 0.05 * (i % 3), r = 152 + (i * 7 % 13);
       h += '<circle cx="' + (c[0] + r * Math.cos(a)).toFixed(1) + '" cy="' + (c[1] + r * Math.sin(a)).toFixed(1) + '" r="2.4"/>';
     }
-    h += '</g><g id="slt-spots">';
-    for (i = 0; i < SLT_SPOTS; i++) {
-      a = -Math.PI / 2 + i / SLT_SPOTS * Math.PI * 2;
-      h += '<circle cx="' + (c[0] + 157 * Math.cos(a)).toFixed(1) + '" cy="' + (c[1] + 157 * Math.sin(a)).toFixed(1) + '" r="5" fill="#bbf7d0" stroke="' + GREEN + '" stroke-width="2" opacity="0"/>';
+    h += '</g>';
+    if (direct) h += '<circle id="slt-track" cx="280" cy="210" r="181" fill="none" stroke="' + GREEN + '" stroke-width="2.5" stroke-dasharray="9 8" opacity="0"/>';
+    h += '<g id="slt-spots">';
+    for (i = 0; i < n; i++) {
+      a = -Math.PI / 2 + i / n * Math.PI * 2;
+      h += '<circle cx="' + (c[0] + rr * Math.cos(a)).toFixed(1) + '" cy="' + (c[1] + rr * Math.sin(a)).toFixed(1) + '" r="' + (direct ? 3.6 : 5) + '" fill="#bbf7d0" stroke="' + GREEN + '" stroke-width="' + (direct ? 1.5 : 2) + '" opacity="0"/>';
     }
     h += '</g>'
       + txt(16, 30, 'The drain is a ring', 'start') + txt(16, 54, 'all the way around', 'start', MUTED, 400, 18) + lead(120, 62, 166, 112)
       + txt(544, 404, 'Pupil', 'end') + lead(490, 398, 300, 226)
       + txt(16, 404, 'Iris', 'start') + lead(56, 396, 190, 290);
+    if (direct) h += '<g id="slt-lab-track" opacity="0">' + txt(544, 30, 'The laser finds and', 'end', '#15803d') + txt(544, 54, 'follows the eye', 'end', '#15803d', 400) + '</g>';
     return h + '</svg>';
   }
   function sltSpots(n, glow) {
@@ -117,6 +131,41 @@
       spots[i].style.opacity = i < n ? 1 : 0;
       spots[i].setAttribute('fill', i === n - 1 && glow ? '#4ade80' : '#bbf7d0');
     }
+  }
+  var SLT_VARIANTS = [['slt', 'Standard SLT'], ['dslt', 'Direct SLT (DSLT)']];
+  function sltProc(direct) {
+    var laser = { label: 'Laser', dur: direct ? 2600 : 4200,
+      caption: direct
+        ? '<strong>The laser.</strong> In two to three seconds the machine delivers about 120 gentle pulses in a ring, through the edge of the cornea to the drain underneath. There is no cut and no burn.'
+        : '<strong>The laser.</strong> Short, gentle pulses are aimed at the drain, spot by spot, around the ring. There is no cut and no burn: the light is absorbed by pigment in the drain.',
+      draw: function (p) {
+        var total = document.querySelectorAll('#slt-spots circle').length;
+        var n = Math.round(p * total), on = p > 0 && p < 1, x = (p * total) % 1, pulse = on ? Math.max(0, Math.sin(Math.PI * clamp(x * 2.2, 0, 1))) : 0;
+        if (direct && on) pulse = 0.55 + 0.45 * pulse; // too fast to see single pulses
+        op('slt-beam', on ? 1 : 0); op('slt-lab-laser', on ? 1 : 0);
+        at('slt-beam', 'stroke-width', 2 + 5 * pulse); at('slt-flash', 'r', 14 * pulse); op('slt-flash', pulse);
+        sltSpots(n, on);
+      } };
+    var later = { label: 'Weeks later', dur: 2600, caption: '<strong>Over the next weeks.</strong> The treated drain clears itself and lets more fluid through, so the pressure comes down. The full effect takes four to six weeks.',
+      draw: function (p) {
+        var e = ease(p), gone = 1 - ease(clamp(p * 3, 0, 1));
+        op('slt-clog', 1 - e); op('slt-rclog', 1 - e); op('slt-flow', e); op('slt-lab-flow', e);
+        if (p > 0) { op('slt-lens', gone); op('slt-lab-lens', gone); op('slt-track', gone); op('slt-lab-track', gone); }
+        var spots = document.querySelectorAll('#slt-spots circle'); for (var i = 0; i < spots.length; i++) if (p > 0) spots[i].style.opacity = (1 - 0.8 * e).toFixed(2);
+      } };
+    var first = direct
+      ? { label: 'Aim', dur: 1800, caption: '<strong>Aiming.</strong> After a numbing drop you rest your chin and look at a target light. The laser&rsquo;s camera finds the edge of the cornea and follows the eye. There is no contact lens: nothing touches the eye.',
+          draw: function (p) { var e = ease(p); op('slt-aim', e); op('slt-track', e); op('slt-lab-lens', e); op('slt-lab-track', e); } }
+      : { label: 'Lens', dur: 1600, caption: '<strong>Drops and a contact lens.</strong> After numbing drops, a contact lens with a mirror is placed on the eye. It lets the doctor see and aim at the drain, which is hidden behind the edge of the cornea.',
+          draw: function (p) { var e = ease(p); at('slt-lens', 'transform', 'translate(' + (-80 * (1 - e)).toFixed(1) + ',0)'); op('slt-lens', e); op('slt-lab-lens', e); } };
+    if (direct) { var d0 = laser.draw; laser.draw = function (p) { d0(p); if (p > 0) op('slt-aim', 0); }; }
+    return {
+      variants: SLT_VARIANTS,
+      views: [['Side view', function () { return sltSide(direct); }], ['Around the drain', function () { return sltRing(direct); }]],
+      intro: '<strong>Before.</strong> The drain is a ring of filter tissue all the way around the eye, where the iris meets the cornea. In glaucoma it lets fluid through less easily than it should.'
+        + (direct ? ' Direct SLT treats it from the outside, through the edge of the cornea.' : ' Standard SLT treats it through a mirrored contact lens.'),
+      steps: [first, laser, later]
+    };
   }
 
   // ---------- MIGS (close-up of the angle) ----------
@@ -176,7 +225,9 @@
   }
 
   // ---------- tube shunt ----------
-  var TUBE = 'M560,30 C460,36 370,62 322,88 L250,150';
+  // along the eye wall, through it at the limbus, then down the front chamber
+  // parallel to the iris and just in front of it
+  var TUBE = 'M560,30 C460,36 380,58 334,80 C316,90 302,108 294,134 L281,198';
   function tubeSvg() {
     var h = svgOpen('60 -20 680 440', 'Side view of a tube shunt: a plate on the eye wall and a tube into the front chamber');
     h += eyeSide()
@@ -186,35 +237,19 @@
       + '<path id="tube-in" d="' + TUBE + '" pathLength="1" fill="none" stroke="#d1d5db" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 1" stroke-dashoffset="1"/>'
       + '<path id="tube-water" d="' + TUBE + '" pathLength="1" fill="none" stroke="' + WATER + '" stroke-width="3" stroke-linecap="round" stroke-dasharray="0.04 0.06" opacity="0"/>'
       + '<path id="tube-patch" d="M330,72 C360,56 400,46 430,44 L436,56 C404,58 366,68 336,84 Z" fill="#fef3c7" stroke="#a16207" stroke-width="1.5" opacity="0"/>'
-      + '<g id="tube-flow" opacity="0">' + arrow('tube-f1', 'M200,260 C210,210 230,180 246,160') + '</g>'
+      + '<g id="tube-flow" opacity="0">' + arrow('tube-f1', 'M206,292 C214,258 240,228 270,208') + '</g>'
       + txt(210, 392, 'Iris', 'end') + lead(216, 386, 280, 290)
       + txt(440, 330, 'Lens', 'start') + lead(436, 324, 420, 324)
       + '<g id="tube-lab-plate" opacity="0">' + txt(520, 120, 'Plate on the eye wall,', 'start') + txt(520, 144, 'under the upper eyelid', 'start', INK, 400) + lead(600, 102, 640, 44) + '</g>'
-      + '<g id="tube-lab-tube" opacity="0">' + txt(70, 10, 'Tube tip in the', 'start') + txt(70, 34, 'front chamber', 'start', INK, 400) + lead(170, 40, 252, 146) + '</g>'
+      + '<g id="tube-lab-tube" opacity="0">' + txt(70, 10, 'Tube in the front chamber,', 'start') + txt(70, 34, 'in front of the iris', 'start', INK, 400) + lead(170, 40, 283, 190) + '</g>'
       + '<g id="tube-lab-patch" opacity="0">' + txt(330, 0, 'Patch over the tube', 'start', '#a16207') + lead(390, 8, 388, 54, '#a16207') + '</g>'
       + '<g id="tube-lab-bleb" opacity="0">' + txt(520, 196, 'Fluid is absorbed', 'start', BLUE) + txt(520, 220, 'around the plate', 'start', BLUE, 400) + lead(560, 178, 620, 30, BLUE) + '</g>';
     return h + '</svg>';
   }
 
   var PROCS = {
-    slt: {
-      views: [['Side view', sltSide], ['Around the drain', sltRing]],
-      intro: '<strong>Before.</strong> The drain is a ring of filter tissue all the way around the eye, where the iris meets the cornea. In glaucoma it lets fluid through less easily than it should.',
-      steps: [
-        { label: 'Lens', dur: 1600, caption: '<strong>Drops and a contact lens.</strong> After numbing drops, a contact lens with a mirror is placed on the eye. It lets the doctor see and aim at the drain, which is hidden behind the edge of the cornea.',
-          draw: function (p) { var e = ease(p); at('slt-lens', 'transform', 'translate(' + (-80 * (1 - e)).toFixed(1) + ',0)'); op('slt-lens', e); op('slt-lab-lens', e); } },
-        { label: 'Laser', dur: 4200, caption: '<strong>The laser.</strong> Short, gentle pulses are aimed at the drain, spot by spot, all the way around. There is no cut and no burn: the light is absorbed by pigment in the drain.',
-          draw: function (p) {
-            var n = Math.round(p * SLT_SPOTS), on = p > 0 && p < 1, x = (p * SLT_SPOTS) % 1, pulse = on ? Math.max(0, Math.sin(Math.PI * clamp(x * 2.2, 0, 1))) : 0;
-            op('slt-beam', on ? 1 : 0); op('slt-lab-laser', on ? 1 : 0);
-            at('slt-beam', 'stroke-width', 2 + 5 * pulse); at('slt-flash', 'r', 14 * pulse); op('slt-flash', pulse);
-            sltSpots(n, on);
-          } },
-        { label: 'Weeks later', dur: 2600, caption: '<strong>Over the next weeks.</strong> The treated drain clears itself and lets more fluid through, so the pressure comes down. The full effect takes four to six weeks.',
-          draw: function (p) { var e = ease(p); op('slt-clog', 1 - e); op('slt-rclog', 1 - e); op('slt-flow', e); op('slt-lab-flow', e); if (p > 0) { op('slt-lens', 1 - ease(clamp(p * 3, 0, 1))); op('slt-lab-lens', 1 - ease(clamp(p * 3, 0, 1))); }
-            var spots = document.querySelectorAll('#slt-spots circle'); for (var i = 0; i < spots.length; i++) if (p > 0) spots[i].style.opacity = (1 - 0.8 * e).toFixed(2); } }
-      ]
-    },
+    slt: sltProc(false),
+    dslt: sltProc(true),
     migs: {
       views: [['Close-up of the drain', migsSvg]],
       intro: '<strong>Before.</strong> A close-up of the drain. Fluid has to pass through the meshwork to reach the canal behind it, and in glaucoma the meshwork resists it.',
@@ -233,11 +268,11 @@
       views: [['Side view', trabSvg]],
       intro: '<strong>Before.</strong> The front of the eye cut in half. The red line is the conjunctiva, the thin clear skin over the white of the eye. The operation is done at the top of the eye, under the upper eyelid.',
       steps: [
-        { label: 'Flap', dur: 1800, caption: '<strong>A flap.</strong> The surgeon opens the conjunctiva and makes a thin, hinged flap in the white wall of the eye.',
+        { label: 'Flap', dur: 1800, caption: '<strong>A flap.</strong> The surgeon opens the conjunctiva and makes a thin, hinged flap, like a trapdoor, in the white wall of the eye. A medicine that slows scarring (mitomycin C) is applied briefly.',
           draw: function (p) { var e = ease(p); at('trab-flap', 'transform', 'rotate(' + (-34 * e).toFixed(1) + ' 322 89)'); op('trab-lab-flap', e); } },
         { label: 'Opening', dur: 1800, caption: '<strong>An opening.</strong> A tiny opening is made under the flap into the front chamber, and usually a small hole in the iris beside it so the iris cannot block it.',
           draw: function (p) { var e = ease(p); at('trab-hole', 'stroke-width', 7 * e); at('trab-pi', 'stroke-width', 8 * e); op('trab-lab-hole', e); } },
-        { label: 'Stitches', dur: 1800, caption: '<strong>Stitches.</strong> The flap is laid back and stitched loosely, so fluid can seep out slowly under its edges. The conjunctiva is closed over it.',
+        { label: 'Stitches', dur: 1800, caption: '<strong>Stitches.</strong> The flap is laid back and stitched loosely, so fluid can seep out slowly under its edges. The stitches can be loosened later to adjust the flow. The conjunctiva is closed over it.',
           draw: function (p) { var e = ease(p); op('trab-sut', e); if (!p) return; at('trab-flap', 'transform', 'rotate(' + (-34 * (1 - e)).toFixed(1) + ' 322 89)'); op('trab-lab-flap', 1 - e); } },
         { label: 'Bleb', dur: 2600, caption: '<strong>The bleb.</strong> Fluid now leaves through the opening and collects in a small blister, the bleb, under the conjunctiva, where it is absorbed. The eyelid covers it.',
           draw: function (p) { var e = ease(p), c = conjPath(e); at('trab-conj', 'd', c.line); at('trab-bleb', 'd', c.fill); op('trab-bleb', 0.85 * e); op('trab-flow', e); op('trab-lab-bleb', e); if (p > 0) op('trab-lab-hole', 1 - e); } }
@@ -249,7 +284,7 @@
       steps: [
         { label: 'Plate', dur: 1700, caption: '<strong>The plate.</strong> A thin, soft plate is placed on the wall of the eye, far back under the upper eyelid, and stitched in place.',
           draw: function (p) { var e = ease(p); at('tube-plate', 'transform', 'translate(' + (160 * (1 - e)).toFixed(1) + ',0)'); op('tube-plate', p > 0 ? 1 : 0); op('tube-lab-plate', e); } },
-        { label: 'Tube', dur: 2000, caption: '<strong>The tube.</strong> The tube from the plate is trimmed and passed into the front chamber through a needle opening, just in front of the iris.',
+        { label: 'Tube', dur: 2000, caption: '<strong>The tube.</strong> The tube from the plate is trimmed and passed into the front chamber through a tiny tunnel. It lies flat, just in front of the iris and parallel to it, away from the cornea.',
           draw: function (p) { var e = ease(p); at('tube-out', 'stroke-dashoffset', 1 - e); at('tube-in', 'stroke-dashoffset', 1 - e); op('tube-out', p > 0 ? 1 : 0); op('tube-in', p > 0 ? 1 : 0); op('tube-lab-tube', e); } },
         { label: 'Patch', dur: 1500, caption: '<strong>A patch.</strong> A patch of donor tissue covers the tube where it runs under the conjunctiva, to protect it. The conjunctiva is closed over everything.',
           draw: function (p) { var e = ease(p); op('tube-patch', e); op('tube-lab-patch', e); } },
@@ -259,36 +294,49 @@
     }
   };
 
-  var proc = PROCS[root.getAttribute('data-proc')];
-  if (!proc) return;
-  var starts = [], T_END = 0;
-  proc.steps.forEach(function (s) { starts.push(T_END); T_END += s.dur; });
+  if (!PROCS[root.getAttribute('data-proc')]) return;
+  var proc, starts, T_END, el, stepBtns, tNow = 0, capShown = -2, raf = 0, playing = false;
 
   // ---------- markup ----------
-  var two = proc.views.length > 1, h = '';
-  if (two) {
-    h += '<div class="jk-chips jk-lpi__tabs" role="group" aria-label="View">';
-    proc.views.forEach(function (v, i) { h += '<button type="button" class="jk-chip' + (i ? '' : ' is-active') + '" data-view="' + (i ? 'front' : 'side') + '" aria-pressed="' + !i + '">' + v[0] + '</button>'; });
-    h += '</div>';
+  function mount(key) {
+    proc = PROCS[key];
+    starts = []; T_END = 0;
+    proc.steps.forEach(function (s) { starts.push(T_END); T_END += s.dur; });
+    var two = proc.views.length > 1, h = '';
+    if (proc.variants) {
+      h += '<div class="jk-chips jk-proc__variants" role="group" aria-label="Which kind">';
+      proc.variants.forEach(function (v) { h += '<button type="button" class="jk-chip' + (v[0] === key ? ' is-active' : '') + '" data-variant="' + v[0] + '" aria-pressed="' + (v[0] === key) + '">' + v[1] + '</button>'; });
+      h += '</div>';
+    }
+    if (two) {
+      h += '<div class="jk-chips jk-lpi__tabs" role="group" aria-label="View">';
+      proc.views.forEach(function (v, i) { h += '<button type="button" class="jk-chip' + (i ? '' : ' is-active') + '" data-view="' + (i ? 'front' : 'side') + '" aria-pressed="' + !i + '">' + v[0] + '</button>'; });
+      h += '</div>';
+    }
+    h += '<div class="jk-lpi__views' + (two ? '' : ' jk-lpi__views--one') + '" data-show="side">';
+    proc.views.forEach(function (v, i) { h += '<figure class="jk-lpi__view" data-view="' + (i ? 'front' : 'side') + '"><figcaption>' + v[0] + '</figcaption>' + v[1]() + '</figure>'; });
+    h += '</div>'
+      + '<ol class="jk-proc__steps" aria-label="Steps">';
+    proc.steps.forEach(function (s, i) { h += '<li><button type="button" class="jk-proc__step" data-step="' + i + '"><span>' + (i + 1) + '</span> ' + s.label + '</button></li>'; });
+    h += '</ol>'
+      + '<div class="jk-lpi__controls">'
+      + '<button type="button" class="btn btn-primary jk-lpi__fire" id="jk-proc-play">&#9654; Play</button>'
+      + '<button type="button" class="btn btn-outline-secondary" id="jk-proc-reset" disabled>Start over</button>'
+      + '<button type="button" class="btn btn-outline-secondary jk-lpi__full" id="jk-proc-full"' + (reqFull ? '' : ' hidden') + '>' + fullLabel() + '</button>'
+      + '</div>'
+      + '<p class="jk-lpi__step" id="jk-proc-cap" aria-live="polite"></p>';
+    root.innerHTML = h;
+    el = { play: $('jk-proc-play'), reset: $('jk-proc-reset'), full: $('jk-proc-full'), cap: $('jk-proc-cap'), views: root.querySelector('.jk-lpi__views') };
+    stepBtns = root.querySelectorAll('.jk-proc__step');
+    capShown = -2;
+    render(0);
+    setButtons();
   }
-  h += '<div class="jk-lpi__views' + (two ? '' : ' jk-lpi__views--one') + '" data-show="side">';
-  proc.views.forEach(function (v, i) { h += '<figure class="jk-lpi__view" data-view="' + (i ? 'front' : 'side') + '"><figcaption>' + v[0] + '</figcaption>' + v[1]() + '</figure>'; });
-  h += '</div>'
-    + '<ol class="jk-proc__steps" aria-label="Steps">';
-  proc.steps.forEach(function (s, i) { h += '<li><button type="button" class="jk-proc__step" data-step="' + i + '"><span>' + (i + 1) + '</span> ' + s.label + '</button></li>'; });
-  h += '</ol>'
-    + '<div class="jk-lpi__controls">'
-    + '<button type="button" class="btn btn-primary jk-lpi__fire" id="jk-proc-play">&#9654; Play</button>'
-    + '<button type="button" class="btn btn-outline-secondary" id="jk-proc-reset" disabled>Start over</button>'
-    + '<button type="button" class="btn btn-outline-secondary jk-lpi__full" id="jk-proc-full" hidden>Full screen</button>'
-    + '</div>'
-    + '<p class="jk-lpi__step" id="jk-proc-cap" aria-live="polite"></p>';
-  root.innerHTML = h;
-  var el = { play: $('jk-proc-play'), reset: $('jk-proc-reset'), full: $('jk-proc-full'), cap: $('jk-proc-cap'), views: root.querySelector('.jk-lpi__views') };
-  var stepBtns = root.querySelectorAll('.jk-proc__step');
+  var reqFull = root.requestFullscreen || root.webkitRequestFullscreen;
+  function isFull() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+  function fullLabel() { return isFull() ? 'Exit full screen' : 'Full screen'; }
 
   // ---------- render ----------
-  var tNow = 0, capShown = -2;
   function render(t) {
     tNow = t;
     proc.steps.forEach(function (s, i) { s.draw(clamp((t - starts[i]) / s.dur, 0, 1), t); });
@@ -301,7 +349,6 @@
     }
   }
 
-  var raf = 0, playing = false;
   function setButtons() {
     el.play.innerHTML = playing ? '&#10074;&#10074; Pause' : tNow >= T_END ? '&#9654; Play again' : tNow > 0 ? '&#9654; Continue' : '&#9654; Play';
     el.reset.disabled = tNow <= 0 && !playing;
@@ -325,32 +372,30 @@
   // a step button shows that step finished, so it can be talked through
   function jump(i) { stop(); render(starts[i] + proc.steps[i].dur); setButtons(); }
 
-  el.play.addEventListener('click', play);
-  el.reset.addEventListener('click', function () { stop(); render(0); setButtons(); });
   root.addEventListener('click', function (e) {
     var b = e.target.closest('button');
     if (!b) return;
-    if (b.hasAttribute('data-step')) jump(+b.getAttribute('data-step'));
-    else if (b.hasAttribute('data-view')) {
-      el.views.setAttribute('data-show', b.getAttribute('data-view'));
-      root.querySelectorAll('.jk-lpi__tabs .jk-chip').forEach(function (o) { var on = o === b; o.classList.toggle('is-active', on); o.setAttribute('aria-pressed', String(on)); });
-    }
+    if (b.id === 'jk-proc-play') play();
+    else if (b.id === 'jk-proc-reset') { stop(); render(0); setButtons(); }
+    else if (b.id === 'jk-proc-full') {
+      if (isFull()) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      else if (reqFull) reqFull.call(root);
+    } else if (b.hasAttribute('data-step')) jump(+b.getAttribute('data-step'));
+    else if (b.hasAttribute('data-variant')) {
+      if (PROCS[b.getAttribute('data-variant')] === proc) return;
+      var show = el.views.getAttribute('data-show');
+      stop(); mount(b.getAttribute('data-variant'));
+      setView(show);
+    } else if (b.hasAttribute('data-view')) setView(b.getAttribute('data-view'));
   });
-
-  var reqFull = root.requestFullscreen || root.webkitRequestFullscreen;
-  if (reqFull) {
-    el.full.hidden = false;
-    el.full.addEventListener('click', function () {
-      var cur = document.fullscreenElement || document.webkitFullscreenElement;
-      if (cur) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
-      else reqFull.call(root);
-    });
-    var onFs = function () { el.full.textContent = (document.fullscreenElement || document.webkitFullscreenElement) ? 'Exit full screen' : 'Full screen'; };
-    document.addEventListener('fullscreenchange', onFs);
-    document.addEventListener('webkitfullscreenchange', onFs);
+  function setView(v) {
+    el.views.setAttribute('data-show', v);
+    root.querySelectorAll('.jk-lpi__tabs .jk-chip').forEach(function (o) { var on = o.getAttribute('data-view') === v; o.classList.toggle('is-active', on); o.setAttribute('aria-pressed', String(on)); });
   }
+  function onFs() { if (el && el.full) el.full.textContent = fullLabel(); }
+  document.addEventListener('fullscreenchange', onFs);
+  document.addEventListener('webkitfullscreenchange', onFs);
 
-  render(0);
-  setButtons();
+  mount(root.getAttribute('data-proc'));
   root.classList.add('is-ready');
 })();
