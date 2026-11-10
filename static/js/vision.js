@@ -435,7 +435,7 @@
     h += MODE === 'rx'
       ? '<p class="jk-vis__hint">Drag the handle to compare with and without glasses. Hold <button type="button" class="jk-vis__hold" id="jk-vis-hold">With glasses</button> to see the whole scene through these glasses.</p>'
       : '<p class="jk-vis__hint">Drag the handle to compare. Hold <button type="button" class="jk-vis__hold" id="jk-vis-hold">Show normal</button> to see the scene without the condition.</p>';
-    if (MODE === 'rx') h += buildRx(); else h += buildConditions();
+    if (MODE === 'rx') h += buildRx(); else h += buildSeverity() + buildConditions();
     h += '<div class="jk-vis__about" id="jk-vis-about" aria-live="polite"></div>';
     h += '<div class="jk-vis__share">'
       + '<button type="button" class="btn btn-outline-primary btn-sm" id="jk-vis-copy">Copy link to this view</button>'
@@ -443,6 +443,16 @@
       + '<div class="jk-qrbox jk-vis__qr"><div class="jk-qr" id="jk-vis-qr"></div><p class="jk-qrbox__cap">Scan to open this view on your phone</p></div>'
       + '</div>';
     root.innerHTML = h;
+  }
+
+  // The severity row sits right under the picture, so on a phone Play and
+  // the slider are on screen together with what they change.
+  function buildSeverity() {
+    return '<div class="jk-vis__row jk-vis__row--sev"><label class="jk-vis__lab" for="jk-vis-sev">How far along</label>'
+      + '<div class="jk-vis__sevctl">'
+      + '<button type="button" class="btn btn-outline-primary btn-sm jk-vis__play" id="jk-vis-play" hidden>&#9654; Play</button>'
+      + '<div class="jk-vis__sevwrap"><input type="range" id="jk-vis-sev" min="0" max="100" step="1" value="55">'
+      + '<div class="jk-vis__sevlabels" id="jk-vis-sevlabels" aria-hidden="true"></div></div></div></div>';
   }
 
   function buildConditions() {
@@ -459,12 +469,6 @@
       h += '<button type="button" class="jk-chip" data-cond="' + c.id + '" aria-pressed="false">' + c.label + '</button>';
     });
     h += '</div></div>';
-    // severity
-    h += '<div class="jk-vis__row jk-vis__row--sev"><label class="jk-vis__lab" for="jk-vis-sev">How far along</label>'
-      + '<div class="jk-vis__sevctl">'
-      + '<button type="button" class="btn btn-outline-primary btn-sm jk-vis__play" id="jk-vis-play" hidden>&#9654; Play</button>'
-      + '<div class="jk-vis__sevwrap"><input type="range" id="jk-vis-sev" min="0" max="100" step="1" value="55">'
-      + '<div class="jk-vis__sevlabels" id="jk-vis-sevlabels" aria-hidden="true"></div></div></div></div>';
     h += '<div id="jk-vis-options" class="jk-vis__options"></div>';
     h += '<div id="jk-vis-paint" class="jk-vis__paint" hidden></div>';
     return h;
@@ -564,6 +568,9 @@
     els.play.classList.toggle('is-active', on);
   }
   function startPlay() {
+    // bring the whole picture into view if part of it is scrolled away
+    var r = els.stage.getBoundingClientRect();
+    if (r.top < 0 || r.bottom > window.innerHeight) els.stage.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
     if (!paused || state.sev >= 100) state.sev = 0;
     paused = false;
     var from = state.sev;
