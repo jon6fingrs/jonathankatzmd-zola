@@ -62,7 +62,7 @@ Removing the lens on its own lowers eye pressure slightly in many eyes, and more
 
 ## Later on
 
-Months or years after surgery, the capsule that holds the implant can become cloudy, blurring vision in a way that feels like the cataract coming back. This "secondary cataract" is treated in the office with a painless laser (YAG capsulotomy) that takes a minute and is permanent.
+Months or years after surgery, the capsule that holds the implant can become cloudy, blurring vision in a way that feels like the cataract coming back. This "secondary cataract" is treated in the office with a painless laser, a [YAG capsulotomy](@/learn/yag-capsulotomy.md), that takes a minute and is permanent.
 
 ## Questions worth asking
 
