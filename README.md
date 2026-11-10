@@ -140,8 +140,10 @@ preview comment is the quickest way to spot a link that escaped.
 | Content | Template | Notes |
 |---|---|---|
 | `content/_index.md` | `templates/index.html` | home: hero (WebP via `resize_image`), tool cards, bio + office phones, Learn cards, Physician JSON-LD built from `config.extra.offices` |
-| `content/about.md`, `content/learn/*.md`, `content/privacy.md` | `templates/page.html` | `[extra] article = true` gives the 720px reading layout, an `<h1>`, and previous/next links within the section |
-| `content/learn/_index.md`, `content/patients/_index.md` | `templates/section.html` | card grid of the section's pages |
+| `content/about.md`, `content/learn/*.md`, `content/privacy.md` | `templates/page.html` | `[extra] article = true` gives the 720px reading layout and an `<h1>`. Every Learn page also sets `topic` and `group` (see "Learn topics" below), which drive the "Related pages" block at the bottom |
+| `content/patients/_index.md` ("Tools"; the address stays `/patients/`) | `templates/section.html` | card grid of the section's pages, plus pages from other sections named in `[extra] also` |
+| `content/learn/_index.md` | `templates/learn.html` | every topic with its articles; topics and their order come from `[extra] topics` |
+| `content/learn/<topic>/_index.md` | `templates/topic.html` | a topic hub: the articles with that `topic`, under the hub's `groups` headings if it has any |
 | `content/patients/eye-drops.md` | `templates/eye-drops.html` | renders `static/data/eye-drops.json` twice: a table (≥768px) and a card list (phones). `static/js/droptable.js` filters both, builds the filter chips, sorts, and runs the lightbox |
 | `content/patients/post-op-schedule.md` | `templates/page.html` | form markup lives in the content file; logic in `static/js/postop-rules.js` (dosing rules, tested) + `static/js/postop.js` (UI) |
 | `content/patients/eye-drop-form.md` | `templates/page.html` | row template in the content file; logic in `static/js/dropform-plan.js` (tapers, tested) + `static/js/dropform.js` (UI) |
@@ -157,6 +159,25 @@ preview comment is the quickest way to spot a link that escaped.
 
 A page's `[extra]` can load scripts with `scripts = ["vendor/x.js", "js/y.js"]`
 (in order) or a single `js = "js/y.js"`.
+
+### Learn topics
+
+The Learn menu is one panel listing every article under its topic
+(Glaucoma, Cataract, Vision Simulators), built by `partials/navbar.html`
+from the Learn section, so a new article appears in the menu by itself.
+Each topic also has its own page. Articles all live
+flat in `content/learn/` so their addresses never change. To add one:
+set `topic = "glaucoma"` (or `cataract`, `simulators`) and `group = "Lasers"`
+(a heading from that hub's `groups`, or `""` if the hub has none) in its
+`[extra]`. Both keys are required on every Learn page: the templates
+compare them directly. A page with `topic = ""` (When to Call the Same
+Day) belongs to no topic and gets no breadcrumb or related block. Tools
+are only the three drop tools in `content/patients/`; the simulators and
+the eye pressure sink are Learn pages.
+To add a topic: create `content/learn/<topic>/_index.md` with
+`template = "topic.html"` and a `more` label (the heading of the related
+block, e.g. "More on glaucoma"), add it to `topics` in `content/learn/_index.md`
+and to the Learn menu in `config.toml`.
 
 ### `static/data/eye-drops.json` is the single source of truth
 

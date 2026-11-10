@@ -132,6 +132,44 @@ body { color: var(--jk-ink); font-family: var(--jk-body); }
   margin-right: .6rem; vertical-align: 2px; opacity: .6;
 }
 
+/* The Learn menu (partials/navbar.html, `mega = true` in config.toml).
+   Phones first: each topic is a row that expands in place (Bootstrap
+   collapse). From 992px the panel is wide, topics are columns, everything
+   is open, and the topic name is a link to its page. */
+.jk-mega__panel { padding: 0 0 .5rem 2.1rem; }
+.jk-mega__head {
+  font-family: var(--jk-display); text-transform: uppercase; letter-spacing: .06em; font-size: 1rem;
+  color: var(--jk-ink); text-decoration: none; background: none; border: 0; text-align: left;
+}
+.jk-mega__head--link { display: none; }
+.jk-mega__head--btn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: .6rem 0; min-height: 44px; }
+.jk-mega__head--btn::after { content: ""; width: .55rem; height: .55rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-135deg); transition: transform .15s ease; margin: .25rem .4rem 0 .75rem; }
+.jk-mega__head--btn.collapsed::after { transform: rotate(45deg); margin-top: -.2rem; }
+.jk-mega__body { padding: 0 0 .5rem .9rem; }
+.jk-mega__group { display: flex; flex-direction: column; margin-bottom: .35rem; }
+.jk-mega__sub { font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--jk-muted); margin: .5rem 0 .1rem; }
+.jk-mega__item { display: block; padding: .5rem 0; color: var(--jk-ink); text-decoration: none; font-family: var(--jk-body); font-size: 1rem; line-height: 1.25; }
+.jk-mega__item:hover, .jk-mega__head--link:hover { color: var(--jk-accent); }
+.jk-mega__overview { color: var(--jk-accent); font-size: .92rem; }
+.jk-mega__foot { border-top: 1px solid rgba(31,41,55,.15); margin-top: .35rem; padding-top: .35rem; }
+.jk-mega__foot .jk-mega__item { font-family: var(--jk-display); text-transform: uppercase; letter-spacing: .06em; }
+@media (min-width: 992px) {
+  .jk-navbar .jk-mega { position: static; }
+  .jk-navbar .jk-mega__panel { left: auto; right: 2rem; top: calc(100% - .6rem); width: min(100vw - 4rem, 1060px); padding: 1.1rem 1.4rem .8rem; box-shadow: 0 12px 30px rgba(15,23,42,.14); }
+  .jk-mega__cols { display: flex; flex-wrap: wrap; gap: 1rem 1.75rem; }
+  .jk-mega__topic { flex: var(--jk-n, 1) 1 calc(var(--jk-n, 1) * 150px); min-width: 0; }
+  .jk-mega__head--btn { display: none; }
+  .jk-mega__head--link { display: block; font-size: 1.1rem; padding-bottom: .35rem; margin-bottom: .45rem; border-bottom: 2px solid var(--jk-line); }
+  .jk-mega__body.collapse { display: block !important; height: auto !important; padding: 0; }
+  .jk-mega__groups { display: flex; gap: 0 1.5rem; }
+  .jk-mega__group { flex: 1 1 0; min-width: 0; }
+  .jk-mega__sub { margin-top: 0; }
+  .jk-mega__item { padding: .28rem 0; font-size: .95rem; }
+  .jk-mega__overview { display: none; }
+  .jk-mega__foot { display: flex; gap: 2rem; margin-top: .9rem; padding-top: .6rem; border-top-color: var(--jk-line); }
+  .jk-mega__foot .jk-mega__item { font-size: .95rem; }
+}
+
 /* hamburger — three bars; the theme animates them into an X when open */
 .jk-toggler { border: 0; background: transparent; padding: .4rem .1rem !important; }
 .jk-toggler:focus { box-shadow: none; outline: 0; }
@@ -640,6 +678,23 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-figure img { display: block; width: 100%; height: auto; }
 .jk-figure figcaption { margin-top: .6rem; font-size: .92rem; line-height: 1.45; color: var(--jk-muted); text-align: center; }
 .jk-page--article .jk-page__body .jk-figure figcaption { margin-bottom: 0; }
+.jk-crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; font-size: .88rem; color: var(--jk-muted); margin: 0 0 .9rem; }
+.jk-crumbs a { color: var(--jk-accent); text-decoration: none; }
+.jk-crumbs a:hover { text-decoration: underline; }
+.jk-related { margin-top: 2.5rem; padding: 1rem 1.1rem 1.1rem; background: #fff; border: 1px solid var(--jk-line); border-radius: 10px; font-size: .98rem; }
+.jk-related__top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .25rem 1rem; margin-bottom: .7rem; }
+.jk-page--article .jk-page__body .jk-related__head, .jk-related__head { font-family: var(--jk-body); font-size: 1.05rem; font-weight: 600; margin: 0; border: 0; padding: 0; text-transform: none; letter-spacing: 0; }
+.jk-page--article .jk-page__body .jk-related ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .45rem .6rem; }
+.jk-related li { margin: 0; }
+.jk-related li a { display: inline-flex; align-items: center; padding: .35rem .85rem; border: 1px solid var(--jk-line); border-radius: 999px; background: var(--jk-bg); color: var(--jk-ink); text-decoration: none; min-height: 38px; }
+.jk-related li a:hover { border-color: var(--jk-accent); color: var(--jk-accent); }
+.jk-related__all { color: var(--jk-accent); text-decoration: none; font-weight: 500; font-size: .92rem; white-space: nowrap; }
+.jk-related__all:hover { text-decoration: underline; }
+.jk-sectionhead--minor { margin-top: 2.75rem; font-size: 1.15rem; color: var(--jk-muted); }
+.jk-cardgrid--compact .jk-card h3 { font-size: 1rem; }
+@media print { .jk-related, .jk-crumbs { display: none; } }
+.jk-sectionhead a { color: inherit; text-decoration: none; }
+.jk-sectionhead a:hover { color: var(--jk-accent); }
 .jk-article-nav { border-top: 1px solid var(--jk-line); margin-top: 2.5rem; padding-top: 1rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-size: .95rem; }
 .jk-article-nav a { color: var(--jk-accent); text-decoration: none; }
 .jk-article-nav a:hover { text-decoration: underline; }

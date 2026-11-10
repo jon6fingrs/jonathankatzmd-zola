@@ -6,6 +6,8 @@ weight = 110
 
 [extra]
 article = true
+topic = "cataract"
+group = ""
 js = "js/yag.js"
 +++
 

@@ -6,6 +6,8 @@ weight = 10
 
 [extra]
 article = true
+topic = "glaucoma"
+group = "Basics"
 +++
 
 Glaucoma is a group of eye diseases that damage the **optic nerve**, the cable that carries what the eye sees to the brain. The damage is usually slow, painless, and permanent, and in most people it is related to the **pressure inside the eye** being higher than that particular nerve can tolerate. It is one of the leading causes of irreversible blindness worldwide, and also one of the most treatable when it is found early.

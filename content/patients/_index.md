@@ -1,12 +1,8 @@
 +++
-description = "Patient tools: an eye drop reference guide, printable eye drop schedule generators, and interactive vision simulators."
-title = "For Patients"
+description = "Practical tools for your eye drops: a medication reference with photos, a post-op drop schedule, and a daily drop schedule builder, all printable with phone reminders."
+title = "Tools"
 template = "section.html"
 sort_by = "weight"
 weight = 4
 
-[extra]
-# Pages from other sections listed here too, after this section's own.
-# They keep their /learn/ addresses so existing links still work.
-also = ["learn/vision-loss.md", "learn/glasses-prescription.md"]
 +++

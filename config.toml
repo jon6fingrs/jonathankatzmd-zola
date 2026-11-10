@@ -66,7 +66,7 @@ url = "/about/"
 icon = "images/nav/doctor.svg"
 
 [[extra.menus]]
-name = "FOR PATIENTS"
+name = "TOOLS"
 url = "/patients/"
 icon = "images/nav/eye.svg"
   [[extra.menus.children]]
@@ -78,53 +78,22 @@ icon = "images/nav/eye.svg"
   [[extra.menus.children]]
   name = "POST-OP SCHEDULE"
   url = "/patients/post-op-schedule/"
-  [[extra.menus.children]]
-  name = "WHAT VISION LOSS LOOKS LIKE"
-  url = "/learn/vision-loss/"
-  [[extra.menus.children]]
-  name = "GLASSES PRESCRIPTION SIMULATOR"
-  url = "/learn/glasses-prescription/"
 
+# `mega = true` makes the Learn menu one panel that lists every article under
+# its topic, built from the Learn section (see partials/navbar.html), so a
+# new article or topic appears in the menu by itself. `children` are the
+# extra links along the bottom of the panel.
 [[extra.menus]]
 name = "LEARN"
 url = "/learn/"
 icon = "images/nav/book.svg"
+mega = true
   [[extra.menus.children]]
-  name = "WHAT IS GLAUCOMA?"
-  url = "/learn/what-is-glaucoma/"
+  name = "When to call the same day"
+  url = "/learn/when-to-call/"
   [[extra.menus.children]]
-  name = "HOW TREATMENTS LOWER PRESSURE"
-  url = "/learn/eye-pressure/"
-  [[extra.menus.children]]
-  name = "GLAUCOMA TESTING"
-  url = "/learn/glaucoma-testing/"
-  [[extra.menus.children]]
-  name = "USING EYE DROPS"
-  url = "/learn/using-eye-drops/"
-  [[extra.menus.children]]
-  name = "SLT LASER"
-  url = "/learn/slt-laser/"
-  [[extra.menus.children]]
-  name = "LASER IRIDOTOMY"
-  url = "/learn/laser-iridotomy/"
-  [[extra.menus.children]]
-  name = "MIGS"
-  url = "/learn/migs/"
-  [[extra.menus.children]]
-  name = "TRABECULECTOMY"
-  url = "/learn/trabeculectomy/"
-  [[extra.menus.children]]
-  name = "TUBE SHUNT SURGERY"
-  url = "/learn/tube-shunt-surgery/"
-  [[extra.menus.children]]
-  name = "MICROPULSE / CPC LASER"
-  url = "/learn/cyclophotocoagulation/"
-  [[extra.menus.children]]
-  name = "CATARACT SURGERY"
-  url = "/learn/cataract-surgery/"
-  [[extra.menus.children]]
-  name = "YAG CAPSULOTOMY"
-  url = "/learn/yag-capsulotomy/"
+  name = "All topics"
+  url = "/learn/"
 
 [[extra.menus]]
 name = "CONTACT"

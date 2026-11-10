@@ -26,7 +26,58 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
         <ul class="nav navbar-nav main-navigation">
           {% for menu in config.extra.menus %}
-            {% if menu.children %}
+            {% if menu.mega %}
+              {#- The Learn menu: one panel listing every article under its
+                  topic (and group), built from the Learn section, so no
+                  article is more than one click away. From 992px the
+                  topics are columns; below that each topic is a row that
+                  expands in place. `children` become the links along the
+                  bottom. -#}
+              {%- set learn = get_section(path="learn/_index.md") %}
+              <li class="nav-item dropdown jk-mega">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                  {% if menu.icon %}<img class="jk-navicon" src="{{ get_url(path=menu.icon) }}" alt="">{% endif %}{{ menu.name }}
+                </a>
+                <div class="dropdown-menu jk-mega__panel">
+                  <div class="jk-mega__cols">
+                    {% for t in learn.extra.topics %}
+                    {%- set hub = get_section(path="learn/" ~ t ~ "/_index.md") %}
+                    {%- set groups = hub.extra.groups %}
+                    <div class="jk-mega__topic" style="--jk-n: {% if groups | length > 0 %}{{ groups | length }}{% else %}1{% endif %}">
+                      <a class="jk-mega__head jk-mega__head--link" href="{{ hub.permalink }}">{{ hub.title }}</a>
+                      <button type="button" class="jk-mega__head jk-mega__head--btn collapsed" data-bs-toggle="collapse" data-bs-target="#jk-mega-{{ t }}" aria-expanded="false" aria-controls="jk-mega-{{ t }}">{{ hub.title }}</button>
+                      <div class="collapse jk-mega__body" id="jk-mega-{{ t }}">
+                        <div class="jk-mega__groups">
+                          {% if groups | length > 0 %}
+                          {% for g in groups %}
+                          <div class="jk-mega__group">
+                            <span class="jk-mega__sub">{{ g }}</span>
+                            {% for p in learn.pages %}{% if p.extra.topic == t and p.extra.group == g %}
+                            <a class="jk-mega__item" href="{{ p.permalink }}">{{ p.title }}</a>
+                            {% endif %}{% endfor %}
+                          </div>
+                          {% endfor %}
+                          {% else %}
+                          <div class="jk-mega__group">
+                            {% for p in learn.pages %}{% if p.extra.topic == t %}
+                            <a class="jk-mega__item" href="{{ p.permalink }}">{{ p.title }}</a>
+                            {% endif %}{% endfor %}
+                          </div>
+                          {% endif %}
+                        </div>
+                        <a class="jk-mega__item jk-mega__overview" href="{{ hub.permalink }}">{{ hub.title }} overview &rarr;</a>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                  <div class="jk-mega__foot">
+                    {% for child in menu.children %}
+                    <a class="jk-mega__item" href="{{ get_url(path=child.url, trailing_slash=true) }}">{{ child.name }}</a>
+                    {% endfor %}
+                  </div>
+                </div>
+              </li>
+            {% elif menu.children %}
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   {% if menu.icon %}<img class="jk-navicon" src="{{ get_url(path=menu.icon) }}" alt="">{% endif %}{{ menu.name }}

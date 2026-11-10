@@ -4,12 +4,27 @@
 <section class="jk-page{% if page.extra.centered %} jk-page--centered{% endif %}{% if page.extra.article %} jk-page--article{% endif %}">
   <div class="container">
     <div class="jk-page__body">
+      {% if page.extra.article and page.extra.topic %}
+      {%- set crumb_hub = get_section(path="learn/" ~ page.extra.topic ~ "/_index.md") %}
+      <nav class="jk-crumbs" aria-label="Breadcrumb"><a href="{{ get_url(path='/learn/', trailing_slash=true) }}">Learn</a><span aria-hidden="true">&rsaquo;</span><a href="{{ crumb_hub.permalink }}">{{ crumb_hub.title }}</a></nav>
+      {% endif %}
       {% if page.extra.article %}<h1 class="jk-title">{{ page.title }}</h1>{% endif %}
       {{ page.content | safe }}
-      {% if page.extra.article and (page.lower or page.higher) %}
-      <nav class="jk-article-nav" aria-label="More to read">
-        <span>{% if page.lower %}<a href="{{ page.lower.permalink }}">&larr; {{ page.lower.title }}</a>{% endif %}</span>
-        <span>{% if page.higher %}<a href="{{ page.higher.permalink }}">{{ page.higher.title }} &rarr;</a>{% endif %}</span>
+      {#- Learn articles end with the other pages in the same topic and group,
+          and a link to the topic page. Pages with no topic get nothing. -#}
+      {% if page.extra.article and page.extra.topic %}
+      {%- set learn = get_section(path="learn/_index.md") %}
+      {%- set hub = get_section(path="learn/" ~ page.extra.topic ~ "/_index.md") %}
+      <nav class="jk-related" aria-label="Related pages">
+        <div class="jk-related__top">
+          <h2 class="jk-related__head">{{ hub.extra.more }}</h2>
+          <a class="jk-related__all" href="{{ hub.permalink }}">All {{ hub.title }} pages &rarr;</a>
+        </div>
+        <ul>
+          {% for p in learn.pages %}{% if p.extra.topic == page.extra.topic and p.extra.group == page.extra.group and p.permalink != page.permalink %}
+          <li><a href="{{ p.permalink }}">{{ p.title }}</a></li>
+          {% endif %}{% endfor %}
+        </ul>
       </nav>
       {% endif %}
     </div>
