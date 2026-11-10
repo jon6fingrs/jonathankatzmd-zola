@@ -79,26 +79,20 @@ icon = "images/nav/eye.svg"
   name = "POST-OP SCHEDULE"
   url = "/patients/post-op-schedule/"
 
-# The Learn dropdown lists topics, not pages: each topic page lists its own
-# articles, so adding an article never lengthens the menu.
+# `mega = true` makes the Learn menu one panel that lists every article under
+# its topic, built from the Learn section (see partials/navbar.html), so a
+# new article or topic appears in the menu by itself. `children` are the
+# extra links along the bottom of the panel.
 [[extra.menus]]
 name = "LEARN"
 url = "/learn/"
 icon = "images/nav/book.svg"
+mega = true
   [[extra.menus.children]]
-  name = "GLAUCOMA"
-  url = "/learn/glaucoma/"
-  [[extra.menus.children]]
-  name = "CATARACT"
-  url = "/learn/cataract/"
-  [[extra.menus.children]]
-  name = "VISION SIMULATORS"
-  url = "/learn/simulators/"
-  [[extra.menus.children]]
-  name = "WHEN TO CALL THE SAME DAY"
+  name = "When to call the same day"
   url = "/learn/when-to-call/"
   [[extra.menus.children]]
-  name = "ALL TOPICS"
+  name = "All topics"
   url = "/learn/"
 
 [[extra.menus]]

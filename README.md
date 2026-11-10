@@ -162,8 +162,10 @@ A page's `[extra]` can load scripts with `scripts = ["vendor/x.js", "js/y.js"]`
 
 ### Learn topics
 
-The Learn menu lists topics (Glaucoma, Cataract, Vision Simulators), not
-pages, so adding an article never lengthens the menu. Articles all live
+The Learn menu is one panel listing every article under its topic
+(Glaucoma, Cataract, Vision Simulators), built by `partials/navbar.html`
+from the Learn section, so a new article appears in the menu by itself.
+Each topic also has its own page. Articles all live
 flat in `content/learn/` so their addresses never change. To add one:
 set `topic = "glaucoma"` (or `cataract`, `simulators`) and `group = "Lasers"`
 (a heading from that hub's `groups`, or `""` if the hub has none) in its
