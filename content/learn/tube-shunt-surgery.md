@@ -1,20 +1,27 @@
 +++
 title = "Tube Shunt Surgery"
-description = "Glaucoma drainage devices (Ahmed, Baerveldt): a small tube and plate that drain fluid from the eye. Who they are for, the operation, and the six-week recovery."
+description = "Glaucoma drainage devices (Ahmed, Baerveldt): a small tube and plate that drain fluid from the eye. With a step-by-step animation, who they are for, the operation, and the six-week recovery."
 template = "page.html"
 weight = 90
 
 [extra]
 article = true
+js = "js/procedure.js"
 +++
 
-A **tube shunt**, also called a glaucoma drainage device or implant, is a small silicone tube connected to a thin plate. The tube is placed just inside the front of the eye and carries fluid back to the plate, which sits on the white of the eye under the eyelid, well behind where it can be seen. Fluid collects in a reservoir around the plate and is absorbed. Common devices are the **Ahmed** valve and the **Baerveldt** and **ClearPath** implants.
+A **tube shunt**, also called a glaucoma drainage device or implant, is a small silicone tube connected to a thin plate. The tube is placed just inside the front of the eye, lying flat in front of the iris and away from the cornea, and carries fluid back to the plate, which sits on the white of the eye under the eyelid, well behind where it can be seen. Fluid collects in a reservoir around the plate and is absorbed. Common devices are the **Ahmed** valve and the **Baerveldt** and **ClearPath** implants.
+
+Press **Play** to see how the tube and plate are placed and how fluid drains, or tap a step to go through it at your own pace.
+
+<div id="jk-proc" class="jk-lpi" data-proc="tube">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
+</div>
 
 {{<figure src="images/learn/tube-shunt.svg" alt="Cross-section showing a thin tube entering the front chamber of the eye and running under a patch along the eye wall to a plate further back." caption="The tube carries fluid from the front chamber to the plate, which sits on the eye wall under the upper eyelid. A patch covers the tube. Simplified, not to scale." />}}
 
 ## Who it is for
 
-Tube shunts lower pressure about as well as [trabeculectomy](@/learn/trabeculectomy.md) and are chosen when a trabeculectomy is less likely to work or has already failed. That includes eyes with scarring from previous surgery or injury, glaucoma caused by inflammation or abnormal blood vessels (neovascular glaucoma), some eyes that have had corneal transplants or retinal surgery, and eyes where very close early follow-up would be difficult. In many practices, tube shunts are now used as a first surgery for selected patients.
+A tube shunt and a [trabeculectomy](@/learn/trabeculectomy.md) are the two main glaucoma operations, and each has its own uses. A trabeculectomy can usually reach a lower pressure, so it is often preferred when the nerve needs a very low target and the eye has not had surgery before. A tube shunt does not usually get the pressure quite as low, but it holds up better in eyes where a trabeculectomy is likely to scar closed, or already has. That was the finding of the Tube Versus Trabeculectomy (TVT) studies. Tubes are chosen for eyes with scarring from previous surgery or injury, glaucoma caused by inflammation or abnormal blood vessels (neovascular glaucoma), some eyes that have had corneal transplants or retinal surgery, and eyes where very close early follow-up would be difficult. In many practices, tube shunts are now used as a first surgery for selected patients.
 
 ## Valved and non-valved devices
 

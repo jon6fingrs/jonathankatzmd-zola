@@ -1,6 +1,6 @@
 +++
 title = "Your Glasses Prescription"
-description = "Enter a glasses prescription and see how the world looks with and without it at distance, arm's length and reading distance, compared with normal vision."
+description = "Enter a glasses prescription and see how the world looks with and without the glasses at distance, arm's length and reading distance."
 template = "page.html"
 weight = 25
 

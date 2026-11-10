@@ -1,14 +1,21 @@
 +++
 title = "MIGS"
-description = "Minimally invasive glaucoma surgery: small implants and procedures, often combined with cataract surgery, that lower pressure with a quicker recovery than traditional surgery."
+description = "Minimally invasive glaucoma surgery: small implants and procedures, often combined with cataract surgery, that lower pressure with a quicker recovery than traditional surgery. With a step-by-step animation of a stent being placed."
 template = "page.html"
 weight = 70
 
 [extra]
 article = true
+js = "js/procedure.js"
 +++
 
 **Minimally invasive glaucoma surgery (MIGS)** is a family of procedures that lower eye pressure through very small openings, with less disruption to the eye and a faster recovery than traditional glaucoma surgery. Most are performed at the time of [cataract surgery](@/learn/cataract-surgery.md) through the same incision, adding a few minutes to the operation. Some can be done on their own.
+
+Press **Play** to see a stent being placed in the drain, one of the most common kinds of MIGS, or tap a step to go through it at your own pace.
+
+<div id="jk-proc" class="jk-lpi" data-proc="migs">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
+</div>
 
 MIGS is generally for **mild to moderate open-angle glaucoma**, with the goal of lowering pressure modestly and reducing the number of drops needed. It is not usually a replacement for [trabeculectomy](@/learn/trabeculectomy.md) or a [tube shunt](@/learn/tube-shunt-surgery.md) in advanced disease, where larger pressure reductions are needed.
 
@@ -37,7 +44,7 @@ A small amount of blood inside the eye (hyphema) is common with angle procedures
 
 ## Results
 
-On average MIGS lowers pressure by a few millimeters and reduces drop use by one to two medications, with many patients off drops entirely. The effect is more modest than trabeculectomy or a tube but with far fewer complications. Pressure is monitored lifelong, and if it rises later, drops, laser or further surgery remain possible; MIGS does not close off those options.
+On average MIGS brings pressure into the mid teens and reduces drop use by one to two medications, with many patients off drops entirely. The effect is more modest than trabeculectomy or a tube but with far fewer complications. Pressure is monitored lifelong, and if it rises later, drops, laser or further surgery remain possible; MIGS does not close off those options.
 
 ## Risks
 

@@ -37,13 +37,13 @@
     { id: 'main', group: 'drain', label: 'Drops: open the main drain', where: 'main',
       about: '<strong>Netarsudil</strong> (Rhopressa) relaxes the main drain so fluid passes through it more easily, and slightly lowers the pressure in the veins it empties into.', link: ['../using-eye-drops/', 'Using eye drops'] },
     { id: 'slt', group: 'drain', label: 'SLT laser', where: 'main',
-      about: '<strong>SLT laser</strong> treats the main drain itself. Over a few weeks the drain clears and lets more fluid through. Nothing is cut.', link: ['../slt-laser/', 'SLT laser'] },
+      about: '<strong>SLT laser</strong> (standard or direct) treats the main drain itself. Over a few weeks the drain clears and lets more fluid through. Nothing is cut.', link: ['../slt-laser/', 'SLT laser'] },
     { id: 'migs', group: 'drain', label: 'MIGS', where: 'main',
       about: '<strong>MIGS</strong> (a tiny stent, or opening part of the drain) gives fluid a shortcut past the clogged part of the main drain, into the canal behind it. It is usually done with cataract surgery, and pressures in the mid teens afterward are typical. The fluid still leaves through the same veins, so it cannot go below the floor.', link: ['../migs/', 'MIGS'] },
     { id: 'trab', group: 'new', label: 'Trabeculectomy', where: 'new',
       about: '<strong>Trabeculectomy</strong> makes a new drain: a small opening in the wall of the eye, so fluid collects in a pocket (bleb) under the upper eyelid and is absorbed there. It bypasses the veins, so it can take the level lower than drops or laser can.', link: ['../trabeculectomy/', 'Trabeculectomy'] },
     { id: 'tube', group: 'new', label: 'Tube shunt', where: 'new',
-      about: '<strong>A tube shunt</strong> is a new drain made of a tiny tube that carries fluid to a plate on the wall of the eye, where it is absorbed. Like a trabeculectomy it bypasses the veins.', link: ['../tube-shunt-surgery/', 'Tube shunt surgery'] }
+      about: '<strong>A tube shunt</strong> is a new drain made of a tiny tube that carries fluid to a plate on the wall of the eye, where it is absorbed. Like a trabeculectomy it bypasses the veins. It usually does not go quite as low, but it holds up better in eyes that scar.', link: ['../tube-shunt-surgery/', 'Tube shunt surgery'] }
   ];
   var GROUPS = [['faucet', 'Turn down the faucet'], ['drain', 'Open the drains'], ['new', 'Add a new drain']];
 
