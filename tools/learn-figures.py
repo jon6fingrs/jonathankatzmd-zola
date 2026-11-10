@@ -285,6 +285,143 @@ b+=label(412,356,'Laser','start',22,'700','#15803d')
 b+=f'<line x1="400" y1="10" x2="400" y2="390" stroke="#e5e7eb" stroke-width="2"/>'
 figs['yag-capsulotomy']=('A cloudy capsule behind the lens implant, and the clear opening the YAG laser makes in it',800,400,b)
 
+# ---------- dry eye ----------
+SKIN='#f1c7a8'; SKIN_D='#b07d5b'; OIL='#f59e0b'; WATER='#93c5fd'
+def front_eye(cx,cy,w=150,up=92,down=92,iris=58):
+    """An open eye seen from the front (the patient's right eye: nose to the viewer's right)."""
+    e=f'M{cx-w},{cy} Q{cx},{cy-up*1.9} {cx+w},{cy} Q{cx},{cy+down*1.9} {cx-w},{cy} Z'
+    s=f'<clipPath id="fe{cx}"><path d="{e}"/></clipPath><path d="{e}" fill="#ffffff" stroke="{INK}" stroke-width="3"/>'
+    s+=f'<g clip-path="url(#fe{cx})"><circle cx="{cx}" cy="{cy}" r="{iris}" fill="#5b8bb5" stroke="#2c4f6e" stroke-width="2"/><circle cx="{cx}" cy="{cy}" r="{iris*0.4:.0f}" fill="#111827"/><circle cx="{cx+14}" cy="{cy-16}" r="7" fill="#ffffff"/></g>'
+    s+=f'<path d="M{cx-w},{cy} Q{cx},{cy-up*1.9} {cx+w},{cy}" fill="none" stroke="{INK}" stroke-width="5"/>'
+    return s
+def wavy(x,y,color='#64748b'):
+    return f'<path d="M{x},{y} q-8,-11 0,-22 q8,-11 0,-22" fill="none" stroke="{color}" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ahm)"/>'
+MARK=f'<marker id="ahm" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>'
+
+# 11. where tears come from and where they go
+cx,cy=330,250
+b=MARK
+b+=f'<path d="M150,128 C170,84 250,70 300,96 C282,120 220,150 172,160 Z" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="2"/>'  # tear gland, up and out
+b+=front_eye(cx,cy)
+for i in range(-4,5):   # oil gland openings along both lid margins
+    x=cx+i*30; yy=86*(1-(i*30/150)**2)
+    b+=f'<circle cx="{x}" cy="{cy-yy+3:.0f}" r="3.2" fill="{OIL}" stroke="#92400e" stroke-width="1"/><circle cx="{x}" cy="{cy+yy-3:.0f}" r="3.2" fill="{OIL}" stroke="#92400e" stroke-width="1"/>'
+a_=f'stroke="{BLUE}" stroke-width="4" fill="none" stroke-linecap="round"'
+b+=f'<path d="M230,150 C250,176 262,196 268,214" {a_} marker-end="url(#ah)"/><path d="M396,250 C420,250 440,250 458,250" {a_} marker-end="url(#ah)"/>'
+b+=f'<circle cx="470" cy="238" r="4.5" fill="{INK}"/><circle cx="470" cy="262" r="4.5" fill="{INK}"/>'  # puncta
+b+=f'<path d="M470,238 C500,226 520,236 530,250 M470,262 C500,274 520,264 530,250" fill="none" stroke="#1d4ed8" stroke-width="5" stroke-linecap="round"/>'
+b+=f'<path d="M530,236 C548,236 552,262 546,290 C540,330 548,370 560,404" fill="none" stroke="#1d4ed8" stroke-width="9" stroke-linecap="round"/><path d="M530,236 C548,236 552,262 546,290 C540,330 548,370 560,404" fill="none" stroke="#dbeafe" stroke-width="4" stroke-linecap="round"/>'
+b+=label(20,40,'Tear gland','start',22)+label(20,66,'makes the watery tears','start',20,'400')+leader(150,48,206,110)
+b+=label(20,330,'Oil glands','start',22)+label(20,356,'in both eyelids:','start',20,'400')+label(20,380,'their openings line','start',20,'400')+label(20,404,'the lid edges','start',20,'400')+leader(150,338,238,318)
+b+=label(520,150,'Drain openings','start',22)+label(520,176,'at the inner corner','start',20,'400')+leader(540,186,474,234)
+b+=label(590,380,'To the nose','start',22)+leader(586,374,558,384)
+b+=label(480,40,'Tears sweep across the eye','middle',20,'600',BLUE)+label(480,64,'with each blink','middle',20,'400',BLUE)
+figs['tear-system']=('Where tears come from and where they go: the tear gland, the oil glands in the eyelids, and the drains at the inner corner',760,430,b)
+
+# 12. an oil gland in the eyelid: working, and blocked
+def lid_panel(ox, blocked):
+    s=''
+    # the eye's surface below, with its tear film
+    s+=f'<rect x="{ox+30}" y="330" width="320" height="56" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>'
+    s+=f'<rect x="{ox+30}" y="{318 if blocked else 306}" width="320" height="{12 if blocked else 24}" fill="{WATER}"/>'
+    if not blocked: s+=f'<line x1="{ox+30}" y1="306" x2="{ox+350}" y2="306" stroke="{OIL}" stroke-width="6" stroke-linecap="round"/>'
+    else: s+=f'<line x1="{ox+30}" y1="318" x2="{ox+350}" y2="318" stroke="{OIL}" stroke-width="4" stroke-dasharray="14 40" stroke-linecap="round"/>'
+    # the eyelid, cut through, hanging over the eye
+    s+=f'<path d="M{ox+120},40 L{ox+260},40 L{ox+260},250 Q{ox+260},290 {ox+220},290 L{ox+160},290 Q{ox+120},290 {ox+120},250 Z" fill="{SKIN}" stroke="{SKIN_D}" stroke-width="2"/>'
+    if blocked: s+=f'<path d="M{ox+160},290 L{ox+220},290 Q{ox+252},290 {ox+258},262 L{ox+122},262 Q{ox+128},290 {ox+160},290 Z" fill="#f87171" opacity="0.55"/>'
+    for k in range(3): s+=f'<path d="M{ox+136+k*10},288 q-14,16 -30,{18+k*4}" fill="none" stroke="{INK}" stroke-width="2.5" stroke-linecap="round"/>'  # lashes at the front edge
+    gw=26 if blocked else 16
+    s+=f'<path d="M{ox+210-gw},90 Q{ox+210},60 {ox+210+gw},90 L{ox+210+gw},230 Q{ox+210},262 {ox+210-gw},230 Z" fill="{"#fbbf24" if blocked else "#fde68a"}" stroke="#b45309" stroke-width="2"/>'
+    s+=f'<path d="M{ox+210},250 L{ox+210},290" stroke="#b45309" stroke-width="7" stroke-linecap="round"/><path d="M{ox+210},250 L{ox+210},{280 if blocked else 290}" stroke="#fde68a" stroke-width="3.5" stroke-linecap="round"/>'
+    if blocked:
+        s+=f'<ellipse cx="{ox+210}" cy="289" rx="10" ry="7" fill="#fef3c7" stroke="#92400e" stroke-width="2"/>'
+        for k in range(3): s+=wavy(ox+70+k*36,300)
+        s+=wavy(ox+300,300)+wavy(ox+336,300)
+    else:
+        s+=f'<path d="M{ox+210},292 C{ox+210},300 {ox+214},304 {ox+226},305" fill="none" stroke="{OIL}" stroke-width="5" stroke-linecap="round"/>'
+    return s
+b=MARK+lid_panel(0,False)+lid_panel(400,True)
+b+=label(200,28,'Working gland','middle',24,'700')+label(600,28,'Blocked gland','middle',24,'700')
+b+=label(20,120,'Eyelid','start',20)+leader(86,114,130,120)
+b+=label(300,150,'Oil gland','start',20)+leader(296,144,228,150)
+b+=label(20,220,'Lashes','start',20)+leader(60,228,108,300)
+b+=label(360,290,'Oil spreads','end',18,'600','#b45309')
+b+=label(190,372,'Surface of the eye','middle',18,'600','#1e3a8a')+label(590,372,'Surface of the eye','middle',18,'600','#1e3a8a')
+b+=label(700,150,'Thick oil','start',20,'600','#92400e')+label(700,174,'plugs the','start',20,'400')+label(700,198,'opening','start',20,'400')+leader(696,190,622,286)
+b+=label(416,200,'Tears','start',20,'600','#475569')+label(416,224,'evaporate','start',20,'400','#475569')
+b+=label(790,312,'Red, sore lid edge','end',18,'600','#b91c1c')
+b+=f'<line x1="400" y1="10" x2="400" y2="392" stroke="#e5e7eb" stroke-width="2"/>'
+figs['eyelid-glands']=('An oil gland in the eyelid: a working gland spreads oil over the tears, and a blocked gland lets them evaporate',800,400,b)
+
+# 13. punctal plug
+cx,cy=300,200
+b=front_eye(cx,cy,170,88,88,62)
+b+=f'<path d="M{cx-170},{cy} Q{cx},{cy+167} {cx+170},{cy} Q{cx},{cy+122} {cx-170},{cy} Z" fill="{WATER}" opacity="0.9"/>'  # tears pooled along the lower lid
+b+=f'<path d="M{cx-170},{cy} Q{cx},{cy+167} {cx+170},{cy}" fill="none" stroke="{INK}" stroke-width="3"/>'
+b+=f'<circle cx="{cx+150}" cy="{cy-16}" r="5" fill="{INK}"/>'
+b+=f'<path d="M{cx+150},{cy-16} C{cx+190},{cy-30} {cx+214},{cy-14} {cx+226},{cy+4} M{cx+152},{cy+22} C{cx+190},{cy+34} {cx+214},{cy+22} {cx+226},{cy+4}" fill="none" stroke="#1d4ed8" stroke-width="5" stroke-linecap="round" opacity="0.5"/>'
+b+=f'<path d="M{cx+226},{cy-8} C{cx+244},{cy-8} {cx+248},{cy+20} {cx+242},{cy+50} C{cx+236},{cy+90} {cx+244},{cy+130} {cx+256},{cy+170}" fill="none" stroke="#1d4ed8" stroke-width="9" stroke-linecap="round" opacity="0.4"/>'
+b+=f'<g><rect x="{cx+141}" y="{cy+12}" width="22" height="9" rx="4.5" fill="#0f9b8e" stroke="#0b6b62" stroke-width="2"/><rect x="{cx+147}" y="{cy+19}" width="10" height="16" rx="4" fill="#0f9b8e" stroke="#0b6b62" stroke-width="2"/></g>'
+b+=label(540,70,'Upper drain','start',20)+label(540,94,'left open','start',20,'400')+leader(536,76,cx+156,cy-16)
+b+=label(560,250,'Plug in the','start',22,'600','#0b6b62')+label(560,276,'lower drain','start',22,'600','#0b6b62')+label(560,302,'opening','start',22,'600','#0b6b62')+leader(556,256,cx+166,cy+22)
+b+=label(30,360,'Your own tears stay','start',22,'600',BLUE)+label(30,386,'on the eye longer','start',22,'400',BLUE)+leader(232,352,cx-20,cy+73)
+b+=label(590,388,'To the nose','start',18,'400',MUTED)
+figs['punctal-plug']=('A punctal plug: a tiny plug in the drain opening at the inner corner keeps your own tears on the eye longer',760,410,b)
+
+# 14. the lash line: clean, crusted, and with the sleeves Demodex leaves
+def lash_panel(ox, kind):
+    s=f'<path d="M{ox+16},70 L{ox+234},70 L{ox+234},150 Q{ox+125},176 {ox+16},150 Z" fill="{SKIN}" stroke="{SKIN_D}" stroke-width="2"/>'
+    if kind!='clean': s+=f'<path d="M{ox+16},128 L{ox+234},128 L{ox+234},150 Q{ox+125},176 {ox+16},150 Z" fill="#f87171" opacity="0.45"/>'
+    for i in range(5):
+        x=ox+45+i*40; y0=156+ (8 if i in (1,2,3) else 3)
+        s+=f'<path d="M{x},{y0} C{x-4},{y0+50} {x-18},{y0+92} {x-34},{y0+118}" fill="none" stroke="{INK}" stroke-width="4" stroke-linecap="round"/>'
+        if kind=='crust':
+            for (dx,dy,r) in [(-2,6,6),(4,20,5),(-8,38,4.5),(-4,-4,5)]:
+                s+=f'<ellipse cx="{x+dx}" cy="{y0+dy}" rx="{r+2}" ry="{r}" fill="#fef3c7" stroke="#b45309" stroke-width="1.2" transform="rotate({(i*37+dy)%60-30} {x+dx} {y0+dy})"/>'
+        if kind=='sleeve':
+            s+=f'<path d="M{x-7},{y0-4} L{x+7},{y0-4} L{x+3},{y0+30} L{x-9},{y0+30} Z" fill="#fde68a" stroke="#92400e" stroke-width="1.5" opacity="0.92"/>'
+    return s
+b=lash_panel(0,'clean')+lash_panel(255,'crust')+lash_panel(510,'sleeve')
+b+=label(125,34,'Healthy','middle',22,'700')+label(380,34,'At the lashes','middle',22,'700')+label(635,34,'Demodex','middle',22,'700')
+b+=label(125,330,'Clean lash line','middle',19,'400',MUTED)+label(380,330,'Crusts and flakes','middle',19,'400',MUTED)+label(380,354,'on the lashes','middle',19,'400',MUTED)+label(635,330,'Waxy sleeves around','middle',19,'400',MUTED)+label(635,354,'the base of each lash','middle',19,'400',MUTED)
+b+=label(24,100,'Lid edge','start',17,'600')
+b+=f'<line x1="252" y1="50" x2="252" y2="360" stroke="#e5e7eb" stroke-width="2"/><line x1="508" y1="50" x2="508" y2="360" stroke="#e5e7eb" stroke-width="2"/>'
+figs['lash-line']=('The lash line close up: healthy, with crusts and flakes, and with the waxy sleeves that Demodex mites leave',765,370,b)
+
+# 15. stye and chalazion
+def lid_eye(cx,cy):
+    s=f'<path d="M{cx-190},{cy+6} Q{cx},{cy-250} {cx+190},{cy+6} Q{cx},{cy-178} {cx-190},{cy+6} Z" fill="{SKIN}" stroke="{SKIN_D}" stroke-width="2"/>'  # upper lid skin
+    return s+front_eye(cx,cy,150,88,80,54)
+b=lid_eye(200,250)+lid_eye(600,250)
+b+=f'<circle cx="150" cy="178" r="15" fill="#ef4444" stroke="#991b1b" stroke-width="2"/><circle cx="150" cy="178" r="5" fill="#fef3c7"/>'   # stye at the lash line
+b+=f'<ellipse cx="640" cy="140" rx="30" ry="22" fill="#eab08c" stroke="{SKIN_D}" stroke-width="2.5"/><path d="M620,132 Q640,118 660,132" fill="none" stroke="#fff" stroke-width="3" opacity="0.6" stroke-linecap="round"/>'  # chalazion in the lid
+b+=label(200,34,'Stye','middle',24,'700')+label(600,34,'Chalazion','middle',24,'700')
+b+=label(20,96,'Red, tender bump','start',19,'600','#b91c1c')+label(20,120,'at the lash line','start',19,'400')+leader(96,128,140,168)
+b+=label(420,96,'Firm, usually painless','start',19,'600')+label(420,120,'lump in the lid','start',19,'400')+leader(560,116,618,134)
+b+=label(200,372,'An infected lash follicle or gland;','middle',18,'400',MUTED)+label(200,394,'comes up over a day or two','middle',18,'400',MUTED)
+b+=label(600,372,'A blocked oil gland;','middle',18,'400',MUTED)+label(600,394,'can last for weeks','middle',18,'400',MUTED)
+b+=f'<line x1="400" y1="10" x2="400" y2="400" stroke="#e5e7eb" stroke-width="2"/>'
+figs['stye-chalazion']=('A stye is a red, tender bump at the lash line; a chalazion is a firm lump in the lid from a blocked oil gland',800,410,b)
+
+# 16. an allergic eye
+cx,cy=330,235
+b=f'<path d="M{cx-200},{cy+10} Q{cx},{cy-280} {cx+200},{cy+10} Q{cx},{cy-170} {cx-200},{cy+10} Z" fill="#f6b8a6" stroke="{SKIN_D}" stroke-width="2"/>'   # puffy upper lid
+b+=f'<path d="M{cx-190},{cy+4} Q{cx},{cy+250} {cx+190},{cy+4} Q{cx},{cy+160} {cx-190},{cy+4} Z" fill="#f6b8a6" stroke="{SKIN_D}" stroke-width="2"/>'  # puffy lower lid
+b+=front_eye(cx,cy,150,84,78,52)
+v='fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round"'
+for (d_) in [f'M{cx-140},{cy} C{cx-116},{cy-10} {cx-96},{cy-2} {cx-64},{cy-8}', f'M{cx-128},{cy+18} C{cx-104},{cy+26} {cx-86},{cy+18} {cx-62},{cy+20}', f'M{cx-116},{cy-22} C{cx-98},{cy-30} {cx-82},{cy-22} {cx-66},{cy-26}',
+            f'M{cx+140},{cy} C{cx+116},{cy-10} {cx+96},{cy-2} {cx+64},{cy-8}', f'M{cx+128},{cy+18} C{cx+104},{cy+26} {cx+86},{cy+18} {cx+62},{cy+20}', f'M{cx+116},{cy-22} C{cx+98},{cy-30} {cx+82},{cy-22} {cx+66},{cy-26}']:
+    b+=f'<path d="{d_}" {v}/>'
+b+=f'<path d="M{cx+110},{cy+46} c10,16 10,28 0,30 c-10,-2 -10,-14 0,-30 Z" fill="#60a5fa" stroke="#1d4ed8" stroke-width="1.5"/>'
+for (px,py) in [(120,70),(190,40),(520,60),(590,110),(90,150)]:
+    b+=f'<g transform="translate({px},{py})" fill="#facc15" stroke="#a16207" stroke-width="1.5"><circle r="9"/><circle r="3" cx="-10"/><circle r="3" cx="10"/><circle r="3" cy="-10"/><circle r="3" cy="10"/></g>'
+b+=label(20,250,'Itching','start',22,'700','#b45309')+label(20,276,'the main symptom','start',19,'400')
+b+=label(560,200,'Red,','start',22,'600','#b91c1c')+label(560,226,'both eyes','start',19,'400')+leader(556,206,cx+120,cy-4)
+b+=label(560,330,'Watering,','start',22,'600',BLUE)+label(560,356,'stringy mucus','start',19,'400')+leader(556,324,cx+114,cy+66)
+b+=label(20,380,'Puffy lids','start',22,'600')+leader(120,372,cx-110,cy+92)
+b+=label(250,40,'Pollen, dust, pet dander','start',19,'600','#a16207')
+figs['eye-allergy']=('An allergic eye: itching, redness in both eyes, watering and puffy lids, set off by pollen, dust or pet dander',760,420,b)
+
 for name,(title,w,h,body) in figs.items():
     open(os.path.join(OUT,name+'.svg'),'w').write(svg(w,h,body,title))
     print(name, os.path.getsize(os.path.join(OUT,name+'.svg')),'bytes')

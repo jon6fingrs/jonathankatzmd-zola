@@ -23,6 +23,8 @@ iyuzeh.png, ilevro.png, omlonti.png, xelpros.jpg, miebo.png, vevye.png,
 muro-128-ointment.webp and muro-128-solution.jpg (Bausch + Lomb Muro 128 cartons
 with tube and bottle, trimmed of white margin),
 tobramycin.jpg (Sandoz tobramycin 0.3% carton and bottle, trimmed of white margin),
+ketotifen.jpg (Alcon Zaditor carton and bottle, trimmed of white margin),
+olopatadine.jpg (Alcon Pataday Extra Strength carton and bottle; the mirror reflection below it removed and the transparent background made white),
 vuity.webp, methazolamide-50.jpg (Sandoz 50 mg tablet, "GG 181", which matches
 the Sandoz methazolamide label on DailyMed).
 The remaining photos date from the WordPress site (see fetch-assets.sh).
