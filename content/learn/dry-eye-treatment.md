@@ -7,7 +7,7 @@ weight = 320
 [extra]
 article = true
 topic = "dry-eye"
-group = ""
+group = "Dry eye"
 js = "js/procedure.js"
 +++
 
@@ -33,7 +33,7 @@ Artificial tears add moisture and smooth the surface. They are sold without a pr
 - **Ointment** at bedtime protects the eye overnight. It blurs vision, so it is used just before sleep.
 - **Avoid "get the red out" drops.** They shrink blood vessels and do not treat dryness, and the redness often returns worse.
 
-Brands and photos are in the [Eye Medication Reference](@/patients/eye-drops.md). If you use several drops, the [Eye Drop Schedule Builder](@/patients/eye-drop-form.md) can lay out a daily routine; leave five minutes between different drops.
+[Choosing Artificial Tears](@/learn/choosing-artificial-tears.md) helps you pick a kind, and brands and photos are in the [Eye Medication Reference](@/patients/eye-drops.md). If you use several drops, the [Eye Drop Schedule Builder](@/patients/eye-drop-form.md) can lay out a daily routine; leave five minutes between different drops.
 
 ## Step 3: Eyelid care
 

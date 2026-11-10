@@ -7,7 +7,7 @@ weight = 300
 [extra]
 article = true
 topic = "dry-eye"
-group = ""
+group = "Dry eye"
 js = "js/procedure.js"
 +++
 
@@ -43,7 +43,7 @@ Many people have some of both. Either way the surface of the eye becomes irritat
 - Burning, stinging or a gritty, sandy feeling
 - A feeling that something is in the eye
 - **Vision that blurs and then clears with a blink**, often worse when reading, driving or using a screen
-- **Watering.** Dry spots irritate the eye, and it answers with a flood of watery reflex tears that do not stay on the surface.
+- **Watering.** Dry spots irritate the eye, and it answers with a flood of watery reflex tears that do not stay on the surface. See [Watery Eyes](@/learn/watery-eyes.md).
 - Redness and tired eyes, usually worse late in the day
 - Sensitivity to light, wind, smoke or air conditioning
 - Trouble wearing contact lenses
@@ -58,7 +58,7 @@ The two are easy to confuse, and many people have both.
 - **Allergy** tends to come with a season or a trigger such as pollen, dust or pets, often with sneezing and a runny nose, and with puffy lids.
 - **Dry eye** is there year round, and is worse late in the day, with screens and in dry air.
 
-The difference matters because the treatments differ. Antihistamine pills, in particular, can make dry eye worse.
+The difference matters because the treatments differ. Antihistamine pills, in particular, can make dry eye worse. See [Eye Allergy](@/learn/eye-allergy.md).
 
 ## What brings it on or makes it worse
 

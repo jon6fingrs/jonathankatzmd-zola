@@ -403,6 +403,25 @@ b+=label(600,372,'A blocked oil gland;','middle',18,'400',MUTED)+label(600,394,'
 b+=f'<line x1="400" y1="10" x2="400" y2="400" stroke="#e5e7eb" stroke-width="2"/>'
 figs['stye-chalazion']=('A stye is a red, tender bump at the lash line; a chalazion is a firm lump in the lid from a blocked oil gland',800,410,b)
 
+# 16. an allergic eye
+cx,cy=330,235
+b=f'<path d="M{cx-200},{cy+10} Q{cx},{cy-280} {cx+200},{cy+10} Q{cx},{cy-170} {cx-200},{cy+10} Z" fill="#f6b8a6" stroke="{SKIN_D}" stroke-width="2"/>'   # puffy upper lid
+b+=f'<path d="M{cx-190},{cy+4} Q{cx},{cy+250} {cx+190},{cy+4} Q{cx},{cy+160} {cx-190},{cy+4} Z" fill="#f6b8a6" stroke="{SKIN_D}" stroke-width="2"/>'  # puffy lower lid
+b+=front_eye(cx,cy,150,84,78,52)
+v='fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round"'
+for (d_) in [f'M{cx-140},{cy} C{cx-116},{cy-10} {cx-96},{cy-2} {cx-64},{cy-8}', f'M{cx-128},{cy+18} C{cx-104},{cy+26} {cx-86},{cy+18} {cx-62},{cy+20}', f'M{cx-116},{cy-22} C{cx-98},{cy-30} {cx-82},{cy-22} {cx-66},{cy-26}',
+            f'M{cx+140},{cy} C{cx+116},{cy-10} {cx+96},{cy-2} {cx+64},{cy-8}', f'M{cx+128},{cy+18} C{cx+104},{cy+26} {cx+86},{cy+18} {cx+62},{cy+20}', f'M{cx+116},{cy-22} C{cx+98},{cy-30} {cx+82},{cy-22} {cx+66},{cy-26}']:
+    b+=f'<path d="{d_}" {v}/>'
+b+=f'<path d="M{cx+110},{cy+46} c10,16 10,28 0,30 c-10,-2 -10,-14 0,-30 Z" fill="#60a5fa" stroke="#1d4ed8" stroke-width="1.5"/>'
+for (px,py) in [(120,70),(190,40),(520,60),(590,110),(90,150)]:
+    b+=f'<g transform="translate({px},{py})" fill="#facc15" stroke="#a16207" stroke-width="1.5"><circle r="9"/><circle r="3" cx="-10"/><circle r="3" cx="10"/><circle r="3" cy="-10"/><circle r="3" cy="10"/></g>'
+b+=label(20,250,'Itching','start',22,'700','#b45309')+label(20,276,'the main symptom','start',19,'400')
+b+=label(560,200,'Red,','start',22,'600','#b91c1c')+label(560,226,'both eyes','start',19,'400')+leader(556,206,cx+120,cy-4)
+b+=label(560,330,'Watering,','start',22,'600',BLUE)+label(560,356,'stringy mucus','start',19,'400')+leader(556,324,cx+114,cy+66)
+b+=label(20,380,'Puffy lids','start',22,'600')+leader(120,372,cx-110,cy+92)
+b+=label(250,40,'Pollen, dust, pet dander','start',19,'600','#a16207')
+figs['eye-allergy']=('An allergic eye: itching, redness in both eyes, watering and puffy lids, set off by pollen, dust or pet dander',760,420,b)
+
 for name,(title,w,h,body) in figs.items():
     open(os.path.join(OUT,name+'.svg'),'w').write(svg(w,h,body,title))
     print(name, os.path.getsize(os.path.join(OUT,name+'.svg')),'bytes')

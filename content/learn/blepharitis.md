@@ -7,7 +7,7 @@ weight = 310
 [extra]
 article = true
 topic = "dry-eye"
-group = ""
+group = "Dry eye"
 js = "js/procedure.js"
 +++
 
