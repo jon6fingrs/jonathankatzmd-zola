@@ -2,7 +2,7 @@
 title = "What Is Glaucoma?"
 description = "Glaucoma is damage to the optic nerve, usually linked to eye pressure. Why it has no symptoms early, who is at risk, and how it is treated."
 template = "page.html"
-weight = 1
+weight = 10
 
 [extra]
 article = true
@@ -18,7 +18,7 @@ The front of the eye is filled with a clear fluid called **aqueous humor**. It i
 
 Eye pressure is measured in millimeters of mercury (mm Hg). "Normal" is often quoted as 10 to 21 mm Hg, but the number that is safe for one person's nerve may be too high for another's. Some people develop glaucoma with pressures in the normal range (sometimes called normal-tension glaucoma), and some people have higher pressures for years without damage (ocular hypertension). That is why your doctor follows the nerve itself, not just the pressure.
 
-To see what glaucoma does to vision, and why it goes unnoticed, try the [vision loss simulator](@/learn/vision-loss.md).
+To see how each treatment changes this balance, try the [eye pressure sink](@/learn/eye-pressure.md). To see what glaucoma does to vision, and why it goes unnoticed, try the [vision loss simulator](@/learn/vision-loss.md).
 
 ## Why there are usually no symptoms
 

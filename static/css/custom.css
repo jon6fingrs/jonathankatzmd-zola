@@ -1031,3 +1031,29 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
   /* the photo is wider than the eye drawing is tall: centre it in its column */
   .jk-lpi__view:has(.jk-yag__photo) { display: flex; flex-direction: column; justify-content: center; }
 }
+
+/* Eye pressure sink (learn/eye-pressure, static/js/sink.js). Uses the
+   .jk-lpi box. On a phone the picture sticks to the top of the screen
+   while the treatment chips scroll under it; from 768px the chips sit
+   beside it. */
+.jk-sink__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+.jk-sink__pic { margin: 0; min-width: 0; position: sticky; top: 0; z-index: 2; background: #fff; border-bottom: 1px solid var(--jk-line); }
+.jk-sink__pic .jk-lpi__svg { max-height: 38vh; margin: 0 auto; }
+.jk-sink__side { min-width: 0; }
+.jk-sink__opt { grid-template-columns: minmax(0, 1fr) !important; gap: .25rem !important; margin: .6rem 0; }
+.jk-sink__opt .jk-vis__lab { padding-top: 0; }
+.jk-sink .jk-chip { min-height: 40px; }
+.jk-sink__about { background: var(--jk-bg); border-radius: 8px; padding: .5rem .7rem; margin: .25rem 0 .5rem; font-size: .9rem; line-height: 1.4; min-height: 6.6em; text-align: left; color: var(--jk-ink); }
+.jk-page--article .jk-page__body .jk-sink__about { margin-bottom: .5rem; }
+.jk-sink__about a { color: var(--jk-accent); white-space: nowrap; }
+.jk-sink__controls { justify-content: flex-start; }
+@media (min-width: 768px) {
+  .jk-sink__grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+  .jk-sink__pic { position: static; border-bottom: 0; }
+  .jk-sink__pic .jk-lpi__svg { max-height: none; }
+  .jk-sink__about { font-size: 1rem; padding: .7rem .85rem; min-height: 5.5em; }
+}
+.jk-lpi.jk-sink:fullscreen .jk-sink__grid { max-width: 1500px; margin: 0 auto; width: 100%; align-items: center; }
+.jk-lpi.jk-sink:fullscreen .jk-sink__about { font-size: 1.25rem; }
+.jk-lpi.jk-sink:fullscreen .jk-chip { font-size: 1.05rem; }
+@media print { .jk-sink__pic { position: static; } .jk-sink__controls { display: none; } }

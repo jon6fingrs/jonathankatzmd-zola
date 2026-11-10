@@ -2,7 +2,7 @@
 title = "What Vision Loss Looks Like"
 description = "An interactive simulator of glaucoma, cataract, macular degeneration, diabetic retinopathy, retinal detachment, stroke, dry eye, floaters and more, with plain-language explanations of each."
 template = "page.html"
-weight = 2
+weight = 20
 
 [extra]
 article = true

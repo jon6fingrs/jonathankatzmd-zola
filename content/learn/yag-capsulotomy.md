@@ -2,7 +2,7 @@
 title = "YAG Capsulotomy"
 description = "YAG laser capsulotomy: a quick office laser that clears the cloudy capsule that can form behind a lens implant after cataract surgery. With an animation of what the laser does and how vision changes, what the visit is like, and what to expect afterward."
 template = "page.html"
-weight = 11
+weight = 110
 
 [extra]
 article = true
