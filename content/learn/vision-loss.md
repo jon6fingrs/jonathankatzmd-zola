@@ -6,7 +6,7 @@ weight = 20
 
 [extra]
 article = true
-topic = "tools"
+topic = "simulators"
 group = ""
 scripts = ["vendor/qrcode.js", "js/schedule-common.js", "js/vision.js"]
 +++

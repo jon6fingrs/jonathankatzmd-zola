@@ -4,28 +4,28 @@
 <section class="jk-page{% if page.extra.centered %} jk-page--centered{% endif %}{% if page.extra.article %} jk-page--article{% endif %}">
   <div class="container">
     <div class="jk-page__body">
+      {% if page.extra.article and page.extra.topic %}
+      {%- set crumb_hub = get_section(path="learn/" ~ page.extra.topic ~ "/_index.md") %}
+      <nav class="jk-crumbs" aria-label="Breadcrumb"><a href="{{ get_url(path='/learn/', trailing_slash=true) }}">Learn</a><span aria-hidden="true">&rsaquo;</span><a href="{{ crumb_hub.permalink }}">{{ crumb_hub.title }}</a></nav>
+      {% endif %}
       {% if page.extra.article %}<h1 class="jk-title">{{ page.title }}</h1>{% endif %}
       {{ page.content | safe }}
-      {#- Related pages: Learn articles list the others in the same topic and
-          group and link to the topic page; simulators link back to Tools. -#}
+      {#- Learn articles end with the other pages in the same topic and group,
+          and a link to the topic page. Pages with no topic get nothing. -#}
       {% if page.extra.article and page.extra.topic %}
-      {% if page.extra.topic == "tools" %}
-      <nav class="jk-related" aria-label="Related pages">
-        <p class="jk-related__all"><a href="{{ get_url(path='/patients/', trailing_slash=true) }}">&larr; All tools</a></p>
-      </nav>
-      {% else %}
       {%- set learn = get_section(path="learn/_index.md") %}
       {%- set hub = get_section(path="learn/" ~ page.extra.topic ~ "/_index.md") %}
       <nav class="jk-related" aria-label="Related pages">
-        <h2 class="jk-related__head">Related pages</h2>
+        <div class="jk-related__top">
+          <h2 class="jk-related__head">{{ hub.extra.more }}</h2>
+          <a class="jk-related__all" href="{{ hub.permalink }}">All {{ hub.title }} pages &rarr;</a>
+        </div>
         <ul>
           {% for p in learn.pages %}{% if p.extra.topic == page.extra.topic and p.extra.group == page.extra.group and p.permalink != page.permalink %}
           <li><a href="{{ p.permalink }}">{{ p.title }}</a></li>
           {% endif %}{% endfor %}
         </ul>
-        <p class="jk-related__all"><a href="{{ hub.permalink }}">All {{ hub.title }} pages &rarr;</a></p>
       </nav>
-      {% endif %}
       {% endif %}
     </div>
   </div>

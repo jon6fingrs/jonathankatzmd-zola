@@ -11,6 +11,7 @@
 <section class="jk-page">
   <div class="container">
     <div class="jk-page__body">
+      <nav class="jk-crumbs" aria-label="Breadcrumb"><a href="{{ learn.permalink }}">Learn</a><span aria-hidden="true">&rsaquo;</span><span>{{ section.title }}</span></nav>
       {{ section.content | safe }}
       {% if groups | length > 0 %}
       {% for g in groups %}
@@ -34,7 +35,16 @@
         {% endif %}{% endfor %}
       </div>
       {% endif %}
-      <p class="jk-morelink"><a href="{{ learn.permalink }}">All topics</a></p>
+      <h2 class="jk-sectionhead jk-sectionhead--minor">Other topics</h2>
+      <div class="jk-cardgrid jk-cardgrid--compact">
+        {% for t in learn.extra.topics %}{% if t != section.extra.topic %}
+        {%- set hub = get_section(path="learn/" ~ t ~ "/_index.md") %}
+        <a class="jk-card" href="{{ hub.permalink }}">
+          <h3>{{ hub.title }}</h3>
+          {% if hub.description %}<p>{{ hub.description }}</p>{% endif %}
+        </a>
+        {% endif %}{% endfor %}
+      </div>
     </div>
   </div>
 </section>

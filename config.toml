@@ -78,18 +78,6 @@ icon = "images/nav/eye.svg"
   [[extra.menus.children]]
   name = "POST-OP SCHEDULE"
   url = "/patients/post-op-schedule/"
-  [[extra.menus.children]]
-  name = "WHAT VISION LOSS LOOKS LIKE"
-  url = "/learn/vision-loss/"
-  [[extra.menus.children]]
-  name = "GLASSES PRESCRIPTION SIMULATOR"
-  url = "/learn/glasses-prescription/"
-  [[extra.menus.children]]
-  name = "EYE PRESSURE SINK"
-  url = "/learn/eye-pressure/"
-  [[extra.menus.children]]
-  name = "ALL TOOLS"
-  url = "/patients/"
 
 # The Learn dropdown lists topics, not pages: each topic page lists its own
 # articles, so adding an article never lengthens the menu.
@@ -104,8 +92,8 @@ icon = "images/nav/book.svg"
   name = "CATARACT"
   url = "/learn/cataract/"
   [[extra.menus.children]]
-  name = "GENERAL EYE CARE"
-  url = "/learn/general/"
+  name = "VISION SIMULATORS"
+  url = "/learn/simulators/"
   [[extra.menus.children]]
   name = "WHEN TO CALL THE SAME DAY"
   url = "/learn/when-to-call/"

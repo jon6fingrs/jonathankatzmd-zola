@@ -6,7 +6,7 @@ weight = 200
 
 [extra]
 article = true
-topic = "general"
+topic = ""
 group = ""
 +++
 

@@ -162,16 +162,19 @@ A page's `[extra]` can load scripts with `scripts = ["vendor/x.js", "js/y.js"]`
 
 ### Learn topics
 
-The Learn menu lists topics (Glaucoma, Cataract, General Eye Care), not
+The Learn menu lists topics (Glaucoma, Cataract, Vision Simulators), not
 pages, so adding an article never lengthens the menu. Articles all live
 flat in `content/learn/` so their addresses never change. To add one:
-set `topic = "glaucoma"` (or `cataract`, `general`) and `group = "Lasers"`
+set `topic = "glaucoma"` (or `cataract`, `simulators`) and `group = "Lasers"`
 (a heading from that hub's `groups`, or `""` if the hub has none) in its
 `[extra]`. Both keys are required on every Learn page: the templates
-compare them directly. The simulators use `topic = "tools"`, which keeps
-them out of the Learn lists; they appear under Tools through `also`.
+compare them directly. A page with `topic = ""` (When to Call the Same
+Day) belongs to no topic and gets no breadcrumb or related block. Tools
+are only the three drop tools in `content/patients/`; the simulators and
+the eye pressure sink are Learn pages.
 To add a topic: create `content/learn/<topic>/_index.md` with
-`template = "topic.html"`, add it to `topics` in `content/learn/_index.md`
+`template = "topic.html"` and a `more` label (the heading of the related
+block, e.g. "More on glaucoma"), add it to `topics` in `content/learn/_index.md`
 and to the Learn menu in `config.toml`.
 
 ### `static/data/eye-drops.json` is the single source of truth
