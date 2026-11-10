@@ -1,8 +1,9 @@
 /* Step-by-step procedure demos for the Learn pages: SLT, MIGS,
  * trabeculectomy, tube shunt and cyclophotocoagulation. A page has one
  *     <div id="jk-proc" class="jk-lpi" data-proc="slt"></div>
- * and this file builds it. SLT (standard, direct) and cyclophotocoagulation (micropulse, standard)
- * each have two variants switched by chips; see `variants`.
+ * and this file builds it. SLT (standard, direct), MIGS (stent, goniotomy, viscodilation) and
+ * cyclophotocoagulation (micropulse, standard) have variants switched by
+ * chips; see `variants`.
  *
  * Each procedure is an entry in PROCS: one or two drawings (inline SVG,
  * using the same eye geometry as tools/learn-figures.py) and a list of
@@ -270,33 +271,148 @@
     };
   }
 
-  // ---------- MIGS (close-up of the angle) ----------
+  // ---------- MIGS: stent, goniotomy, viscodilation ----------
+  // Two drawings: a close-up of the angle (the geometry of migs-stent.svg)
+  // and a ring view of the whole drain, since the canal runs all the way
+  // around and a catheter or a goniotomy travels along it.
   function wy(x, inner) { return (inner ? 330 : 230) - x * 0.31; }
-  var MS = [372, wy(372, 1) + 8], M_ANG = -62;
-  function migsSvg() {
-    var h = svgOpen('0 0 720 500', 'Close-up of the drain: a tiny stent is placed through the meshwork into the canal behind it');
+  var MS = [372, wy(372, 1) + 8], M_ANG = -62, M_CANAL = [395, wy(395, 1) - 48];
+  var MIGS_INS = { migs: 'Inserter', gonio: 'Blade', visco: 'Cannula' };
+  function migsSvg(kind) {
+    var h = svgOpen('0 0 720 500', 'Close-up of the drain: the meshwork, with the canal behind it');
     h += '<path d="M0,' + wy(0, 0) + ' L340,' + wy(340, 0) + ' L340,' + wy(340, 1) + ' L0,' + wy(0, 1) + ' Z" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>'
       + '<path d="M340,' + wy(340, 0) + ' L720,' + wy(720, 0) + ' L720,' + wy(720, 1) + ' L340,' + wy(340, 1) + ' Z" fill="#f8fafc" stroke="#6b7280" stroke-width="2"/>'
       + '<path d="M520,' + wy(520, 1) + ' L720,' + wy(720, 1) + ' L720,300 C640,300 560,280 500,240 Z" fill="#f2b8b5" stroke="#b45454" stroke-width="2"/>'
       + '<path d="M440,' + (wy(440, 1) + 4) + ' L520,' + (wy(520, 1) + 2) + ' C510,300 500,380 496,480 L404,480 C410,380 425,290 440,' + (wy(440, 1) + 4) + ' Z" fill="#8b5e3c" stroke="#5c3d26" stroke-width="2"/>';
     var tm = [[350, wy(350, 1)], [440, wy(440, 1)], [440, wy(440, 1) - 22], [350, wy(350, 1) - 22]];
     h += '<path d="M' + tm.map(function (p) { return p[0] + ',' + p[1].toFixed(1); }).join(' L') + ' Z" fill="url(#pr-tm)" stroke="#b45309" stroke-width="2"/>';
-    var cx = 395, cy = wy(395, 1) - 48;
+    var cx = M_CANAL[0], cy = M_CANAL[1];
+    if (kind === 'gonio') { // the strip of meshwork that is removed, leaving the canal open to the chamber
+      var g = [[370, wy(370, 1) + 2], [420, wy(420, 1) + 2], [420, wy(420, 1) - 36], [370, wy(370, 1) - 36]];
+      h += '<path id="migs-gap" d="M' + g.map(function (p) { return p[0] + ',' + p[1].toFixed(1); }).join(' L') + ' Z" fill="#fff" opacity="0"/>';
+    }
     h += '<ellipse id="migs-canal" cx="' + cx + '" cy="' + cy.toFixed(1) + '" rx="44" ry="14" transform="rotate(-17 ' + cx + ' ' + cy.toFixed(1) + ')" fill="#93c5fd" stroke="#1d4ed8" stroke-width="2"/>';
-    // the stent rides on the inserter: both in the stent's own frame, x along its length
+    if (kind === 'visco') h += '<circle id="migs-cath" cx="' + cx + '" cy="' + cy.toFixed(1) + '" r="7" fill="#1e3a8a" stroke="#fff" stroke-width="2" opacity="0"/>';
+    // the instrument, and the stent riding on it, in the instrument's own frame (x along its length)
     h += '<g transform="rotate(' + M_ANG + ' ' + MS[0] + ' ' + MS[1].toFixed(1) + ')">'
-      + '<g id="migs-ins"><rect x="' + (MS[0] - 360) + '" y="' + (MS[1] - 4).toFixed(1) + '" width="352" height="8" rx="3" fill="#9ca3af" stroke="#4b5563" stroke-width="1.5"/></g>'
-      + '<g id="migs-stent"><rect x="' + (MS[0] - 6) + '" y="' + (MS[1] - 9).toFixed(1) + '" width="78" height="18" rx="9" fill="#d4a017" stroke="#7c5a06" stroke-width="2"/><rect x="' + (MS[0] + 6) + '" y="' + (MS[1] - 3).toFixed(1) + '" width="54" height="6" rx="3" fill="#fff7d6"/></g>'
+      + '<g id="migs-ins" opacity="0"><rect x="' + (MS[0] - 360) + '" y="' + (MS[1] - 4).toFixed(1) + '" width="352" height="8" rx="3" fill="#9ca3af" stroke="#4b5563" stroke-width="1.5"/>'
+      + (kind === 'gonio' ? '<path d="M' + (MS[0] - 10) + ',' + (MS[1] - 7).toFixed(1) + ' L' + (MS[0] + 16) + ',' + MS[1].toFixed(1) + ' L' + (MS[0] - 10) + ',' + (MS[1] + 7).toFixed(1) + ' Z" fill="#6b7280" stroke="#374151" stroke-width="1.5"/>' : '')
+      + '</g>'
+      + (kind === 'migs' ? '<g id="migs-stent" opacity="0"><rect x="' + (MS[0] - 6) + '" y="' + (MS[1] - 9).toFixed(1) + '" width="78" height="18" rx="9" fill="#d4a017" stroke="#7c5a06" stroke-width="2"/><rect x="' + (MS[0] + 6) + '" y="' + (MS[1] - 3).toFixed(1) + '" width="54" height="6" rx="3" fill="#fff7d6"/></g>' : '')
       + '</g>'
       + '<g id="migs-flow" opacity="0">' + arrow('migs-f1', 'M150,420 C240,390 320,320 360,252') + arrow('migs-f2', 'M420,' + (cy - 10).toFixed(0) + ' C450,' + (cy - 50).toFixed(0) + ' 470,' + (cy - 90).toFixed(0) + ' 500,' + (cy - 120).toFixed(0)) + '</g>'
       + txt(60, 250, 'Cornea', 'start') + txt(600, 48, 'Sclera', 'start', MUTED, 400, 20)
       + txt(160, 130, "Schlemm's canal", 'start', INK, 600, 20) + lead(250, 138, 372, 160)
       + txt(570, 330, 'Drain', 'start', INK, 600, 20) + txt(570, 354, '(trabecular', 'start', INK, 400, 18) + txt(570, 376, 'meshwork)', 'start', INK, 400, 18) + lead(566, 326, 428, 196)
       + txt(530, 470, 'Iris', 'start') + lead(526, 464, 486, 440)
-      + '<g id="migs-lab-ins" opacity="0">' + txt(40, 330, 'Inserter', 'start', '#4b5563') + '</g>'
-      + '<g id="migs-lab-stent" opacity="0">' + txt(150, 214, 'Stent', 'start') + lead(206, 208, 374, 208) + '</g>'
-      + '<g id="migs-lab-flow" opacity="0">' + txt(510, 76, 'To the', 'start', BLUE, 600, 18) + txt(510, 98, 'bloodstream', 'start', BLUE, 600, 18) + txt(40, 470, 'Fluid in the front chamber', 'start', BLUE, 600, 20) + '</g>';
+      + '<g id="migs-lab-ins" opacity="0">' + txt(40, 330, MIGS_INS[kind], 'start', '#4b5563') + '</g>';
+    if (kind === 'migs') h += '<g id="migs-lab-stent" opacity="0">' + txt(150, 214, 'Stent', 'start') + lead(206, 208, 374, 208) + '</g>';
+    if (kind === 'gonio') h += '<g id="migs-lab-gap" opacity="0">' + txt(70, 214, 'Meshwork opened', 'start') + lead(248, 208, 378, 204) + '</g>';
+    if (kind === 'visco') h += '<g id="migs-lab-cath" opacity="0">' + txt(70, 214, 'Catheter in the canal', 'start', '#1e3a8a') + lead(284, 204, cx - 6, cy + 4, '#1e3a8a') + '</g>'
+      + '<g id="migs-lab-dil" opacity="0">' + txt(70, 214, 'Canal stretched open', 'start', BLUE) + lead(280, 204, cx - 30, cy + 10, BLUE) + '</g>';
+    h += '<g id="migs-lab-flow" opacity="0">' + txt(510, 76, 'To the', 'start', BLUE, 600, 18) + txt(510, 98, 'bloodstream', 'start', BLUE, 600, 18) + txt(40, 470, 'Fluid in the front chamber', 'start', BLUE, 600, 20) + '</g>';
     return h + '</svg>';
+  }
+  // angles in degrees, 0 = 3 o'clock (where the instrument reaches the drain), clockwise on screen
+  function ringPt(deg, r) { var a = deg * Math.PI / 180; return [280 + r * Math.cos(a), 210 + r * Math.sin(a)]; }
+  function ringArc(a0, a1, r) { var p0 = ringPt(a0, r), p1 = ringPt(a1, r); return 'M' + p0[0].toFixed(1) + ',' + p0[1].toFixed(1) + ' A' + r + ',' + r + ' 0 0,' + (a1 > a0 ? 1 : 0) + ' ' + p1[0].toFixed(1) + ',' + p1[1].toFixed(1); }
+  function dash(id, d, color, w, extra) { return '<path id="' + id + '" d="' + d + '" pathLength="1" fill="none" stroke="' + color + '" stroke-width="' + w + '" stroke-dasharray="1 1" stroke-dashoffset="1"' + (extra || '') + '/>'; }
+  var R_CANAL = 181, R_TM = 165;
+  function migsRing(kind) {
+    var h = svgOpen('0 0 560 420', 'Around the drain: the meshwork and the canal behind it run all the way around the eye'), i, p, q;
+    h += '<circle cx="280" cy="210" r="200" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>'
+      + '<circle id="mg-rcanal" cx="280" cy="210" r="' + R_CANAL + '" fill="none" stroke="#93c5fd" stroke-width="7"/>'
+      + '<circle cx="280" cy="210" r="' + R_TM + '" fill="none" stroke="url(#pr-tm)" stroke-width="17"/>'
+      + '<circle cx="280" cy="210" r="' + (R_TM + 8.5) + '" fill="none" stroke="#b45309" stroke-width="1"/>'
+      + '<circle cx="280" cy="210" r="156" fill="url(#pr-irisg)" stroke="#3f2a1a" stroke-width="2"/>'
+      + '<circle cx="280" cy="210" r="46" fill="#0b0f14"/>';
+    var flowAt = [];
+    if (kind === 'migs') {
+      h += '<g id="mg-rstent" opacity="0">';
+      [-12, 12].forEach(function (a) { p = ringPt(a, 158); q = ringPt(a, 184); h += '<line x1="' + p[0].toFixed(1) + '" y1="' + p[1].toFixed(1) + '" x2="' + q[0].toFixed(1) + '" y2="' + q[1].toFixed(1) + '" stroke="#7c5a06" stroke-width="10" stroke-linecap="round"/><line x1="' + p[0].toFixed(1) + '" y1="' + p[1].toFixed(1) + '" x2="' + q[0].toFixed(1) + '" y2="' + q[1].toFixed(1) + '" stroke="#d4a017" stroke-width="6" stroke-linecap="round"/>'; });
+      h += '</g>';
+      flowAt = [-34, -12, 12, 34];
+    } else if (kind === 'gonio') {
+      h += dash('mg-rgonio', ringArc(-55, 55, R_TM), '#fff', 18) + '<circle id="mg-rtool" r="8" fill="#6b7280" stroke="#374151" stroke-width="2" opacity="0"/>';
+      flowAt = [-44, -22, 0, 22, 44];
+    } else {
+      h += dash('mg-dilU', ringArc(-180, 0, R_CANAL), '#3b82f6', 13) + dash('mg-dilL', ringArc(180, 0, R_CANAL), '#3b82f6', 13)
+        + dash('mg-cathU', ringArc(0, -180, R_CANAL), '#1e3a8a', 4, ' stroke-linecap="round"') + dash('mg-cathL', ringArc(0, 180, R_CANAL), '#1e3a8a', 4, ' stroke-linecap="round"');
+      flowAt = [-150, -110, -70, -30, 30, 70, 110, 150];
+    }
+    h += '<g id="mg-rflow" opacity="0">';
+    flowAt.forEach(function (a, k) { p = ringPt(a, 186); q = ringPt(a, 204); h += arrow('mg-rf' + k, 'M' + p[0].toFixed(1) + ',' + p[1].toFixed(1) + ' L' + q[0].toFixed(1) + ',' + q[1].toFixed(1), BLUE, 3.5); });
+    h += '</g>'
+      + txt(16, 30, 'The canal: a ring', 'start', '#1d4ed8') + txt(16, 54, 'behind the drain', 'start', MUTED, 400, 18) + lead(128, 62, 152, 82, '#1d4ed8')
+      + txt(16, 404, 'Iris', 'start') + lead(56, 396, 190, 290)
+      + txt(544, 404, 'Pupil', 'end') + lead(490, 398, 300, 228);
+    return h + '</svg>';
+  }
+  var MIGS_VARIANTS = [['migs', 'Stent'], ['gonio', 'Goniotomy'], ['visco', 'Viscodilation']];
+  var MIGS_COMBINE = ' These procedures are often combined with each other, and with cataract surgery, in one operation.';
+  function insAt(x, show) { at('migs-ins', 'transform', 'translate(' + x.toFixed(1) + ',0)'); at('migs-stent', 'transform', 'translate(' + x.toFixed(1) + ',0)'); if (show !== undefined) { op('migs-ins', show); op('migs-stent', show); } }
+  function migsFlow(caption) {
+    return { label: 'Fluid', dur: 2200, caption: caption,
+      draw: function (p) { var e = ease(p); op('migs-flow', e); op('migs-lab-flow', e); op('mg-rflow', e); at('migs-canal', 'fill', p > 0.3 ? '#60a5fa' : '#93c5fd'); } };
+  }
+  function migsProc(kind) {
+    var approach = '<strong>The instrument.</strong> Through the same tiny incision used for cataract surgery, or one like it, the surgeon brings ', watch = ' across the front chamber, watching the drain through a mirrored lens.';
+    var steps;
+    if (kind === 'migs') {
+      steps = [
+        { label: 'Inserter', dur: 1800, caption: approach + 'the stent on its inserter' + watch,
+          draw: function (p) { var e = ease(p); insAt(lerp(-320, -60, e), p > 0 ? 1 : 0); op('migs-lab-ins', e); } },
+        { label: 'Stent', dur: 1400, caption: '<strong>The stent goes in.</strong> The stent, smaller than a grain of rice, is pushed through the meshwork so its tip sits in the canal. Often two or three are placed.',
+          draw: function (p) { var e = ease(p); op('migs-lab-stent', e); op('mg-rstent', e); if (!p) return; insAt(lerp(-60, 0, e)); } },
+        { label: 'Withdraw', dur: 1400, caption: '<strong>The inserter is withdrawn.</strong> The stent stays in place on its own. Nothing is seen or felt from the outside.',
+          draw: function (p) { if (!p) return; var e = ease(p); at('migs-ins', 'transform', 'translate(' + lerp(0, -380, e).toFixed(1) + ',0)'); op('migs-ins', 1 - e); op('migs-lab-ins', 1 - e); } },
+        migsFlow('<strong>Fluid takes the shortcut.</strong> It passes through the stent into the canal and on to the bloodstream, bypassing the part of the drain that resists it.' + MIGS_COMBINE)
+      ];
+    } else if (kind === 'gonio') {
+      steps = [
+        { label: 'Blade', dur: 1800, caption: approach + 'a fine blade' + watch,
+          draw: function (p) { var e = ease(p); insAt(lerp(-320, 0, e), p > 0 ? 1 : 0); op('migs-lab-ins', e); } },
+        { label: 'Open', dur: 2600, caption: '<strong>The drain is opened.</strong> A strip of the meshwork is removed along part of the ring, usually a quarter to a third of the way around. The canal behind it is now open to the front chamber. No implant is left in the eye.',
+          draw: function (p) {
+            var e = ease(p); op('migs-gap', ease(clamp(p * 2.5, 0, 1))); op('migs-lab-gap', e); at('mg-rgonio', 'stroke-dashoffset', 1 - e);
+            var t = ringPt(-55 + 110 * e, R_TM); at('mg-rtool', 'transform', 'translate(' + t[0].toFixed(1) + ',' + t[1].toFixed(1) + ')'); op('mg-rtool', p > 0 && p < 1 ? 1 : 0);
+          } },
+        { label: 'Withdraw', dur: 1300, caption: '<strong>The blade is withdrawn.</strong> Nothing is seen or felt from the outside.',
+          draw: function (p) { if (!p) return; var e = ease(p); insAt(lerp(0, -380, e), 1 - e); op('migs-lab-ins', 1 - e); } },
+        migsFlow('<strong>Fluid reaches the canal directly.</strong> With the strip of meshwork gone, fluid passes straight into the canal and on to the bloodstream. A little bleeding from the canal in the first days is common and clears.' + MIGS_COMBINE)
+      ];
+    } else {
+      steps = [
+        { label: 'Catheter', dur: 2800, caption: '<strong>The catheter.</strong> Through a tiny incision, a fine cannula is brought to the drain. A flexible catheter, about as thin as a few hairs, is passed from it through the meshwork and threaded along the canal, halfway around the eye.',
+          draw: function (p) {
+            var a = ease(clamp(p / 0.35, 0, 1)), c = ease(clamp((p - 0.35) / 0.65, 0, 1));
+            insAt(lerp(-320, 0, a), p > 0 ? 1 : 0); op('migs-lab-ins', a * (1 - c)); op('migs-cath', c); op('migs-lab-cath', c); at('mg-cathU', 'stroke-dashoffset', 1 - c);
+          } },
+        { label: 'Gel', dur: 2600, caption: '<strong>The gel.</strong> As the catheter is drawn back, a clear gel is released into the canal. It stretches the canal open, along with the small channels that carry fluid away from it.',
+          draw: function (p) {
+            var e = ease(p); at('mg-dilU', 'stroke-dashoffset', 1 - e); at('migs-canal', 'rx', 44 + 5 * e); at('migs-canal', 'ry', 14 + 5 * e); op('migs-lab-dil', e);
+            if (p > 0) { at('mg-cathU', 'stroke-dashoffset', e); op('migs-lab-cath', 1 - e); }
+          } },
+        { label: 'Other half', dur: 3000, caption: '<strong>The other half.</strong> The catheter is then passed the other way and drawn back in the same manner, so the canal is treated all the way around.',
+          draw: function (p) {
+            var a = ease(clamp(p * 2, 0, 1)), c = ease(clamp(p * 2 - 1, 0, 1));
+            at('mg-cathL', 'stroke-dashoffset', p < 0.5 ? 1 - a : c); at('mg-dilL', 'stroke-dashoffset', 1 - c);
+            if (p > 0) { at('migs-canal', 'rx', 49 + 4 * c); at('migs-canal', 'ry', 19 + 4 * c); }
+          } },
+        (function () {
+          var f = migsFlow('<strong>Fluid drains more easily.</strong> The catheter and cannula are removed and nothing is left in the eye. The stretched canal and channels carry fluid away more easily.' + MIGS_COMBINE), d0 = f.draw;
+          f.draw = function (p) { d0(p); if (p > 0) { var g = 1 - ease(clamp(p * 3, 0, 1)); insAt(lerp(-380, 0, g), g); op('migs-cath', g); } };
+          return f;
+        })()
+      ];
+    }
+    return {
+      variants: MIGS_VARIANTS,
+      views: [['Close-up of the drain', function () { return migsSvg(kind); }], ['Around the drain', function () { return migsRing(kind); }]],
+      intro: '<strong>Before.</strong> Fluid has to pass through the meshwork to reach the canal behind it, and in glaucoma the meshwork resists it. '
+        + (kind === 'migs' ? 'A stent holds a path open through the meshwork.' : kind === 'gonio' ? 'A goniotomy removes a strip of the meshwork.' : 'Viscodilation stretches the canal and its outflow channels open with a gel.'),
+      steps: steps
+    };
   }
 
   // ---------- trabeculectomy ----------
@@ -354,20 +470,9 @@
     dslt: sltProc(true),
     cpc: cpcProc(true),
     cwcpc: cpcProc(false),
-    migs: {
-      views: [['Close-up of the drain', migsSvg]],
-      intro: '<strong>Before.</strong> A close-up of the drain. Fluid has to pass through the meshwork to reach the canal behind it, and in glaucoma the meshwork resists it.',
-      steps: [
-        { label: 'Inserter', dur: 1800, caption: '<strong>The inserter.</strong> Through the same tiny incision used for cataract surgery, the surgeon brings the stent across the front chamber, watching the drain through a mirrored lens.',
-          draw: function (p) { var e = ease(p); at('migs-ins', 'transform', 'translate(' + lerp(-320, -60, e).toFixed(1) + ',0)'); at('migs-stent', 'transform', 'translate(' + lerp(-320, -60, e).toFixed(1) + ',0)'); op('migs-ins', p > 0 ? 1 : 0); op('migs-stent', p > 0 ? 1 : 0); op('migs-lab-ins', e); } },
-        { label: 'Stent', dur: 1400, caption: '<strong>The stent goes in.</strong> The stent, smaller than a grain of rice, is pushed through the meshwork so its tip sits in the canal.',
-          draw: function (p) { var e = ease(p); op('migs-lab-stent', e); if (!p) return; at('migs-ins', 'transform', 'translate(' + lerp(-60, 0, e).toFixed(1) + ',0)'); at('migs-stent', 'transform', 'translate(' + lerp(-60, 0, e).toFixed(1) + ',0)'); } },
-        { label: 'Withdraw', dur: 1400, caption: '<strong>The inserter is withdrawn.</strong> The stent stays in place on its own. Nothing is seen from the outside.',
-          draw: function (p) { if (!p) return; var e = ease(p); at('migs-ins', 'transform', 'translate(' + lerp(0, -380, e).toFixed(1) + ',0)'); op('migs-ins', 1 - e); op('migs-lab-ins', 1 - e); } },
-        { label: 'Fluid', dur: 2200, caption: '<strong>Fluid takes the shortcut.</strong> It passes through the stent into the canal and on to the bloodstream, bypassing the part of the drain that resists it. Pressure in the mid teens afterward is typical.',
-          draw: function (p) { var e = ease(p); op('migs-flow', e); op('migs-lab-flow', e); at('migs-canal', 'fill', p > 0.3 ? '#60a5fa' : '#93c5fd'); } }
-      ]
-    },
+    migs: migsProc('migs'),
+    gonio: migsProc('gonio'),
+    visco: migsProc('visco'),
     trab: {
       views: [['Side view', trabSvg]],
       intro: '<strong>Before.</strong> The front of the eye cut in half. The red line is the conjunctiva, the thin clear skin over the white of the eye. The operation is done at the top of the eye, under the upper eyelid.',

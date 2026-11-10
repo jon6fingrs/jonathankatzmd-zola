@@ -39,7 +39,7 @@
     { id: 'slt', group: 'drain', label: 'SLT laser', where: 'main',
       about: '<strong>SLT laser</strong> (standard or direct) treats the main drain itself. Over a few weeks the drain clears and lets more fluid through. Nothing is cut.', link: ['../slt-laser/', 'SLT laser'] },
     { id: 'migs', group: 'drain', label: 'MIGS', where: 'main',
-      about: '<strong>MIGS</strong> (a tiny stent, or opening part of the drain) gives fluid a shortcut past the clogged part of the main drain, into the canal behind it. It is usually done with cataract surgery, and pressures in the mid teens afterward are typical. The fluid still leaves through the same veins, so it cannot go below the floor.', link: ['../migs/', 'MIGS'] },
+      about: '<strong>MIGS</strong> (a tiny stent, a goniotomy that opens part of the drain, or viscodilation that stretches the canal, often combined) gives fluid a shortcut past the clogged part of the main drain, into the canal behind it. It is usually done with cataract surgery, and pressures in the mid teens afterward are typical. The fluid still leaves through the same veins, so it cannot go below the floor.', link: ['../migs/', 'MIGS'] },
     { id: 'trab', group: 'new', label: 'Trabeculectomy', where: 'new',
       about: '<strong>Trabeculectomy</strong> makes a new drain: a small opening in the wall of the eye, so fluid collects in a pocket (bleb) under the upper eyelid and is absorbed there. It bypasses the veins, so it can take the level lower than drops or laser can.', link: ['../trabeculectomy/', 'Trabeculectomy'] },
     { id: 'tube', group: 'new', label: 'Tube shunt', where: 'new',
