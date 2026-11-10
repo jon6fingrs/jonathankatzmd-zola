@@ -6,6 +6,8 @@ weight = 100
 
 [extra]
 article = true
+topic = "cataract"
+group = ""
 +++
 
 A **cataract** is clouding of the eye's natural lens, which sits behind the pupil and focuses light onto the retina. Almost everyone develops some cataract with age; it becomes a problem when it blurs vision, dulls colors, causes glare from headlights or sunlight, or changes your glasses prescription frequently. Cataract surgery replaces the cloudy lens with a clear artificial one and is among the most common and successful operations performed.

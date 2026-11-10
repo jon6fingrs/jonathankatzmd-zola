@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{#- A Learn topic hub (content/learn/<topic>/_index.md). Articles stay in
+    content/learn/ so their addresses never change; an article joins a topic
+    with `topic = "..."` in its [extra], and optionally a `group` that matches
+    one of this section's `groups`. Every Learn article sets both keys
+    (group may be ""). -#}
+{% block content %}
+{%- set learn = get_section(path="learn/_index.md") %}
+{%- set groups = section.extra.groups %}
+<section class="jk-page">
+  <div class="container">
+    <div class="jk-page__body">
+      {{ section.content | safe }}
+      {% if groups | length > 0 %}
+      {% for g in groups %}
+      <h2 class="jk-sectionhead">{{ g }}</h2>
+      <div class="jk-cardgrid">
+        {% for p in learn.pages %}{% if p.extra.topic == section.extra.topic and p.extra.group == g %}
+        <a class="jk-card" href="{{ p.permalink }}">
+          <h3>{{ p.title }}</h3>
+          {% if p.description %}<p>{{ p.description }}</p>{% endif %}
+        </a>
+        {% endif %}{% endfor %}
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="jk-cardgrid">
+        {% for p in learn.pages %}{% if p.extra.topic == section.extra.topic %}
+        <a class="jk-card" href="{{ p.permalink }}">
+          <h3>{{ p.title }}</h3>
+          {% if p.description %}<p>{{ p.description }}</p>{% endif %}
+        </a>
+        {% endif %}{% endfor %}
+      </div>
+      {% endif %}
+      <p class="jk-morelink"><a href="{{ learn.permalink }}">All topics</a></p>
+    </div>
+  </div>
+</section>
+{% endblock content %}

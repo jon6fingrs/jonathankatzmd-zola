@@ -6,6 +6,8 @@ weight = 15
 
 [extra]
 article = true
+topic = "glaucoma"
+group = "Basics"
 scripts = ["js/sink-model.js", "js/sink.js"]
 +++
 

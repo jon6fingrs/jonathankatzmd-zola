@@ -6,6 +6,8 @@ weight = 40
 
 [extra]
 article = true
+topic = "glaucoma"
+group = "Basics"
 +++
 
 Eye drops only work if they get into the eye, and the technique matters more than most people expect. Studies that watch patients put in drops find that many miss the eye, touch the tip to the lashes, or put in several drops at once. These steps make each drop count.

@@ -66,7 +66,7 @@ url = "/about/"
 icon = "images/nav/doctor.svg"
 
 [[extra.menus]]
-name = "FOR PATIENTS"
+name = "TOOLS"
 url = "/patients/"
 icon = "images/nav/eye.svg"
   [[extra.menus.children]]
@@ -84,47 +84,34 @@ icon = "images/nav/eye.svg"
   [[extra.menus.children]]
   name = "GLASSES PRESCRIPTION SIMULATOR"
   url = "/learn/glasses-prescription/"
+  [[extra.menus.children]]
+  name = "EYE PRESSURE SINK"
+  url = "/learn/eye-pressure/"
+  [[extra.menus.children]]
+  name = "ALL TOOLS"
+  url = "/patients/"
 
+# The Learn dropdown lists topics, not pages: each topic page lists its own
+# articles, so adding an article never lengthens the menu.
 [[extra.menus]]
 name = "LEARN"
 url = "/learn/"
 icon = "images/nav/book.svg"
   [[extra.menus.children]]
-  name = "WHAT IS GLAUCOMA?"
-  url = "/learn/what-is-glaucoma/"
+  name = "GLAUCOMA"
+  url = "/learn/glaucoma/"
   [[extra.menus.children]]
-  name = "HOW TREATMENTS LOWER PRESSURE"
-  url = "/learn/eye-pressure/"
+  name = "CATARACT"
+  url = "/learn/cataract/"
   [[extra.menus.children]]
-  name = "GLAUCOMA TESTING"
-  url = "/learn/glaucoma-testing/"
+  name = "GENERAL EYE CARE"
+  url = "/learn/general/"
   [[extra.menus.children]]
-  name = "USING EYE DROPS"
-  url = "/learn/using-eye-drops/"
+  name = "WHEN TO CALL THE SAME DAY"
+  url = "/learn/when-to-call/"
   [[extra.menus.children]]
-  name = "SLT LASER"
-  url = "/learn/slt-laser/"
-  [[extra.menus.children]]
-  name = "LASER IRIDOTOMY"
-  url = "/learn/laser-iridotomy/"
-  [[extra.menus.children]]
-  name = "MIGS"
-  url = "/learn/migs/"
-  [[extra.menus.children]]
-  name = "TRABECULECTOMY"
-  url = "/learn/trabeculectomy/"
-  [[extra.menus.children]]
-  name = "TUBE SHUNT SURGERY"
-  url = "/learn/tube-shunt-surgery/"
-  [[extra.menus.children]]
-  name = "MICROPULSE / CPC LASER"
-  url = "/learn/cyclophotocoagulation/"
-  [[extra.menus.children]]
-  name = "CATARACT SURGERY"
-  url = "/learn/cataract-surgery/"
-  [[extra.menus.children]]
-  name = "YAG CAPSULOTOMY"
-  url = "/learn/yag-capsulotomy/"
+  name = "ALL TOPICS"
+  url = "/learn/"
 
 [[extra.menus]]
 name = "CONTACT"

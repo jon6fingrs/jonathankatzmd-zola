@@ -6,11 +6,26 @@
     <div class="jk-page__body">
       {% if page.extra.article %}<h1 class="jk-title">{{ page.title }}</h1>{% endif %}
       {{ page.content | safe }}
-      {% if page.extra.article and (page.lower or page.higher) %}
-      <nav class="jk-article-nav" aria-label="More to read">
-        <span>{% if page.lower %}<a href="{{ page.lower.permalink }}">&larr; {{ page.lower.title }}</a>{% endif %}</span>
-        <span>{% if page.higher %}<a href="{{ page.higher.permalink }}">{{ page.higher.title }} &rarr;</a>{% endif %}</span>
+      {#- Related pages: Learn articles list the others in the same topic and
+          group and link to the topic page; simulators link back to Tools. -#}
+      {% if page.extra.article and page.extra.topic %}
+      {% if page.extra.topic == "tools" %}
+      <nav class="jk-related" aria-label="Related pages">
+        <p class="jk-related__all"><a href="{{ get_url(path='/patients/', trailing_slash=true) }}">&larr; All tools</a></p>
       </nav>
+      {% else %}
+      {%- set learn = get_section(path="learn/_index.md") %}
+      {%- set hub = get_section(path="learn/" ~ page.extra.topic ~ "/_index.md") %}
+      <nav class="jk-related" aria-label="Related pages">
+        <h2 class="jk-related__head">Related pages</h2>
+        <ul>
+          {% for p in learn.pages %}{% if p.extra.topic == page.extra.topic and p.extra.group == page.extra.group and p.permalink != page.permalink %}
+          <li><a href="{{ p.permalink }}">{{ p.title }}</a></li>
+          {% endif %}{% endfor %}
+        </ul>
+        <p class="jk-related__all"><a href="{{ hub.permalink }}">All {{ hub.title }} pages &rarr;</a></p>
+      </nav>
+      {% endif %}
       {% endif %}
     </div>
   </div>

@@ -6,6 +6,8 @@ weight = 90
 
 [extra]
 article = true
+topic = "glaucoma"
+group = "Surgery"
 js = "js/procedure.js"
 +++
 

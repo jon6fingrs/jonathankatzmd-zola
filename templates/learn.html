@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{#- The Learn landing page: every topic with its articles. Topics and their
+    order come from `topics` in content/learn/_index.md. -#}
+{% block content %}
+<section class="jk-page">
+  <div class="container">
+    <div class="jk-page__body">
+      {{ section.content | safe }}
+      {% for t in section.extra.topics %}
+      {%- set hub = get_section(path="learn/" ~ t ~ "/_index.md") %}
+      <h2 class="jk-sectionhead"><a href="{{ hub.permalink }}">{{ hub.title }}</a></h2>
+      <div class="jk-cardgrid">
+        {% for p in section.pages %}{% if p.extra.topic == t %}
+        <a class="jk-card" href="{{ p.permalink }}">
+          <h3>{{ p.title }}</h3>
+          {% if p.description %}<p>{{ p.description }}</p>{% endif %}
+        </a>
+        {% endif %}{% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock content %}

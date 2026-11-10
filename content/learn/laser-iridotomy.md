@@ -6,6 +6,8 @@ weight = 60
 
 [extra]
 article = true
+topic = "glaucoma"
+group = "Lasers"
 js = "js/lpi.js"
 +++
 

@@ -6,6 +6,8 @@ weight = 30
 
 [extra]
 article = true
+topic = "glaucoma"
+group = "Basics"
 +++
 
 A glaucoma visit involves more measurements than a routine eye exam, and some of them are repeated at every visit for years. That is not because anything is wrong; it is because glaucoma is diagnosed and followed by looking for **change over time**. Each test below gives a different view of the same question: is the optic nerve stable?
