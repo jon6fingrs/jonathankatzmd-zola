@@ -217,7 +217,10 @@
   var CPC_VARIANTS = [['cpc', 'Micropulse'], ['cwcpc', 'Standard CPC']];
   function cpcProc(micro) {
     var probe = { label: 'Probe', dur: 1800,
-      caption: '<strong>Numbing and the probe.</strong> The eye is numbed, usually with an injection of anesthetic beside the eye, so you feel no pain. A small probe is then rested on the white of the eye, just behind the edge of the cornea. Nothing enters the eye.',
+      caption: '<strong>Numbing and the probe.</strong> ' + (micro
+        ? 'You are given sedation so you sleep lightly, and numbing drops are placed on the eye.'
+        : 'The eye is numbed with an injection of anesthetic behind the eye, so you feel no pain.')
+        + ' A small probe is then rested on the white of the eye, just behind the edge of the cornea. Nothing enters the eye.',
       draw: function (p) { var e = ease(p); op('cpc-probe', e); at('cpc-probe', 'transform', 'translate(' + (-8 * (1 - e)).toFixed(1) + ',' + (-30 * (1 - e)).toFixed(1) + ')'); op('cpc-lab-probe', e); } };
     var laser = { label: 'Laser', dur: micro ? 5200 : 4400,
       caption: micro
@@ -246,7 +249,7 @@
         at('cpc-fprobe', 'transform', 'translate(' + pos[0].toFixed(1) + ',' + pos[1].toFixed(1) + ')');
       } };
     var later = { label: 'Weeks later', dur: 2600,
-      caption: '<strong>Over the next weeks.</strong> The treated tissue makes less fluid, like a faucet turned down, and the pressure falls. The full effect takes about four to six weeks. The laser can be repeated if more effect is needed.',
+      caption: '<strong>Over the next weeks.</strong> The treated tissue makes less fluid, like a faucet turned down, and the pressure falls. The full effect takes about a month. The laser can be repeated if more effect is needed.',
       draw: function (p) {
         var e = ease(p), i;
         op('cpc-quiet', 0.45 * e); op('cpc-m2', 1 - e); op('cpc-m3', 1 - e); at('cpc-m1', 'stroke-width', 4 - 1.5 * e);
@@ -262,7 +265,7 @@
       variants: CPC_VARIANTS,
       views: [['Side view', cpcSide], ['Front view', function () { return cpcFront(micro); }]],
       intro: '<strong>Before.</strong> The fluid inside the eye is made by the ciliary body, a ring of tissue hidden behind the iris, under the white of the eye. This laser treats that tissue from the outside.'
-        + (micro ? ' Micropulse delivers it in short bursts while the probe is swept along.' : ' Standard CPC delivers it as a row of separate spots.'),
+        + (micro ? ' Micropulse delivers it in short bursts while the probe is swept along.' : ' Standard CPC is the heavier treatment: a row of separate spots.'),
       steps: [probe, laser, later]
     };
   }
