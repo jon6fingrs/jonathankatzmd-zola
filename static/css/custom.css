@@ -979,3 +979,41 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
   .jk-page--article .jk-vis { width: auto; left: auto; transform: none; }
   .jk-vis__stage { break-inside: avoid; }
 }
+
+/* ===================================================================
+   LASER IRIDOTOMY DEMO (learn/laser-iridotomy, static/js/lpi.js)
+   Mobile-first: one view at a time (chips switch) so the picture, the
+   Fire laser button and the caption fit on one phone screen. From 768px
+   both views sit side by side and the chips go away.
+   =================================================================== */
+.jk-lpi { margin: 1.5rem 0 2rem; position: relative; background: #fff; border: 1px solid var(--jk-line); border-radius: 10px; padding: .75rem; }
+.jk-page--article .jk-lpi { width: min(100vw - 2rem, 1040px); left: 50%; transform: translateX(-50%); }
+.jk-lpi__tabs { justify-content: center; margin-bottom: .5rem; }
+.jk-lpi__views { display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem; }
+.jk-lpi__view { margin: 0; min-width: 0; }
+.jk-lpi__view figcaption { text-align: center; font-size: .9rem; font-weight: 600; color: var(--jk-muted); margin: 0 0 .25rem; }
+.jk-page--article .jk-page__body .jk-lpi__view figcaption { margin-bottom: .25rem; }
+.jk-lpi__svg { display: block; width: 100%; height: auto; }
+.jk-lpi__svg g, .jk-lpi__svg path, .jk-lpi__svg circle, .jk-lpi__svg ellipse { transition: none; }
+@media (max-width: 767.98px) {
+  .jk-lpi__views[data-show="side"] .jk-lpi__view[data-view="front"],
+  .jk-lpi__views[data-show="front"] .jk-lpi__view[data-view="side"] { display: none; }
+}
+.jk-lpi__controls { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; margin: .75rem 0 .5rem; }
+.jk-lpi__controls .btn { min-height: 44px; }
+.jk-lpi__fire { font-weight: 600; padding-left: 1.4rem; padding-right: 1.4rem; }
+.jk-lpi__full[hidden] { display: none; }
+.jk-lpi__step { margin: 0 auto; max-width: 46rem; min-height: 4.6em; text-align: center; font-size: 1rem; line-height: 1.45; }
+.jk-page--article .jk-page__body .jk-lpi__step { margin-bottom: 0; }
+@media (min-width: 768px) {
+  .jk-lpi { padding: 1rem 1.25rem 1.25rem; }
+  .jk-lpi__tabs { display: none; }
+  .jk-lpi__views { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+  .jk-lpi__step { min-height: 3em; font-size: 1.1rem; }
+}
+/* full screen in the exam room: fill the screen, centre the content */
+.jk-lpi:fullscreen { width: 100vw; left: 0; transform: none; border: 0; border-radius: 0; padding: 2vh 3vw; display: flex; flex-direction: column; justify-content: center; overflow: auto; }
+.jk-lpi:fullscreen .jk-lpi__views { max-width: calc((100vh - 16rem) * 2.5); width: 100%; margin: 0 auto; }
+.jk-lpi:fullscreen .jk-lpi__step { font-size: 1.35rem; max-width: 60rem; }
+.jk-lpi:fullscreen .jk-lpi__controls .btn { font-size: 1.15rem; }
+@media print { .jk-lpi__controls, .jk-lpi__tabs { display: none; } .jk-lpi__views .jk-lpi__view[data-view] { display: block !important; } }
