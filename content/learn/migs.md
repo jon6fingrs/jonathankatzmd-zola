@@ -1,6 +1,6 @@
 +++
 title = "MIGS"
-description = "Minimally invasive glaucoma surgery: small implants and procedures, often combined with cataract surgery, that lower pressure with a quicker recovery than traditional surgery."
+description = "Minimally invasive glaucoma surgery: small implants and procedures, often combined with cataract surgery, that lower pressure with a quicker recovery than traditional surgery. With a step-by-step animation of a stent being placed."
 template = "page.html"
 weight = 70
 
@@ -44,7 +44,7 @@ A small amount of blood inside the eye (hyphema) is common with angle procedures
 
 ## Results
 
-On average MIGS lowers pressure by a few millimeters and reduces drop use by one to two medications, with many patients off drops entirely. The effect is more modest than trabeculectomy or a tube but with far fewer complications. Pressure is monitored lifelong, and if it rises later, drops, laser or further surgery remain possible; MIGS does not close off those options.
+On average MIGS brings pressure into the mid teens and reduces drop use by one to two medications, with many patients off drops entirely. The effect is more modest than trabeculectomy or a tube but with far fewer complications. Pressure is monitored lifelong, and if it rises later, drops, laser or further surgery remain possible; MIGS does not close off those options.
 
 ## Risks
 

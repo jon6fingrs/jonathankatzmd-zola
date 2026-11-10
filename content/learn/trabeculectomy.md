@@ -1,6 +1,6 @@
 +++
 title = "Trabeculectomy"
-description = "Trabeculectomy creates a new drainage channel under the eyelid to lower eye pressure in advanced glaucoma. What the operation involves, the twelve-week recovery, and warning signs."
+description = "Trabeculectomy creates a new drainage channel under the eyelid to lower eye pressure in advanced glaucoma. With a step-by-step animation, what the operation involves, the twelve-week recovery, and warning signs."
 template = "page.html"
 weight = 80
 
@@ -19,7 +19,7 @@ Press **Play** to see how the operation makes a new drain, or tap a step to go t
 
 ## How it works
 
-The surgeon makes a small trapdoor in the white wall of the eye (the sclera) under the upper eyelid and removes a tiny piece of tissue beneath it, creating a new path for fluid to leave the eye. The fluid collects under the conjunctiva, the thin clear skin over the white of the eye, in a small blister called a **bleb**, and is absorbed into the blood vessels there. The bleb sits under the upper lid and is not normally visible.
+The surgeon makes a small trapdoor in the white wall of the eye (the sclera) under the upper eyelid and removes a tiny piece of tissue beneath it, creating a new path for fluid to leave the eye. A small opening is usually made in the edge of the iris at the same spot, so the iris cannot plug the new drain. The fluid collects under the conjunctiva, the thin clear skin over the white of the eye, in a small blister called a **bleb**, and is absorbed into the blood vessels there. The bleb sits under the upper lid and is not normally visible.
 
 {{<figure src="images/learn/trabeculectomy.svg" alt="Cross-section showing a small flap and opening in the eye wall near the cornea, with fluid collecting in a blister called a bleb under the conjunctiva." caption="Fluid leaves the eye through a small opening under a flap in the eye wall and collects in a bleb under the conjunctiva, where it is absorbed. Simplified, not to scale." />}}
 

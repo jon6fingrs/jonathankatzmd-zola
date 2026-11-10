@@ -220,14 +220,14 @@ figs['trabeculectomy']=('Trabeculectomy: fluid leaves through a new opening into
 b=eye()
 b+=f'<ellipse cx="605" cy="30" rx="112" ry="24" fill="#bfdbfe" opacity="0.55"/>'
 b+=f'<rect x="520" y="20" width="170" height="24" rx="12" fill="#e5e7eb" stroke="#4b5563" stroke-width="2"/>'
-b+=f'<path d="M530,32 C440,38 360,64 320,90 L250,150" fill="none" stroke="#4b5563" stroke-width="8" stroke-linecap="round"/>'
-b+=f'<path d="M530,32 C440,38 360,64 320,90 L250,150" fill="none" stroke="#d1d5db" stroke-width="3" stroke-linecap="round"/>'
+b+=f'<path d="M530,32 C440,38 380,58 334,80 C316,90 302,108 294,134 L281,198" fill="none" stroke="#4b5563" stroke-width="8" stroke-linecap="round"/>'
+b+=f'<path d="M530,32 C440,38 380,58 334,80 C316,90 302,108 294,134 L281,198" fill="none" stroke="#d1d5db" stroke-width="3" stroke-linecap="round"/>'
 b+=f'<path d="M330,72 C360,56 400,46 430,44 L436,56 C404,58 366,68 336,84 Z" fill="#fef3c7" stroke="#a16207" stroke-width="1.5" opacity="0.95"/>'
 a=f'stroke="{BLUE}" stroke-width="4" fill="none" stroke-linecap="round"'
-b+=f'<path d="M200,260 C210,210 230,180 246,160" {a} marker-end="url(#ah)"/>'
+b+=f'<path d="M206,292 C214,258 240,228 270,208" {a} marker-end="url(#ah)"/>'
 b+=label(470,130,'Plate sits on the eye wall','start',20)+label(470,154,'under the upper eyelid;','start',20,'400')+label(470,178,'fluid is absorbed around it','start',20,'400')+leader(560,112,600,46)
-b+=label(20,-44,'Tube tip sits in the','start',20)+label(20,-20,'front chamber','start',20,'400')+leader(150,-14,250,146)
-b+=label(330,-44,'A patch covers the tube','start',20)+leader(390,-36,388,56)
+b+=label(20,-44,'Tube lies in the front chamber,','start',20)+label(20,-20,'in front of the iris','start',20,'400')+leader(150,-14,283,190)
+b+=label(400,-20,'A patch covers the tube','start',20)+leader(430,-12,400,54)
 b+=label(205,385,'Iris','end')+leader(210,379,278,288)
 figs['tube-shunt']=('Tube shunt: a small tube carries fluid to a plate on the eye wall',720,420+DY,shifted(b))
 

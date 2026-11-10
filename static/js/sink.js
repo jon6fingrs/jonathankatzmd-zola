@@ -37,7 +37,7 @@
     { id: 'main', group: 'drain', label: 'Drops: open the main drain', where: 'main',
       about: '<strong>Netarsudil</strong> (Rhopressa) relaxes the main drain so fluid passes through it more easily, and slightly lowers the pressure in the veins it empties into.', link: ['../using-eye-drops/', 'Using eye drops'] },
     { id: 'slt', group: 'drain', label: 'SLT laser', where: 'main',
-      about: '<strong>SLT laser</strong> treats the main drain itself. Over a few weeks the drain clears and lets more fluid through. Nothing is cut.', link: ['../slt-laser/', 'SLT laser'] },
+      about: '<strong>SLT laser</strong> (standard or direct) treats the main drain itself. Over a few weeks the drain clears and lets more fluid through. Nothing is cut.', link: ['../slt-laser/', 'SLT laser'] },
     { id: 'migs', group: 'drain', label: 'MIGS', where: 'main',
       about: '<strong>MIGS</strong> (a tiny stent, or opening part of the drain) gives fluid a shortcut past the clogged part of the main drain, into the canal behind it. It is usually done with cataract surgery, and pressures in the mid teens afterward are typical. The fluid still leaves through the same veins, so it cannot go below the floor.', link: ['../migs/', 'MIGS'] },
     { id: 'trab', group: 'new', label: 'Trabeculectomy', where: 'new',
