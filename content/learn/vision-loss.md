@@ -67,7 +67,7 @@ Glasses, contact lenses, or refractive surgery correct all of these fully. To se
 
 ## Dry eye
 
-The tear film is the first surface light crosses, and when it is thin or breaks up quickly the picture blurs between blinks, then clears for a moment after one. Dry eye causes fluctuating blur, burning, grittiness, and, paradoxically, watering. It is more common with age, screen use, some medicines, and after eye surgery, and it can make glaucoma drops sting. Artificial tears, warm compresses and lid care help most people; prescription drops are available for more severe disease.
+The tear film is the first surface light crosses, and when it is thin or breaks up quickly the picture blurs between blinks, then clears for a moment after one. Dry eye causes fluctuating blur, burning, grittiness, and, paradoxically, watering. It is more common with age, screen use, some medicines, and after eye surgery, and it can make glaucoma drops sting. Artificial tears, warm compresses and lid care help most people; prescription drops are available for more severe disease. The [Dry Eye](@/learn/what-is-dry-eye.md) pages explain more.
 
 ## Floaters and flashes {#floaters}
 

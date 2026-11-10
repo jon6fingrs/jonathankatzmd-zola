@@ -1,5 +1,6 @@
 /* Step-by-step procedure demos for the Learn pages: SLT, MIGS,
- * trabeculectomy, tube shunt and cyclophotocoagulation. A page has one
+ * trabeculectomy, tube shunt and cyclophotocoagulation, plus the tear film
+ * between blinks (`tears`), which uses the same format. A page has one
  *     <div id="jk-proc" class="jk-lpi" data-proc="slt"></div>
  * and this file builds it. SLT (standard, direct), MIGS (stent, goniotomy, viscodilation, viscodilation + stent) and
  * cyclophotocoagulation (micropulse, standard) have variants switched by
@@ -42,6 +43,7 @@
   function defs() {
     return '<defs>'
       + '<marker id="pr-ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="' + BLUE + '"/></marker>'
+      + '<marker id="pr-ahm" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>'
       + '<pattern id="pr-tm" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#fde68a"/><line x1="0" y1="0" x2="0" y2="6" stroke="#b45309" stroke-width="2"/></pattern>'
       + '<radialGradient id="pr-irisg"><stop offset="0.3" stop-color="#a9764a"/><stop offset="0.7" stop-color="#8b5e3c"/><stop offset="1" stop-color="#5c3d26"/></radialGradient>'
       + '</defs>';
@@ -492,7 +494,117 @@
     return h + '</svg>';
   }
 
+  // ---------- the tear film between blinks ----------
+  // Not a procedure, but the same step-through format: a blink spreads a
+  // fresh tear film, then it thins until the next blink. Three variants:
+  // healthy, not enough oil (it evaporates and breaks up), not enough
+  // tears (a thin film that breaks up). Two drawings: a slice through the
+  // film, and the front of the eye with the dye a doctor uses to see it.
+  var TEAR = {
+    tears: { h0: 120, loss: 0.18, breakAt: 2, oil: 1, evap: 0.35 },
+    tearsevap: { h0: 120, loss: 0.5, breakAt: 0.3, oil: 0.25, evap: 1 },
+    tearsaq: { h0: 62, loss: 0.3, breakAt: 0.45, oil: 1, evap: 0.45 }
+  };
+  var TEAR_SPOTS = [[150, 34], [318, 44], [452, 30]]; // dry spots in the slice: x, half-width
+  var TF_BASE = 300; // top of the eye's surface in the slice
+  // q: how far into the gap between blinks (0 fresh .. 1 just before the next blink)
+  function tearState(v, q) { var d = clamp((q - v.breakAt) / (1 - v.breakAt), 0, 1); return { h: v.h0 * (1 - v.loss * q), dry: v.breakAt > 1 ? 0 : ease(d) }; }
+  function tearTop(v, x, q) {
+    var st = tearState(v, q), y = TF_BASE - st.h, i, g;
+    for (i = 0; i < TEAR_SPOTS.length; i++) { g = Math.exp(-Math.pow((x - TEAR_SPOTS[i][0]) / TEAR_SPOTS[i][1], 2)); y += (st.h + 2) * st.dry * g; }
+    return Math.min(y, TF_BASE + 2);
+  }
+  // the film's top edge; left of lidX it has just been refreshed by the lid
+  function tearPaths(v, q, lidX) {
+    var top = '', x, y;
+    for (x = 20; x <= 540; x += 8) { y = tearTop(v, x, x < lidX ? 0 : q); top += (x === 20 ? 'M' : ' L') + x + ',' + y.toFixed(1); }
+    return { top: top, fill: top + ' L540,' + TF_BASE + ' L20,' + TF_BASE + ' Z' };
+  }
+  function tearSlice(key) {
+    var v = TEAR[key], h = svgOpen('0 0 560 420', 'A slice through the tear film on the surface of the eye'), i;
+    h += '<rect x="20" y="' + TF_BASE + '" width="520" height="100" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>'
+      + '<path id="tf-water" fill="#93c5fd"/>'
+      + '<rect x="20" y="' + (TF_BASE - 7) + '" width="520" height="8" fill="#6ee7b7"/>'
+      + '<path id="tf-oil" fill="none" stroke="#f59e0b" stroke-width="' + (v.oil < 1 ? 5 : 8) + '" stroke-linecap="round"' + (v.oil < 1 ? ' stroke-dasharray="26 46"' : '') + '/>'
+      + '<g id="tf-evap" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linecap="round">';
+    for (i = 0; i < 6; i++) { var ex = 70 + i * 84; h += '<path d="M' + ex + ',150 q-9,-12 0,-24 q9,-12 0,-24" marker-end="url(#pr-ahm)"/>'; }
+    h += '</g>'
+      + '<g id="tf-lid" opacity="0"><rect x="-150" y="96" width="150" height="212" rx="18" fill="#f1c7a8" stroke="#b07d5b" stroke-width="2"/>' + txt(-75, 206, 'Eyelid', 'middle', '#7c4a2a') + '</g>'
+      + txt(280, 372, 'Surface of the eye (cornea)', 'middle', '#1e3a8a', 600, 20)
+      + '<g id="tf-lab-layers">' + txt(24, 30, 'Oil layer', 'start', '#b45309', 600, 20) + txt(24, 52, 'slows evaporation', 'start', MUTED, 400, 17)
+      + txt(214, 30, 'Water layer', 'start', '#1d4ed8', 600, 20) + txt(214, 52, 'the bulk of the tears', 'start', MUTED, 400, 17)
+      + txt(404, 30, 'Mucus layer', 'start', '#047857', 600, 20) + txt(404, 52, 'helps tears stick', 'start', MUTED, 400, 17) + '</g>'
+      + '<text id="tf-timer" x="540" y="92" ' + FONT + ' font-size="20" font-weight="600" fill="' + INK + '" text-anchor="end"></text>'
+      + '<g id="tf-lab-dry" opacity="0">' + txt(TEAR_SPOTS[1][0], 252, 'Dry spot', 'middle', '#b91c1c', 700, 20) + '</g>';
+    return h + '</svg>';
+  }
+  var DYE_SPOTS = [[-30, -38, 26, 15, -20], [34, 6, 30, 16, 25], [-44, 34, 22, 13, 10], [22, -52, 18, 11, 40], [58, 44, 16, 10, -30]];
+  function tearFront() {
+    var h = svgOpen('0 0 560 420', 'The front of the eye stained with a yellow-green dye, as the doctor sees it'), i, s;
+    h += '<clipPath id="tf-eyeclip"><path d="M60,214 Q280,40 500,214 Q280,388 60,214 Z"/></clipPath>'
+      + '<path d="M60,214 Q280,40 500,214 Q280,388 60,214 Z" fill="#fff" stroke="' + INK + '" stroke-width="3"/>'
+      + '<g clip-path="url(#tf-eyeclip)">'
+      + '<path d="M60,214 Q280,40 500,214 Q280,388 60,214 Z" fill="#d9f99d" opacity="0.55"/>'
+      + '<circle cx="280" cy="214" r="112" fill="#65a30d"/><circle cx="280" cy="214" r="112" fill="#bef264" opacity="0.75"/>'
+      + '<circle cx="280" cy="214" r="40" fill="#1a2e05" opacity="0.55"/>'
+      + '<g id="tf-fspots" fill="#14532d" opacity="0">';
+    for (i = 0; i < DYE_SPOTS.length; i++) { s = DYE_SPOTS[i]; h += '<ellipse cx="' + (280 + s[0]) + '" cy="' + (214 + s[1]) + '" rx="' + s[2] + '" ry="' + s[3] + '" transform="rotate(' + s[4] + ' ' + (280 + s[0]) + ' ' + (214 + s[1]) + ')"/>'; }
+    h += '</g>'
+      + '<path id="tf-flid" d="M40,20 L520,20 L520,214 Q280,40 40,214 Z" fill="#f1c7a8" stroke="#b07d5b" stroke-width="2"/>'
+      + '</g>'
+      + '<path d="M60,214 Q280,40 500,214" fill="none" stroke="' + INK + '" stroke-width="5"/>'
+      + txt(20, 404, 'Yellow-green dye in the tears', 'start', '#3f6212', 600, 20)
+      + '<g id="tf-flab-dry" opacity="0">' + txt(540, 404, 'Dark patches: dry spots', 'end', '#14532d', 600, 20) + '</g>'
+      + '<g id="tf-flab-ok" opacity="0">' + txt(540, 404, 'Even color: smooth film', 'end', '#3f6212', 600, 20) + '</g>';
+    return h + '</svg>';
+  }
+  var TEAR_VARIANTS = [['tears', 'Healthy'], ['tearsevap', 'Not enough oil'], ['tearsaq', 'Not enough tears']];
+  function tearDraw(v, q, lidX, lidShow) {
+    var pth = tearPaths(v, q, lidX), st = tearState(v, q);
+    at('tf-water', 'd', pth.fill); at('tf-oil', 'd', pth.top);
+    op('tf-evap', v.evap * (lidShow ? 0.3 : 1));
+    at('tf-lid', 'transform', 'translate(' + lidX.toFixed(1) + ',0)'); op('tf-lid', lidShow ? 1 : 0);
+    var dry = st.dry * (1 - clamp(lidX / 560, 0, 1)); // the lid wipes the dry spots away as it passes
+    op('tf-lab-dry', dry > 0.6 ? 1 : 0); op('tf-fspots', 0.85 * dry);
+    return st;
+  }
+  function tearProc(key) {
+    var v = TEAR[key], healthy = key === 'tears', breakSec = Math.round(v.breakAt * 10);
+    var why = key === 'tearsevap'
+      ? 'Here the oil layer is patchy, because the oil glands in the eyelids are blocked. Without its cover the water evaporates quickly.'
+      : key === 'tearsaq' ? 'Here the tear glands make too little of the watery part, so the film starts out thin.' : 'A healthy film has all three layers.';
+    return {
+      variants: TEAR_VARIANTS,
+      views: [['A slice through the tear film', function () { return tearSlice(key); }], ['With dye, as the doctor sees it', tearFront]],
+      intro: '<strong>The tear film.</strong> A thin film of tears covers the front of the eye. It has three layers: mucus that helps it stick, water, and a skin of oil on top that slows evaporation. ' + why,
+      steps: [
+        { label: 'Blink', dur: 1700, caption: '<strong>A blink.</strong> The eyelid sweeps across and spreads a fresh, smooth film of tears over the surface.',
+          draw: function (p, t) {
+            var e = ease(p), lidX = p > 0 && p < 1 ? lerp(-10, 720, e) : (p >= 1 ? 720 : -10);
+            tearDraw(v, 1, lidX, p > 0 && p < 1);
+            at('tf-flid', 'transform', 'translate(0,' + (p > 0 && p < 1 ? (190 * Math.sin(Math.PI * p)).toFixed(1) : '0') + ')');
+            at('tf-timer', 'opacity', p >= 1 ? 1 : 0);
+          } },
+        { label: 'Eye open', dur: 5200, caption: healthy
+            ? '<strong>Between blinks.</strong> The film thins a little as water evaporates, but the oil layer holds it together. It stays smooth for ten seconds or more, until the next blink.'
+            : '<strong>Between blinks.</strong> The film thins and then breaks apart after only about ' + breakSec + ' seconds, leaving dry spots on the surface before the next blink arrives.',
+          draw: function (p) {
+            if (p > 0) { tearDraw(v, p, -10, false); }
+            var el = $('tf-timer'); if (el) el.textContent = 'Seconds since the blink: ' + Math.round(10 * p);
+            op('tf-lab-layers', 1);
+          } },
+        { label: healthy ? 'Result' : 'What you feel', dur: 2200, caption: healthy
+            ? '<strong>A smooth surface.</strong> A smooth tear film is the first lens of the eye, so vision stays clear and the eye feels comfortable. With dye, the doctor sees an even color.'
+            : '<strong>What you feel.</strong> Dry spots sting, burn or feel gritty, and they blur vision until the next blink. The irritation can also set off a flood of watery reflex tears, which is why a dry eye often waters. With dye, the doctor sees the dry spots as dark patches.',
+          draw: function (p) { var e = ease(p); op('tf-flab-dry', healthy ? 0 : e); op('tf-flab-ok', healthy ? e : 0); } }
+      ]
+    };
+  }
+
   var PROCS = {
+    tears: tearProc('tears'),
+    tearsevap: tearProc('tearsevap'),
+    tearsaq: tearProc('tearsaq'),
     slt: sltProc(false),
     dslt: sltProc(true),
     cpc: cpcProc(true),
