@@ -6,7 +6,7 @@ weight = 15
 
 [extra]
 article = true
-js = "js/sink.js"
+scripts = ["js/sink-model.js", "js/sink.js"]
 +++
 
 Every [glaucoma](@/learn/what-is-glaucoma.md) treatment in use today works the same way: it lowers the pressure inside the eye. They differ in *how*. A simple way to picture it is a sink. A faucet runs all day, drains carry the water away, and the water level is the eye pressure. Tap a treatment below to see which part of the sink it changes.
@@ -34,7 +34,17 @@ In the most common kind of glaucoma, the faucet is normal. The main drain is par
 
 **Add a new drain.** A [trabeculectomy](@/learn/trabeculectomy.md) or a [tube shunt](@/learn/tube-shunt-surgery.md) makes a new way out of the eye. These lower pressure the most and are used when the other steps are not enough.
 
-Treatments from different groups add together, which is why you may be on two kinds of drops, or have a laser and still use a drop. Two treatments that work on the same part help less the second time.
+## Why there is a floor, and why adding more helps less
+
+The main drain empties into small veins on the surface of the eye, and those veins have a pressure of their own, around 8 to 10 mm Hg. Fluid cannot run out through the main drain into veins that are at a higher pressure, so that vein pressure is a **floor**. Turning the faucet down, or opening the drains, brings the level toward the floor but not under it. It is the dotted line near the bottom of the sink.
+
+Only a new drain gets past it. A trabeculectomy or tube shunt carries fluid somewhere other than those veins, which is why surgery can reach pressures that drops and laser cannot.
+
+Treatments also give **diminishing returns**:
+
+- **The same part twice helps less the second time.** A second drop that slows the faucet adds less than the first, because the eye never stops making fluid altogether. The same goes for two treatments on the main drain: they share the same clogged filter, and it can only be opened so far.
+- **Different parts add up better**, which is why you may be on one drop that slows the faucet and another that opens a drain, or have a laser and still use a drop.
+- **The closer the level is to the floor, the less anything moves it.** A drop that takes a pressure of 30 down by 7 may take a pressure of 16 down by 2.
 
 ## How low is low enough?
 
@@ -49,5 +59,6 @@ There is no single safe number. "Normal" pressure is often quoted as 10 to 21 mm
 ## Questions worth asking
 
 - What is my target pressure, and am I at it?
+- Can drops or laser get me there, or is it below what they can reach?
 - Which part of the sink does each of my treatments work on?
 - If my pressure needs to come down further, what is the next step for me?
