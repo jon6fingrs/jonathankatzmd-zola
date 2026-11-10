@@ -52,6 +52,7 @@ You will need a driver. Usually one eye is treated at a time.
 - You will use an **anti-inflammatory (steroid) drop** for at least a month, stepping down a little each week:
   - **After micropulse:** four times a day for a week, then three, then two, then once a day, about four weeks in all.
   - **After standard CPC:** eight times a day for a week, then six, four, three, two and one, about six weeks in all.
+- The [Post-Op Schedule](@/patients/post-op-schedule.md) page makes a printable day-by-day chart of these drops.
 - Your doctor may change this schedule for your eye. Sometimes a drop that keeps the pupil dilated is added to keep the eye comfortable.
 - **Keep using your glaucoma drops** unless you are told to stop. The laser takes about a month to reach its full effect, and drops are adjusted after that.
 - There are usually no activity restrictions after the first day.
