@@ -1,8 +1,8 @@
 # Draws the Learn-page illustrations into static/images/learn/*.svg.
 # Run after editing:  python3 tools/learn-figures.py   (no dependencies)
-# All eight share eye(), a side view of the front of the eye facing left with
+# All but the iridotomy front view share eye(), a side view of the front of the eye facing left with
 # the optical axis along the bottom, so they stay consistent with each other.
-import os
+import os, math
 OUT=os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'static', 'images', 'learn')
 FONT='font-family="Helvetica Neue, Helvetica, Arial, sans-serif"'
 INK='#1f2937'; BLUE='#2a6ebb'; MUTED='#5b6573'
@@ -27,14 +27,44 @@ def label(x,y,text,anchor='start',size=22,weight='600',color=INK):
 def leader(x1,y1,x2,y2):
     return f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{MUTED}" stroke-width="1.5"/><circle cx="{x2}" cy="{y2}" r="3.5" fill="{MUTED}"/>'
 
-def eye(lens='clear', iris=True):
+# The iris as a strip around a centerline from its root (u=0) to the pupil
+# margin (u=1); bow=1 is the narrow-angle shape. Same maths as static/js/lpi.js,
+# which animates between the two, so keep them in step.
+IRIS_N=30; HOLE_U=0.25
+def iris_center(u,bow):
+    push=40*(1-math.exp(-u/0.07))*(1-u)**1.1-9*u**4
+    return (308-30*u-bow*push, 126+175*u)
+def iris_sides(bow):
+    front=[];back=[]
+    for i in range(IRIS_N+1):
+        u=i/IRIS_N; c=iris_center(u,bow); a=iris_center(max(0,u-0.02),bow); b=iris_center(min(1,u+0.02),bow)
+        dx=b[0]-a[0]; dy=b[1]-a[1]; ln=math.hypot(dx,dy) or 1
+        h=(16-3*u)/2; nx=-dy/ln; ny=dx/ln
+        front.append((c[0]-nx*h,c[1]-ny*h)); back.append((c[0]+nx*h,c[1]+ny*h))
+    return front,back
+def _pts(a): return ' L'.join(f'{x:.1f},{y:.1f}' for x,y in a)
+def iris_strip(bow, hole=False):
+    front,back=iris_sides(bow); m=front[-1]; n=back[-1]; r=math.hypot(n[0]-m[0],n[1]-m[1])/2
+    s=f'<path d="M{_pts(front)} A{r:.1f},{r:.1f} 0 0,1 {n[0]:.1f},{n[1]:.1f} L{_pts(back[::-1])} Z" fill="#8b5e3c" stroke="#5c3d26" stroke-width="1.5" stroke-linejoin="round"/>'
+    if hole:
+        i=round(HOLE_U*IRIS_N); f=front[i]; b=back[i]; ex=(b[0]-f[0])*0.2; ey=(b[1]-f[1])*0.2
+        s+=f'<line x1="{f[0]-ex:.1f}" y1="{f[1]-ey:.1f}" x2="{b[0]+ex:.1f}" y2="{b[1]+ey:.1f}" stroke="#fff" stroke-width="13"/>'
+    return s
+def behind_iris(bow, fill='#a78bfa', opacity=0.55):
+    _,back=iris_sides(bow)
+    return f'<path d="M{_pts(back)} L300,306 L385,178 L345,166 L316,128 Z" fill="{fill}" opacity="{opacity}"/>'
+
+def eye(lens='clear', iris=True, behind=''):
     """Upper half of the anterior segment. Key points: angle ~ (300,122),
-    Schlemm's canal ~ (309,104), pupil margin ~ (272,300), lens equator ~ (385,178)."""
+    Schlemm's canal ~ (309,104), pupil margin ~ (272,300), lens equator ~ (385,178).
+    iris: True (the usual flat iris), False, or SVG to draw in its place;
+    behind: SVG drawn under the lens and ciliary body (fluid behind the iris)."""
     s=''
     # sclera (white wall) from limbus to the right
     s+=f'<path d="M298,92 C420,50 560,40 720,44 L720,70 C560,66 422,76 304,116 Z" fill="#f8fafc" stroke="#6b7280" stroke-width="2"/>'
     # cornea (clear dome)
     s+=f'<path d="M110,400 C110,250 190,128 298,92 L304,116 C204,148 128,262 128,400 Z" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>'
+    s+=behind
     # ciliary body
     s+=f'<path d="M312,118 C340,106 372,98 400,96 C392,130 372,160 340,170 C326,160 314,142 312,118 Z" fill="#f2b8b5" stroke="#b45454" stroke-width="1.5"/>'
     # lens
@@ -50,7 +80,9 @@ def eye(lens='clear', iris=True):
     for (x1,y1,x2,y2) in [(342,166,372,184),(352,160,388,180),(362,152,400,183),(372,144,412,190)]:
         s+=f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="#a8a29e" stroke-width="1"/>'
     # iris
-    if iris:
+    if isinstance(iris,str):
+        s+=iris
+    elif iris:
         s+=f'<path d="M300,124 C292,180 280,250 270,300 L286,302 C296,252 306,186 316,128 Z" fill="#8b5e3c" stroke="#5c3d26" stroke-width="1.5"/>'
     # trabecular meshwork (the drain) and Schlemm's canal
     s+=f'<path d="M292,104 L305,100 L309,122 L299,126 Z" fill="url(#tm)" stroke="#b45309" stroke-width="1.2"/>'
@@ -208,6 +240,29 @@ b+=label(250,345,'Cloudy natural lens','middle',20)
 b+=label(640,345,'Clear lens implant','middle',20)+label(640,369,'in the same capsule','middle',20,'400')
 b+=f'<line x1="400" y1="10" x2="400" y2="380" stroke="#e5e7eb" stroke-width="2"/>'
 figs['cataract-lens']=('A cloudy natural lens compared with a clear lens implant after cataract surgery',800,390,b)
+
+# 9. laser iridotomy: narrow angle before, open angle after
+PURPLE='#6d28d9'
+b='<clipPath id="il"><rect x="0" y="0" width="396" height="400"/></clipPath><clipPath id="ir"><rect x="404" y="0" width="396" height="400"/></clipPath>'
+b+=f'<marker id="ahp" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="{PURPLE}"/></marker>'
+b+=f'<marker id="ahb" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="{BLUE}"/></marker>'
+T='translate(-10,96) scale(0.72)'; T2='translate(394,96) scale(0.72)'
+push=''.join(f'<path d="M338,{y} L312,{y-1}" stroke="{PURPLE}" stroke-width="3.5" fill="none" stroke-linecap="round" marker-end="url(#ahp)"/>' for y in (214,250))
+a=f'stroke="{BLUE}" stroke-width="4" fill="none" stroke-linecap="round" marker-end="url(#ahb)"'
+flow_lpi=f'<path d="M342,184 C326,180 310,174 284,164" {a}/><path d="M270,156 C268,144 276,134 288,126" {a}/>'
+b+=f'<g clip-path="url(#il)"><g transform="{T}">{eye(iris=iris_strip(1), behind=behind_iris(1))}{push}</g></g>'
+b+=f'<g clip-path="url(#ir)"><g transform="{T2}">{eye(iris=iris_strip(0,True))}{flow_lpi}</g></g>'
+def P(x,y,right=False):  # eye coordinates -> figure coordinates
+    return ((394 if right else -10)+x*0.72, 96+y*0.72)
+b+=label(200,34,'Narrow angle','middle',24,'700')+label(604,34,'After laser iridotomy','middle',24,'700')
+x,y=P(292,120); b+=label(20,84,'Drain crowded','start',20,'600','#b91c1c')+label(20,108,'by the iris','start',20,'400','#b91c1c')+leader(120,114,x,y)
+x,y=P(330,232); b+=label(262,300,'Fluid trapped','start',20,'600',PURPLE)+label(262,324,'behind the iris','start',20,'400',PURPLE)+leader(258,292,x,y)
+x,y=P(*iris_sides(1)[0][24]); b+=label(60,372,'Iris','end',20)+leader(66,366,x,y)
+x,y=P(420,330); b+=label(330,372,'Lens','start',20)+leader(326,366,x-6,y)
+x,y=P(294,116,True); b+=label(424,84,'Drain open','start',20,'600','#15803d')+leader(500,92,x,y)
+x,y=P(301,170,True); b+=label(650,268,'Opening in','start',20,'600',BLUE)+label(650,292,'the iris: fluid','start',20,'400',BLUE)+label(650,316,'passes','start',20,'400',BLUE)+label(650,340,'through','start',20,'400',BLUE)+leader(646,260,x+8,y+2)
+b+=f'<line x1="400" y1="10" x2="400" y2="390" stroke="#e5e7eb" stroke-width="2"/>'
+figs['iridotomy']=('A narrow drainage angle before laser iridotomy, and the open angle after it',800,400,b)
 
 for name,(title,w,h,body) in figs.items():
     open(os.path.join(OUT,name+'.svg'),'w').write(svg(w,h,body,title))
