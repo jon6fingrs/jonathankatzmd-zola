@@ -2,7 +2,7 @@
 title = "Cataract Surgery"
 description = "What a cataract is, when surgery makes sense, lens implant choices, the day of surgery and the four-week recovery, and what is different if you also have glaucoma."
 template = "page.html"
-weight = 10
+weight = 100
 
 [extra]
 article = true

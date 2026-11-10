@@ -2,7 +2,7 @@
 title = "Laser Iridotomy"
 description = "Laser peripheral iridotomy: a quick office laser that makes a tiny opening in the iris to open a narrow drainage angle. With an animation of what the laser does, what the visit is like, and what to expect afterward."
 template = "page.html"
-weight = 6
+weight = 60
 
 [extra]
 article = true

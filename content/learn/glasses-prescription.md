@@ -2,7 +2,7 @@
 title = "Your Glasses Prescription"
 description = "Enter a glasses prescription and see how the world looks with and without it at distance, arm's length and reading distance, compared with normal vision."
 template = "page.html"
-weight = 2
+weight = 25
 
 [extra]
 article = true
