@@ -1135,3 +1135,23 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-lpi:fullscreen .jk-lpi__views--one { max-width: calc((100vh - 18rem) * 1.4); }
 .jk-lpi:fullscreen .jk-proc__step { font-size: 1.05rem; }
 @media print { .jk-proc__steps { display: none; } }
+
+/* Artificial tears picker (learn/choosing-artificial-tears, tearpicker.js) */
+.jk-tears { margin: 1.5rem 0 2rem; background: #fff; border: 1px solid var(--jk-line); border-radius: 10px; padding: 1rem; }
+.jk-tears__q { margin: 0 0 .9rem; }
+.jk-tears__q .jk-vis__lab { display: block; padding: 0 0 .35rem; }
+.jk-tears .jk-chip { min-height: 40px; }
+.jk-tears__out { border-top: 1px solid var(--jk-line); margin-top: 1.1rem; padding-top: 1rem; }
+.jk-page--article .jk-page__body .jk-tears__head, .jk-tears__head { font-family: var(--jk-body); font-size: 1.1rem; font-weight: 600; margin: 0 0 .7rem; }
+.jk-tears__cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem; }
+.jk-tears__card { border: 1px solid var(--jk-line); border-left: 4px solid var(--jk-accent); border-radius: 8px; padding: .75rem .9rem; background: var(--jk-bg); min-width: 0; }
+.jk-tears__when { display: block; font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--jk-muted); margin-bottom: .15rem; }
+.jk-tears__card strong { font-size: 1.05rem; }
+.jk-page--article .jk-page__body .jk-tears__card p, .jk-tears__card p { margin: .3rem 0 0; font-size: .95rem; line-height: 1.4; }
+.jk-tears__why { color: var(--jk-muted); }
+.jk-tears__brands { font-weight: 500; }
+.jk-tears__photos { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+.jk-tears__photos img { height: 58px; width: auto; border-radius: 4px; background: #fff; margin: 0; }
+.jk-page--article .jk-page__body .jk-tears__notes, .jk-tears__notes { margin: 1rem 0 0; padding-left: 1.2rem; font-size: .95rem; }
+.jk-tears__notes li { margin-bottom: .35rem; }
+@media (min-width: 768px) { .jk-tears { padding: 1.25rem 1.4rem; } .jk-tears__cards { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); } }

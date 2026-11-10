@@ -724,7 +724,143 @@
     ]
   };
 
+  // ---------- why an eye waters ----------
+  // The front of the eye with its tear gland and drains. Three causes:
+  // reflex tears from a dry surface, a blocked drain, and a lower lid that
+  // has fallen away from the eye so the drain opening no longer touches it.
+  var WCX = 250, WCY = 210;
+  function wLid(sag) { return 'M' + (WCX - 170) + ',' + WCY + ' Q' + WCX + ',' + (WCY + 167 + sag) + ' ' + (WCX + 170) + ',' + WCY; }
+  function wLake(level, sag) { return wLid(sag) + ' Q' + WCX + ',' + (WCY + 160 + sag - 44 * level).toFixed(1) + ' ' + (WCX - 170) + ',' + WCY + ' Z'; }
+  function waterySvg(kind) {
+    var cx = WCX, cy = WCY, h = svgOpen('0 0 560 440', 'The front of an eye with its tear gland above and its drains at the inner corner');
+    h += '<path d="M70,96 C90,52 170,38 220,64 C202,88 140,118 92,128 Z" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="2"/>'
+      + '<path id="wt-white" d="M' + (cx - 170) + ',' + cy + ' Q' + cx + ',' + (cy - 167) + ' ' + (cx + 170) + ',' + cy + ' Q' + cx + ',' + (cy + 167) + ' ' + (cx - 170) + ',' + cy + ' Z" fill="#fff"/>'
+      + '<path id="wt-under" fill="#fecaca" opacity="0"/>'
+      + '<circle cx="' + cx + '" cy="' + cy + '" r="60" fill="#5b8bb5" stroke="#2c4f6e" stroke-width="2"/><circle cx="' + cx + '" cy="' + cy + '" r="24" fill="#111827"/><circle cx="' + (cx + 14) + '" cy="' + (cy - 16) + '" r="7" fill="#fff"/>'
+      + '<g id="wt-dry" fill="#b91c1c" opacity="0"><ellipse cx="' + (cx - 26) + '" cy="' + (cy + 22) + '" rx="12" ry="7"/><ellipse cx="' + (cx + 22) + '" cy="' + (cy + 34) + '" rx="10" ry="6"/><ellipse cx="' + (cx + 4) + '" cy="' + (cy - 4) + '" rx="8" ry="5"/></g>'
+      + '<path id="wt-lake" fill="#93c5fd" opacity="0.92"/>'
+      + '<path d="M' + (cx - 170) + ',' + cy + ' Q' + cx + ',' + (cy - 167) + ' ' + (cx + 170) + ',' + cy + '" fill="none" stroke="' + INK + '" stroke-width="5"/>'
+      + '<path id="wt-lid" fill="none" stroke="' + INK + '" stroke-width="3.5"/>'
+      + '<path d="M' + (cx + 150) + ',' + (cy - 16) + ' C' + (cx + 190) + ',' + (cy - 30) + ' ' + (cx + 214) + ',' + (cy - 14) + ' ' + (cx + 226) + ',' + (cy + 4) + ' M' + (cx + 152) + ',' + (cy + 22) + ' C' + (cx + 190) + ',' + (cy + 34) + ' ' + (cx + 214) + ',' + (cy + 22) + ' ' + (cx + 226) + ',' + (cy + 4) + '" fill="none" stroke="#1d4ed8" stroke-width="5" stroke-linecap="round" opacity="0.55"/>'
+      + '<path d="M' + (cx + 226) + ',' + (cy - 8) + ' C' + (cx + 244) + ',' + (cy - 8) + ' ' + (cx + 248) + ',' + (cy + 20) + ' ' + (cx + 242) + ',' + (cy + 50) + ' C' + (cx + 236) + ',' + (cy + 90) + ' ' + (cx + 244) + ',' + (cy + 130) + ' ' + (cx + 256) + ',' + (cy + 190) + '" fill="none" stroke="#1d4ed8" stroke-width="9" stroke-linecap="round" opacity="0.4"/>'
+      + '<circle cx="' + (cx + 150) + '" cy="' + (cy - 16) + '" r="5" fill="' + INK + '"/><circle id="wt-punct" cx="' + (cx + 152) + '" cy="' + (cy + 22) + '" r="5" fill="' + INK + '"/>'
+      + '<g id="wt-in">' + arrow('wt-in1', 'M150,118 C170,146 182,166 188,184') + '</g>'
+      + '<g id="wt-in2" opacity="0">' + arrow('wt-in2a', 'M120,128 C136,160 146,180 150,198', BLUE, 5) + arrow('wt-in2b', 'M186,104 C208,132 222,150 228,168', BLUE, 5) + '</g>'
+      + '<g id="wt-out">' + arrow('wt-out1', 'M' + (cx + 104) + ',' + (cy + 4) + ' L' + (cx + 138) + ',' + (cy + 4), BLUE, 3.5) + '</g>'
+      + '<g id="wt-block" opacity="0"><path d="M' + (cx + 232) + ',' + (cy + 62) + ' l22,22 m0,-22 l-22,22" stroke="#b91c1c" stroke-width="6" stroke-linecap="round"/></g>'
+      + '<g id="wt-drops" fill="#60a5fa" stroke="#1d4ed8" stroke-width="1.5" opacity="0"><path d="M' + (cx + 60) + ',' + (cy + 80) + ' c10,16 10,28 0,30 c-10,-2 -10,-14 0,-30 Z"/><path d="M' + (cx + 104) + ',' + (cy + 70) + ' c8,13 8,22 0,24 c-8,-2 -8,-11 0,-24 Z"/><path d="M' + (cx + 84) + ',' + (cy + 124) + ' c8,13 8,22 0,24 c-8,-2 -8,-11 0,-24 Z"/></g>'
+      + txt(20, 30, 'Tear gland', 'start') + lead(110, 38, 130, 76)
+      + txt(540, 40, 'Drains', 'end') + lead(500, 48, cx + 152, cy - 20)
+      + txt(540, 428, 'To the nose', 'end', MUTED, 400, 18)
+      + '<g id="wt-lab-a" opacity="0">' + txt(20, 400, { reflex: 'Dry, irritated surface', blocked: 'Drain blocked', lid: 'Loose lid, away from the eye' }[kind], 'start', '#b91c1c') + '</g>'
+      + '<g id="wt-lab-b" opacity="0">' + txt(20, 428, 'Tears spill over the lid', 'start', BLUE) + '</g>';
+    return h + '</svg>';
+  }
+  var WATERY_VARIANTS = [['reflex', 'Dry eye'], ['blocked', 'Blocked drain'], ['loose', 'Loose lid']];
+  var WATERY_TEXT = {
+    reflex: ['<strong>Normal.</strong> The tear gland makes a steady trickle of tears, a blink spreads them, and they drain at the inner corner. The most common reason for a watery eye is, oddly, a dry one.',
+      '<strong>A dry, irritated surface.</strong> The tear film breaks up and leaves dry spots. The surface is full of nerves, and it signals the tear gland for help.',
+      '<strong>A flood of reflex tears.</strong> The gland answers with a rush of watery tears, more than the drains can carry, and they spill over. These tears are thin and do not stay on the eye, so the dryness comes back. Treating the dry eye stops the watering.'],
+    blocked: ['<strong>Normal.</strong> The tear gland makes a steady trickle of tears, a blink spreads them, and they drain at the inner corner into the nose.',
+      '<strong>A blocked drain.</strong> The drain openings or the tear duct can narrow or block, most often with age. Tears are still made at the normal rate.',
+      '<strong>Nowhere to go.</strong> The tears back up, pool along the lid and spill onto the cheek, often with stickiness. An opening that has narrowed can be widened in the office; a blocked duct can be bypassed with surgery.'],
+    loose: ['<strong>Normal.</strong> The lower lid sits snugly against the eye, so the drain opening touches the tears, and each blink pumps them into the drain.',
+      '<strong>A loose lower lid.</strong> With age the lower lid can slacken and sag or turn outward. The drain opening lifts away from the eye, and the blink no longer pumps tears into it.',
+      '<strong>Tears miss the drain.</strong> They pool in the sagging lid and spill over, and the exposed surface dries, which brings more tears. A small operation to tighten the lid fixes it.']
+  };
+  function wateryProc(key) {
+    var kind = key === 'loose' ? 'lid' : key, T = WATERY_TEXT[key], sagNow = 0; // steps draw in order, so the second sees the first's sag
+    return {
+      variants: WATERY_VARIANTS,
+      views: [['The front of the eye', function () { return waterySvg(kind); }]],
+      intro: T[0],
+      steps: [
+        { label: 'The cause', dur: 2400, caption: T[1],
+          draw: function (p) {
+            var e = ease(p), sag = kind === 'lid' ? 56 * e : 0;
+            sagNow = sag;
+            at('wt-lid', 'd', wLid(sag)); op('wt-lab-a', e);
+            op('wt-dry', kind === 'reflex' ? e : 0); op('wt-block', kind === 'blocked' ? e : 0); op('wt-out', kind === 'reflex' ? 1 : 1 - e);
+            at('wt-under', 'd', wLid(0).replace('M', 'M') + ' Q' + WCX + ',' + (WCY + 167 + sag) + ' ' + (WCX - 170) + ',' + WCY + ' Z'); op('wt-under', kind === 'lid' ? 0.8 * e : 0);
+            at('wt-punct', 'cy', WCY + 22 + (kind === 'lid' ? 22 * e : 0)); at('wt-punct', 'cx', WCX + 152 + (kind === 'lid' ? -8 * e : 0));
+          } },
+        { label: 'Overflow', dur: 2800, caption: T[2],
+          draw: function (p) {
+            var e = ease(p), sag = sagNow;
+            at('wt-lake', 'd', wLake((0.25 + 0.75 * e) * (kind === 'lid' ? 0.6 : 1), sag)); op('wt-in2', kind === 'reflex' ? e : 0);
+            op('wt-drops', ease(clamp(p * 2 - 0.8, 0, 1))); at('wt-drops', 'transform', 'translate(0,' + (sag * 0.5 + 12 * e).toFixed(1) + ')'); op('wt-lab-b', e);
+          } }
+      ]
+    };
+  }
+
+  // ---------- an allergic reaction on the surface of the eye ----------
+  var AL_POLLEN = [[110, 0], [210, 1], [300, 2], [396, 3], [470, 4]], AL_GRAN = 14;
+  function allergySvg() {
+    var h = svgOpen('0 0 560 420', 'A slice through the surface of the eye: tears on top, the lining of the eye beneath, with an allergy cell, a blood vessel and a nerve'), i;
+    h += '<rect id="al-tissue" x="20" y="190" width="520" height="210" fill="#fde2e2" stroke="#e5a3a3" stroke-width="2"/>'
+      + '<rect x="20" y="150" width="520" height="40" fill="#bfdbfe"/><line x1="20" y1="150" x2="540" y2="150" stroke="#3b82f6" stroke-width="2"/>'
+      + '<path id="al-vessel" d="M20,340 C140,320 260,360 380,336 C440,326 500,340 540,334" fill="none" stroke="#dc2626" stroke-linecap="round"/>'
+      + '<g id="al-leak" fill="#93c5fd" opacity="0">';
+    [[120, 316], [200, 322], [290, 330], [370, 316], [450, 314], [160, 300], [330, 304]].forEach(function (c) { h += '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="6"/>'; });
+    h += '</g>'
+      + '<path d="M70,400 C90,330 120,280 150,240" fill="none" stroke="#ca8a04" stroke-width="4" stroke-linecap="round"/><circle cx="150" cy="240" r="6" fill="#ca8a04"/>'
+      + '<g id="al-itch" opacity="0" fill="none" stroke="#b45309" stroke-width="3.5" stroke-linecap="round"><path d="M132,224 l-10,-12 l12,-2 l-10,-12"/><path d="M168,224 l10,-12 l-12,-2 l10,-12"/></g>'
+      + '<g id="al-gran" fill="#7c3aed">';
+    for (i = 0; i < AL_GRAN; i++) h += '<circle r="5"/>';
+    h += '</g>'
+      + '<circle id="al-cell" cx="300" cy="262" r="34" fill="#ddd6fe" stroke="#6d28d9" stroke-width="3"/>'
+      + '<g id="al-pollen" fill="#facc15" stroke="#a16207" stroke-width="1.5">';
+    for (i = 0; i < AL_POLLEN.length; i++) h += '<g><circle r="9"/><circle r="3" cx="-10"/><circle r="3" cx="10"/><circle r="3" cy="-10"/><circle r="3" cy="10"/></g>';
+    h += '</g>'
+      + '<g id="al-shield" opacity="0" fill="none" stroke="#059669" stroke-width="5" stroke-linecap="round"><path d="M126,252 a26,26 0 0 1 48,0"/><path d="M230,318 a70,40 0 0 1 140,0"/><circle cx="300" cy="262" r="42" stroke-dasharray="10 9"/></g>'
+      + '<g id="al-drop" opacity="0"><path d="M440,40 c18,28 18,48 0,52 c-18,-4 -18,-24 0,-52 Z" fill="#6ee7b7" stroke="#059669" stroke-width="2.5"/></g>'
+      + txt(26, 176, 'Tears', 'start', '#1d4ed8', 600, 18)
+      + txt(534, 216, 'Lining of the eye', 'end', '#9f1239', 600, 18)
+      + txt(356, 256, 'Allergy cell', 'start', '#6d28d9', 600, 20) + txt(356, 278, '(mast cell)', 'start', '#6d28d9', 400, 17)
+      + txt(534, 372, 'Blood vessel', 'end', '#b91c1c', 600, 18)
+      + txt(26, 392, 'Nerve', 'start', '#a16207', 600, 18)
+      + '<g id="al-lab-pollen" opacity="0">' + txt(26, 40, 'Pollen, dust or pet dander', 'start', '#a16207') + '</g>'
+      + '<g id="al-lab-hist" opacity="0">' + txt(26, 40, 'Histamine is released', 'start', '#6d28d9') + '</g>'
+      + '<g id="al-lab-sym" opacity="0">' + txt(26, 40, 'Itching, redness, swelling, watering', 'start', '#b91c1c') + '</g>'
+      + '<g id="al-lab-drop" opacity="0">' + txt(26, 40, 'Allergy drop: blocks histamine', 'start', '#047857') + txt(26, 64, 'and steadies the allergy cell', 'start', '#047857', 400) + '</g>';
+    return h + '</svg>';
+  }
+  function alGran(spread) { // histamine granules: packed in the cell, or spread through the tissue
+    var g = document.querySelectorAll('#al-gran circle'), i, a, r;
+    for (i = 0; i < g.length; i++) { a = i / g.length * Math.PI * 2 + (i % 3) * 0.4; r = 12 + (i % 3) * 7 + spread * (70 + (i * 37 % 90));
+      g[i].setAttribute('cx', (300 + r * Math.cos(a) * 1.5).toFixed(1)); g[i].setAttribute('cy', clamp(262 + r * Math.sin(a) * 0.75, 204, 392).toFixed(1)); }
+  }
+  var ALLERGY = {
+    views: [['The surface of the eye, cut through', allergySvg]],
+    intro: '<strong>The surface of the eye.</strong> The clear lining of the eye sits just under the tears. It holds allergy cells (mast cells) packed with histamine, small blood vessels, and nerve endings.',
+    steps: [
+      { label: 'Trigger', dur: 2200, caption: '<strong>The trigger.</strong> Pollen, dust, mould or pet dander lands in the tears and reaches the lining of the eye. In someone with allergies, the allergy cells are primed to react to it.',
+        draw: function (p) {
+          var e = ease(p), g = document.querySelectorAll('#al-pollen > g'), i;
+          for (i = 0; i < g.length; i++) g[i].setAttribute('transform', 'translate(' + (AL_POLLEN[i][0] + (300 - AL_POLLEN[i][0]) * 0.25 * e).toFixed(1) + ',' + lerp(-20 - i * 14, 182 + (i % 2) * 14, e).toFixed(1) + ')');
+          op('al-pollen', p > 0 ? 1 : 0); op('al-lab-pollen', e);
+        } },
+      { label: 'Histamine', dur: 2200, caption: '<strong>Histamine.</strong> The allergy cells burst open and release histamine and other chemicals into the tissue. This happens within minutes.',
+        draw: function (p) { var e = ease(p); alGran(e); at('al-cell', 'stroke-dasharray', p > 0.15 ? '14 9' : 'none'); op('al-lab-hist', e); if (p > 0) op('al-lab-pollen', 1 - e); } },
+      { label: 'Symptoms', dur: 2400, caption: '<strong>Symptoms.</strong> Histamine makes the nerves itch, widens the blood vessels so the eye turns red, and lets fluid leak out so the lids and the lining swell and the eye waters. Rubbing bursts more cells and makes it worse.',
+        draw: function (p) { var e = ease(p); at('al-vessel', 'stroke-width', 10 + 14 * e); op('al-leak', e); op('al-itch', e); at('al-tissue', 'fill', p > 0.4 ? '#fecdd3' : '#fde2e2'); op('al-lab-sym', e); if (p > 0) op('al-lab-hist', 1 - e); } },
+      { label: 'Drops', dur: 2800, caption: '<strong>Allergy drops.</strong> Antihistamine drops block histamine at the nerves and blood vessels, so the itch and redness settle within minutes. Most also steady the allergy cells so they release less, which is why they work best used every day through the season, not only when the eyes itch.',
+        draw: function (p) {
+          var e = ease(p), fall = ease(clamp(p * 2.5, 0, 1));
+          op('al-drop', p > 0 && fall < 1 ? 1 : 0); at('al-drop', 'transform', 'translate(0,' + (90 * fall).toFixed(1) + ')');
+          op('al-shield', ease(clamp(p * 2 - 0.5, 0, 1))); op('al-lab-drop', e);
+          if (p > 0) { at('al-vessel', 'stroke-width', 24 - 14 * e); op('al-leak', 1 - e); op('al-itch', 1 - e); op('al-lab-sym', 1 - e); alGran(1 - 0.75 * e); op('al-gran', 1 - 0.6 * e); if (p > 0.6) at('al-tissue', 'fill', '#fde2e2'); }
+          else op('al-gran', 1);
+        } }
+    ]
+  };
+
   var PROCS = {
+    reflex: wateryProc('reflex'),
+    blocked: wateryProc('blocked'),
+    loose: wateryProc('loose'),
+    allergy: ALLERGY,
     lidcare: LIDCARE,
     plug: PLUG,
     tears: tearProc('tears'),
