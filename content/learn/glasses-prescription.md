@@ -9,7 +9,7 @@ article = true
 scripts = ["vendor/qrcode.js", "js/schedule-common.js", "js/rx-optics.js", "js/vision.js"]
 +++
 
-A glasses prescription is a short list of numbers for each eye, and it says exactly how the eye focuses. Enter yours below to see what it means: how blurry each distance is without glasses, what the glasses fix, and where a reading add comes in. Drag the handle to compare with normal vision, just like the [vision loss simulator](@/learn/vision-loss.md).
+A glasses prescription is a short list of numbers for each eye, and it says exactly how the eye focuses. Enter yours below to see what it means: how blurry each distance is without glasses, what the glasses fix, and where a reading add comes in. The left side of the picture shows the view through these glasses and the right side without them; drag the handle to compare, just like the [vision loss simulator](@/learn/vision-loss.md).
 
 <div id="jk-vision" class="jk-vis" data-mode="rx" data-base="../../images/vision/">
   <p class="jk-vis__noscript">The simulator needs JavaScript. How to read a prescription is explained in words below.</p>
@@ -42,7 +42,7 @@ The lens stiffens with age and gradually loses its ability to focus up close. A 
 
 ## How the simulator works {#how-it-works}
 
-The simulator works out, for each eye and each distance, how much focusing error is left over after the eye has done what it can at the age you enter, and blurs the scene by that amount. With astigmatism the blur is stronger in one direction, set by the axis. "With these glasses" assumes the add, if there is one, is in a progressive or bifocal: the full add for reading, about half of it at arm's length. The 20/ numbers are rough equivalents from the usual rule of thumb, not a measurement.
+The simulator works out, for each eye and each distance, how much focusing error is left over after the eye has done what it can at the age you enter, and blurs the scene by that amount. With astigmatism the blur is stronger in one direction, set by the axis. The "With these glasses" side assumes the add, if there is one, is in a progressive or bifocal: the full add for reading, about half of it at arm's length. The 20/ numbers are rough equivalents from the usual rule of thumb, not a measurement.
 
 Real vision also depends on the pupil size, the lighting, the health of the eye and the brain's ability to adapt, so treat the pictures as a guide. If your glasses no longer give you clear vision, or one eye has changed, make an appointment: a change in prescription can also be an early sign of a cataract or other eye condition.
 

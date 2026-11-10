@@ -864,6 +864,8 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-vis__wrap .jk-vis__img { inset: -6%; width: 112%; height: 112%; }
 .jk-vis .jk-chip { min-height: 36px; }
 .jk-vis__overlay { position: absolute; inset: 0; pointer-events: none; }
+/* Play: pre-rendered frames that vision.js cross-fades */
+.jk-vis__key { position: absolute; inset: 0; will-change: opacity; }
 .jk-vis__floaters { position: absolute; inset: 0; width: 100%; height: 100%; filter: blur(0.6px); pointer-events: none; }
 .jk-vis__floaters[hidden] { display: none; }
 .jk-vis__floater { animation: jk-vis-drift 18s ease-in-out infinite alternate; }
@@ -922,6 +924,11 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-chip--sm { padding: .3rem .7rem; font-size: .85rem; }
 .jk-vis__sevwrap { padding-top: .25rem; }
 .jk-vis__sevwrap input[type="range"] { width: 100%; accent-color: var(--jk-accent); min-height: 32px; margin: 0; }
+.jk-vis__sevctl { display: flex; align-items: flex-start; gap: .6rem; }
+.jk-vis__sevctl .jk-vis__sevwrap { flex: 1 1 auto; min-width: 0; }
+.jk-vis__play { flex: 0 0 auto; min-height: 36px; min-width: 6.2rem; white-space: nowrap; margin-top: .25rem; }
+.jk-vis__play[hidden] { display: none; }
+.jk-vis__play.is-active { background: var(--jk-accent); border-color: var(--jk-accent); color: #fff; }
 .jk-vis__sevlabels { display: flex; justify-content: space-between; font-size: .8rem; color: var(--jk-muted); }
 
 .jk-vis__about, .jk-vis__paint { background: #fff; border: 1px solid var(--jk-line); border-radius: 8px; padding: .9rem 1rem; margin: 1rem 0; }
