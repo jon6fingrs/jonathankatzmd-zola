@@ -368,6 +368,41 @@ b+=label(30,360,'Your own tears stay','start',22,'600',BLUE)+label(30,386,'on th
 b+=label(590,388,'To the nose','start',18,'400',MUTED)
 figs['punctal-plug']=('A punctal plug: a tiny plug in the drain opening at the inner corner keeps your own tears on the eye longer',760,410,b)
 
+# 14. the lash line: clean, crusted, and with the sleeves Demodex leaves
+def lash_panel(ox, kind):
+    s=f'<path d="M{ox+16},70 L{ox+234},70 L{ox+234},150 Q{ox+125},176 {ox+16},150 Z" fill="{SKIN}" stroke="{SKIN_D}" stroke-width="2"/>'
+    if kind!='clean': s+=f'<path d="M{ox+16},128 L{ox+234},128 L{ox+234},150 Q{ox+125},176 {ox+16},150 Z" fill="#f87171" opacity="0.45"/>'
+    for i in range(5):
+        x=ox+45+i*40; y0=156+ (8 if i in (1,2,3) else 3)
+        s+=f'<path d="M{x},{y0} C{x-4},{y0+50} {x-18},{y0+92} {x-34},{y0+118}" fill="none" stroke="{INK}" stroke-width="4" stroke-linecap="round"/>'
+        if kind=='crust':
+            for (dx,dy,r) in [(-2,6,6),(4,20,5),(-8,38,4.5),(-4,-4,5)]:
+                s+=f'<ellipse cx="{x+dx}" cy="{y0+dy}" rx="{r+2}" ry="{r}" fill="#fef3c7" stroke="#b45309" stroke-width="1.2" transform="rotate({(i*37+dy)%60-30} {x+dx} {y0+dy})"/>'
+        if kind=='sleeve':
+            s+=f'<path d="M{x-7},{y0-4} L{x+7},{y0-4} L{x+3},{y0+30} L{x-9},{y0+30} Z" fill="#fde68a" stroke="#92400e" stroke-width="1.5" opacity="0.92"/>'
+    return s
+b=lash_panel(0,'clean')+lash_panel(255,'crust')+lash_panel(510,'sleeve')
+b+=label(125,34,'Healthy','middle',22,'700')+label(380,34,'At the lashes','middle',22,'700')+label(635,34,'Demodex','middle',22,'700')
+b+=label(125,330,'Clean lash line','middle',19,'400',MUTED)+label(380,330,'Crusts and flakes','middle',19,'400',MUTED)+label(380,354,'on the lashes','middle',19,'400',MUTED)+label(635,330,'Waxy sleeves around','middle',19,'400',MUTED)+label(635,354,'the base of each lash','middle',19,'400',MUTED)
+b+=label(24,100,'Lid edge','start',17,'600')
+b+=f'<line x1="252" y1="50" x2="252" y2="360" stroke="#e5e7eb" stroke-width="2"/><line x1="508" y1="50" x2="508" y2="360" stroke="#e5e7eb" stroke-width="2"/>'
+figs['lash-line']=('The lash line close up: healthy, with crusts and flakes, and with the waxy sleeves that Demodex mites leave',765,370,b)
+
+# 15. stye and chalazion
+def lid_eye(cx,cy):
+    s=f'<path d="M{cx-190},{cy+6} Q{cx},{cy-250} {cx+190},{cy+6} Q{cx},{cy-178} {cx-190},{cy+6} Z" fill="{SKIN}" stroke="{SKIN_D}" stroke-width="2"/>'  # upper lid skin
+    return s+front_eye(cx,cy,150,88,80,54)
+b=lid_eye(200,250)+lid_eye(600,250)
+b+=f'<circle cx="150" cy="178" r="15" fill="#ef4444" stroke="#991b1b" stroke-width="2"/><circle cx="150" cy="178" r="5" fill="#fef3c7"/>'   # stye at the lash line
+b+=f'<ellipse cx="640" cy="140" rx="30" ry="22" fill="#eab08c" stroke="{SKIN_D}" stroke-width="2.5"/><path d="M620,132 Q640,118 660,132" fill="none" stroke="#fff" stroke-width="3" opacity="0.6" stroke-linecap="round"/>'  # chalazion in the lid
+b+=label(200,34,'Stye','middle',24,'700')+label(600,34,'Chalazion','middle',24,'700')
+b+=label(20,96,'Red, tender bump','start',19,'600','#b91c1c')+label(20,120,'at the lash line','start',19,'400')+leader(96,128,140,168)
+b+=label(420,96,'Firm, usually painless','start',19,'600')+label(420,120,'lump in the lid','start',19,'400')+leader(560,116,618,134)
+b+=label(200,372,'An infected lash follicle or gland;','middle',18,'400',MUTED)+label(200,394,'comes up over a day or two','middle',18,'400',MUTED)
+b+=label(600,372,'A blocked oil gland;','middle',18,'400',MUTED)+label(600,394,'can last for weeks','middle',18,'400',MUTED)
+b+=f'<line x1="400" y1="10" x2="400" y2="400" stroke="#e5e7eb" stroke-width="2"/>'
+figs['stye-chalazion']=('A stye is a red, tender bump at the lash line; a chalazion is a firm lump in the lid from a blocked oil gland',800,410,b)
+
 for name,(title,w,h,body) in figs.items():
     open(os.path.join(OUT,name+'.svg'),'w').write(svg(w,h,body,title))
     print(name, os.path.getsize(os.path.join(OUT,name+'.svg')),'bytes')

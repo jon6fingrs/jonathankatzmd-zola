@@ -50,6 +50,16 @@ Many people have some of both. Either way the surface of the eye becomes irritat
 
 To see the on-and-off blur, try "Dry eye" in the [vision loss simulator](@/learn/vision-loss.md).
 
+## Dry eye or allergy?
+
+The two are easy to confuse, and many people have both.
+
+- **Itching** is the mark of allergy. Dry eye burns and feels gritty more than it itches.
+- **Allergy** tends to come with a season or a trigger such as pollen, dust or pets, often with sneezing and a runny nose, and with puffy lids.
+- **Dry eye** is there year round, and is worse late in the day, with screens and in dry air.
+
+The difference matters because the treatments differ. Antihistamine pills, in particular, can make dry eye worse.
+
 ## What brings it on or makes it worse
 
 - **Age**, and hormonal changes after menopause
@@ -63,7 +73,7 @@ To see the on-and-off blur, try "Dry eye" in the [vision loss simulator](@/learn
 
 ## How it is checked
 
-Dry eye is diagnosed at the slit lamp, the microscope used at your eye exam. Your doctor looks at the lid edges and oil glands, the amount of tears along the lower lid, and the surface of the eye. A drop of yellow-green dye shows how quickly the tear film breaks up after a blink and whether there are dry, damaged spots on the surface, as in the animation above. Sometimes a small strip of paper at the lid edge is used to measure how many tears are made.
+Dry eye is diagnosed at the slit lamp, the microscope used at your eye exam. Your doctor looks at the lid edges and oil glands, the amount of tears along the lower lid, and the surface of the eye. A drop of yellow-green dye shows how quickly the tear film breaks up after a blink and whether there are dry, damaged spots on the surface, as in the "With dye" view of the animation above. In dry eye from poor oil, dark patches open up all over the surface within seconds. When too few tears are made, the line of tears along the lower lid is thin and the dry band sits low on the eye, where it is most exposed. Sometimes a small strip of paper at the lid edge is used to measure how many tears are made.
 
 ## Why it matters
 

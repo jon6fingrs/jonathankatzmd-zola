@@ -1,6 +1,6 @@
 +++
 title = "Treating Dry Eye"
-description = "What helps dry eye, step by step: changes at home, artificial tears and how to choose them, eyelid care, prescription drops such as cyclosporine and lifitegrast, punctal plugs and more."
+description = "What helps dry eye, step by step: changes at home, artificial tears and how to choose them, eyelid care, prescription drops such as cyclosporine and lifitegrast, punctal plugs and more. With an animation of how a punctal plug works."
 template = "page.html"
 weight = 320
 
@@ -8,6 +8,7 @@ weight = 320
 article = true
 topic = "dry-eye"
 group = ""
+js = "js/procedure.js"
 +++
 
 [Dry eye](@/learn/what-is-dry-eye.md) is usually a long-term condition, and treatment is built up in steps. Most people do well with the first two or three. The aim is comfortable eyes and steady vision, with a routine you can keep up.
@@ -49,7 +50,11 @@ These treat the inflammation that keeps dry eye going. They are for long-term us
 
 ## Step 5: Keeping your own tears
 
-Tears drain through a small opening at the inner corner of each lid. A **punctal plug** is a tiny plug placed in that opening in the office, in a few seconds, so your own tears stay on the eye longer. Some dissolve over months; others stay until removed. You may feel it at the corner of the lid for a day or two. Plugs help most when the problem is too few tears.
+Tears drain through a small opening at the inner corner of each lid. A **punctal plug** is a tiny plug placed in that opening in the office, in a few seconds, so your own tears stay on the eye longer. Some dissolve over months; others stay until removed. You may feel it at the corner of the lid for a day or two. Plugs help most when the problem is too few tears. Press **Play** to see how one works.
+
+<div id="jk-proc" class="jk-lpi" data-proc="plug">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The picture below shows the same thing.</p>
+</div>
 
 {{<figure src="images/learn/punctal-plug.svg" alt="The front of an eye with a small plug in the drain opening at the inner corner of the lower lid, and tears pooled along the lower lid." caption="A plug in the lower drain opening keeps your own tears on the eye longer. Simplified, not to scale." />}}
 
