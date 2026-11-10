@@ -17,8 +17,13 @@
  *       faucet      each suppressant removes a share of what is still
  *                   suppressible; the eye never makes less than F_FLOOR.
  *       main drain  each treatment recovers a share of the gap to the best
- *                   a treated drain can do (C_BEST), so SLT after MIGS adds
- *                   less than SLT alone, and a healthy drain gains nothing.
+ *                   a treated drain can do (C_BEST), so SLT after netarsudil
+ *                   adds less than SLT alone, and a healthy drain gains nothing.
+ *       MIGS        a bypass past the meshwork into Schlemm's canal, so it
+ *                   adds its own ease (bypass) rather than repairing the
+ *                   meshwork. It still empties into the same veins, so the
+ *                   venous floor holds. Sized so MIGS alone lands in the mid
+ *                   teens, the figure usually quoted for it.
  *       side drain  it carries a share of the fluid made, so it can never
  *                   take more than is made, and it helps less once the
  *                   faucet is turned down.
@@ -37,7 +42,8 @@
   var P_MIN = 6;
 
   // faucet: share of the suppressible flow removed; drain: share of the gap
-  // to C_BEST recovered; side: the side drain's pull; pv: change in venous
+  // to C_BEST recovered; bypass: ease added past the meshwork (MIGS);
+  // side: the side drain's pull; pv: change in venous
   // pressure; add: a new drain [ease, back pressure]
   var EFFECTS = {
     less: { faucet: 0.6 },
@@ -45,18 +51,19 @@
     side: { side: 2.0 },
     main: { drain: 0.3, pv: -1 },          // netarsudil also lowers venous pressure a little
     slt: { drain: 0.6 },
-    migs: { drain: 0.5 },
-    trab: { add: [0.2, 6] },
-    tube: { add: [0.13, 7] }
+    migs: { bypass: 0.25 },
+    trab: { add: [0.35, 6] },
+    tube: { add: [0.25, 7] }
   };
 
   function solve(on, healthy) {
-    var keep = 1, gap = 1, pull = U0, pv = PV, extra = [], id, e;
+    var keep = 1, gap = 1, bypass = 0, pull = U0, pv = PV, extra = [], id, e;
     for (id in EFFECTS) {
       if (!on || !on[id]) continue;
       e = EFFECTS[id];
       if (e.faucet) keep *= 1 - e.faucet;
       if (e.drain) gap *= 1 - e.drain;
+      if (e.bypass) bypass += e.bypass;
       if (e.side) pull = Math.max(pull, e.side);
       if (e.pv) pv += e.pv;
       if (e.add) extra.push(e.add);
@@ -65,7 +72,8 @@
     var C0 = healthy ? C_HEALTHY : C_GLAUCOMA;
     var C = C0 >= C_BEST ? C0 : C_BEST - (C_BEST - C0) * gap;
     var U = F * pull / (pull + F);         // a share of what is made, always less than F
-    var num = F - U + C * pv, den = C, i;
+    var CT = C + bypass;                   // everything that empties into the veins
+    var num = F - U + CT * pv, den = CT, i;
     for (i = 0; i < extra.length; i++) { num += extra[i][0] * extra[i][1]; den += extra[i][0]; }
     var P = num / den;
     if (P < pv && extra.length) {          // below venous pressure nothing leaves by the main drain
@@ -76,7 +84,7 @@
     P = Math.max(P_MIN, P);
     var newFlow = 0;
     for (i = 0; i < extra.length; i++) newFlow += Math.max(0, extra[i][0] * (P - extra[i][1]));
-    return { P: P, F: F, C: C, U: U, pv: pv, mainFlow: Math.max(0, C * (P - pv)), newFlow: newFlow, hasNew: extra.length > 0 };
+    return { P: P, F: F, C: C, U: U, pv: pv, mainFlow: Math.max(0, CT * (P - pv)), newFlow: newFlow, hasNew: extra.length > 0 };
   }
 
   return { solve: solve, PV: PV, F0: F0, C_GLAUCOMA: C_GLAUCOMA, C_HEALTHY: C_HEALTHY, C_BEST: C_BEST, IDS: Object.keys(EFFECTS) };
