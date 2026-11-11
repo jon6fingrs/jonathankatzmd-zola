@@ -15,6 +15,9 @@
  * step buttons jump anywhere, and reduced motion jump straight to the end.
  *
  * Layout and buttons share the .jk-lpi styles with the iridotomy demo.
+ *
+ * Retina and cornea demos live in procedure-retina.js and
+ * procedure-cornea.js, which a page loads before this file.
  */
 (function () {
   'use strict';
@@ -903,6 +906,13 @@
       ]
     }
   };
+
+  // Topic files loaded before this one (procedure-retina.js,
+  // procedure-cornea.js) add their own entries: each pushes a function onto
+  // window.JK_PROC_EXTRA that takes these helpers and returns more PROCS.
+  var HELPERS = { clamp: clamp, ease: ease, lerp: lerp, txt: txt, lead: lead, op: op, at: at, arrow: arrow, svgOpen: svgOpen, $: $,
+    FONT: FONT, INK: INK, BLUE: BLUE, MUTED: MUTED, GREEN: GREEN, WATER: WATER };
+  (window.JK_PROC_EXTRA || []).forEach(function (add) { var more = add(HELPERS), k; for (k in more) PROCS[k] = more[k]; });
 
   if (!PROCS[root.getAttribute('data-proc')]) return;
   var proc, starts, T_END, el, stepBtns, tNow = 0, capShown = -2, raf = 0, playing = false;
