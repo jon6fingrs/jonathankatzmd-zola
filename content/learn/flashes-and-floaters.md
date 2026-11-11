@@ -1,7 +1,9 @@
 +++
 title = "Flashes and Floaters"
-description = "Why floaters and flashes of light appear, what happens when the gel inside the eye pulls away from the retina, and the warning signs of a retinal tear that need a same-day exam. With an animation."
+description = "Why floaters and flashes appear, what happens when the gel inside the eye pulls away from the retina, and the warning signs that need a same-day exam."
 template = "page.html"
+date = 2026-11-11
+updated = 2026-11-11
 weight = 400
 
 [extra]

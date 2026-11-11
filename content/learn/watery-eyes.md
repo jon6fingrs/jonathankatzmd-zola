@@ -1,7 +1,9 @@
 +++
 title = "Watery Eyes"
-description = "Why eyes water: reflex tears from a dry surface, a blocked tear drain, or a loose lower lid. With an animation of each, how the cause is found, and what fixes it."
+description = "Why eyes water: reflex tears from a dry surface, a blocked tear drain, or a loose lower lid. How the cause is found and what fixes it."
 template = "page.html"
+date = 2026-11-10
+updated = 2026-11-10
 weight = 340
 
 [extra]

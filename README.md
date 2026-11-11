@@ -86,7 +86,7 @@ every template and nearly every style was overridden, and the theme's
 stylesheet pulled two fonts from Google on every page. Everything now lives
 in `templates/` and `static/css/custom.css`. Bootstrap 5.3 (CSS + bundle JS)
 is vendored in `static/css` and `static/js`; it is used for the navbar
-collapse/dropdown behaviour, buttons and the contact form grid.
+collapse/dropdown behavior, buttons and the contact form grid.
 
 ## Setup from a fresh clone
 
@@ -154,7 +154,8 @@ preview comment is the quickest way to spot a link that escaped.
 | `content/learn/eye-pressure.md` | `templates/page.html` | the eye pressure "sink": one `<div id="jk-sink">` built by `static/js/sink.js`. The numbers are in `static/js/sink-model.js` (no DOM; pinned by `tests/sink-model.test.js`): the level comes from the steady-state balance, cannot go below venous pressure without a new drain, and stacked treatments give diminishing returns. If an effect size is changed on purpose, keep those tests passing. Example numbers only, and the page says so |
 | `slt-laser.md`, `migs.md`, `trabeculectomy.md`, `tube-shunt-surgery.md`, `cyclophotocoagulation.md` (in `content/learn/`) | `templates/page.html` | step-by-step animations: one `<div id="jk-proc" data-proc="slt">` (or `migs`, `trab`, `tube`, `cpc`; `tears`, `lidcare`, `plug`, `reflex` (watery eyes) and `allergy` are the dry eye topic's demos) built by `static/js/procedure.js`. Each procedure is an entry in `PROCS`: drawings plus steps with `draw(p, t)`. SLT has two variants switched by chips (`slt` through a contact lens, `dslt` direct with no lens), MIGS has four (`migs` stent, `gonio`, `visco`, and `combo`: viscodilation then a stent), and so does cyclophotocoagulation (`cpc` micropulse, `cwcpc` standard); `variants` on an entry adds the chips. The picture is a pure function of time, so a step's draw must set everything it owns even when its `p` is 0, and touch another step's pieces only once its own `p` is above 0; otherwise jumping between steps leaves stale pieces |
 | `content/learn/choosing-artificial-tears.md` | `templates/page.html` | the artificial tears picker: `<div id="jk-tears">` built by `static/js/tearpicker.js`. The advice is in `static/js/tearpicker-rules.js` (no DOM; pinned by `tests/tearpicker-rules.test.js`); brands and photos are read from `eye-drops.json` by the `chart` name on each kind |
-| retina and cornea pages in `content/learn/` | `templates/page.html` | their animations are in `static/js/procedure-retina.js` and `static/js/procedure-cornea.js`, which register extra entries with `procedure.js`; a page loads its topic file first: `scripts = ["js/procedure-retina.js", "js/procedure.js"]`. `macular-degeneration.md` also loads `static/js/amsler.js`, the Amsler grid (on screen, and an example of a change); its "Print the grid" link opens `static/print/amsler-grid.html`, a standalone page with only the grid at 10 cm and the instructions, because hiding the rest of an article for printing is not honoured by every browser |
+| retina and cornea pages in `content/learn/` | `templates/page.html` | their animations are in `static/js/procedure-retina.js` and `static/js/procedure-cornea.js`, which register extra entries with `procedure.js`; a page loads its topic file first: `scripts = ["js/procedure-retina.js", "js/procedure.js"]`. `macular-degeneration.md` also loads `static/js/amsler.js`, the Amsler grid (on screen, and an example of a change); its "Print the grid" link opens `static/print/amsler-grid.html`, a standalone page with only the grid at 10 cm and the instructions, because hiding the rest of an article for printing is not honored by every browser |
+| `content/search.md` | `templates/search.html` | site search. The template writes every Learn article, topic, tool page and drug into a JSON block at build time (rendered page HTML; no Zola search index), and `static/js/search.js` ranks it in the browser (no DOM in the ranking; pinned by `tests/search.test.js`). Drug hits link to the reference with `?q=`, which `droptable.js` reads. The Learn page and the 404 page have a box that sends the words to `/search/` |
 | `content/contact/_index.md` | `templates/contact/section.html` | office list driven by `config.toml`'s `[[extra.offices]]`, not by content |
 | `content/videos.md` | — | `draft = true`; not built or linked until there are videos |
 | any unmatched URL | `templates/404.html` | custom |
@@ -181,6 +182,23 @@ To add a topic: create `content/learn/<topic>/_index.md` with
 block, e.g. "More on glaucoma"), add it to `topics` in `content/learn/_index.md`
 and to the Learn menu in `config.toml`.
 
+### Dates, share cards and structured data on Learn pages
+
+Every Learn article (and the privacy page) has `date` (first published) and
+`updated` (last changed) in its front matter, shown under the title as
+"Published … · Updated …", with Updated left out when it is the same day
+(Privacy shows "Last updated …"). **When you change a page's content, set
+`updated` to that day.** Learn articles also carry `MedicalWebPage` JSON-LD
+(`templates/page.html`) with those dates, Dr. Katz as author and reviewer,
+and the breadcrumb.
+
+Link previews (`og:image`) use a share card from `static/images/share/`:
+`<slug>.png` for an article, `topic-<topic>.png` for a topic page, the
+portrait everywhere else (`templates/base.html`). A new article needs a card:
+`node tools/share-cards.js <slug>` makes one from the page's first figure, or
+a frame of its animation taken from the site (set `SITE=` to the PR preview
+for a page that is not live yet). `tests/content.test.js` fails without it.
+
 ### `static/data/eye-drops.json` is the single source of truth
 
 Both the reference page (build time) and the schedule builder (runtime
@@ -190,7 +208,7 @@ as their `color`; that drives the "By mouth" chip, and in the schedule
 builder it locks "Which eye" to "By mouth", skips the five-minute drop
 spacing, and words the calendar reminder "Take:". Where photos came from is
 in IMAGE-SOURCES.md. Keys: `generic`, `brand`
-(comma-separated if several), `color` (cap colour; `Vial`/`Tube` for
+(comma-separated if several), `color` (cap color; `Vial`/`Tube` for
 containers), `use` (comma-separated categories), `dosage`, `notes`
 (`Preservative Free` in notes drives that chip), `photos` (filenames in
 `static/images/drops/`; may be empty). Photos are thumbnailed at build
@@ -318,7 +336,7 @@ vanish on some rows; `pt` units never round away. Checkboxes are drawn with
 `appearance: none` and a `pt` border for the same reason.
 
 **Printed schedules are large print for patients.**
-- Solid black text, 12pt minimum. No grey anywhere in print.
+- Solid black text, 12pt minimum. No gray anywhere in print.
 - `.jk-page .container` drops its max-width in print, so the table fills
   the paper; landscape fills the wider page.
 - The daily-routine table is built as one `<tbody class="routine-slot">`
@@ -343,6 +361,17 @@ JPEG/PNG/WebP/GIF. The two `.avif` files in `static/images/drops/` are
 the WordPress-era originals, unreferenced by the JSON and kept only so
 old links to those exact filenames still resolve; don't list them in
 `photos`.
+
+### Content checks in CI
+
+`tests/content.test.js` runs with the other Node tests and fails on:
+descriptions over 160 characters, British spellings in anything patients
+read, a Learn article missing `topic`/`group`/`date`/`updated` or its share
+card, an inline `<script>` or `onclick` (the Content-Security-Policy in
+`static/_headers` blocks them; put scripts in `static/js/`), a link to the
+post-op tool under another name, and article text about steroid tapers or
+drop durations that disagrees with `static/js/postop-rules.js`. If a rule
+changes on purpose, change the article and the test together.
 
 ## Known rough edges
 

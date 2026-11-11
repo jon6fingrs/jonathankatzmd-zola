@@ -1,7 +1,9 @@
 +++
 title = "Laser Iridotomy"
-description = "Laser peripheral iridotomy: a quick office laser that makes a tiny opening in the iris to open a narrow drainage angle. With an animation of what the laser does, what the visit is like, and what to expect afterward."
+description = "Laser iridotomy: a quick office laser that makes a tiny opening in the iris to open a narrow drainage angle. The visit, recovery and risks."
 template = "page.html"
+date = 2026-11-10
+updated = 2026-11-11
 weight = 60
 
 [extra]
@@ -67,7 +69,13 @@ Often both eyes need treatment. They may be done on the same day or on separate 
 - There are no activity restrictions. You can read, watch television, bathe and exercise.
 - At a follow-up visit the doctor checks that the opening is clear and looks at the angle again with the mirrored lens.
 
-**Call the same day** if you have severe eye pain, a marked drop in vision, a very red eye, or nausea with eye pain.
+## Call the same day if
+
+- Severe eye pain, or eye pain with nausea
+- A marked drop in vision
+- A very red eye
+
+See [When to Call the Same Day](@/learn/when-to-call.md) for other urgent symptoms.
 
 ## Risks
 

@@ -1,7 +1,9 @@
 +++
 title = "Macular Degeneration"
-description = "Age-related macular degeneration: the dry and wet forms, what each does to vision, AREDS2 vitamins, checking with an Amsler grid at home, and treatment with injections. With an animation and a printable grid."
+description = "Dry and wet macular degeneration: what each does to vision, AREDS2 vitamins, a printable Amsler grid for home checks, and treatment with injections."
 template = "page.html"
+date = 2026-11-11
+updated = 2026-11-11
 weight = 420
 
 [extra]
@@ -31,7 +33,7 @@ Choose a form and press **Play**.
 - Blurred or dim central vision; needing more light to read
 - Trouble recognizing faces
 - **Straight lines that look wavy or bent**, which suggests the wet form
-- A grey, dark or blank spot near the center
+- A gray, dark or blank spot near the center
 
 To see this on an everyday scene, try "Macular degeneration" in the [vision loss simulator](@/learn/vision-loss.md).
 
@@ -49,7 +51,7 @@ Dry AMD can turn wet without warning, and the first sign is usually distortion. 
   <p class="jk-vis__noscript">The grid needs JavaScript. The picture below shows it.</p>
 </div>
 
-{{<figure src="images/learn/amsler-grid.svg" alt="Two Amsler grids. On the left all the lines are straight. On the right the lines near one spot are wavy and a grey patch covers part of the grid." caption="Left: a normal grid. Right: an example of a change. Wavy lines or a blurred or missing patch that is new should be reported the same day." />}}
+{{<figure src="images/learn/amsler-grid.svg" alt="Two Amsler grids. On the left all the lines are straight. On the right the lines near one spot are wavy and a gray patch covers part of the grid." caption="Left: a normal grid. Right: an example of a change. Wavy lines or a blurred or missing patch that is new should be reported the same day." />}}
 
 **Call the same day** if lines look wavy, bent or broken, or if a blurred or blank patch appears, and it is new. Keep a printed grid on the refrigerator door, where you will see it. **Print the grid** above opens a page with just the grid and these instructions.
 
@@ -63,7 +65,7 @@ Dry AMD can turn wet without warning, and the first sign is usually distortion. 
 ## What helps dry AMD
 
 - **Stop smoking.**
-- **AREDS2 vitamins.** For people with intermediate dry AMD, or advanced AMD in one eye, a specific vitamin and mineral formula (labelled "AREDS2") lowers the chance of progressing to advanced disease by about a quarter. It does not help early AMD or prevent AMD, and ordinary multivitamins are not the same thing. Ask your doctor whether you are at the stage where it helps.
+- **AREDS2 vitamins.** For people with intermediate dry AMD, or advanced AMD in one eye, a specific vitamin and mineral formula (labeled "AREDS2") lowers the chance of progressing to advanced disease by about a quarter. It does not help early AMD or prevent AMD, and ordinary multivitamins are not the same thing. Ask your doctor whether you are at the stage where it helps.
 - **Diet:** leafy green vegetables and fish.
 - **Sunglasses and a hat** outdoors.
 - **Regular dilated exams**, with a scan of the macula (OCT), and the Amsler grid at home.

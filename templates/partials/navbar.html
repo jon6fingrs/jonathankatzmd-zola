@@ -90,8 +90,8 @@
               </li>
             {% else %}
               <li class="nav-item">
-                <a href="{{ get_url(path=menu.url, trailing_slash=true) }}" class="nav-link">
-                  {% if menu.icon %}<img class="jk-navicon" src="{{ get_url(path=menu.icon) }}" alt="">{% endif %}{{ menu.name }}
+                <a href="{{ get_url(path=menu.url, trailing_slash=true) }}" class="nav-link{% if menu.icon_only %} jk-nav--icon{% endif %}">
+                  {% if menu.icon %}<img class="jk-navicon" src="{{ get_url(path=menu.icon) }}" alt="">{% endif %}{% if menu.icon_only %}<span class="jk-nav__label">{{ menu.name }}</span>{% else %}{{ menu.name }}{% endif %}
                 </a>
               </li>
             {% endif %}

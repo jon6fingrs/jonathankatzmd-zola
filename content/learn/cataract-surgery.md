@@ -1,7 +1,9 @@
 +++
 title = "Cataract Surgery"
-description = "What a cataract is, when surgery makes sense, lens implant choices, the day of surgery and the four-week recovery, and what is different if you also have glaucoma."
+description = "What a cataract is, when surgery makes sense, lens implant choices, the day of surgery and the four-week recovery, and what changes if you have glaucoma."
 template = "page.html"
+date = 2026-10-02
+updated = 2026-11-10
 weight = 100
 
 [extra]
@@ -18,7 +20,7 @@ The [vision loss simulator](@/learn/vision-loss.md) shows what a cataract does t
 
 ## When to have surgery
 
-There is no harm in waiting as long as the cataract is not interfering with your life, and no "ripeness" is required. Surgery makes sense when the cataract limits what you want to do: driving (especially at night), reading, recognising faces, or working. Two exceptions where your doctor may recommend not waiting: a cataract that is making glaucoma harder to control or the angle narrow, and a cataract so dense that it prevents the view of the retina or optic nerve needed to monitor other eye disease.
+There is no harm in waiting as long as the cataract is not interfering with your life, and no "ripeness" is required. Surgery makes sense when the cataract limits what you want to do: driving (especially at night), reading, recognizing faces, or working. Two exceptions where your doctor may recommend not waiting: a cataract that is making glaucoma harder to control or the angle narrow, and a cataract so dense that it prevents the view of the retina or optic nerve needed to monitor other eye disease.
 
 ## Lens implant choices
 

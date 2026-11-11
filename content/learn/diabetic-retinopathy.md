@@ -1,7 +1,9 @@
 +++
 title = "Diabetic Eye Disease"
-description = "How diabetes damages the retina, why there are no early symptoms, how often to be examined, and how diabetic retinopathy and macular swelling are treated. With an animation of the stages."
+description = "How diabetes damages the retina, why early stages have no symptoms, how often to be examined, and how retinopathy and macular swelling are treated."
 template = "page.html"
+date = 2026-11-11
+updated = 2026-11-11
 weight = 430
 
 [extra]

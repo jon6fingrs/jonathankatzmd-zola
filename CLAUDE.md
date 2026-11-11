@@ -44,6 +44,11 @@ https://thehelpfulidiot.com/moving-four-websites-off-my-home-server-to-cloudflar
   deploy (re-run CI). Non-secret settings are in `wrangler.toml`.
 - Deploys use wrangler pinned to 4.156.0 in `ci.yml`, so the version
   doesn't change on its own.
+- `static/_headers` also sets a Content-Security-Policy: scripts only from
+  this site's files (no inline `<script>` or `onclick`), frames only from
+  OpenStreetMap. A new outside script, font or embed must be added there,
+  or it will be blocked on the live site (previews on GitHub Pages ignore
+  `_headers`, so they will not show the problem).
 
 ## Before calling a change done
 
@@ -52,6 +57,9 @@ https://thehelpfulidiot.com/moving-four-websites-off-my-home-server-to-cloudflar
   (no horizontal scroll), and render a PDF for anything printable.
 - Use `get_url(...)` in templates and `@/` links in Markdown, never
   hard-coded root paths: previews live under a sub-path.
+- A changed Learn article gets `updated` set to that day, and a new one
+  needs `date`, `updated` and a share card (`node tools/share-cards.js
+  <slug>`); `tests/content.test.js` checks.
 
 ## Never commit
 

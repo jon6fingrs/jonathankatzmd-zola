@@ -1,7 +1,9 @@
 +++
 title = "SLT Laser"
-description = "Selective laser trabeculoplasty: an office laser that lowers eye pressure by treating the eye's drain, done either through a contact lens or as direct SLT (DSLT) with no lens. With a step-by-step animation, what the visit is like, and what to expect afterward."
+description = "SLT: an office laser that lowers eye pressure by treating the eye's drain, through a contact lens or as direct SLT with no lens. The visit and recovery."
 template = "page.html"
+date = 2026-10-02
+updated = 2026-11-11
 weight = 50
 
 [extra]
@@ -61,6 +63,14 @@ Both eyes can be treated the same day or on separate visits. You can drive after
 - You may be given an anti-inflammatory drop for a few days, or none at all, depending on your doctor's preference.
 - **Keep using your glaucoma drops** unless you are told to stop. SLT takes four to six weeks to reach its full effect, so drops are not usually changed until a follow-up pressure check.
 - There are no activity restrictions.
+
+## Call the same day if
+
+- Eye pain that is getting worse rather than better
+- A marked drop in vision
+- Increasing redness
+
+See [When to Call the Same Day](@/learn/when-to-call.md) for other urgent symptoms.
 
 ## Risks
 

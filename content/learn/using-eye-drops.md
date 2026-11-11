@@ -2,6 +2,8 @@
 title = "Using Eye Drops"
 description = "Step-by-step technique for putting in eye drops, why to wait five minutes between drops, pressing the tear duct, missed doses, storage and refills."
 template = "page.html"
+date = 2026-10-02
+updated = 2026-11-10
 weight = 40
 
 [extra]

@@ -87,6 +87,12 @@
     }, 80);
   });
 
+  // A link from site search (?q=latanoprost) opens the list already filtered.
+  try {
+    var q0 = new URLSearchParams(location.search).get('q');
+    if (q0) { search.value = q0; state.q = q0.trim().toLowerCase(); apply(); }
+  } catch (e) { /* old browser: start unfiltered */ }
+
   // --- chips ---
   chips.forEach(function (chip) {
     chip.addEventListener('click', function () {

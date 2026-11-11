@@ -1,7 +1,9 @@
 +++
 title = "Keratoconus"
-description = "Keratoconus: a cornea that thins and bulges into a cone, usually starting in the teens or twenties. Symptoms, how it is found, cross-linking to stop it, and the contact lenses that restore vision. With an animation."
+description = "Keratoconus: a cornea that thins and bulges into a cone, often from the teens. Symptoms, diagnosis, cross-linking to stop it, and lenses that restore vision."
 template = "page.html"
+date = 2026-11-11
+updated = 2026-11-11
 weight = 530
 
 [extra]

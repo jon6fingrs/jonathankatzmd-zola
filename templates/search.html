@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{#- Site search. The index is written into the page at build time (below)
+    and searched in the browser by static/js/search.js, so a new page or drug
+    is searchable as soon as it is built. Bodies are the Markdown source
+    (content); search.js turns it into plain text. Each entry ends with
+    a comma and the list ends with null, which search.js skips. -#}
+{% block content %}
+{%- set learn = get_section(path="learn/_index.md") %}
+{%- set tools = get_section(path="patients/_index.md") %}
+{%- set drops = load_data(path="static/data/eye-drops.json") %}
+{%- set reference = get_page(path="patients/eye-drops.md") %}
+<section class="jk-page">
+  <div class="container">
+    <div class="jk-page__body">
+      <form class="jk-searchbox" role="search" action="{{ get_url(path='/search/', trailing_slash=true) }}" method="get">
+        <label class="visually-hidden" for="jk-search-q">Search the site</label>
+        <input type="search" id="jk-search-q" name="q" class="form-control" placeholder="Search, for example: floaters, SLT, latanoprost" autocomplete="off" autofocus>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+      <p class="jk-search__status" id="jk-search-status" role="status" aria-live="polite"></p>
+      <noscript><p class="jk-note">Search needs JavaScript. The <a href="{{ learn.permalink }}">Learn page</a> lists every article by topic.</p></noscript>
+      <div class="jk-search__out">
+        <ol class="jk-results" id="jk-search-results"></ol>
+        <section class="jk-search__drugs" id="jk-search-drugs" aria-labelledby="jk-search-drugs-h" hidden>
+          <h2 class="jk-search__drugs-h" id="jk-search-drugs-h">In the Eye Medication Reference</h2>
+          <ul class="jk-search__druglist" id="jk-search-druglist"></ul>
+        </section>
+      </div>
+      <div class="jk-search__hint" id="jk-search-hint">
+        <p>Search every article, the eye drop tools and the medication reference. A few places to start:</p>
+        <ul class="jk-search__try">
+          {%- for q in ["glaucoma drops", "SLT", "floaters", "dry eye", "cataract", "latanoprost", "after surgery"] %}
+          <li><a href="?q={{ q | replace(from=' ', to='+') }}">{{ q }}</a></li>
+          {%- endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<script type="application/json" id="jk-search-data">[
+{%- for t in learn.extra.topics %}{% set hub = get_section(path="learn/" ~ t ~ "/_index.md") %}
+{"k":"topic","t":{{ hub.title | json_encode | safe }},"d":{{ hub.description | default(value="") | json_encode | safe }},"s":"Learn topic","u":{{ hub.permalink | json_encode | safe }},"b":{{ hub.content | json_encode | safe }}},
+{%- endfor %}
+{%- for p in learn.pages %}
+{"t":{{ p.title | json_encode | safe }},"d":{{ p.description | default(value="") | json_encode | safe }},"s":{% if p.extra.topic %}{% set hub = get_section(path="learn/" ~ p.extra.topic ~ "/_index.md") %}{{ hub.title | json_encode | safe }}{% else %}"Learn"{% endif %},"u":{{ p.permalink | json_encode | safe }},"b":{{ p.content | json_encode | safe }}},
+{%- endfor %}
+{%- for p in tools.pages %}
+{"k":"topic","t":{{ p.title | json_encode | safe }},"d":{{ p.description | default(value="") | json_encode | safe }},"s":"Tools","u":{{ p.permalink | json_encode | safe }},"b":""},
+{%- endfor %}
+{%- for path in ["about.md", "privacy.md"] %}{% set p = get_page(path=path) %}
+{"t":{{ p.title | json_encode | safe }},"d":{{ p.description | default(value="") | json_encode | safe }},"s":"About this site","u":{{ p.permalink | json_encode | safe }},"b":{{ p.content | json_encode | safe }}},
+{%- endfor %}
+{%- set contact = get_section(path="contact/_index.md") %}
+{"k":"topic","t":"Contact and office locations","d":{{ contact.description | json_encode | safe }},"s":"About this site","u":{{ contact.permalink | json_encode | safe }},"b":""},
+{%- for d in drops %}{% set dd = d.use ~ " · " ~ d.color %}{% if d.brand %}{% set dd = d.brand ~ " · " ~ dd %}{% endif %}{% set db = d.brand ~ " " ~ d.notes %}
+{"k":"drug","t":{{ d.generic | json_encode | safe }},"q":{{ d.generic | json_encode | safe }},"d":{{ dd | json_encode | safe }},"s":"Eye Medication Reference","u":{{ reference.permalink | json_encode | safe }},"b":{{ db | json_encode | safe }}},
+{%- endfor %}
+null]</script>
+{% endblock content %}
+
+{% block javascripts %}
+{{ super() }}
+<script src="{{ get_url(path='js/search.js', cachebust=true) }}"></script>
+{% endblock javascripts %}

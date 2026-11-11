@@ -12,6 +12,13 @@
   {%- if page is defined and page.description %}{% set pg_desc = page.description %}
   {%- elif section is defined and section.description %}{% set pg_desc = section.description %}
   {%- endif %}
+  {#- Link-preview picture: the share card made by tools/share-cards.js for a
+      Learn article (by its file name) or topic page, else the portrait. #}
+  {%- set og_image = config.extra.about_image %}
+  {%- set og_card = false %}
+  {%- if page is defined and page.extra.article and "learn" in page.components %}{% set og_image = "images/share/" ~ page.slug ~ ".png" %}{% set og_card = true %}
+  {%- elif section is defined and section.extra.topic %}{% set og_image = "images/share/topic-" ~ section.extra.topic ~ ".png" %}{% set og_card = true %}
+  {%- endif %}
   <title>{% block title %}{{ pg_title }}{% endblock title %}</title>
   <meta name="description" content="{{ pg_desc }}">
   <meta name="theme-color" content="#7d8da6">
@@ -36,16 +43,21 @@
   <link rel="apple-touch-icon" sizes="180x180" href="{{ icon180.url }}">
 
   {#- Open Graph / Twitter cards so shared links get a preview. #}
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="{% if og_card and page is defined %}article{% else %}website{% endif %}">
   <meta property="og:site_name" content="{{ config.title }}">
   <meta property="og:title" content="{{ pg_title }}">
   <meta property="og:description" content="{{ pg_desc }}">
   <meta property="og:url" content="{{ current_url | default(value=config.base_url) }}">
-  <meta property="og:image" content="{{ get_url(path=config.extra.about_image) }}">
+  <meta property="og:image" content="{{ get_url(path=og_image) }}">
+  {%- if og_card %}
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ pg_title }}">
+  {%- endif %}
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ pg_title }}">
   <meta name="twitter:description" content="{{ pg_desc }}">
-  <meta name="twitter:image" content="{{ get_url(path=config.extra.about_image) }}">
+  <meta name="twitter:image" content="{{ get_url(path=og_image) }}">
   {#- Preview builds (GitHub Pages, see .github/workflows/preview.yml) set
       JK_PREVIEW at build time: keep them out of search results, out of the
       analytics, and visibly labelled. Production builds never set it. #}
@@ -58,7 +70,7 @@
   {%- if config.extra.plausible.enabled and not jk_preview %}
   <script defer data-domain="{{ config.extra.plausible.domain }}"{% if config.extra.plausible.api_endpoint %} data-api="{{ config.extra.plausible.api_endpoint }}"{% endif %} src="{{ config.extra.plausible.src }}"></script>
   {%- if config.extra.plausible.custom_events %}
-  <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+  <script src="{{ get_url(path='js/vx-init.js', cachebust=true) }}"></script>
   {%- endif %}
   {%- endif %}
 </head>

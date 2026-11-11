@@ -1,7 +1,9 @@
 +++
 title = "When to Call the Same Day"
-description = "The eye symptoms that should not wait for a routine appointment: sudden vision changes, flashes and floaters, a painful red eye, and warning signs after surgery or laser."
+description = "Eye symptoms that should not wait for a routine visit: sudden vision changes, flashes and floaters, a painful red eye, and warning signs after surgery."
 template = "page.html"
+date = 2026-11-10
+updated = 2026-11-11
 weight = 200
 
 [extra]
@@ -10,9 +12,7 @@ topic = ""
 group = ""
 +++
 
-Most eye problems can wait for a scheduled visit. The ones on this page should not. If you have any of them, **call the office the same day**, and say what you are experiencing so the staff can get you seen. The phone numbers are on the [Contact](@/contact/_index.md) page. After hours, call your office number and follow the instructions.
-
-If you cannot reach anyone and the problem is severe, go to an emergency room.
+Most eye problems can wait for a scheduled visit. The ones on this page should not. If you have any of them, **call the office the same day**, and say what you are experiencing so the staff can get you seen. The phone numbers are on the [Contact](@/contact/_index.md) page. **After hours**, call the same office number and follow the instructions to reach the doctor on call. If you cannot reach a doctor, go to an emergency room.
 
 ## Sudden changes in vision
 

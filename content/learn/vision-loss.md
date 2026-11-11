@@ -1,7 +1,9 @@
 +++
 title = "What Vision Loss Looks Like"
-description = "An interactive simulator of glaucoma, cataract, macular degeneration, diabetic retinopathy, retinal detachment, stroke, dry eye, floaters and more, with plain-language explanations of each."
+description = "An interactive simulator of glaucoma, cataract, macular degeneration, diabetic eye disease, retinal detachment, stroke, dry eye and floaters."
 template = "page.html"
+date = 2026-10-03
+updated = 2026-11-11
 weight = 20
 
 [extra]
@@ -37,7 +39,7 @@ A [cataract](@/learn/cataract-surgery.md) is clouding of the eye's natural lens.
 
 Age-related macular degeneration (AMD) affects the macula, the small central area of the retina responsible for reading, recognizing faces and seeing fine detail. Side vision is kept, so people with even advanced AMD walk around safely but cannot read or make out faces.
 
-- **Dry AMD** is slow. The center fades, print needs more light and magnification, and a blank or grey spot may appear in the middle of the view.
+- **Dry AMD** is slow. The center fades, print needs more light and magnification, and a blank or gray spot may appear in the middle of the view.
 - **Wet AMD** is sudden. Abnormal blood vessels leak under the macula, so straight lines look bent or wavy and a dark spot can appear over days. It is treated with injections of medicine into the eye, and the sooner the better, so a new distortion in one eye should be seen within days.
 
 Checking each eye separately against straight lines (a door frame, a grid, lines of print) is the simplest way to catch a change early.
@@ -52,7 +54,7 @@ More on [Diabetic Eye Disease](@/learn/diabetic-retinopathy.md).
 
 ## Retinal detachment
 
-The retina can pull away from the back wall of the eye, often after a tear. The warning signs are a sudden shower of new floaters, flashes of light like a camera flash at the edge of vision, and then a dark curtain or shadow moving in from one side. **This is an emergency.** A detachment repaired before it reaches the center of the retina usually keeps good vision; once the center detaches, some loss is permanent. Call the office the same day, or go to an emergency department if it is after hours.
+The retina can pull away from the back wall of the eye, often after a tear. The warning signs are a sudden shower of new floaters, flashes of light like a camera flash at the edge of vision, and then a dark curtain or shadow moving in from one side. **This is an emergency.** A detachment repaired before it reaches the center of the retina usually keeps good vision; once the center detaches, some loss is permanent. Call the office the same day; [When to Call the Same Day](@/learn/when-to-call.md) explains what to do after hours.
 
 More on [Retinal Tears and Detachment](@/learn/retinal-detachment.md).
 

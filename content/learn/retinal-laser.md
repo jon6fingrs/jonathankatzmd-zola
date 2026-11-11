@@ -1,7 +1,9 @@
 +++
 title = "Laser for the Retina"
-description = "Retinal laser treatment: scatter laser (panretinal photocoagulation, PRP) for new blood vessels in diabetic eye disease and vein blockages, and focal laser for leaks near the macula. What it does, the visit, side effects and how it compares with injections. With an animation."
+description = "Retinal laser: scatter laser (PRP) for new blood vessels in diabetic eye disease and vein blockages, and focal laser for leaks near the macula."
 template = "page.html"
+date = 2026-11-11
+updated = 2026-11-11
 weight = 460
 
 [extra]
@@ -46,7 +48,7 @@ Choose a kind and press **Play**.
 1. Drops dilate the pupils, and numbing drops are placed in the eye.
 2. You sit at a laser that looks like the microscope used for your exams.
 3. A contact lens is placed on the eye to hold the lids open and focus the laser.
-4. You see bright flashes. Scatter laser can sting or ache, especially near the edges of the retina; tell the doctor if you need a break. A numbing injection beside the eye is an option for people who find it painful. Focal laser is usually painless.
+4. You see bright flashes. Scatter laser can sting or ache, especially near the edges of the retina; tell the doctor if you need a break. A numbing injection behind the eye is an option for people who find it painful. Focal laser is usually painless.
 5. A session takes about 10 to 30 minutes.
 
 **Bring a driver.** Vision is dazzled and blurred for the rest of the day. An ache can be eased with ordinary pain relievers.
@@ -55,7 +57,14 @@ Choose a kind and press **Play**.
 
 - Keep up your follow-up visits: the effect is checked after a few weeks, and more laser can be added.
 - **Keep blood sugar, blood pressure and cholesterol under control**: the laser treats the result, not the cause.
-- **Call the same day** for a sudden shower of floaters, a curtain over your vision or severe pain. See [When to Call the Same Day](@/learn/when-to-call.md).
+
+## Call the same day if
+
+- A sudden shower of floaters
+- A curtain over part of your vision
+- Severe pain
+
+See [When to Call the Same Day](@/learn/when-to-call.md) for other urgent symptoms.
 
 ## If you have glaucoma
 

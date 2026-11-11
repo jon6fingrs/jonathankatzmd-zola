@@ -1,7 +1,9 @@
 +++
 title = "Blepharitis and the Eyelid Glands"
-description = "Blepharitis is inflammation of the eyelid edges, and blocked oil glands in the lids are the most common cause of dry eye. What it looks and feels like, how to do warm compresses and lid cleaning, and when prescription treatment helps. With an animation of lid care and drawings of the lash line, styes and chalazia."
+description = "Blepharitis and blocked eyelid oil glands, the most common cause of dry eye: symptoms, warm compresses and lid cleaning, styes, chalazia and prescriptions."
 template = "page.html"
+date = 2026-11-10
+updated = 2026-11-10
 weight = 310
 
 [extra]

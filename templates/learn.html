@@ -7,6 +7,11 @@
   <div class="container">
     <div class="jk-page__body">
       {{ section.content | safe }}
+      <form class="jk-searchbox" role="search" action="{{ get_url(path='/search/', trailing_slash=true) }}" method="get">
+        <label class="visually-hidden" for="jk-learn-q">Search the site</label>
+        <input type="search" id="jk-learn-q" name="q" class="form-control" placeholder="Search all pages" autocomplete="off">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
       {% for t in section.extra.topics %}
       {%- set hub = get_section(path="learn/" ~ t ~ "/_index.md") %}
       <h2 class="jk-sectionhead"><a href="{{ hub.permalink }}">{{ hub.title }}</a></h2>

@@ -2,6 +2,8 @@
 title = "Retinal Tears and Detachment"
 description = "How a retinal tear leads to a detachment, the warning signs, how a tear is sealed with laser, and how a detached retina is repaired. With an animation of both."
 template = "page.html"
+date = 2026-11-11
+updated = 2026-11-11
 weight = 410
 
 [extra]
@@ -59,7 +61,7 @@ A detachment is repaired by a retina surgeon, usually within days, and sooner if
 ## After surgery
 
 - **Head positioning.** With a gas bubble you may need to keep your head in a particular position, sometimes face down, for several days so the bubble presses on the right spot. This matters for the result.
-- **Flying and high altitude.** If a gas bubble is used, there is often a period afterward when you should not fly or travel to high altitude, because the bubble expands as air pressure falls. Your surgeon will tell you how long. Tell any anesthetist that you have gas in your eye.
+- **Flying and high altitude.** If a gas bubble is used, there is often a period afterward when you should not fly or travel to high altitude, because the bubble expands as air pressure falls. Your surgeon will tell you how long. Tell any doctor who gives you an anesthetic that you have gas in your eye.
 - Vision through a gas bubble is very poor. It returns from the top down as the bubble shrinks.
 - Drops are used for several weeks.
 

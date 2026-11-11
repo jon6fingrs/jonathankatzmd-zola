@@ -1,7 +1,9 @@
 +++
 title = "Corneal Transplants"
-description = "Corneal transplant surgery: the full-thickness and partial-thickness kinds (PK, DMEK, DSAEK), who needs one, what the operation and recovery involve, and the signs of rejection."
+description = "Corneal transplants (DMEK, DSAEK, DALK, PK): who needs one, what the operation and recovery involve, and the warning signs of rejection."
 template = "page.html"
+date = 2026-11-11
+updated = 2026-11-11
 weight = 550
 
 [extra]
@@ -44,7 +46,7 @@ It is an outpatient procedure of about one to two hours, under local anesthetic 
 
 ## Rejection
 
-The body can recognise the donor tissue and attack it, most often in the first two years but possibly much later. Caught early, most rejection episodes are reversed with intensive steroid drops. Know the warning signs, remembered as **RSVP**:
+The body can recognize the donor tissue and attack it, most often in the first two years but possibly much later. Caught early, most rejection episodes are reversed with intensive steroid drops. Know the warning signs, remembered as **RSVP**:
 
 - **R**edness
 - **S**ensitivity to light
