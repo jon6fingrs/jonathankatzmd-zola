@@ -185,11 +185,12 @@ and to the Learn menu in `config.toml`.
 ### Dates, share cards and structured data on Learn pages
 
 Every Learn article (and the privacy page) has `date` (first published) and
-`updated` (last reviewed) in its front matter, shown under the title as
-"Published … · Last reviewed …". **When you change a page's medical content,
-or the owner re-reads one, set `updated` to that day.** Learn articles also
-carry `MedicalWebPage` JSON-LD (`templates/page.html`) with those dates,
-Dr. Katz as reviewer and the breadcrumb.
+`updated` (last changed) in its front matter, shown under the title as
+"Published … · Updated …", with Updated left out when it is the same day
+(Privacy shows "Last updated …"). **When you change a page's content, set
+`updated` to that day.** Learn articles also carry `MedicalWebPage` JSON-LD
+(`templates/page.html`) with those dates, Dr. Katz as author and reviewer,
+and the breadcrumb.
 
 Link previews (`og:image`) use a share card from `static/images/share/`:
 `<slug>.png` for an article, `topic-<topic>.png` for a topic page, the

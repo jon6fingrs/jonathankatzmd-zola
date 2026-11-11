@@ -13,9 +13,9 @@
           names the page, as on About and Contact. -#}
       {% if page.extra.article and "learn" in page.components %}<h1 class="jk-title">{{ page.title }}</h1>{% endif %}
       {#- Dates: `date` is when the page was first published and `updated` when
-          it was last reviewed (bump it whenever you re-read a page, even if
-          nothing changed). -#}
-      {% if page.extra.article and page.date and "learn" in page.components %}<p class="jk-dates"><span>Published <time datetime="{{ page.date }}">{{ page.date | date(format="%B %-d, %Y") }}</time></span>{% if page.updated %} &middot; <span>Last reviewed <time datetime="{{ page.updated }}">{{ page.updated | date(format="%B %-d, %Y") }}</time></span>{% endif %}</p>
+          its content last changed. "Updated" shows only when it is a
+          different day. -#}
+      {% if page.extra.article and page.date and "learn" in page.components %}<p class="jk-dates"><span>Published <time datetime="{{ page.date }}">{{ page.date | date(format="%b %-d, %Y") }}</time></span>{% if page.updated and page.updated != page.date %} &middot; <span>Updated <time datetime="{{ page.updated }}">{{ page.updated | date(format="%b %-d, %Y") }}</time></span>{% endif %}</p>
       {% elif page.extra.article and page.updated %}<p class="jk-dates">Last updated <time datetime="{{ page.updated }}">{{ page.updated | date(format="%B %-d, %Y") }}</time></p>{% endif %}
       {{ page.content | safe }}
       {#- Learn articles end with the other pages in the same topic and group,
@@ -40,8 +40,8 @@
 </section>
 {% endblock content %}
 
-{#- Structured data for Learn articles: a medical page reviewed by Dr. Katz,
-    with its dates and breadcrumb. The Physician it points to is described on
+{#- Structured data for Learn articles: a medical page by Dr. Katz, with its
+    dates and breadcrumb. The Physician it points to is described on
     the home page (templates/index.html). -#}
 {% block head_extra %}
 {%- if page.extra.article and page.date and "learn" in page.components %}
@@ -56,7 +56,6 @@
   "image": "{{ get_url(path='images/share/' ~ page.slug ~ '.png') }}",
   "datePublished": "{{ page.date }}",
   "dateModified": "{{ page.updated | default(value=page.date) }}",
-  "lastReviewed": "{{ page.updated | default(value=page.date) }}",
   "author": { "@id": "{{ config.base_url }}/#physician" },
   "reviewedBy": { "@type": "Physician", "@id": "{{ config.base_url }}/#physician", "name": "Jonathan Katz, MD" },
   "audience": { "@type": "PeopleAudience", "audienceType": "Patients" }
