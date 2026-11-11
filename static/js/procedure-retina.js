@@ -289,5 +289,138 @@
     ]
   };
 
-  return { pvd: pvdProc(false), pvdtear: pvdProc(true), rd: rdProc(false), rdlaser: rdProc(true), inject: INJECT, amd: amdProc(false), amdwet: amdProc(true), dr: DR };
+  // ---------- vitrectomy (pars plana vitrectomy, PPV) ----------
+  // Shown clearing blood from the gel, the most common reason in diabetes;
+  // the same steps are used to repair a detachment or a macular hole.
+  // labels that share a spot swap rather than cross-fade: the old one is gone
+  // in the first quarter of the step, the new one arrives after it
+  function lin(p) { return ease(clamp(p * 4 - 1, 0, 1)); }
+  function lout(p) { return 1 - ease(clamp(p * 4, 0, 1)); }
+  var PP_PORTS = [-126, 126];
+  var PP_WORK = [[372, 176], [356, 262]]; // where the cutter and the light pipe work
+  function ppLine(i, ins, sweep) {
+    var port = gp(PP_PORTS[i], 172), w = PP_WORK[i], tip;
+    if (i === 0) w = [w[0] + 46 * Math.cos(sweep), w[1] + 34 * Math.sin(sweep)];
+    tip = [lerp(port[0], w[0], ins), lerp(port[1], w[1], ins)];
+    var dx = port[0] - w[0], dy = port[1] - w[1], L = Math.hypot(dx, dy), out = [port[0] + dx / L * 120, port[1] + dy / L * 120];
+    at('pp-i' + i, 'x1', out[0]); at('pp-i' + i, 'y1', out[1]); at('pp-i' + i, 'x2', tip[0]); at('pp-i' + i, 'y2', tip[1]);
+    at('pp-t' + i, 'cx', tip[0]); at('pp-t' + i, 'cy', tip[1]);
+  }
+  function ppvSvg() {
+    var h = svgOpen('0 0 640 470', 'The eye cut in half, with blood clouding the gel that fills it'), i, s = 3, a;
+    function rnd() { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }
+    var blood = '';
+    for (i = 0; i < 26; i++) { a = rnd() * Math.PI * 2; var r = Math.sqrt(rnd()) * 120; blood += '<circle cx="' + (346 + r * Math.cos(a)).toFixed(0) + '" cy="' + (220 + r * Math.sin(a)).toFixed(0) + '" r="' + (3 + rnd() * 5).toFixed(1) + '"/>'; }
+    h += '<clipPath id="pp-clip"><circle cx="' + GX + '" cy="' + GY + '" r="157"/></clipPath>'
+      + globe({ under: '<g clip-path="url(#pp-clip)"><circle id="pp-gel" cx="' + GX + '" cy="' + GY + '" r="160" fill="#b45309" opacity="0.45"/><g id="pp-blood" fill="#7f1d1d" opacity="0.85">' + blood + '</g>'
+        + '<path id="pp-gas" fill="#e0f2fe" stroke="#0284c7" stroke-width="2.5" opacity="0.92"/></g>' })
+      + '<g id="pp-laser" opacity="0" fill="#bbf7d0" stroke="' + GREEN + '" stroke-width="1.8">';
+    [-104, -96, -88, -80, -72, 72, 80, 88, 96, 104].forEach(function (d) { var q = gp(d, 160); h += '<circle cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="4.5"/>'; });
+    h += '</g><g id="pp-ports" opacity="0">';
+    PP_PORTS.forEach(function (d) { var q = gp(d, 172); h += '<rect x="' + (q[0] - 7).toFixed(1) + '" y="' + (q[1] - 7).toFixed(1) + '" width="14" height="14" rx="3" fill="#9ca3af" stroke="#374151" stroke-width="2" transform="rotate(' + d + ' ' + q[0].toFixed(1) + ' ' + q[1].toFixed(1) + ')"/>'; });
+    h += '</g><g id="pp-inst" opacity="0">'
+      + '<line id="pp-i0" stroke="#6b7280" stroke-width="7" stroke-linecap="round"/><circle id="pp-t0" r="5" fill="#374151"/>'
+      + '<line id="pp-i1" stroke="#cbd5e1" stroke-width="7" stroke-linecap="round"/><circle id="pp-t1" r="9" fill="#fef9c3" opacity="0.9"/>'
+      + '</g>'
+      + globeLabels(txt(620, 30, 'Retina', 'end', '#c2410c') + lead(560, 38, gp(-30, 162)[0], gp(-30, 162)[1], '#c2410c')
+      + '<g id="pp-lab-0">' + txt(20, 30, 'Blood in the gel', 'start', '#7f1d1d') + lead(130, 38, 330, 150, '#7f1d1d') + '</g>'
+      + '<g id="pp-lab-1" opacity="0">' + txt(320, 456, 'Three tiny ports in the white of the eye', 'middle', INK, 600, 19) + '</g>'
+      + '<g id="pp-lab-2" opacity="0">' + txt(320, 456, 'A cutter removes the gel and blood; a light shines inside', 'middle', INK, 600, 18) + '</g>'
+      + '<g id="pp-lab-3" opacity="0">' + txt(320, 456, 'Laser to the retina, or scar tissue peeled away', 'middle', '#047857', 600, 19) + '</g>'
+      + '<g id="pp-lab-4" opacity="0">' + txt(320, 456, 'Gas, air, clear fluid or oil fills the eye', 'middle', '#0369a1', 600, 19) + '</g>');
+    return h + '</svg>';
+  }
+  function ppGas(level) { // the bubble fills from the top down: level 0 none .. 1 most of the eye
+    if (level <= 0) { at('pp-gas', 'd', 'M0,0 Z'); return; }
+    var y = GY - 160 + 300 * level, half = Math.sqrt(Math.max(0, 160 * 160 - (y - GY) * (y - GY)));
+    at('pp-gas', 'd', 'M' + (GX - half).toFixed(1) + ',' + y.toFixed(1) + ' A160,160 0 ' + (y > GY ? 1 : 0) + ',1 ' + (GX + half).toFixed(1) + ',' + y.toFixed(1) + ' Z');
+  }
+  var PPV = {
+    views: [['The eye, cut in half', ppvSvg]],
+    intro: '<strong>Why a vitrectomy.</strong> The eye is filled with a clear gel. Here bleeding from diabetic eye disease has clouded it, so light cannot reach the retina. Removing the gel is also how a retinal detachment, a macular hole or scar tissue on the retina is repaired.',
+    steps: [
+      { label: 'Ports', dur: 2000, caption: '<strong>Ports.</strong> After the eye is numbed, usually with sedation, three tiny ports are placed through the white of the eye, just behind the colored part. They are narrower than a pencil lead. One keeps the eye filled with fluid during surgery; the other two take the instruments.',
+        draw: function (p) { var e = ease(p); op('pp-ports', e); op('pp-lab-1', e); } },
+      { label: 'Gel out', dur: 3400, caption: '<strong>The gel is removed.</strong> A fine cutter, guided by a light inside the eye and a microscope above it, cuts and gently draws out the gel along with the blood. Clear fluid flows in to replace it, so the eye keeps its shape.',
+        draw: function (p) {
+          var ins = ease(clamp(p * 4, 0, 1)), clear = ease(clamp((p - 0.2) / 0.8, 0, 1));
+          op('pp-inst', p > 0 ? 1 : 0); ppLine(0, ins, p * 14); ppLine(1, ins, 0);
+          op('pp-gel', 0.45 * (1 - clear)); op('pp-blood', 0.85 * (1 - clear)); op('pp-lab-2', lin(p));
+          if (p > 0) { op('pp-lab-1', lout(p)); op('pp-lab-0', 1 - clear); } else op('pp-lab-0', 1);
+        } },
+      { label: 'Repair', dur: 2600, caption: '<strong>Treating the retina.</strong> With the view clear, the surgeon treats the cause: laser to the retina to shrink abnormal vessels, peeling scar tissue off its surface, or flattening a detached retina and sealing its tears.',
+        draw: function (p) { var e = ease(p), g = document.querySelectorAll('#pp-laser circle'), i; op('pp-laser', p > 0 ? 1 : 0); for (i = 0; i < g.length; i++) g[i].style.opacity = p * g.length > i ? 1 : 0; op('pp-lab-3', lin(p)); if (p > 0) { op('pp-lab-2', lout(p)); ppLine(0, 1, 14 + p * 6); } } },
+      { label: 'Fill', dur: 2800, caption: '<strong>Filling the eye.</strong> Depending on the repair, the eye is left filled with clear fluid, air, a gas bubble that presses the retina in place, or silicone oil. The instruments come out and the ports seal by themselves, usually without stitches. The eye makes its own fluid again, and gas or air is absorbed over days to weeks.',
+        draw: function (p) { var e = ease(p), out = ease(clamp(p * 3, 0, 1)); ppGas(0.6 * ease(clamp(p * 1.4 - 0.2, 0, 1))); op('pp-lab-4', lin(p)); if (p > 0) { op('pp-inst', 1 - out); op('pp-lab-3', lout(p)); op('pp-ports', 1 - 0.6 * e); } } }
+    ]
+  };
+
+  // ---------- laser to the retina: scatter (PRP) and focal ----------
+  var DISC = [376, 210], MAC = [250, 212];
+  function prpSpots() { // rings of spots in the outer retina, sparing the macula and the optic nerve
+    var pts = [], r, a, n, k, x, y;
+    for (r = 110; r <= 182; r += 18) { n = Math.round(r / 6.5); for (k = 0; k < n; k++) { a = k / n * Math.PI * 2 + r * 0.07; x = 280 + r * Math.cos(a); y = 210 + r * Math.sin(a);
+      if (Math.hypot(x - DISC[0], y - DISC[1]) < 64 || Math.hypot(x - MAC[0], y - MAC[1]) < 100) continue; pts.push([x, y]); } }
+    return pts;
+  }
+  var FOCAL = [[214, 188], [226, 244], [282, 178], [292, 236], [204, 220], [270, 252]];
+  function laserSvg(prp) {
+    var h = svgOpen('0 0 560 444', prp ? 'The back of the eye, with new blood vessels growing on the optic nerve' : 'The back of the eye, with leaking blood vessels near the macula'), inner = '';
+    if (prp) {
+      inner += '<g id="ls-nv" fill="none" stroke="#b91c1c" stroke-width="2" stroke-linecap="round"><path d="M392,190 c14,-20 30,-18 34,-36 M398,196 c22,-10 34,-2 46,-16 M388,186 c2,-22 16,-28 12,-46 M400,204 c20,2 30,14 48,10 M390,232 c14,18 30,14 36,32 M396,226 c20,8 32,2 44,14"/></g><g id="ls-spots">';
+      prpSpots().forEach(function (q) { inner += '<circle cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="5.5" fill="#fef3c7" stroke="#ca8a04" stroke-width="1" opacity="0"/>'; });
+      inner += '</g>';
+    } else {
+      inner += '<circle id="ls-edema" cx="' + MAC[0] + '" cy="' + MAC[1] + '" r="64" fill="#bfdbfe" opacity="0"/><g id="ls-ma" fill="#7f1d1d" opacity="0">';
+      FOCAL.forEach(function (q) { inner += '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="4"/>'; });
+      inner += '</g><g id="ls-exud" fill="#fef08a" opacity="0">';
+      for (var i = 0; i < 16; i++) { var a = i / 16 * Math.PI * 2; inner += '<circle cx="' + (MAC[0] + 58 * Math.cos(a)).toFixed(0) + '" cy="' + (MAC[1] + 48 * Math.sin(a)).toFixed(0) + '" r="' + (3 + i % 3) + '"/>'; }
+      inner += '</g><g id="ls-spots">';
+      FOCAL.forEach(function (q) { inner += '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="7" fill="#fef3c7" stroke="#ca8a04" stroke-width="1" opacity="0"/>'; });
+      inner += '</g>';
+    }
+    h += fundus(inner)
+      + '<circle id="ls-flash" r="0" fill="#bbf7d0" stroke="' + GREEN + '" stroke-width="2.5"/>'
+      + txt(20, 30, 'Macula', 'start') + lead(92, 36, 244, 204)
+      + txt(540, 30, 'Optic nerve', 'end') + lead(470, 38, 384, 196)
+      + '<g id="ls-lab-1" opacity="0">' + txt(280, 432, prp ? 'Fragile new vessels' : 'Leaking spots and swelling near the center', 'middle', '#b91c1c', 600, 19) + '</g>'
+      + '<g id="ls-lab-2" opacity="0">' + txt(280, 432, prp ? 'Laser spots across the outer retina, sparing the center' : 'Small laser spots on the leaking points', 'middle', '#047857', 600, 19) + '</g>'
+      + '<g id="ls-lab-3" opacity="0">' + txt(280, 432, prp ? 'The new vessels shrink back' : 'The swelling goes down', 'middle', '#1d4ed8', 600, 19) + '</g>';
+    return h + '</svg>';
+  }
+  function lsSpots(n, glow, scar) {
+    var g = document.querySelectorAll('#ls-spots circle'), i;
+    for (i = 0; i < g.length; i++) { g[i].style.opacity = i < n ? 1 : 0; g[i].setAttribute('fill', scar ? '#78350f' : i === n - 1 && glow ? '#4ade80' : '#fef3c7'); g[i].setAttribute('stroke', scar ? '#451a03' : '#ca8a04'); }
+    var last = g[Math.max(0, Math.min(g.length - 1, n - 1))];
+    if (glow && n > 0) { at('ls-flash', 'cx', last.getAttribute('cx')); at('ls-flash', 'cy', last.getAttribute('cy')); }
+  }
+  function laserProc(prp) {
+    return {
+      variants: [['prp', 'Scatter laser (PRP)'], ['focal', 'Focal laser']],
+      views: [['The back of the eye', function () { return laserSvg(prp); }]],
+      intro: prp
+        ? '<strong>Scatter laser (PRP).</strong> In advanced diabetic eye disease, or after a blocked retinal vein, the starved outer retina sends out a signal that makes fragile new blood vessels grow, here on the optic nerve. They can bleed and scar.'
+        : '<strong>Focal laser.</strong> Near the macula, small bulges in the blood vessel walls can leak, so the center of the retina swells and vision blurs. This is diabetic macular edema.',
+      steps: [
+        { label: prp ? 'New vessels' : 'Leak', dur: 2200, caption: prp
+            ? '<strong>New vessels.</strong> Fine, fragile vessels grow on the surface of the retina and optic nerve. They cause no symptoms until they bleed.'
+            : '<strong>The leak.</strong> Fluid and yellow fatty deposits collect around the leaking spots, at the edge of the macula.',
+          draw: function (p) { var e = ease(p); op('ls-lab-1', e); if (prp) op('ls-nv', 0.35 + 0.65 * e); else { op('ls-edema', 0.55 * e); op('ls-ma', e); op('ls-exud', e); } } },
+        { label: 'Laser', dur: prp ? 4200 : 2600, caption: prp
+            ? '<strong>The laser.</strong> In the office, through a contact lens, many small laser spots are placed across the outer retina, avoiding the center. The treated retina needs less oxygen, so the signal for new vessels switches off. It is usually done over two or three sessions. Bright flashes are seen, and it can sting or ache.'
+            : '<strong>The laser.</strong> A few small, gentle spots are placed on or around the leaking points, away from the very center, to seal them.',
+          draw: function (p) {
+            var total = document.querySelectorAll('#ls-spots circle').length, n = Math.round(p * total), on = p > 0 && p < 1, x = (p * total) % 1;
+            var pulse = on ? Math.max(0, Math.sin(Math.PI * clamp(x * 2.2, 0, 1))) : 0;
+            lsSpots(n, on, false); at('ls-flash', 'r', 11 * pulse); op('ls-flash', pulse); op('ls-lab-2', lin(p)); if (p > 0) op('ls-lab-1', lout(p));
+          } },
+        { label: 'Weeks later', dur: 2600, caption: prp
+            ? '<strong>Over the following weeks.</strong> The new vessels shrink and stop growing, and the spots become small scars. This protects against severe vision loss. The cost is some loss of side vision and night vision, because the outer retina has been treated. Injections are often used alongside or instead.'
+            : '<strong>Over the following months.</strong> The leaks seal and the swelling goes down slowly. Injections into the eye have largely replaced focal laser as the first treatment for macular swelling, but laser is still used for some leaks, and the two are often combined.',
+          draw: function (p) { var e = ease(p); op('ls-lab-3', lin(p)); if (p > 0) { op('ls-lab-2', lout(p)); lsSpots(9999, false, p > 0.5); if (prp) op('ls-nv', 1 - 0.85 * e); else { op('ls-edema', 0.55 * (1 - e)); op('ls-exud', 1 - 0.6 * e); op('ls-ma', 1 - 0.7 * e); } } } }
+      ]
+    };
+  }
+
+  return { ppv: PPV, prp: laserProc(true), focal: laserProc(false), pvd: pvdProc(false), pvdtear: pvdProc(true), rd: rdProc(false), rdlaser: rdProc(true), inject: INJECT, amd: amdProc(false), amdwet: amdProc(true), dr: DR };
 });

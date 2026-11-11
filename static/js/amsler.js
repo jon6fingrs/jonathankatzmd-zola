@@ -1,7 +1,9 @@
 /* Amsler grid (content/learn/macular-degeneration.md). A home check for
  * distortion at the center of vision. The grid is drawn here so it can also
- * show an example of what a change looks like; "Print" prints the plain
- * grid at a fixed size (see .jk-amsler in custom.css).
+ * show an example of what a change looks like. "Print the grid" opens
+ * static/print/amsler-grid.html, a page holding only the grid at 10 cm and
+ * the instructions, because hiding the rest of a page for printing is not
+ * honoured by every browser (Safari on iPhone printed the whole page).
  */
 (function () {
   'use strict';
@@ -31,7 +33,7 @@
     + '<button type="button" class="jk-chip" data-ex="1" aria-pressed="false">Example of a change</button></div>'
     + '<div class="jk-amsler__grid" id="jk-amsler-grid"></div>'
     + '<p class="jk-amsler__note" id="jk-amsler-note"></p>'
-    + '<div class="jk-lpi__controls"><button type="button" class="btn btn-outline-primary" id="jk-amsler-print">Print the grid</button></div>';
+    + '<div class="jk-lpi__controls"><a class="btn btn-outline-primary" id="jk-amsler-print" href="' + (root.getAttribute('data-print') || '#') + '" target="_blank" rel="noopener">Print the grid</a></div>';
   var box = document.getElementById('jk-amsler-grid'), note = document.getElementById('jk-amsler-note');
   function show(on) {
     box.innerHTML = grid(on);
@@ -42,9 +44,7 @@
     var b = e.target.closest('button');
     if (!b) return;
     if (b.hasAttribute('data-ex')) show(b.getAttribute('data-ex') === '1');
-    else if (b.id === 'jk-amsler-print') { show(false); document.body.classList.add('jk-print-amsler'); window.print(); }
   });
-  window.addEventListener('afterprint', function () { document.body.classList.remove('jk-print-amsler'); });
   show(false);
   root.classList.add('is-ready');
 })();

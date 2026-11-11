@@ -1,6 +1,6 @@
 +++
 title = "Retina"
-description = "Flashes and floaters, retinal tears and detachment, macular degeneration, diabetic eye disease, and what to expect from injections into the eye."
+description = "Flashes and floaters, retinal tears and detachment, macular degeneration, diabetic eye disease, and what to expect from injections, laser and vitrectomy."
 template = "topic.html"
 
 [extra]

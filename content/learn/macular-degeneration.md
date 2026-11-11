@@ -45,13 +45,13 @@ Dry AMD can turn wet without warning, and the first sign is usually distortion. 
 4. While looking at the dot, notice whether all the lines are straight and all the squares are there.
 5. Repeat with the other eye.
 
-<div id="jk-amsler" class="jk-amsler">
+<div id="jk-amsler" class="jk-amsler" data-print="../../print/amsler-grid.html">
   <p class="jk-vis__noscript">The grid needs JavaScript. The picture below shows it.</p>
 </div>
 
 {{<figure src="images/learn/amsler-grid.svg" alt="Two Amsler grids. On the left all the lines are straight. On the right the lines near one spot are wavy and a grey patch covers part of the grid." caption="Left: a normal grid. Right: an example of a change. Wavy lines or a blurred or missing patch that is new should be reported the same day." />}}
 
-**Call the same day** if lines look wavy, bent or broken, or if a blurred or blank patch appears, and it is new. Keep a printed grid on the refrigerator door, where you will see it.
+**Call the same day** if lines look wavy, bent or broken, or if a blurred or blank patch appears, and it is new. Keep a printed grid on the refrigerator door, where you will see it. **Print the grid** above opens a page with just the grid and these instructions.
 
 ## Who gets it
 

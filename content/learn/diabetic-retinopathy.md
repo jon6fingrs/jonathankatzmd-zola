@@ -64,9 +64,9 @@ If your blood sugar is brought down very quickly after a long period of poor con
 ## Treatment
 
 - **[Injections into the eye](@/learn/eye-injections.md)** of medicines that stop leakage and make new vessels shrink. They are the main treatment for macular edema and are also used for proliferative disease. They are repeated, often monthly at first.
-- **Laser.** Scatter laser to the outer retina makes new vessels regress and has protected vision for decades. Focal laser treats some leaking spots near the macula.
+- **[Laser](@/learn/retinal-laser.md).** Scatter laser (PRP) to the outer retina makes new vessels regress and has protected vision for decades. Focal laser treats some leaking spots near the macula.
 - **Steroid injections or implants** for swelling that does not respond.
-- **Surgery (vitrectomy)** to clear blood that does not go away, or to release scar tissue pulling on the retina.
+- **Surgery ([vitrectomy](@/learn/vitrectomy.md))** to clear blood that does not go away, or to release scar tissue pulling on the retina.
 
 These are done by a retina specialist. Your eye doctor will refer you when retinopathy reaches the stage where treatment helps.
 

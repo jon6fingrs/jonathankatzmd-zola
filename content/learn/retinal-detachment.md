@@ -52,7 +52,7 @@ You can go home afterward. For a week or two you may be asked to avoid heavy exe
 
 A detachment is repaired by a retina surgeon, usually within days, and sooner if the macula is still attached. The method depends on the detachment.
 
-- **Vitrectomy.** The gel is removed through tiny openings, the retina is flattened, the tear is sealed with laser, and the eye is filled with a gas bubble (or occasionally silicone oil) that holds the retina in place while it heals.
+- **[Vitrectomy](@/learn/vitrectomy.md).** The gel is removed through tiny openings, the retina is flattened, the tear is sealed with laser, and the eye is filled with a gas bubble (or occasionally silicone oil) that holds the retina in place while it heals.
 - **Scleral buckle.** A soft silicone band is stitched around the outside of the eye, under the muscles, to press the wall in against the tear. It stays permanently and is not visible.
 - **Gas bubble in the office (pneumatic retinopexy).** For some detachments a gas bubble is injected and the tear is sealed with laser or freezing, without an operating room.
 

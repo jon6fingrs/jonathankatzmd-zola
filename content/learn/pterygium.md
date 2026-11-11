@@ -61,7 +61,8 @@ Press **Play** to see the difference, and what surgery does.
 Pterygium surgery is an outpatient procedure that takes about 30 to 45 minutes, with numbing and light sedation.
 
 1. The pterygium is lifted off the cornea and removed, along with the abnormal tissue beneath it.
-2. The bare area is covered with a **graft of your own conjunctiva**, a thin piece taken from under the upper eyelid of the same eye, where it is not missed.
+2. The bare area is covered with a **graft of your own conjunctiva**, a thin piece taken from under the lower eyelid of the same eye, where it is not missed. The conjunctiva under the upper lid is left untouched, because it is the site used for glaucoma surgery such as a [trabeculectomy](@/learn/trabeculectomy.md) and needs to stay healthy in case that is ever needed.
+   - Instead of your own tissue, a graft of **amniotic membrane** can be used: a thin, specially prepared donor tissue, from the inner lining of the placenta after a planned cesarean birth, that calms inflammation and helps the surface heal.
 3. The graft is fixed with tissue glue or very fine stitches that dissolve.
 4. A medicine that discourages regrowth (mitomycin C) is sometimes applied.
 
@@ -87,5 +88,5 @@ The graft is the important part. With the old method of simply cutting the ptery
 
 - Is mine growing, and how close is it to the center?
 - Is it affecting my glasses prescription?
-- Would you use a graft, and glue or stitches?
+- Would you use my own tissue or amniotic membrane, and glue or stitches?
 - How long will the eye stay red?
