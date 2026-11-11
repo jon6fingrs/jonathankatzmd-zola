@@ -154,6 +154,7 @@ preview comment is the quickest way to spot a link that escaped.
 | `content/learn/eye-pressure.md` | `templates/page.html` | the eye pressure "sink": one `<div id="jk-sink">` built by `static/js/sink.js`. The numbers are in `static/js/sink-model.js` (no DOM; pinned by `tests/sink-model.test.js`): the level comes from the steady-state balance, cannot go below venous pressure without a new drain, and stacked treatments give diminishing returns. If an effect size is changed on purpose, keep those tests passing. Example numbers only, and the page says so |
 | `slt-laser.md`, `migs.md`, `trabeculectomy.md`, `tube-shunt-surgery.md`, `cyclophotocoagulation.md` (in `content/learn/`) | `templates/page.html` | step-by-step animations: one `<div id="jk-proc" data-proc="slt">` (or `migs`, `trab`, `tube`, `cpc`; `tears`, `lidcare`, `plug`, `reflex` (watery eyes) and `allergy` are the dry eye topic's demos) built by `static/js/procedure.js`. Each procedure is an entry in `PROCS`: drawings plus steps with `draw(p, t)`. SLT has two variants switched by chips (`slt` through a contact lens, `dslt` direct with no lens), MIGS has four (`migs` stent, `gonio`, `visco`, and `combo`: viscodilation then a stent), and so does cyclophotocoagulation (`cpc` micropulse, `cwcpc` standard); `variants` on an entry adds the chips. The picture is a pure function of time, so a step's draw must set everything it owns even when its `p` is 0, and touch another step's pieces only once its own `p` is above 0; otherwise jumping between steps leaves stale pieces |
 | `content/learn/choosing-artificial-tears.md` | `templates/page.html` | the artificial tears picker: `<div id="jk-tears">` built by `static/js/tearpicker.js`. The advice is in `static/js/tearpicker-rules.js` (no DOM; pinned by `tests/tearpicker-rules.test.js`); brands and photos are read from `eye-drops.json` by the `chart` name on each kind |
+| retina and cornea pages in `content/learn/` | `templates/page.html` | their animations are in `static/js/procedure-retina.js` and `static/js/procedure-cornea.js`, which register extra entries with `procedure.js`; a page loads its topic file first: `scripts = ["js/procedure-retina.js", "js/procedure.js"]`. `macular-degeneration.md` also loads `static/js/amsler.js`, the Amsler grid (on screen, and an example of a change); its "Print the grid" link opens `static/print/amsler-grid.html`, a standalone page with only the grid at 10 cm and the instructions, because hiding the rest of an article for printing is not honoured by every browser |
 | `content/contact/_index.md` | `templates/contact/section.html` | office list driven by `config.toml`'s `[[extra.offices]]`, not by content |
 | `content/videos.md` | — | `draft = true`; not built or linked until there are videos |
 | any unmatched URL | `templates/404.html` | custom |
@@ -164,11 +165,11 @@ A page's `[extra]` can load scripts with `scripts = ["vendor/x.js", "js/y.js"]`
 ### Learn topics
 
 The Learn menu is one panel listing every article under its topic
-(Glaucoma, Cataract, Dry Eye, Vision Simulators), built by `partials/navbar.html`
+(Glaucoma, Cataract, Dry Eye, Cornea, Retina, Vision Simulators), built by `partials/navbar.html`
 from the Learn section, so a new article appears in the menu by itself.
 Each topic also has its own page. Articles all live
 flat in `content/learn/` so their addresses never change. To add one:
-set `topic = "glaucoma"` (or `cataract`, `dry-eye`, `simulators`) and `group = "Lasers"`
+set `topic = "glaucoma"` (or `cataract`, `dry-eye`, `cornea`, `retina`, `simulators`) and `group = "Lasers"`
 (a heading from that hub's `groups`, or `""` if the hub has none) in its
 `[extra]`. Both keys are required on every Learn page: the templates
 compare them directly. A page with `topic = ""` (When to Call the Same

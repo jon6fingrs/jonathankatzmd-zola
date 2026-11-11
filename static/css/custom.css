@@ -1155,3 +1155,13 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-page--article .jk-page__body .jk-tears__notes, .jk-tears__notes { margin: 1rem 0 0; padding-left: 1.2rem; font-size: .95rem; }
 .jk-tears__notes li { margin-bottom: .35rem; }
 @media (min-width: 768px) { .jk-tears { padding: 1.25rem 1.4rem; } .jk-tears__cards { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); } }
+
+/* Amsler grid (learn/macular-degeneration, static/js/amsler.js) */
+.jk-amsler { margin: 1.5rem 0 2rem; background: #fff; border: 1px solid var(--jk-line); border-radius: 10px; padding: 1rem; text-align: center; }
+.jk-amsler__tabs { justify-content: center; margin-bottom: .75rem; }
+.jk-amsler__grid { max-width: 420px; margin: 0 auto; }
+.jk-amsler__svg { display: block; width: 100%; height: auto; }
+.jk-page--article .jk-page__body .jk-amsler__note, .jk-amsler__note { margin: .75rem auto 0; max-width: 34rem; font-size: .98rem; min-height: 3em; }
+/* "Print the grid" opens static/print/amsler-grid.html. Printing the article
+   itself shows the grid without its buttons. */
+@media print { .jk-amsler__tabs, .jk-amsler .jk-lpi__controls { display: none; } }

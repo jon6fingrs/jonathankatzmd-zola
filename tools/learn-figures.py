@@ -422,6 +422,145 @@ b+=label(20,380,'Puffy lids','start',22,'600')+leader(120,372,cx-110,cy+92)
 b+=label(250,40,'Pollen, dust, pet dander','start',19,'600','#a16207')
 figs['eye-allergy']=('An allergic eye: itching, redness in both eyes, watering and puffy lids, set off by pollen, dust or pet dander',760,420,b)
 
+# ---------- retina ----------
+# The whole eye cut in half, front to the left (the same drawing as globe() in
+# static/js/procedure-retina.js), and the back of the eye as the doctor sees it.
+def gpt(deg,r,cx=330,cy=220):
+    a=math.radians(deg); return (cx+r*math.cos(a), cy+r*math.sin(a))
+def globe(cx=330,cy=220):
+    f=gpt(-140,172,cx,cy); bk=gpt(140,172,cx,cy); n0=gpt(17,150,cx,cy); n1=gpt(17,262,cx,cy)
+    s=f'<line x1="{n0[0]:.1f}" y1="{n0[1]:.1f}" x2="{n1[0]:.1f}" y2="{n1[1]:.1f}" stroke="#ca8a04" stroke-width="40"/><line x1="{n0[0]:.1f}" y1="{n0[1]:.1f}" x2="{n1[0]:.1f}" y2="{n1[1]:.1f}" stroke="#fde68a" stroke-width="34"/>'
+    s+=f'<path d="M{f[0]:.1f},{f[1]:.1f} Q{cx-238},{cy} {bk[0]:.1f},{bk[1]:.1f} Z" fill="#dbeafe" stroke="#3b82f6" stroke-width="3"/>'
+    s+=f'<circle cx="{cx}" cy="{cy}" r="170" fill="#e0f2fe"/>'
+    s+=f'<path d="M{f[0]:.1f},{f[1]:.1f} A172,172 0 1,1 {bk[0]:.1f},{bk[1]:.1f}" fill="none" stroke="#6b7280" stroke-width="4"/>'
+    r0=gpt(-128,162,cx,cy); r1=gpt(128,162,cx,cy)
+    s+=f'<path d="M{r0[0]:.1f},{r0[1]:.1f} A162,162 0 1,1 {r1[0]:.1f},{r1[1]:.1f}" fill="none" stroke="#fb923c" stroke-width="9" stroke-linecap="round"/>'
+    s+=f'<circle cx="{cx+160}" cy="{cy}" r="6" fill="#9a3412"/>'
+    s+=f'<line x1="{cx-117}" y1="{cy-94}" x2="{cx-104}" y2="{cy-32}" stroke="#8b5e3c" stroke-width="9" stroke-linecap="round"/><line x1="{cx-104}" y1="{cy+32}" x2="{cx-117}" y2="{cy+94}" stroke="#8b5e3c" stroke-width="9" stroke-linecap="round"/>'
+    s+=f'<ellipse cx="{cx-78}" cy="{cy}" rx="26" ry="60" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/>'
+    return s
+def fundus(cx,cy,r=150,extra='',uid='a'):
+    k=r/190.0
+    def X(x): return cx+(x-280)*k
+    def Y(y): return cy+(y-210)*k
+    def path(pts): return ' '.join(f'{c}{X(x):.0f},{Y(y):.0f}' for c,x,y in pts)
+    s=f'<clipPath id="fu{uid}"><circle cx="{cx}" cy="{cy}" r="{r}"/></clipPath><circle cx="{cx}" cy="{cy}" r="{r}" fill="#ea580c"/><circle cx="{cx}" cy="{cy}" r="{r}" fill="#fb923c" opacity="0.45"/><g clip-path="url(#fu{uid})">'
+    s+=f'<circle cx="{X(250):.0f}" cy="{Y(212):.0f}" r="{40*k:.0f}" fill="#9a3412" opacity="0.45"/><circle cx="{X(250):.0f}" cy="{Y(212):.0f}" r="{12*k:.0f}" fill="#7c2d12" opacity="0.6"/>'
+    for pts in [[('M',372,196),('C',340,120),(' ',250,80),(' ',120,110)],[('M',372,224),('C',340,300),(' ',250,340),(' ',120,312)],[('M',380,196),('C',420,140),(' ',450,110),(' ',480,70)],[('M',380,224),('C',420,280),(' ',450,310),(' ',480,350)]]:
+        s+=f'<path d="{path(pts)}" fill="none" stroke="#991b1b" stroke-width="{5*k:.1f}" stroke-linecap="round"/>'
+    s+=extra+'</g>'
+    s+=f'<circle cx="{X(376):.0f}" cy="{Y(210):.0f}" r="{26*k:.0f}" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/><circle cx="{X(376):.0f}" cy="{Y(210):.0f}" r="{9*k:.0f}" fill="#fef9c3"/>'
+    s+=f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#7c2d12" stroke-width="3"/>'
+    return s,X,Y
+
+# 17. the parts of the eye that matter for the retina
+b=globe()
+b+=label(20,40,'Cornea','start',22)+leader(96,46,128,150)
+b+=label(20,400,'Lens','start',22)+leader(74,392,246,260)
+b+=label(250,424,'Gel (vitreous)','middle',22,'600','#0369a1')+leader(250,402,330,300)
+b+=label(700,60,'Retina','end',22,'600','#c2410c')+label(700,84,'the light-sensing layer','end',19,'400')+leader(540,96,gpt(-45,162)[0],gpt(-45,162)[1])
+b+=label(700,200,'Macula','end',22,'600','#9a3412')+label(700,224,'center of vision','end',19,'400')+leader(612,190,492,218)
+b+=label(700,360,'Optic nerve','end',22)+label(700,384,'to the brain','end',19,'400')+leader(590,352,gpt(17,230)[0],gpt(17,230)[1])
+figs['retina-anatomy']=('The eye cut in half: cornea and lens at the front, the gel filling the eye, the retina lining the back, the macula at its center, and the optic nerve',720,440,b)
+
+# 18. macular degeneration at the back of the eye: normal, dry, wet
+b=''
+import random
+for i,(kind,title,sub) in enumerate([('n','Healthy',''),('d','Dry','yellow deposits (drusen)'),('w','Wet','leaking vessels, bleeding')]):
+    cx=135+i*265; extra=''
+    f,X,Y=fundus(cx,200,118,'',uid='m'+kind)
+    if kind in ('d','w'):
+        rnd=random.Random(4)
+        dots=''.join(f'<circle cx="{X(250+rnd.uniform(-58,58)):.0f}" cy="{Y(212+rnd.uniform(-50,50)):.0f}" r="{rnd.uniform(3,7):.1f}" fill="#fde047" opacity="0.95"/>' for _ in range(16 if kind=='d' else 8))
+        if kind=='w': dots+=f'<ellipse cx="{X(256):.0f}" cy="{Y(214):.0f}" rx="34" ry="26" fill="#7f1d1d" opacity="0.85"/><ellipse cx="{X(250):.0f}" cy="{Y(212):.0f}" rx="50" ry="40" fill="#bfdbfe" opacity="0.4"/>'
+        f,X,Y=fundus(cx,200,118,dots,uid='m'+kind)
+    b+=f
+    b+=label(cx,44,title,'middle',24,'700')+label(cx,352,sub,'middle',19,'400',MUTED)
+b+=label(135,352,'even color at the macula','middle',19,'400',MUTED)
+figs['amd-fundus']=('The back of the eye in macular degeneration: healthy, dry with yellow drusen at the macula, and wet with bleeding and fluid',800,370,b)
+
+# 19. the Amsler grid: normal and with a change
+def amsler(ox,oy,size,on):
+    n=20; s=f'<rect x="{ox}" y="{oy}" width="{size}" height="{size}" fill="#fff"/>'; k=size/400.0
+    def warp(x,y):
+        if not on: return x,y
+        dx=x-250; dy=y-160; g=math.exp(-(dx*dx+dy*dy)/3200)
+        return x+dx*0.42*g+9*g*math.sin(y/16), y+dy*0.42*g+9*g*math.sin(x/16)
+    for i in range(n+1):
+        for vert in (True,False):
+            pts=[]
+            for t in range(0,401,5):
+                x,y=warp(i*20,t) if vert else warp(t,i*20)
+                pts.append(f'{ox+x*k:.1f},{oy+y*k:.1f}')
+            s+=f'<path d="M{" L".join(pts)}" fill="none" stroke="{INK}" stroke-width="{2.2 if i in (0,n) else 1}"/>'
+    if on: s+=f'<ellipse cx="{ox+262*k:.0f}" cy="{oy+150*k:.0f}" rx="{46*k:.0f}" ry="{36*k:.0f}" fill="#9ca3af" opacity="0.6"/>'
+    s+=f'<circle cx="{ox+size/2}" cy="{oy+size/2}" r="4.5" fill="{INK}"/>'
+    return s
+b=amsler(40,60,300,False)+amsler(420,60,300,True)
+b+=label(190,36,'Normal','middle',24,'700')+label(570,36,'Call the same day','middle',24,'700','#b91c1c')
+b+=label(190,392,'All lines straight, no gaps','middle',19,'400',MUTED)+label(570,392,'Wavy lines, or a blurred or missing patch','middle',19,'400',MUTED)
+figs['amsler-grid']=('The Amsler grid: with normal vision every line is straight; wavy lines or a missing patch are a reason to call the same day',760,410,b)
+
+# 20. diabetic retinopathy at the back of the eye: early and advanced
+b=''
+for i,(kind,title,sub) in enumerate([('e','Early','small spots of bleeding; no symptoms'),('a','Advanced','new vessels and bleeding')]):
+    cx=200+i*400; rnd=random.Random(9)
+    f,X,Y=fundus(cx,205,150,'',uid='d'+kind)
+    ex=''.join(f'<circle cx="{X(130+rnd.uniform(0,300)):.0f}" cy="{Y(80+rnd.uniform(0,260)):.0f}" r="3" fill="#7f1d1d"/>' for _ in range(14))
+    ex+=''.join(f'<ellipse cx="{X(120+rnd.uniform(0,300)):.0f}" cy="{Y(70+rnd.uniform(0,280)):.0f}" rx="{rnd.uniform(6,12):.0f}" ry="{rnd.uniform(4,8):.0f}" fill="#7f1d1d" opacity="0.85"/>' for _ in range(5 if kind=='e' else 10))
+    if kind=='a':
+        ex+=''.join(f'<circle cx="{X(250+44*math.cos(j/12*6.283)):.0f}" cy="{Y(212+36*math.sin(j/12*6.283)):.0f}" r="{3+j%3}" fill="#fef08a"/>' for j in range(12))
+        for (x1,y1,x2,y2,x3,y3) in [(392,190,406,170,426,154),(398,196,420,186,444,180),(388,186,390,164,400,140),(400,204,420,206,448,214),(390,232,404,250,426,264),(396,226,416,234,440,240)]:
+            ex+=f'<path d="M{X(x1):.0f},{Y(y1):.0f} Q{X(x2):.0f},{Y(y2):.0f} {X(x3):.0f},{Y(y3):.0f}" fill="none" stroke="#b91c1c" stroke-width="2" stroke-linecap="round"/>'
+        ex+=f'<path d="M{X(150):.0f},{Y(270):.0f} C{X(210):.0f},{Y(250):.0f} {X(330):.0f},{Y(262):.0f} {X(430):.0f},{Y(290):.0f} C{X(440):.0f},{Y(350):.0f} {X(380):.0f},{Y(400):.0f} {X(280):.0f},{Y(400):.0f} C{X(200):.0f},{Y(400):.0f} {X(140):.0f},{Y(350):.0f} {X(150):.0f},{Y(270):.0f} Z" fill="#7f1d1d" opacity="0.75"/>'
+    f,X,Y=fundus(cx,205,150,ex,uid='d'+kind)
+    b+=f+label(cx,36,title,'middle',24,'700')+label(cx,392,sub,'middle',19,'400',MUTED)
+figs['diabetic-fundus']=('The back of the eye in diabetic retinopathy: early, with small spots of bleeding, and advanced, with new vessels, deposits at the macula and bleeding',800,410,b)
+
+# ---------- cornea ----------
+EPI='#e9d5ff'; EPI_S='#7c3aed'; STROMA='#dbeafe'; ENDO='#a7f3d0'; ENDO_S='#047857'
+def cornea_slab(x,y,w,eh=40,sh=150,endo=True,lines=True):
+    s=f'<rect x="{x}" y="{y+eh}" width="{w}" height="{sh}" fill="{STROMA}" stroke="#3b82f6" stroke-width="2"/>'
+    if lines: s+=''.join(f'<line x1="{x+4}" y1="{yy}" x2="{x+w-4}" y2="{yy}" stroke="#93c5fd" stroke-width="1.2"/>' for yy in range(y+eh+14,y+eh+sh-6,14))
+    s+=f'<rect x="{x}" y="{y}" width="{w}" height="{eh}" fill="{EPI}" stroke="{EPI_S}" stroke-width="2"/>'
+    if endo: s+=''.join(f'<rect x="{x+1+i*26}" y="{y+eh+sh}" width="24" height="16" rx="5" fill="{ENDO}" stroke="{ENDO_S}" stroke-width="1.5"/>' for i in range(int(w//26)))
+    return s
+
+# 21. the layers of the cornea, and what goes wrong in each
+b=cornea_slab(230,90,312)
+b+=f'<line x1="230" y1="84" x2="542" y2="84" stroke="#60a5fa" stroke-width="5" stroke-linecap="round"/>'
+b+=label(20,60,'Tear film','start',20,'600','#1d4ed8')+leader(110,66,236,84)
+b+=label(20,116,'Surface cells','start',20,'600',EPI_S)+label(20,140,'scratches, erosions','start',18,'400',MUTED)+leader(170,112,238,110)
+b+=label(20,206,'Clear middle layer','start',20,'600','#1d4ed8')+label(20,230,'keratoconus, scars,','start',18,'400',MUTED)+label(20,252,'infections','start',18,'400',MUTED)+leader(200,202,238,204)
+b+=label(20,300,'Pump cells','start',20,'600',ENDO_S)+label(20,324,'Fuchs dystrophy','start',18,'400',MUTED)+leader(140,296,240,290)
+b+=label(386,340,'Inside of the eye','middle',18,'400',MUTED)
+b+=label(386,30,'The cornea, about half a millimeter thick','middle',20,'600')
+figs['cornea-layers']=('The layers of the cornea, front to back: tear film, surface cells, the clear middle layer and the pump cells, with the conditions that affect each',720,360,b)
+
+# 22. two kinds of corneal transplant
+b=cornea_slab(40,110,320)+cornea_slab(440,110,320)
+b+=f'<rect x="130" y="104" width="140" height="218" fill="#fde68a" opacity="0.55" stroke="#b45309" stroke-width="3" stroke-dasharray="8 6"/>'
+for sx in range(130,271,28): b+=f'<path d="M{sx-6},100 l12,10 m0,-10 l-12,10" stroke="{INK}" stroke-width="1.8"/>'
+b+=f'<rect x="440" y="298" width="320" height="22" fill="#fde68a" opacity="0.7" stroke="#b45309" stroke-width="3" stroke-dasharray="8 6"/>'
+b+=label(200,40,'Full-thickness transplant','middle',22,'700')+label(200,66,'all layers replaced, held with stitches','middle',18,'400',MUTED)
+b+=label(600,40,'Partial-thickness transplant','middle',22,'700')+label(600,66,'only the pump layer replaced; no stitches','middle',18,'400',MUTED)
+b+=label(200,360,'For scars and advanced keratoconus','middle',18,'400',MUTED)+label(600,360,'For Fuchs dystrophy and other pump failure','middle',18,'400',MUTED)
+b+=f'<line x1="400" y1="20" x2="400" y2="372" stroke="#e5e7eb" stroke-width="2"/>'
+figs['corneal-transplant']=('Two kinds of corneal transplant: full thickness, with stitches, and partial thickness, replacing only the inner pump layer',800,380,b)
+
+# 23. a corneal ulcer
+cx,cy=300,215
+b=front_eye(cx,cy,170,90,84,70)
+v='fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round"'
+for sgn in (-1,1):
+    for (dy,c1,c2) in [(-6,-12,-4),(16,24,18),(-24,-32,-24),(34,40,34)]:
+        b+=f'<path d="M{cx+sgn*160},{cy+dy} C{cx+sgn*132},{cy+c1} {cx+sgn*110},{cy+c2} {cx+sgn*78},{cy+dy*0.6:.0f}" {v}/>'
+b+=f'<ellipse cx="{cx+22}" cy="{cy+14}" rx="20" ry="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/><ellipse cx="{cx+22}" cy="{cy+14}" rx="34" ry="28" fill="#e2e8f0" opacity="0.45"/>'
+b+=label(560,150,'White spot','start',22,'700')+label(560,176,'on the cornea','start',19,'400')+leader(556,156,cx+36,cy+8)
+b+=label(20,90,'Red, painful eye,','start',22,'600','#b91c1c')+label(20,116,'sensitive to light','start',19,'400')+leader(150,124,cx-128,cy-10)
+b+=label(20,380,'Same-day care, especially with contact lenses','start',20,'600')
+figs['corneal-ulcer']=('A corneal ulcer: a white spot on the cornea in a red, painful, light-sensitive eye, which needs same-day care',760,400,b)
+
 for name,(title,w,h,body) in figs.items():
     open(os.path.join(OUT,name+'.svg'),'w').write(svg(w,h,body,title))
     print(name, os.path.getsize(os.path.join(OUT,name+'.svg')),'bytes')
