@@ -40,9 +40,9 @@ It is done in an operating room as an outpatient, usually under a numbing inject
 
 ## Gas, oil and positioning
 
-- **A gas or air bubble** presses the retina or a macular hole in place while it heals. It is absorbed over one to eight weeks depending on the gas. You may need to keep your head in a set position, sometimes face down, for several days. It matters for the result.
-- **No flying, and no travel to high altitude, until the gas is gone.** The bubble expands with altitude and can raise eye pressure dangerously. Tell any anesthetist you have gas in your eye; some anesthetic gases do the same.
-- **Silicone oil** is used for complex detachments. It is not absorbed, so it is removed in a second operation a few months later. Flying is safe with oil.
+- **A gas or air bubble** presses the retina or a macular hole in place while it heals. It is absorbed gradually, over a period that depends on the gas used. You may need to keep your head in a set position, sometimes face down, for several days. It matters for the result.
+- **Flying and high altitude.** With a gas bubble there is often a period when you should not fly or travel to high altitude, because the bubble expands as air pressure falls. Your surgeon will tell you how long. Tell any anesthetist you have gas in your eye.
+- **Silicone oil** is used for complex detachments. It is not absorbed, so it is usually removed in a second operation a few months later.
 - Vision through a bubble is very poor, like looking through water. As the gas is absorbed you see a line that moves down, then a small bubble, then it is gone.
 
 ## Recovery

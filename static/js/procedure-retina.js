@@ -78,7 +78,7 @@
           var on = p > 0.15 && p < 1; op('pv-flash', on ? (0.5 + 0.5 * Math.sin(t / 70)) : 0); op('pv-lab-flash', on ? 1 : 0);
         } }
     ];
-    if (tear) steps.push({ label: 'A tear', dur: 2600, caption: '<strong>A tear.</strong> In a small number of people the gel is stuck firmly to the retina and tears it as it pulls away. Signs are a sudden shower of new floaters, repeated flashes, or a shadow at the edge of vision. A tear needs to be sealed with laser within a day or so, before fluid gets under the retina. <strong>Call the same day.</strong>',
+    if (tear) steps.push({ label: 'A tear', dur: 2600, caption: '<strong>A tear.</strong> In some people, about one in seven of those seen for new symptoms, the gel is stuck firmly to the retina and tears it as it pulls away. Signs are a sudden shower of new floaters, repeated flashes, or a shadow at the edge of vision. A tear needs to be sealed with laser within a day or so, before fluid gets under the retina. <strong>Call the same day.</strong>',
       draw: function (p) { var e = ease(p); op('pv-flap', e); op('pv-blood', 0.9 * e); op('pv-lab-tear', e); at('gl-retina', 'd', retinaPath(null, p > 0 ? [TEAR_A - 7, TEAR_A + 3] : null)); if (p > 0) { op('pv-flash', 0); op('pv-lab-flash', 0); } } });
     else steps.push({ label: 'Settles', dur: 2400, caption: '<strong>It settles.</strong> In most people the gel comes away cleanly. The flashes stop within a few weeks, and the floaters sink out of the line of sight and fade as the brain learns to ignore them. Nothing needs to be done, but the retina should be checked once to make sure there is no tear.',
       draw: function (p) { var e = ease(p); if (p > 0) { op('pv-float', 0.8 - 0.5 * e); op('pv-flash', 0); op('pv-lab-flash', 0); at('pv-float', 'transform', 'translate(' + (-26 - 10 * e).toFixed(1) + ',' + (60 * e).toFixed(1) + ')'); } } });
@@ -127,7 +127,7 @@
         draw: function (p) { var e = ease(p); if (p > 0) rdShape(30 * e, 16, true); op('rd-fluid', 0.8 * e); op('rd-arrows', p > 0 && p < 1 ? 1 : 0); op('rd-lab-fluid', e); } },
       { label: 'Spreads', dur: 2800, caption: '<strong>It spreads.</strong> The detached area grows, and you see it as a dark curtain or shadow moving in from one side. A retina that is off the wall is cut off from its blood supply and stops working. If the detachment reaches the macula, the center of vision is lost. This is an emergency: the sooner it is repaired, the more vision is saved.',
         draw: function (p) { var e = ease(p); if (p > 0) rdShape(30 + 40 * e, 16 + 30 * e, true); } },
-      { label: 'Repair', dur: 3000, caption: '<strong>Repair.</strong> A retina surgeon puts the retina back in place, most often by removing the gel and filling the eye with a gas bubble that presses the retina against the wall, or by placing a band around the eye. Laser or freezing then seals the tear. The gas is absorbed over weeks; you may need to keep your head in a set position at first, and you cannot fly until it is gone.',
+      { label: 'Repair', dur: 3000, caption: '<strong>Repair.</strong> A retina surgeon puts the retina back in place, most often by removing the gel and filling the eye with a gas bubble that presses the retina against the wall, or by placing a band around the eye. Laser or freezing then seals the tear. The gas is absorbed over weeks; you may need to keep your head in a set position at first, and there is often a period when you should not fly.',
         draw: function (p) { var e = ease(p); if (p > 0) { rdShape(70 * (1 - e), 46, true); op('rd-fluid', 0.8 * (1 - e)); op('rd-lab-fluid', 1 - e); } at('rd-bubble', 'r', 92 * e); op('rd-laser', ease(clamp(p * 2 - 1, 0, 1))); op('rd-lab-fix', e); } }
     ];
     return {
@@ -350,7 +350,7 @@
         } },
       { label: 'Repair', dur: 2600, caption: '<strong>Treating the retina.</strong> With the view clear, the surgeon treats the cause: laser to the retina to shrink abnormal vessels, peeling scar tissue off its surface, or flattening a detached retina and sealing its tears.',
         draw: function (p) { var e = ease(p), g = document.querySelectorAll('#pp-laser circle'), i; op('pp-laser', p > 0 ? 1 : 0); for (i = 0; i < g.length; i++) g[i].style.opacity = p * g.length > i ? 1 : 0; op('pp-lab-3', lin(p)); if (p > 0) { op('pp-lab-2', lout(p)); ppLine(0, 1, 14 + p * 6); } } },
-      { label: 'Fill', dur: 2800, caption: '<strong>Filling the eye.</strong> Depending on the repair, the eye is left filled with clear fluid, air, a gas bubble that presses the retina in place, or silicone oil. The instruments come out and the ports seal by themselves, usually without stitches. The eye makes its own fluid again, and gas or air is absorbed over days to weeks.',
+      { label: 'Fill', dur: 2800, caption: '<strong>Filling the eye.</strong> Depending on the repair, the eye is left filled with clear fluid, air, a gas bubble that presses the retina in place, or silicone oil. The instruments come out and the ports seal by themselves, usually without stitches. The eye makes its own fluid again, and gas or air is absorbed over time.',
         draw: function (p) { var e = ease(p), out = ease(clamp(p * 3, 0, 1)); ppGas(0.6 * ease(clamp(p * 1.4 - 0.2, 0, 1))); op('pp-lab-4', lin(p)); if (p > 0) { op('pp-inst', 1 - out); op('pp-lab-3', lout(p)); op('pp-ports', 1 - 0.6 * e); } } }
     ]
   };

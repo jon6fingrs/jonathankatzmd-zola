@@ -36,7 +36,7 @@ At some point, usually between 50 and 70, the shrinking gel peels away from the 
 - Flashes at the outer edge of vision, especially in the dark or when the eyes move
 - These settle over weeks to a few months as the gel comes fully free
 
-In most people the gel separates cleanly and nothing more happens. In a small number, perhaps one in ten with new symptoms, it tears the retina as it goes. A tear lets fluid get under the retina and can lead to a [retinal detachment](@/learn/retinal-detachment.md). A tear found early is sealed with a few minutes of laser in the office.
+In most people the gel separates cleanly and nothing more happens. In some, about one in seven people who are seen for new flashes or floaters, it tears the retina as it goes. A tear lets fluid get under the retina and can lead to a [retinal detachment](@/learn/retinal-detachment.md). A tear found early is sealed with a few minutes of laser in the office.
 
 That is why **new flashes or floaters should be examined promptly**, with the pupils dilated, even though the cause usually turns out to be harmless. You cannot tell the harmless kind from a tear by how it looks to you.
 

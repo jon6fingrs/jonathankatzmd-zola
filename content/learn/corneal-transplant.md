@@ -12,7 +12,7 @@ group = "Surgery"
 
 A **corneal transplant** replaces diseased cornea with healthy tissue from a donor. It is the most common and most successful transplant in medicine: the cornea has no blood vessels of its own, so the body is less likely to reject it than other transplanted tissue. No matching of blood or tissue type is needed, and anti-rejection pills are not usually required, only drops.
 
-Today, where possible, only the diseased layer is replaced.
+Today, where possible, only the diseased layer is replaced. Transplants are done by a cornea specialist; your eye doctor will refer you if one is needed.
 
 {{<figure src="images/learn/corneal-transplant.svg" alt="Two slices through the cornea. On the left, a full-thickness button of donor cornea replaces all the layers and is held by stitches. On the right, only the thin inner pump layer is replaced, with no stitches." caption="Left: a full-thickness transplant replaces every layer. Right: a partial-thickness transplant replaces only the worn-out pump layer. Simplified, not to scale." />}}
 

@@ -42,6 +42,8 @@ A scan of the cornea's shape and thickness (**corneal topography** or **tomograp
 
 ## Stopping it: cross-linking
 
+Cross-linking, specialty lens fitting and keratoconus surgery are done by cornea and contact lens specialists. Your eye doctor will refer you.
+
 **Corneal cross-linking** is the one treatment that addresses the cause. Vitamin B2 (riboflavin) drops are soaked into the cornea, which is then exposed to ultraviolet light for several minutes. This creates new bonds between the cornea's fibers and stiffens it.
 
 - It **halts progression** in the great majority of eyes.

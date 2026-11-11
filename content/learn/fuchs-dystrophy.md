@@ -41,7 +41,6 @@ In Fuchs dystrophy they are lost faster, and small bumps called **guttae** form 
 ## What helps
 
 - **Salt drops and ointment** (sodium chloride 5%, sold as Muro 128) draw water out of the cornea. Drops are used during the day and ointment at bedtime. They help early swelling and morning fog. Both are pictured in the [Eye Medication Reference](@/patients/eye-drops.md).
-- **A hair dryer** held at arm's length and aimed across the face for a few minutes on waking speeds up evaporation and clears the morning fog sooner.
 - **Lower eye pressure** means less fluid is pushed into the cornea, so pressure is kept under control.
 - **A soft bandage contact lens** eases the pain of surface blisters.
 
@@ -58,7 +57,7 @@ If you have Fuchs and are told you need cataract surgery, ask how your cornea af
 
 ## Surgery for Fuchs
 
-When vision is affected through the day, the worn-out pump layer is replaced. Only that layer is transplanted, through a small incision, with no stitches in the cornea. The two versions are known as **DMEK** and **DSAEK**. Recovery is faster and rejection less common than with a full-thickness transplant. See [Corneal Transplants](@/learn/corneal-transplant.md).
+When vision is affected through the day, the worn-out pump layer is replaced by a cornea specialist. Only that layer is transplanted, through a small incision, with no stitches in the cornea. The two versions are known as **DMEK** and **DSAEK**. Recovery is faster and rejection less common than with a full-thickness transplant. See [Corneal Transplants](@/learn/corneal-transplant.md).
 
 ## If you have glaucoma
 

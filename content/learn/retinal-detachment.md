@@ -59,7 +59,7 @@ A detachment is repaired by a retina surgeon, usually within days, and sooner if
 ## After surgery
 
 - **Head positioning.** With a gas bubble you may need to keep your head in a particular position, sometimes face down, for several days so the bubble presses on the right spot. This matters for the result.
-- **No flying, and no travel to high altitude, until the gas is gone.** The bubble expands at altitude and can raise eye pressure dangerously. Your surgeon will tell you when it is safe; it takes two to eight weeks depending on the gas. Tell any anesthetist that you have gas in your eye.
+- **Flying and high altitude.** If a gas bubble is used, there is often a period afterward when you should not fly or travel to high altitude, because the bubble expands as air pressure falls. Your surgeon will tell you how long. Tell any anesthetist that you have gas in your eye.
 - Vision through a gas bubble is very poor. It returns from the top down as the bubble shrinks.
 - Drops are used for several weeks.
 
