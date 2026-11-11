@@ -220,6 +220,11 @@ body { color: var(--jk-ink); font-family: var(--jk-body); }
   /* The label wraps at the width of the name (width 0 + min-width 100%
      keeps it from widening the brand), so the name sets the width. */
   .jk-brand__page { white-space: normal; width: 0; min-width: 100%; line-height: 1.25; }
+}
+/* Small phones (iPhone SE, 375px): a little smaller name so the menu button
+   still fits beside it. */
+@media (max-width: 380px) {
+  .jk-brand__title { font-size: 2.05rem; }
   .jk-navbar .navbar-collapse { margin-top: .75rem; flex-basis: 100%; }
   .jk-navbar .nav-link { padding: .75rem 0 !important; }
   .jk-navbar .dropdown-menu { border: 0; background: transparent; padding: 0 0 .5rem 2.1rem; }
