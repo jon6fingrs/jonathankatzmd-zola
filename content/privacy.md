@@ -2,6 +2,8 @@
 title = "Privacy"
 description = "How jonathankatzmd.com handles information: no accounts, no cookies, no tracking across sites, and schedule tools that run entirely in your browser."
 template = "page.html"
+date = 2026-10-02
+updated = 2026-11-11
 weight = 9
 
 [extra]
@@ -18,7 +20,9 @@ The tools do not ask for your name, date of birth or any other identifying infor
 
 ## Contact form
 
-The contact form sends your name, email address, optional phone number and message to the practice by email so we can reply. It is intended for comments about the website and other non-medical topics. **Please do not send medical questions, symptoms or anything you would consider private health information through the form**; call the office instead. Form submissions are processed through a small self-hosted mail service and are not shared with third parties.
+The contact form sends your name, email address, optional phone number and message to the practice by email so we can reply. It is intended for comments about the website and other non-medical topics. **Please do not send medical questions, symptoms or anything you would consider private health information through the form**; call the office instead.
+
+When you press Submit, the message is passed to a small program that runs on Cloudflare, the company that hosts this site, and is sent from there as an email through Fastmail, the practice's email provider. The website itself does not keep a copy. The message is not shared with anyone else or used for marketing. See the [Cloudflare](https://www.cloudflare.com/privacypolicy/) and [Fastmail](https://www.fastmail.com/policies/privacy/) privacy policies.
 
 ## Analytics
 
@@ -27,6 +31,10 @@ The site uses a self-hosted copy of [Plausible Analytics](https://plausible.io/p
 ## Cookies and storage
 
 The site sets no cookies. It does not use your browser's local storage to keep information between visits.
+
+## Hosting
+
+The site is hosted by Cloudflare. As with any website, delivering a page means Cloudflare receives the technical details of each request, such as your IP address, browser type and the page asked for, and it may use them briefly to keep the site running and to block attacks. This site does not use that information to identify visitors. See the [Cloudflare privacy policy](https://www.cloudflare.com/privacypolicy/).
 
 ## Third parties
 

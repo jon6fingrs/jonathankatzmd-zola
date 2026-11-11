@@ -1,6 +1,6 @@
 +++
 title = "Learn"
-description = "Plain-language explanations of glaucoma, cataract, dry eye, and conditions of the cornea and retina: the conditions, the tests, and what to expect from drops, laser and surgery, with animations and simulators."
+description = "Plain-language guides to glaucoma, cataract, dry eye, the cornea and the retina: the conditions, the tests, and what to expect from treatment."
 template = "learn.html"
 sort_by = "weight"
 weight = 3

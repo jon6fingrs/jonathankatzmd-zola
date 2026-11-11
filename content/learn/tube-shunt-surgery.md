@@ -1,7 +1,9 @@
 +++
 title = "Tube Shunt Surgery"
-description = "Glaucoma drainage devices (Ahmed, Baerveldt): a small tube and plate that drain fluid from the eye. With a step-by-step animation, who they are for, the operation, and the six-week recovery."
+description = "Tube shunts (Ahmed, Baerveldt): a small tube and plate that drain fluid from the eye. Who they are for, the operation, and the six-week recovery."
 template = "page.html"
+date = 2026-10-02
+updated = 2026-11-10
 weight = 90
 
 [extra]
@@ -54,7 +56,7 @@ Surgery is at an outpatient center under a local anesthetic block with sedation,
 
 Most eyes reach target pressure, with or without drops, and the implant lasts for life. Pressure may drift up over the years as the capsule around the plate thickens; this is usually managed with drops.
 
-Risks include pressure that is too low or too high in the early weeks, bleeding or inflammation inside the eye, double vision, the tube touching the cornea or being too long or short (correctable), and the covering over the tube wearing thin over years, which can be repaired. Gradual clouding of the cornea is a recognised long-term concern that your surgeon monitors. Infection is rare. As with any glaucoma surgery, lost vision from glaucoma is not restored; the aim is to protect what remains.
+Risks include pressure that is too low or too high in the early weeks, bleeding or inflammation inside the eye, double vision, the tube touching the cornea or being too long or short (correctable), and the covering over the tube wearing thin over years, which can be repaired. Gradual clouding of the cornea is a recognized long-term concern that your surgeon monitors. Infection is rare. As with any glaucoma surgery, lost vision from glaucoma is not restored; the aim is to protect what remains.
 
 ## Questions worth asking
 

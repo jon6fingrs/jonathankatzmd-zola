@@ -1,7 +1,9 @@
 +++
 title = "How Treatments Lower Eye Pressure"
-description = "The eye as a sink: a faucet that makes fluid, drains that carry it away, and a water level that is the eye pressure. Tap each glaucoma treatment (drops, SLT, MIGS, trabeculectomy, tube shunt, cyclophotocoagulation) to see what it changes."
+description = "The eye as a sink: a faucet that makes fluid, drains that carry it away, and a water level that is the pressure. See what each glaucoma treatment changes."
 template = "page.html"
+date = 2026-11-10
+updated = 2026-11-10
 weight = 15
 
 [extra]

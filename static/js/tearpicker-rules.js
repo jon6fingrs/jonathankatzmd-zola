@@ -37,9 +37,9 @@
     if (a.lasting && !a.contacts) picks.push({ kind: 'gel', when: 'When you need it to last', why: 'Regular tears wear off quickly for you. A gel drop stays on the eye longer; use it when a minute of blur does not matter.' });
     if (a.night) picks.push({ kind: 'ointment', when: 'At bedtime', why: 'Your eyes are worst on waking, which usually means they dry out overnight.' });
 
-    if (a.contacts) notes.push('With contact lenses, use drops labelled for use with contacts, or put drops in before the lenses go in and after they come out. Do not use gels or ointment with lenses in.');
+    if (a.contacts) notes.push('With contact lenses, use drops labeled for use with contacts, or put drops in before the lenses go in and after they come out. Do not use gels or ointment with lenses in.');
     if (a.lasting && a.contacts) notes.push('Gel drops last longer but are not for use with lenses in. Use them after the lenses are out.');
-    if (a.oil) notes.push('For blocked oil glands, look for tears that contain oil (often labelled "lipid", "for evaporative dry eye" or "for MGD"), and keep up warm compresses and lid cleaning.');
+    if (a.oil) notes.push('For blocked oil glands, look for tears that contain oil (often labeled "lipid", "for evaporative dry eye" or "for MGD"), and keep up warm compresses and lid cleaning.');
     if (a.often === 'high') notes.push('Needing tears many times a day is a reason to be seen. Prescription drops or punctal plugs may help more.');
     notes.push('Use tears on a schedule, not only when the eyes hurt, and leave five minutes between different drops.');
     notes.push('Avoid drops that promise to "get the red out".');

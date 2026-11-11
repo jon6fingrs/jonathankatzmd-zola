@@ -1,7 +1,9 @@
 +++
 title = "Injections into the Eye"
-description = "What to expect from an intravitreal injection for wet macular degeneration, diabetic macular edema or a retinal vein blockage: why it is needed, the visit step by step, aftercare, risks and how often. With an animation."
+description = "What to expect from an injection into the eye for wet macular degeneration, diabetic swelling or a vein blockage: the visit, aftercare, risks, how often."
 template = "page.html"
+date = 2026-11-11
+updated = 2026-11-11
 weight = 440
 
 [extra]
@@ -47,7 +49,14 @@ The whole appointment takes longer than the injection: allow an hour or two. Bri
 - Do not rub the eye. Avoid swimming and eye makeup for a couple of days.
 - You can otherwise carry on as normal.
 
-**Call the same day** if, in the days after an injection, you have **increasing pain, worsening redness, a drop in vision, or marked light sensitivity**. These can be signs of an infection inside the eye, which is rare but must be treated at once. See [When to Call the Same Day](@/learn/when-to-call.md).
+## Call the same day if
+
+- Pain that is increasing in the days after an injection
+- Worsening redness
+- A drop in vision
+- Marked light sensitivity
+
+These can be signs of an infection inside the eye, which is rare but must be treated at once. See [When to Call the Same Day](@/learn/when-to-call.md) for other urgent symptoms.
 
 ## Risks
 

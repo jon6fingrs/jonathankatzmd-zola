@@ -76,7 +76,7 @@ icon = "images/nav/eye.svg"
   name = "EYE DROP SCHEDULE BUILDER"
   url = "/patients/eye-drop-form/"
   [[extra.menus.children]]
-  name = "POST-OP SCHEDULE"
+  name = "POST-OP EYE DROP SCHEDULE"
   url = "/patients/post-op-schedule/"
 
 # `mega = true` makes the Learn menu one panel that lists every article under
@@ -99,6 +99,11 @@ mega = true
 name = "CONTACT"
 url = "/contact/"
 icon = "images/nav/human-greeting-proximity.svg"
+
+[[extra.menus]]
+name = "SEARCH"
+url = "/search/"
+icon = "images/nav/search.svg"
 
 # Katzen Eye Group office locations
 [[extra.offices]]
@@ -136,7 +141,7 @@ hours = [
 # Surgery centers
 [[extra.surgery_centers]]
 name = "Dulaney Eye Institute"
-map_embed = "https://www.openstreetmap.org/export/embed.html?bbox=-76.62268638610841%2C39.41217537071112%2C-76.60410404205324%2C39.42251938075945&layer=mapnik&marker=39.41734756759902%2C-76.61339521408081"
+map_embed = "https://www.openstreetmap.org/export/embed.html?bbox=-76.61002%2C39.40159%2C-76.59144%2C39.41193&layer=mapnik&marker=39.40676%2C-76.60073"
 address = "901 Dulaney Valley Road, Suite 200, Towson, MD 21204"
 street = "901 Dulaney Valley Road, Suite 200"
 city = "Towson"

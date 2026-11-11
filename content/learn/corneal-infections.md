@@ -1,7 +1,9 @@
 +++
 title = "Corneal Infections"
-description = "Infections of the cornea (keratitis and corneal ulcers): the warning signs, why contact lens wearers are at risk, herpes and shingles in the eye, how infections are treated, and how to prevent them."
+description = "Corneal infections and ulcers: the warning signs, contact lens risks, herpes and shingles in the eye, how they are treated, and how to prevent them."
 template = "page.html"
+date = 2026-11-11
+updated = 2026-11-11
 weight = 540
 
 [extra]
@@ -21,7 +23,7 @@ An infection of the cornea is called **keratitis**, and when it erodes into the 
 - **Sensitivity to light**
 - **Blurred vision**
 - Discharge or heavy watering
-- A **white or grey spot** on the clear part of the eye
+- A **white or gray spot** on the clear part of the eye
 
 **Call the same day.** If you wear contact lenses, take them out, do not put them back in, and bring the lenses and the case with you. See [When to Call the Same Day](@/learn/when-to-call.md).
 

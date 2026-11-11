@@ -1,7 +1,9 @@
 +++
 title = "Treating Dry Eye"
-description = "What helps dry eye, step by step: changes at home, artificial tears and how to choose them, eyelid care, prescription drops such as cyclosporine and lifitegrast, punctal plugs and more. With an animation of how a punctal plug works."
+description = "What helps dry eye, step by step: habits at home, artificial tears, eyelid care, prescription drops like cyclosporine and lifitegrast, and punctal plugs."
 template = "page.html"
+date = 2026-11-10
+updated = 2026-11-10
 weight = 320
 
 [extra]

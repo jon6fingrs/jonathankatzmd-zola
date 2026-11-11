@@ -3,7 +3,7 @@
  * show an example of what a change looks like. "Print the grid" opens
  * static/print/amsler-grid.html, a page holding only the grid at 10 cm and
  * the instructions, because hiding the rest of a page for printing is not
- * honoured by every browser (Safari on iPhone printed the whole page).
+ * honored by every browser (Safari on iPhone printed the whole page).
  */
 (function () {
   'use strict';

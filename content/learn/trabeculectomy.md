@@ -1,7 +1,9 @@
 +++
 title = "Trabeculectomy"
-description = "Trabeculectomy creates a new drainage channel under the eyelid to lower eye pressure in advanced glaucoma. With a step-by-step animation, what the operation involves, the twelve-week recovery, and warning signs."
+description = "Trabeculectomy makes a new drain under the eyelid to lower eye pressure in advanced glaucoma. The operation, the twelve-week recovery, and warning signs."
 template = "page.html"
+date = 2026-10-02
+updated = 2026-11-11
 weight = 80
 
 [extra]
@@ -45,7 +47,7 @@ Recovery from trabeculectomy is longer and more involved than from cataract surg
 
 **Vision and glasses.** Vision usually returns to about its previous level over one to three months. The operation can change your glasses prescription, so a new prescription is checked once things are stable, typically around three months.
 
-## Warning signs: call the same day
+## Call the same day if
 
 - Pain that is getting worse rather than better
 - Increasing redness

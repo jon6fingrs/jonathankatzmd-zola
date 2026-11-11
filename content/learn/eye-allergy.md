@@ -1,7 +1,9 @@
 +++
 title = "Eye Allergy"
-description = "Itchy, red, watery eyes from pollen, dust or pets: what an eye allergy is, how to tell it from dry eye and pink eye, what helps, and why allergy drops work best used every day. With an animation of the reaction."
+description = "Itchy, red, watery eyes from pollen, dust or pets: how to tell allergy from dry eye and pink eye, what helps, and why allergy drops work best daily."
 template = "page.html"
+date = 2026-11-10
+updated = 2026-11-10
 weight = 350
 
 [extra]
@@ -32,7 +34,7 @@ Press **Play** to see what happens in the lining of the eye, and what allergy dr
 ## Triggers
 
 - **Seasonal:** tree pollen in spring, grass in summer, ragweed in the fall
-- **Year round:** dust mites, pet dander, mould
+- **Year round:** dust mites, pet dander, mold
 - **Contact:** eye makeup, face creams, and sometimes eye drops themselves or their preservatives. This kind tends to make the lid skin red and scaly.
 - **Contact lenses** can set off an allergy-like reaction under the upper lid, with itching and mucus that make the lenses uncomfortable.
 

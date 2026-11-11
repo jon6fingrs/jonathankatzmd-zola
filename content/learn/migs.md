@@ -1,7 +1,9 @@
 +++
 title = "MIGS"
-description = "Minimally invasive glaucoma surgery: small implants and procedures, often combined with cataract surgery, that lower pressure with a quicker recovery than traditional surgery. With step-by-step animations of a stent, a goniotomy, viscodilation, and viscodilation combined with a stent."
+description = "Minimally invasive glaucoma surgery: stents, goniotomy and viscodilation, often done with cataract surgery, with a quicker recovery than older operations."
 template = "page.html"
+date = 2026-10-02
+updated = 2026-11-11
 weight = 70
 
 [extra]
@@ -47,6 +49,15 @@ Which procedure fits you depends on the type and severity of glaucoma, the anato
 **After.** Vision is blurry for a day or two and improves over the first week. You will use an antibiotic drop for about a week and a steroid drop tapered over about a month; the [Post-Op Eye Drop Schedule](@/patients/post-op-schedule.md) tool lays this out day by day. Your usual glaucoma drops may be continued, reduced or stopped depending on your pressure at follow-up, which is checked at about one day, one week and one month. Avoid rubbing the eye, swimming and heavy lifting for the first couple of weeks.
 
 A small amount of blood inside the eye (hyphema) is common with angle procedures and clears within days. It can make the first few days blurrier than after cataract surgery alone.
+
+## Call the same day if
+
+- Pain that is getting worse rather than better
+- Vision that gets worse after it had started to improve
+- Increasing redness, or discharge from the eye
+- New flashes, a shower of floaters, or a curtain over part of your vision
+
+See [When to Call the Same Day](@/learn/when-to-call.md) for other urgent symptoms.
 
 ## Results
 

@@ -1,7 +1,9 @@
 +++
 title = "Fuchs Dystrophy"
-description = "Fuchs dystrophy: why the cornea swells and vision is foggy in the morning, how it is followed, what salt drops do, how it affects cataract surgery, and the partial-thickness transplant that treats it. With an animation."
+description = "Fuchs dystrophy: why the cornea swells and vision is foggy on waking, what salt drops do, its effect on cataract surgery, and the transplant that treats it."
 template = "page.html"
+date = 2026-11-11
+updated = 2026-11-11
 weight = 520
 
 [extra]

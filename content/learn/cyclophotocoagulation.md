@@ -1,7 +1,9 @@
 +++
 title = "Micropulse and CPC Laser"
-description = "Cyclophotocoagulation: a laser applied to the outside of the eye that lowers pressure by reducing how much fluid the eye makes. Micropulse and standard CPC compared, with a step-by-step animation, what the day is like, and what to expect afterward."
+description = "Micropulse and standard CPC: a laser applied through the white of the eye that lowers pressure by reducing how much fluid the eye makes."
 template = "page.html"
+date = 2026-11-10
+updated = 2026-11-11
 weight = 95
 
 [extra]
@@ -26,7 +28,7 @@ The ciliary body is a ring of tissue hidden behind the iris, just under the whit
 ## Micropulse and standard CPC
 
 - **Micropulse.** The laser switches on and off many times a second, so the tissue rests between bursts and heats up less. The probe is swept slowly back and forth along the upper half of the eye and then the lower half. It causes less inflammation and can be used earlier in glaucoma, including in eyes with good vision. It is done with numbing drops and sedation. Its effect is usually milder, and it is more likely to need repeating.
-- **Standard CPC.** The laser is delivered as a steady pulse at each of a row of spots around the eye. It is a heavier treatment: it lowers pressure more, with more inflammation afterward and somewhat higher risks. It is used mostly in eyes with poor vision, when other treatments have not controlled the pressure. It is done with a numbing injection beside the eye.
+- **Standard CPC.** The laser is delivered as a steady pulse at each of a row of spots around the eye. It is a heavier treatment: it lowers pressure more, with more inflammation afterward and somewhat higher risks. It is used mostly in eyes with poor vision, when other treatments have not controlled the pressure. It is done with a numbing injection behind the eye.
 
 Both skip the two sides of the eye (the 3 and 9 o'clock positions), where nerves and blood vessels run.
 
@@ -54,13 +56,19 @@ You will need a driver. Usually one eye is treated at a time.
 - You will use an **anti-inflammatory (steroid) drop** for at least a month, stepping down a little each week:
   - **After micropulse:** four times a day for a week, then three, then two, then once a day, about four weeks in all.
   - **After standard CPC:** eight times a day for a week, then six, four, three, two and one, about six weeks in all.
-- The [Post-Op Schedule](@/patients/post-op-schedule.md) page makes a printable day-by-day chart of these drops.
+- The [Post-Op Eye Drop Schedule](@/patients/post-op-schedule.md) tool makes a printable day-by-day chart of these drops.
 - Your doctor may change this schedule for your eye. Sometimes a drop that keeps the pupil dilated is added to keep the eye comfortable.
 - **Keep using your glaucoma drops** unless you are told to stop. The laser takes about a month to reach its full effect, and drops are adjusted after that.
 - There are usually no activity restrictions after the first day.
 - If the pressure is not low enough, the laser can be repeated.
 
-**Call the same day** if you have severe pain, a marked drop in vision, or increasing redness.
+## Call the same day if
+
+- Severe pain, or pain that is getting worse
+- A marked drop in vision
+- Increasing redness
+
+See [When to Call the Same Day](@/learn/when-to-call.md) for other urgent symptoms.
 
 ## Risks
 

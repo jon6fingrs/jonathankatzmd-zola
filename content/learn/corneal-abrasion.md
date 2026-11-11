@@ -1,7 +1,9 @@
 +++
 title = "Corneal Scratches"
-description = "A scratched cornea (corneal abrasion): why it hurts so much, how it heals, what treatment involves, and the erosions that can come back months later. With an animation."
+description = "A scratched cornea: why it hurts so much, how it heals, what treatment involves, and the erosions that can come back months later."
 template = "page.html"
+date = 2026-11-11
+updated = 2026-11-11
 weight = 500
 
 [extra]
@@ -21,7 +23,7 @@ Press **Play** to see what happens.
 
 ## The layers of the cornea
 
-{{<figure src="images/learn/cornea-layers.svg" alt="A slice through the cornea showing its layers from front to back: the tear film, a thin layer of surface cells, a thick clear middle layer, and a single layer of pump cells, each labelled with the conditions that affect it." caption="The cornea in layers. A scratch involves only the surface cells, which is why it heals so quickly. Simplified, not to scale." />}}
+{{<figure src="images/learn/cornea-layers.svg" alt="A slice through the cornea showing its layers from front to back: the tear film, a thin layer of surface cells, a thick clear middle layer, and a single layer of pump cells, each labeled with the conditions that affect it." caption="The cornea in layers. A scratch involves only the surface cells, which is why it heals so quickly. Simplified, not to scale." />}}
 
 ## Common causes
 

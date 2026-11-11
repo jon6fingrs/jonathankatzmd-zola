@@ -9,6 +9,10 @@
       <nav class="jk-crumbs" aria-label="Breadcrumb"><a href="{{ get_url(path='/learn/', trailing_slash=true) }}">Learn</a><span aria-hidden="true">&rsaquo;</span><a href="{{ crumb_hub.permalink }}">{{ crumb_hub.title }}</a></nav>
       {% endif %}
       {% if page.extra.article %}<h1 class="jk-title">{{ page.title }}</h1>{% endif %}
+      {#- Dates: `date` is when the page was first published and `updated` when
+          it was last reviewed (bump it whenever you re-read a page, even if
+          nothing changed). -#}
+      {% if page.extra.article and page.date %}<p class="jk-dates">Published <time datetime="{{ page.date }}">{{ page.date | date(format="%B %-d, %Y") }}</time>{% if page.updated %} &middot; Last reviewed <time datetime="{{ page.updated }}">{{ page.updated | date(format="%B %-d, %Y") }}</time>{% endif %}</p>{% endif %}
       {{ page.content | safe }}
       {#- Learn articles end with the other pages in the same topic and group,
           and a link to the topic page. Pages with no topic get nothing. -#}
@@ -31,6 +35,41 @@
   </div>
 </section>
 {% endblock content %}
+
+{#- Structured data for Learn articles: a medical page reviewed by Dr. Katz,
+    with its dates and breadcrumb. The Physician it points to is described on
+    the home page (templates/index.html). -#}
+{% block head_extra %}
+{%- if page.extra.article and page.date and "learn" in page.components %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": {{ page.title | json_encode | safe }},
+  "description": {{ page.description | default(value="") | json_encode | safe }},
+  "url": {{ page.permalink | json_encode | safe }},
+  "inLanguage": "en-US",
+  "image": "{{ get_url(path='images/share/' ~ page.slug ~ '.png') }}",
+  "datePublished": "{{ page.date }}",
+  "dateModified": "{{ page.updated | default(value=page.date) }}",
+  "lastReviewed": "{{ page.updated | default(value=page.date) }}",
+  "author": { "@id": "{{ config.base_url }}/#physician" },
+  "reviewedBy": { "@type": "Physician", "@id": "{{ config.base_url }}/#physician", "name": "Jonathan Katz, MD" },
+  "audience": { "@type": "PeopleAudience", "audienceType": "Patients" }
+  {%- if page.extra.topic %}{% set hub = get_section(path="learn/" ~ page.extra.topic ~ "/_index.md") %},
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Learn", "item": "{{ get_url(path='/learn/', trailing_slash=true) }}" },
+      { "@type": "ListItem", "position": 2, "name": {{ hub.title | json_encode | safe }}, "item": {{ hub.permalink | json_encode | safe }} },
+      { "@type": "ListItem", "position": 3, "name": {{ page.title | json_encode | safe }}, "item": {{ page.permalink | json_encode | safe }} }
+    ]
+  }
+  {%- endif %}
+}
+</script>
+{%- endif %}
+{% endblock head_extra %}
 
 {% block javascripts %}
 {{ super() }}

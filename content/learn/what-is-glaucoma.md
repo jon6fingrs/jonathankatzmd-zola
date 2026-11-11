@@ -2,6 +2,8 @@
 title = "What Is Glaucoma?"
 description = "Glaucoma is damage to the optic nerve, usually linked to eye pressure. Why it has no symptoms early, who is at risk, and how it is treated."
 template = "page.html"
+date = 2026-10-02
+updated = 2026-11-10
 weight = 10
 
 [extra]

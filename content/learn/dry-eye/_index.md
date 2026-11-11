@@ -1,6 +1,6 @@
 +++
 title = "Dry Eye"
-description = "Why eyes feel dry, gritty or watery, the eyelid problems behind most dry eye, and what helps, from lid care and artificial tears to prescription drops and plugs. Also watery eyes and eye allergy."
+description = "Why eyes feel dry, gritty or watery, the eyelid problems behind most dry eye, and what helps. Also watery eyes and eye allergy."
 template = "topic.html"
 
 [extra]

@@ -1,7 +1,9 @@
 +++
 title = "What Is Dry Eye?"
-description = "Dry eye is a problem with the tear film that coats the eye. Why it burns, blurs and even waters, the two main kinds, what brings it on, and how it is checked. With an animation of the tear film between blinks."
+description = "Dry eye is a problem with the tear film. Why it burns, blurs and even waters, the two main kinds, what brings it on, and how it is checked."
 template = "page.html"
+date = 2026-11-10
+updated = 2026-11-10
 weight = 300
 
 [extra]

@@ -2,6 +2,8 @@
 title = "Your Glasses Prescription"
 description = "Enter a glasses prescription and see how the world looks with and without the glasses at distance, arm's length and reading distance."
 template = "page.html"
+date = 2026-10-07
+updated = 2026-11-11
 weight = 25
 
 [extra]
@@ -32,15 +34,15 @@ Prescriptions may also list prism, which is for eyes that do not point together;
 
 The eye changes focus for things at different distances by changing the shape of its lens (accommodation).
 
-- **Distance** is anything beyond a few metres: driving, the TV, faces across a room. A nearsighted eye blurs here; most other eyes are at their best.
+- **Distance** is anything beyond about 10 feet: driving, the TV, faces across a room. A nearsighted eye blurs here; most other eyes are at their best.
 - **Intermediate** is arm's length, around two feet: a computer screen, the car dashboard, the stove top.
 - **Near** is reading distance, around 16 inches: a book, a phone, a pill bottle label.
 
-A nearsighted eye is naturally in focus somewhere up close. A −2.00 eye, for example, is clear at about 50 cm without glasses, which is why many nearsighted people take their glasses off to read.
+A nearsighted eye is naturally in focus somewhere up close. A −2.00 eye, for example, is clear at about 50 cm (20 inches) without glasses, which is why many nearsighted people take their glasses off to read.
 
 ## Presbyopia: why reading gets harder in your 40s {#presbyopia}
 
-The lens stiffens with age and gradually loses its ability to focus up close. A ten-year-old can focus to a few centimetres; by the mid-40s most people need to hold print at arm's length; by the 60s there is little focusing left at all. This is presbyopia. It happens to everyone, whatever their prescription, and is why the simulator asks for your age. It is corrected with the add: reading glasses, bifocals, progressives, or contact lenses or lens implants designed for near.
+The lens stiffens with age and gradually loses its ability to focus up close. A ten-year-old can focus to a few inches; by the mid-40s most people need to hold print at arm's length; by the 60s there is little focusing left at all. This is presbyopia. It happens to everyone, whatever their prescription, and is why the simulator asks for your age. It is corrected with the add: reading glasses, bifocals, progressives, or contact lenses or lens implants designed for near.
 
 ## How the simulator works {#how-it-works}
 

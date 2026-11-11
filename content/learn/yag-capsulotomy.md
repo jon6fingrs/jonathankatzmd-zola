@@ -1,7 +1,9 @@
 +++
 title = "YAG Capsulotomy"
-description = "YAG laser capsulotomy: a quick office laser that clears the cloudy capsule that can form behind a lens implant after cataract surgery. With an animation of what the laser does and how vision changes, what the visit is like, and what to expect afterward."
+description = "YAG capsulotomy: a quick office laser that clears the cloudy capsule behind a lens implant after cataract surgery. The visit, recovery and risks."
 template = "page.html"
+date = 2026-11-10
+updated = 2026-11-11
 weight = 110
 
 [extra]
@@ -63,7 +65,14 @@ If both eyes need it, they can often be treated at the same visit, because the l
 - Keep using any glaucoma drops as usual.
 - There are no activity restrictions.
 
-**Call the same day** if you have flashes of light, a sudden shower of new floaters, a curtain or shadow in your side vision, eye pain, or vision that gets worse instead of better.
+## Call the same day if
+
+- Flashes of light, or a sudden shower of new floaters
+- A curtain or shadow in your side vision
+- Eye pain
+- Vision that gets worse instead of better
+
+See [When to Call the Same Day](@/learn/when-to-call.md) for other urgent symptoms.
 
 ## Risks
 

@@ -53,7 +53,7 @@
   }
   function svgOpen(vb, title) {
     var p = vb.split(' ');
-    return '<svg class="jk-lpi__svg" viewBox="' + vb + '" role="img" aria-label="' + title + '"><title>' + title + '</title>' + defs()
+    return '<svg class="jk-lpi__svg" viewBox="' + vb + '" role="img" aria-label="' + title + '"><title>' + title + '</title>'
       + '<rect x="' + p[0] + '" y="' + p[1] + '" width="' + p[2] + '" height="' + p[3] + '" fill="#fff"/>';
   }
 
@@ -838,7 +838,7 @@
     views: [['The surface of the eye, cut through', allergySvg]],
     intro: '<strong>The surface of the eye.</strong> The clear lining of the eye sits just under the tears. It holds allergy cells (mast cells) packed with histamine, small blood vessels, and nerve endings.',
     steps: [
-      { label: 'Trigger', dur: 2200, caption: '<strong>The trigger.</strong> Pollen, dust, mould or pet dander lands in the tears and reaches the lining of the eye. In someone with allergies, the allergy cells are primed to react to it.',
+      { label: 'Trigger', dur: 2200, caption: '<strong>The trigger.</strong> Pollen, dust, mold or pet dander lands in the tears and reaches the lining of the eye. In someone with allergies, the allergy cells are primed to react to it.',
         draw: function (p) {
           var e = ease(p), g = document.querySelectorAll('#al-pollen > g'), i;
           for (i = 0; i < g.length; i++) g[i].setAttribute('transform', 'translate(' + (AL_POLLEN[i][0] + (300 - AL_POLLEN[i][0]) * 0.25 * e).toFixed(1) + ',' + lerp(-20 - i * 14, 182 + (i % 2) * 14, e).toFixed(1) + ')');
@@ -922,7 +922,10 @@
     proc = PROCS[key];
     starts = []; T_END = 0;
     proc.steps.forEach(function (s) { starts.push(T_END); T_END += s.dur; });
-    var two = proc.views.length > 1, h = '';
+    // The shared markers, patterns and gradients live once, in a zero-size
+    // SVG that is never display:none, so both views can use them whichever
+    // one is showing.
+    var two = proc.views.length > 1, h = '<svg class="jk-proc__defs" aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden">' + defs() + '</svg>';
     if (proc.variants) {
       h += '<div class="jk-chips jk-proc__variants" role="group" aria-label="Which kind">';
       proc.variants.forEach(function (v) { h += '<button type="button" class="jk-chip' + (v[0] === key ? ' is-active' : '') + '" data-variant="' + v[0] + '" aria-pressed="' + (v[0] === key) + '">' + v[1] + '</button>'; });

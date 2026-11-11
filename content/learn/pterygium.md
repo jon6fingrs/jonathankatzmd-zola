@@ -1,7 +1,9 @@
 +++
 title = "Pterygium and Pinguecula"
-description = "Growths on the white of the eye from sun and wind: what a pinguecula and a pterygium are, when they need treatment, and what pterygium surgery and recovery involve. With an animation."
+description = "Pinguecula and pterygium, growths on the white of the eye from sun and wind: when they need treatment, and what surgery and recovery involve."
 template = "page.html"
+date = 2026-11-11
+updated = 2026-11-11
 weight = 510
 
 [extra]
@@ -66,23 +68,26 @@ Pterygium surgery is an outpatient procedure that takes about 30 to 45 minutes, 
 3. The graft is fixed with tissue glue or very fine stitches that dissolve.
 4. A medicine that discourages regrowth (mitomycin C) is sometimes applied.
 
-The graft is the important part. With the old method of simply cutting the pterygium away, about half grew back, often worse than before. With a graft, the rate is roughly one in ten to twenty.
+The graft is the important part. When a pterygium is simply cut away and the area left bare, studies find it grows back in anywhere from a quarter to most eyes, often worse than before. With a graft of your own conjunctiva it grows back in roughly 1 in 10 eyes, and closer to 1 in 20 when the graft is held with tissue glue. Amniotic membrane also lowers the rate a great deal, though in studies a little less than your own tissue does.
 
 ## Recovery
 
 - The eye is **red and scratchy for a few weeks**. The redness fades over one to two months.
-- **Steroid and antibiotic drops** are used for about a month, tapering down. The [Post-Op Schedule](@/patients/post-op-schedule.md) page can make a printable chart.
+- **A steroid drop** is used for about a month, tapering down, and **an antibiotic drop** for the first week. The [Post-Op Eye Drop Schedule](@/patients/post-op-schedule.md) tool can make a printable chart.
 - A patch or shield is worn the first night.
 - Avoid rubbing, swimming, dusty work and heavy lifting for a couple of weeks.
 - **Wear sunglasses outdoors**, for good. Sun exposure is the main reason a pterygium returns.
 - Steroid drops can raise eye pressure, so pressure is checked during recovery. This matters most if you have glaucoma.
 
-## Call the office if
+## Call the same day if
 
 - Pain is getting worse instead of better
 - Vision drops
 - The graft looks as if it has moved, or there is discharge
-- Redness and growth return in the months afterward
+
+See [When to Call the Same Day](@/learn/when-to-call.md) for other urgent symptoms.
+
+If redness and growth return in the months afterward, let the office know so it can be checked.
 
 ## Questions worth asking
 

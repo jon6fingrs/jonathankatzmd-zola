@@ -1,7 +1,9 @@
 +++
 title = "Choosing Artificial Tears"
-description = "Answer a few questions to see which kind of artificial tear suits you: standard or preservative-free, gel drops, or ointment at bedtime, with examples and photos."
+description = "Answer a few questions to see which artificial tear suits you: standard or preservative-free, gel drops, or ointment at bedtime, with photos."
 template = "page.html"
+date = 2026-11-10
+updated = 2026-11-10
 weight = 330
 
 [extra]
@@ -25,7 +27,7 @@ The artificial tears shelf at a pharmacy is long and confusing. The differences 
 - **Preservative-free tears** come in single-use vials or in bottles with a special tip. Choose them if you need tears more than four times a day, wear contact lenses, have sensitive eyes, or already use other eye drops every day. The preservative itself can irritate the surface with frequent use.
 - **Gel drops** are thicker. They last longer and blur vision for a minute or two, so they suit bad days and evenings.
 - **Ointment** is the thickest. It is for bedtime, because it blurs vision until it is blinked away.
-- **Tears with oil** in them, often labelled "lipid" or "for evaporative dry eye", help when the oil glands in the eyelids are blocked.
+- **Tears with oil** in them, often labeled "lipid" or "for evaporative dry eye", help when the oil glands in the eyelids are blocked.
 
 ## Getting the most from them
 

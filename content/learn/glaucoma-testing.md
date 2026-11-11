@@ -2,6 +2,8 @@
 title = "Glaucoma Testing"
 description = "What happens at a glaucoma visit: eye pressure, the visual field test, OCT imaging, gonioscopy and corneal thickness, and what the results mean."
 template = "page.html"
+date = 2026-10-02
+updated = 2026-11-10
 weight = 30
 
 [extra]

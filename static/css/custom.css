@@ -238,6 +238,10 @@ body { color: var(--jk-ink); font-family: var(--jk-body); }
 
 .jk-page__body h2 { font-size: 1.55rem; margin-top: 1.5rem; }
 .jk-title { text-align: center; font-weight: 700; font-size: 1.9rem; margin: 1.5rem 0 2rem; }
+/* Published / last reviewed line under an article's title (templates/page.html). */
+.jk-title + .jk-dates { margin-top: -1.4rem; }
+.jk-page--article .jk-page__body .jk-dates, .jk-dates { text-align: center; color: var(--jk-muted); font-size: .9rem; margin: 0 0 1.75rem; }
+@media print { .jk-dates { display: none; } }
 .jk-rule { border: 0; border-top: 1px solid var(--jk-line); margin: 1.5rem auto; max-width: 320px; }
 
 .jk-page__body blockquote {
@@ -1165,3 +1169,29 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 /* "Print the grid" opens static/print/amsler-grid.html. Printing the article
    itself shows the grid without its buttons. */
 @media print { .jk-amsler__tabs, .jk-amsler .jk-lpi__controls { display: none; } }
+
+/* Site search (templates/search.html, static/js/search.js); the same box sits
+   on the Learn page and the 404 page and sends the words to /search/. */
+.jk-searchbox { display: flex; gap: .5rem; margin: 0 0 1.25rem; }
+.jk-searchbox .form-control { flex: 1 1 auto; min-width: 0; min-height: 44px; font-size: 1.05rem; }
+.jk-searchbox .btn { flex: 0 0 auto; min-height: 44px; }
+.jk-search__status { color: var(--jk-muted); margin: 0 0 .75rem; min-height: 1.5em; }
+.jk-search__out { display: flex; flex-direction: column; }
+.jk-search__drugs--first { order: -1; margin-bottom: 1.25rem; }
+.jk-results { list-style: none; padding: 0; margin: 0 0 1.5rem; }
+.jk-result { border-bottom: 1px solid var(--jk-line); padding: .8rem 0; }
+.jk-result a { display: block; text-decoration: none; }
+.jk-result__sec { display: block; font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--jk-muted); }
+.jk-result__title { display: block; font-size: 1.15rem; font-weight: 600; color: var(--jk-accent); }
+.jk-result a:hover .jk-result__title, .jk-result a:focus .jk-result__title { text-decoration: underline; }
+.jk-result__text { margin: .25rem 0 0; color: var(--jk-ink); line-height: 1.45; overflow-wrap: anywhere; }
+.jk-result__text mark, .jk-results mark { background: #fff3b0; padding: 0 .1em; border-radius: 2px; }
+.jk-search__drugs { background: #fff; border: 1px solid var(--jk-line); border-radius: 10px; padding: .9rem 1rem; }
+.jk-search__drugs-h { font-family: var(--jk-body); font-size: 1rem; font-weight: 600; margin: 0 0 .5rem; }
+.jk-search__druglist { list-style: none; padding: 0; margin: 0; }
+.jk-search__druglist li { padding: .35rem 0; border-top: 1px solid var(--jk-soft); }
+.jk-search__druglist li:first-child { border-top: 0; }
+.jk-search__druglist a { display: block; text-decoration: none; overflow-wrap: anywhere; }
+.jk-search__druglist span { color: var(--jk-muted); font-size: .92rem; }
+.jk-search__try { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; }
+.jk-search__try a { display: inline-block; padding: .4rem .8rem; border: 1px solid var(--jk-line); border-radius: 999px; background: #fff; text-decoration: none; min-height: 36px; }
