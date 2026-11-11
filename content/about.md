@@ -7,7 +7,7 @@ weight = 2
 
 <hr class="jk-rule">
 
-<p class="jk-biolink"><a href="https://www.katzeneye.com/doctors/jonathan-katz/" target="_blank" rel="noopener">Biography at Katzen Eye Group</a></p>
+<p class="jk-biolink"><a href="https://www.katzeneye.com/doctors/jonathan-katz/" target="_blank" rel="noopener">Biography at Katzen Eye Group</a><span class="jk-biolink__sep" aria-hidden="true">&middot;</span><a href="../about-this-site/">About this site</a></p>
 
 <hr class="jk-rule">
 
@@ -34,7 +34,3 @@ Dr. Katz also maintains these tools for eye care professionals:
 - [op.report](https://op.report/) &mdash; an operative note generator that turns a surgeon's own templates into a draft note in their own words, ready to review and sign (patent pending).
 
 These are intended for clinicians and are not a substitute for an individual evaluation.
-
-## About this site
-
-This site, with its articles, animations, simulators and eye drop tools, is described on [About This Site](@/about-this-site.md).
