@@ -42,13 +42,19 @@ Age-related macular degeneration (AMD) affects the macula, the small central are
 
 Checking each eye separately against straight lines (a door frame, a grid, lines of print) is the simplest way to catch a change early.
 
+More on [Macular Degeneration](@/learn/macular-degeneration.md), with a grid you can print.
+
 ## Diabetic retinopathy
 
 High blood sugar damages the small blood vessels of the retina. They leak and bleed, and in advanced disease new fragile vessels grow. Vision can be normal for years while damage builds, then blur patchily where the retina has swelled or bled; swelling of the macula (diabetic macular edema) blurs the center; bleeding into the gel of the eye causes dark floaters or a sudden fog. Yearly dilated eye exams catch retinopathy before it threatens sight, and keeping blood sugar, blood pressure and cholesterol under control slows it. Treatments include injections and laser.
 
+More on [Diabetic Eye Disease](@/learn/diabetic-retinopathy.md).
+
 ## Retinal detachment
 
 The retina can pull away from the back wall of the eye, often after a tear. The warning signs are a sudden shower of new floaters, flashes of light like a camera flash at the edge of vision, and then a dark curtain or shadow moving in from one side. **This is an emergency.** A detachment repaired before it reaches the center of the retina usually keeps good vision; once the center detaches, some loss is permanent. Call the office the same day, or go to an emergency department if it is after hours.
+
+More on [Retinal Tears and Detachment](@/learn/retinal-detachment.md).
 
 ## Stroke and the visual field {#stroke}
 
@@ -72,6 +78,8 @@ The tear film is the first surface light crosses, and when it is thin or breaks 
 ## Floaters and flashes {#floaters}
 
 Floaters are shadows of clumps and strands in the vitreous, the gel that fills the eye. They drift when the eye moves and settle when it stops, and are easiest to see against a bright page or sky. Most are harmless, and the brain learns to ignore them. A **sudden** shower of new floaters, especially with flashes of light or a shadow at the edge of vision, can mean the gel has pulled on and torn the retina, and needs a dilated exam the same day.
+
+More on [Flashes and Floaters](@/learn/flashes-and-floaters.md).
 
 ## Color blindness
 

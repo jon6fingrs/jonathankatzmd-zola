@@ -29,7 +29,7 @@ If you cannot reach anyone and the problem is severe, go to an emergency room.
 - Flashes of light, like a camera flash at the edge of your vision
 - Either of these followed by a shadow or curtain
 
-A few long-standing floaters are normal. A sudden change can mean a tear in the retina, which is treatable when caught early.
+A few long-standing floaters are normal. A sudden change can mean a tear in the retina, which is treatable when caught early. See [Flashes and Floaters](@/learn/flashes-and-floaters.md).
 
 ## A painful or red eye
 
