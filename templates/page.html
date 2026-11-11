@@ -12,7 +12,7 @@
       {#- Dates: `date` is when the page was first published and `updated` when
           it was last reviewed (bump it whenever you re-read a page, even if
           nothing changed). -#}
-      {% if page.extra.article and page.date %}<p class="jk-dates">Published <time datetime="{{ page.date }}">{{ page.date | date(format="%B %-d, %Y") }}</time>{% if page.updated %} &middot; Last reviewed <time datetime="{{ page.updated }}">{{ page.updated | date(format="%B %-d, %Y") }}</time>{% endif %}</p>{% endif %}
+      {% if page.extra.article and page.date %}<p class="jk-dates"><span>Published <time datetime="{{ page.date }}">{{ page.date | date(format="%B %-d, %Y") }}</time></span>{% if page.updated %} &middot; <span>Last reviewed <time datetime="{{ page.updated }}">{{ page.updated | date(format="%B %-d, %Y") }}</time></span>{% endif %}</p>{% endif %}
       {{ page.content | safe }}
       {#- Learn articles end with the other pages in the same topic and group,
           and a link to the topic page. Pages with no topic get nothing. -#}
