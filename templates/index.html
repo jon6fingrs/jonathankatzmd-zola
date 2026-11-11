@@ -115,7 +115,7 @@
           <li><span>{{ loc.name }}</span> <a href="tel:{{ loc.phone | replace(from='-', to='') }}">{{ loc.phone }}</a></li>
           {%- endfor %}
         </ul>
-        <p class="jk-note">Hours, addresses and maps are on the <a href="{{ get_url(path='/contact/', trailing_slash=true) }}">Contact</a> page. For urgent eye problems after hours, call your office number and follow the instructions.</p>
+        <p class="jk-note">Hours, addresses and maps are on the <a href="{{ get_url(path='/contact/', trailing_slash=true) }}">Contact</a> page. For an urgent eye problem, see <a href="{{ get_url(path='/learn/when-to-call/', trailing_slash=true) }}">When to call the same day</a>.</p>
       </div>
     </div>
   </div>

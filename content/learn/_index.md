@@ -11,4 +11,4 @@ weight = 3
 topics = ["glaucoma", "cataract", "dry-eye", "cornea", "retina", "simulators"]
 +++
 
-<p class="jk-page__lede">These pages explain, in plain language, the conditions Dr. Katz treats and the tests and procedures you may hear about at a visit. They are meant to help you understand your care and ask good questions. Your own doctor's instructions always come first.</p>
+<p class="jk-page__lede">These pages explain, in plain language, common eye conditions and the tests and procedures you may hear about at a visit. They are meant to help you understand your care and ask good questions. Your own doctor's instructions always come first.</p>

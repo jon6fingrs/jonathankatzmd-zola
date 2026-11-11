@@ -65,7 +65,11 @@
     if (phone) msg += '\n\nPhone: ' + phone;
     data.append('message', msg);
 
-    data.append('_gotcha', el['_gotcha'] ? el['_gotcha'].value : '');
+    // The trap field has a name autofill does not recognize (and the password
+    // managers' ignore attributes), so only a bot fills it. The server still
+    // reads it as _gotcha.
+    var trap = document.getElementById('jk-hp');
+    data.append('_gotcha', trap ? trap.value : '');
     data.append('_ts_token', token);
 
     return fetch(form.action, {

@@ -20,7 +20,7 @@ The tools do not ask for your name, date of birth or any other identifying infor
 
 ## Contact form
 
-The contact form sends your name, email address, optional phone number and message to the practice by email so we can reply. It is intended for comments about the website and other non-medical topics. **Please do not send medical questions, symptoms or anything you would consider private health information through the form**; call the office instead.
+The contact form sends your name, email address, optional phone number and message to the practice by email so we can reply. It is intended for comments about the website and other non-medical topics. **Please do not send medical questions, symptoms or anything you would consider private health information through the form**; contact your own eye doctor instead.
 
 When you press Submit, the message is passed to a small program that runs on Cloudflare, the company that hosts this site, and is sent from there as an email through Fastmail, the practice's email provider. The website itself does not keep a copy. The message is not shared with anyone else or used for marketing. See the [Cloudflare](https://www.cloudflare.com/privacypolicy/) and [Fastmail](https://www.fastmail.com/policies/privacy/) privacy policies.
 
@@ -42,7 +42,7 @@ Pages load fonts, scripts and images from this site only. The Contact page embed
 
 ## Medical information
 
-Everything on this site is general education. It is not medical advice, does not create a doctor-patient relationship, and does not replace the instructions you receive at your visits. If you have a question about your own eyes or your drops, call your office.
+Everything on this site is general education. It is not medical advice, does not create a doctor-patient relationship, and does not replace the instructions you receive at your visits. If you have a question about your own eyes or your drops, ask your own eye doctor.
 
 ## Questions
 

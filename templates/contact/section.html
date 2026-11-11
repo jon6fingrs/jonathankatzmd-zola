@@ -38,12 +38,13 @@
         </div>
 
         {# Spam trap: never rendered visibly (inline style so no CSS dependency).
-           hugo-contact also checks a "nickname" field, but that name is a magnet
-           for password-manager autofill — and a filled honeypot makes the server
-           silently discard the message with a 200. Omitting it is safe: the check
-           only rejects non-empty values. #}
+           A filled trap makes the server silently discard the message with a
+           200, so the field must never be filled for a real person: its name
+           means nothing to browser autofill, and the data-* attributes tell
+           1Password, LastPass, Bitwarden and Dashlane to skip it. contact.js
+           sends its value as _gotcha, which functions/f/contact.js checks. #}
         <div style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true">
-          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+          <input type="text" name="jk_hp_extra" id="jk-hp" tabindex="-1" autocomplete="off" aria-hidden="true" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other">
         </div>
 
         <div class="jk-form__actions">

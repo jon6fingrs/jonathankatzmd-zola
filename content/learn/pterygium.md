@@ -87,7 +87,7 @@ The graft is the important part. When a pterygium is simply cut away and the are
 
 See [When to Call the Same Day](@/learn/when-to-call.md) for other urgent symptoms.
 
-If redness and growth return in the months afterward, let the office know so it can be checked.
+If redness and growth return in the months afterward, let your eye doctor know so it can be checked.
 
 ## Questions worth asking
 

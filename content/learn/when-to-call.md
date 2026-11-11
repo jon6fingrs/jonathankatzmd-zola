@@ -12,7 +12,9 @@ topic = ""
 group = ""
 +++
 
-Most eye problems can wait for a scheduled visit. The ones on this page should not. If you have any of them, **call the office the same day**, and say what you are experiencing so the staff can get you seen. The phone numbers are on the [Contact](@/contact/_index.md) page. **After hours**, call the same office number and follow the instructions to reach the doctor on call. If you cannot reach a doctor, go to an emergency room.
+Most eye problems can wait for a scheduled visit. The ones on this page should not. If you have any of them, **contact your eye doctor the same day** and describe what is happening, so you can be seen quickly. Many eye practices have an after-hours number or a doctor on call. If you cannot reach an eye doctor and the problem is severe, go to an emergency room.
+
+This page is general information, not a diagnosis or a substitute for advice from a doctor who knows your eyes.
 
 ## Sudden changes in vision
 
@@ -21,7 +23,7 @@ Most eye problems can wait for a scheduled visit. The ones on this page should n
 - Straight lines that suddenly look bent or wavy in one eye
 - Sudden double vision
 
-**Call 911** if a sudden change in vision comes with weakness, numbness, a drooping face, trouble speaking or a severe headache. These can be signs of a stroke.
+**Call 911** (or your local emergency number) if a sudden change in vision comes with weakness, numbness, a drooping face, trouble speaking or a severe headache. These can be signs of a stroke.
 
 ## Flashes and floaters
 

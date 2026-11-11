@@ -29,7 +29,7 @@ These simulations are approximations for understanding, not a diagnosis or a mea
 
 [Glaucoma](@/learn/what-is-glaucoma.md) damages the optic nerve, usually from eye pressure the nerve cannot tolerate. It takes side vision first, typically in arcs above or below the center that start toward the nose, and it spares the center until late. Because the loss is slow, painless, and filled in by the brain, most people feel nothing until a large part of the field is gone. That is why glaucoma is found by [testing](@/learn/glaucoma-testing.md), not by symptoms, and why the treatment ([drops](@/learn/using-eye-drops.md), [laser](@/learn/slt-laser.md) or [surgery](@/learn/trabeculectomy.md)) is aimed at protecting what remains rather than restoring what is lost.
 
-The "Paint your own" pattern lets you mark cells to match a visual field printout. Dr. Katz can set it up in the exam room and send it to your phone with the QR code so you can show family what your test means.
+The "Paint your own" pattern lets you mark cells to match a visual field printout. It can be filled in from a visual field printout and sent to a phone with the QR code, to show family what a test means.
 
 ## Cataract
 
@@ -54,7 +54,7 @@ More on [Diabetic Eye Disease](@/learn/diabetic-retinopathy.md).
 
 ## Retinal detachment
 
-The retina can pull away from the back wall of the eye, often after a tear. The warning signs are a sudden shower of new floaters, flashes of light like a camera flash at the edge of vision, and then a dark curtain or shadow moving in from one side. **This is an emergency.** A detachment repaired before it reaches the center of the retina usually keeps good vision; once the center detaches, some loss is permanent. Call the office the same day; [When to Call the Same Day](@/learn/when-to-call.md) explains what to do after hours.
+The retina can pull away from the back wall of the eye, often after a tear. The warning signs are a sudden shower of new floaters, flashes of light like a camera flash at the edge of vision, and then a dark curtain or shadow moving in from one side. **This is an emergency.** A detachment repaired before it reaches the center of the retina usually keeps good vision; once the center detaches, some loss is permanent. Contact your eye doctor the same day; see [When to Call the Same Day](@/learn/when-to-call.md).
 
 More on [Retinal Tears and Detachment](@/learn/retinal-detachment.md).
 
