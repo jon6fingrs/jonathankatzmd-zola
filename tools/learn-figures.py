@@ -458,7 +458,7 @@ b=globe()
 b+=label(20,40,'Cornea','start',22)+leader(96,46,128,150)
 b+=label(20,400,'Lens','start',22)+leader(74,392,246,260)
 b+=label(250,424,'Gel (vitreous)','middle',22,'600','#0369a1')+leader(250,402,330,300)
-b+=label(700,60,'Retina','end',22,'600','#c2410c')+label(700,84,'the light-sensing layer','end',19,'400')+leader(626,40,gpt(-45,162)[0],gpt(-45,162)[1])
+b+=label(700,60,'Retina','end',22,'600','#c2410c')+label(700,84,'the light-sensing layer','end',19,'400')+leader(540,96,gpt(-45,162)[0],gpt(-45,162)[1])
 b+=label(700,200,'Macula','end',22,'600','#9a3412')+label(700,224,'center of vision','end',19,'400')+leader(612,190,492,218)
 b+=label(700,360,'Optic nerve','end',22)+label(700,384,'to the brain','end',19,'400')+leader(590,352,gpt(17,230)[0],gpt(17,230)[1])
 figs['retina-anatomy']=('The eye cut in half: cornea and lens at the front, the gel filling the eye, the retina lining the back, the macula at its center, and the optic nerve',720,440,b)
@@ -516,6 +516,50 @@ for i,(kind,title,sub) in enumerate([('e','Early','small spots of bleeding; no s
     f,X,Y=fundus(cx,205,150,ex,uid='d'+kind)
     b+=f+label(cx,36,title,'middle',24,'700')+label(cx,392,sub,'middle',19,'400',MUTED)
 figs['diabetic-fundus']=('The back of the eye in diabetic retinopathy: early, with small spots of bleeding, and advanced, with new vessels, deposits at the macula and bleeding',800,410,b)
+
+# ---------- cornea ----------
+EPI='#e9d5ff'; EPI_S='#7c3aed'; STROMA='#dbeafe'; ENDO='#a7f3d0'; ENDO_S='#047857'
+def cornea_slab(x,y,w,eh=40,sh=150,endo=True,lines=True):
+    s=f'<rect x="{x}" y="{y+eh}" width="{w}" height="{sh}" fill="{STROMA}" stroke="#3b82f6" stroke-width="2"/>'
+    if lines: s+=''.join(f'<line x1="{x+4}" y1="{yy}" x2="{x+w-4}" y2="{yy}" stroke="#93c5fd" stroke-width="1.2"/>' for yy in range(y+eh+14,y+eh+sh-6,14))
+    s+=f'<rect x="{x}" y="{y}" width="{w}" height="{eh}" fill="{EPI}" stroke="{EPI_S}" stroke-width="2"/>'
+    if endo: s+=''.join(f'<rect x="{x+1+i*26}" y="{y+eh+sh}" width="24" height="16" rx="5" fill="{ENDO}" stroke="{ENDO_S}" stroke-width="1.5"/>' for i in range(int(w//26)))
+    return s
+
+# 21. the layers of the cornea, and what goes wrong in each
+b=cornea_slab(230,90,312)
+b+=f'<line x1="230" y1="84" x2="542" y2="84" stroke="#60a5fa" stroke-width="5" stroke-linecap="round"/>'
+b+=label(20,60,'Tear film','start',20,'600','#1d4ed8')+leader(110,66,236,84)
+b+=label(20,116,'Surface cells','start',20,'600',EPI_S)+label(20,140,'scratches, erosions','start',18,'400',MUTED)+leader(170,112,238,110)
+b+=label(20,206,'Clear middle layer','start',20,'600','#1d4ed8')+label(20,230,'keratoconus, scars,','start',18,'400',MUTED)+label(20,252,'infections','start',18,'400',MUTED)+leader(200,202,238,204)
+b+=label(20,300,'Pump cells','start',20,'600',ENDO_S)+label(20,324,'Fuchs dystrophy','start',18,'400',MUTED)+leader(140,296,240,290)
+b+=label(386,340,'Inside of the eye','middle',18,'400',MUTED)
+b+=label(386,30,'The cornea, about half a millimeter thick','middle',20,'600')
+figs['cornea-layers']=('The layers of the cornea, front to back: tear film, surface cells, the clear middle layer and the pump cells, with the conditions that affect each',720,360,b)
+
+# 22. two kinds of corneal transplant
+b=cornea_slab(40,110,320)+cornea_slab(440,110,320)
+b+=f'<rect x="130" y="104" width="140" height="218" fill="#fde68a" opacity="0.55" stroke="#b45309" stroke-width="3" stroke-dasharray="8 6"/>'
+for sx in range(130,271,28): b+=f'<path d="M{sx-6},100 l12,10 m0,-10 l-12,10" stroke="{INK}" stroke-width="1.8"/>'
+b+=f'<rect x="440" y="298" width="320" height="22" fill="#fde68a" opacity="0.7" stroke="#b45309" stroke-width="3" stroke-dasharray="8 6"/>'
+b+=label(200,40,'Full-thickness transplant','middle',22,'700')+label(200,66,'all layers replaced, held with stitches','middle',18,'400',MUTED)
+b+=label(600,40,'Partial-thickness transplant','middle',22,'700')+label(600,66,'only the pump layer replaced; no stitches','middle',18,'400',MUTED)
+b+=label(200,360,'For scars and advanced keratoconus','middle',18,'400',MUTED)+label(600,360,'For Fuchs dystrophy and other pump failure','middle',18,'400',MUTED)
+b+=f'<line x1="400" y1="20" x2="400" y2="372" stroke="#e5e7eb" stroke-width="2"/>'
+figs['corneal-transplant']=('Two kinds of corneal transplant: full thickness, with stitches, and partial thickness, replacing only the inner pump layer',800,380,b)
+
+# 23. a corneal ulcer
+cx,cy=300,215
+b=front_eye(cx,cy,170,90,84,70)
+v='fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linecap="round"'
+for sgn in (-1,1):
+    for (dy,c1,c2) in [(-6,-12,-4),(16,24,18),(-24,-32,-24),(34,40,34)]:
+        b+=f'<path d="M{cx+sgn*160},{cy+dy} C{cx+sgn*132},{cy+c1} {cx+sgn*110},{cy+c2} {cx+sgn*78},{cy+dy*0.6:.0f}" {v}/>'
+b+=f'<ellipse cx="{cx+22}" cy="{cy+14}" rx="20" ry="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/><ellipse cx="{cx+22}" cy="{cy+14}" rx="34" ry="28" fill="#e2e8f0" opacity="0.45"/>'
+b+=label(560,150,'White spot','start',22,'700')+label(560,176,'on the cornea','start',19,'400')+leader(556,156,cx+36,cy+8)
+b+=label(20,90,'Red, painful eye,','start',22,'600','#b91c1c')+label(20,116,'sensitive to light','start',19,'400')+leader(150,124,cx-128,cy-10)
+b+=label(20,380,'Same-day care, especially with contact lenses','start',20,'600')
+figs['corneal-ulcer']=('A corneal ulcer: a white spot on the cornea in a red, painful, light-sensitive eye, which needs same-day care',760,400,b)
 
 for name,(title,w,h,body) in figs.items():
     open(os.path.join(OUT,name+'.svg'),'w').write(svg(w,h,body,title))
