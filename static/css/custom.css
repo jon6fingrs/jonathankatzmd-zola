@@ -338,8 +338,8 @@ body { color: var(--jk-ink); font-family: var(--jk-body); }
 /* ===================================================================
    ABOUT
    =================================================================== */
-.jk-biolink { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; column-gap: .9rem; row-gap: .1rem; text-align: center; margin: 0; }
-.jk-biolink__sep { font-size: 1.75rem; color: var(--jk-muted); }
+.jk-biolink { text-align: center; margin: 0; }
+.jk-biolink + .jk-biolink { margin-top: .25rem; }
 .jk-biolink a {
   font-family: var(--jk-body);
   font-size: 1.75rem;
@@ -348,8 +348,8 @@ body { color: var(--jk-ink); font-family: var(--jk-body); }
   text-decoration: none;
 }
 .jk-biolink a:hover { color: var(--jk-accent); }
-/* On a phone the two links stack; the dot between them is only for a row. */
-@media (max-width: 575px) { .jk-biolink__sep { display: none; } .jk-biolink { flex-direction: column; align-items: center; } .jk-biolink a { font-size: 1.25rem; } }
+/* Phones: small enough that each link fits on one line. */
+@media (max-width: 575px) { .jk-biolink a { font-size: 1.25rem; } }
 .jk-about-photo {
   max-width: 290px; height: auto; border-radius: 6px;
   float: right; margin: .25rem 0 1rem 1.75rem;
