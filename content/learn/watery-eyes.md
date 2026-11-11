@@ -3,7 +3,7 @@ title = "Watery Eyes"
 description = "Why eyes water: reflex tears from a dry surface, a blocked tear drain, or a loose lower lid. How the cause is found and what fixes it."
 template = "page.html"
 date = 2026-11-10
-updated = 2026-11-10
+updated = 2026-11-11
 weight = 340
 
 [extra]
@@ -48,7 +48,7 @@ Your doctor examines the tear film, the lids and their position, and the drain o
 - **A blocked tear duct:** an operation makes a new passage from the tear channels into the nose. It is done by an eyelid and tear duct specialist, and your doctor can refer you.
 - **A loose lid:** a small operation tightens the lid so it sits against the eye again.
 
-## Call the office if
+## Call your eye doctor if
 
 - One eye starts watering constantly, especially with a sticky discharge
 - The inner corner of the lids becomes red, swollen and tender

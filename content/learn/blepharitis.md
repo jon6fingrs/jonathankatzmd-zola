@@ -3,7 +3,7 @@ title = "Blepharitis and the Eyelid Glands"
 description = "Blepharitis and blocked eyelid oil glands, the most common cause of dry eye: symptoms, warm compresses and lid cleaning, styes, chalazia and prescriptions."
 template = "page.html"
 date = 2026-11-10
-updated = 2026-11-10
+updated = 2026-11-11
 weight = 310
 
 [extra]
@@ -81,7 +81,7 @@ Both are treated first with warm compresses, several times a day. Do not squeeze
 
 The drops and pills named here are pictured in the [Eye Medication Reference](@/patients/eye-drops.md).
 
-## Call the office if
+## Call your eye doctor if
 
 - A lid becomes very swollen, red and painful, or the redness spreads onto the cheek
 - A lump in the lid keeps growing, bleeds, or comes back in the same spot

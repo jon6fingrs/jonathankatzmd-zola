@@ -3,7 +3,7 @@ title = "Eye Allergy"
 description = "Itchy, red, watery eyes from pollen, dust or pets: how to tell allergy from dry eye and pink eye, what helps, and why allergy drops work best daily."
 template = "page.html"
 date = 2026-11-10
-updated = 2026-11-10
+updated = 2026-11-11
 weight = 350
 
 [extra]
@@ -71,7 +71,7 @@ Allergy and dry eye often occur together, and each makes the other worse.
 - **A short course of a mild steroid drop** for a severe flare. Steroid drops are used only under an eye doctor's care, for a short time, because they can raise eye pressure and cause cataract. That matters most if you have [glaucoma](@/learn/what-is-glaucoma.md).
 - **Seeing an allergist** about testing and allergy shots, when allergies are severe or year round
 
-## Call the office if
+## Call your eye doctor if
 
 - One eye is much worse than the other, or the discharge is thick and sticky
 - The eye is painful or light-sensitive, or your vision drops. See [When to Call the Same Day](@/learn/when-to-call.md).
