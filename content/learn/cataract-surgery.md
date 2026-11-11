@@ -3,7 +3,7 @@ title = "Cataract Surgery"
 description = "What a cataract is, when surgery makes sense, lens implant choices, the day of surgery and the four-week recovery, and what changes if you have glaucoma."
 template = "page.html"
 date = 2026-10-02
-updated = 2026-11-10
+updated = 2026-11-11
 weight = 100
 
 [extra]
@@ -31,11 +31,11 @@ The artificial lens (intraocular lens, or IOL) is chosen for your eye using meas
 - **Multifocal and extended-depth-of-focus** lenses reduce the need for glasses at more than one distance, with trade-offs such as halos at night.
 - **Monovision** sets one eye for distance and the other for near using monofocal lenses.
 
-For patients with glaucoma, a monofocal or toric lens is usually recommended. Multifocal lenses reduce contrast, and glaucoma already reduces contrast sensitivity, so the combination can be disappointing.
+For patients with glaucoma, a monofocal or toric lens is usually recommended. Multifocal lenses reduce contrast, and glaucoma already reduces contrast sensitivity, so the combination can be disappointing. [Choosing a Lens Implant](@/learn/lens-implants.md) compares the options, with a view through each.
 
 ## Before surgery
 
-Measurements of the eye's length and curvature are taken in the office to select the lens power. You may be asked to start an antibiotic or anti-inflammatory drop a day or two before, and to use nothing by mouth for several hours before surgery. Most medicines, including blood thinners, are continued; confirm with your surgeon. Tell the team if you take or have ever taken tamsulosin (Flomax) or similar prostate medicines, as they affect the iris during surgery and the surgeon plans for it.
+Measurements of the eye's length and curvature are taken in the office to select the lens power. You may be asked to start an antibiotic or anti-inflammatory drop a day or two before, and to use nothing by mouth for several hours before surgery. Most medicines, including blood thinners, are continued; confirm with your surgeon. Tell the team if you take or have ever taken tamsulosin (Flomax) or similar prostate medicines, as they affect the iris during surgery and the surgeon plans for it. [Preparing for Cataract Surgery](@/learn/preparing-for-cataract-surgery.md) goes through the lead-up and the first month step by step.
 
 ## The day of surgery
 

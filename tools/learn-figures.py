@@ -561,6 +561,142 @@ b+=label(20,90,'Red, painful eye,','start',22,'600','#b91c1c')+label(20,116,'sen
 b+=label(20,380,'Same-day care, especially with contact lenses','start',20,'600')
 figs['corneal-ulcer']=('A corneal ulcer: a white spot on the cornea in a red, painful, light-sensitive eye, which needs same-day care',760,400,b)
 
+# ---------- cataract and glaucoma, round two ----------
+GREEN_D='#15803d'; RED_D='#b91c1c'
+
+# 24. lens implant types, seen from the front, with how each tends to focus
+def iol(cx,cy,kind):
+    hap=(f'<path d="M{cx+30},{cy-38} C{cx+62},{cy-76} {cx+86},{cy-40} {cx+80},{cy+4}" fill="none" stroke="#0284c7" stroke-width="5" stroke-linecap="round"/>'
+         f'<path d="M{cx-30},{cy+38} C{cx-62},{cy+76} {cx-86},{cy+40} {cx-80},{cy-4}" fill="none" stroke="#0284c7" stroke-width="5" stroke-linecap="round"/>')
+    s=hap+f'<circle cx="{cx}" cy="{cy}" r="50" fill="#e0f2fe" stroke="#0284c7" stroke-width="3"/>'
+    if kind=='toric':
+        for sx in (-1,1):
+            for d in (30,38,46):
+                s+=f'<circle cx="{cx+sx*d}" cy="{cy}" r="2.6" fill="#0369a1"/>'
+    elif kind=='multi':
+        for r in (11,18,24,30,35,40,44,48):
+            s+=f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#0284c7" stroke-width="1.3" opacity="0.8"/>'
+    elif kind=='edof':
+        for r in (20,34):
+            s+=f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#0284c7" stroke-width="1.3" stroke-dasharray="3 3" opacity="0.8"/>'
+    return s
+def dot(x,y,level):  # 2 clear, 1 partly, 0 glasses usually needed
+    if level==2: return f'<circle cx="{x}" cy="{y}" r="9" fill="{GREEN_D}"/>'
+    if level==1: return f'<circle cx="{x}" cy="{y}" r="8" fill="#fff" stroke="{GREEN_D}" stroke-width="2.5"/><path d="M{x},{y-8} A8,8 0 0,1 {x},{y+8} Z" fill="{GREEN_D}"/>'
+    return f'<circle cx="{x}" cy="{y}" r="8" fill="#fff" stroke="#94a3b8" stroke-width="2.5"/>'
+b=''
+cols=[('Monofocal','mono',(2,1,0),'the standard lens'),('Toric','toric',(2,1,0),'corrects astigmatism'),
+      ('Extended depth','edof',(2,2,1),'mild halos at night'),('Multifocal','multi',(2,2,2),'halos and glare at night')]
+for i,(name,kind,lv,note) in enumerate(cols):
+    cx=100+i*200
+    b+=iol(cx,120,kind)
+    b+=label(cx,232,name,'middle',22,'700')+label(cx,256,note,'middle',17,'400',MUTED)
+    for j,(d,l) in enumerate(zip(('Far','Arm’s length','Near'),lv)):
+        y=296+j*30
+        b+=label(cx-62,y+6,d,'start',17,'400')+dot(cx+66,y,l)
+    if i: b+=f'<line x1="{i*200}" y1="20" x2="{i*200}" y2="380" stroke="#e5e7eb" stroke-width="2"/>'
+b+=dot(186,404,2)+label(200,410,'clear without glasses','start',16,'400',MUTED)
+b+=dot(396,404,1)+label(410,410,'often usable','start',16,'400',MUTED)
+b+=dot(556,404,0)+label(570,410,'glasses usually needed','start',16,'400',MUTED)
+figs['iol-types']=('Four kinds of lens implant seen from the front, and how well each usually sees far, at arm’s length and near without glasses',800,430,b)
+
+# 25. measuring for the lens implant: the eye's length and the curve of the cornea
+b=globe(360,230)
+b+=f'<line x1="{360-238+44}" y1="420" x2="{360+170}" y2="420" stroke="{BLUE}" stroke-width="4" marker-start="url(#ah)" marker-end="url(#ah)"/>'
+b+=f'<line x1="{360-238+44}" y1="230" x2="{360-238+44}" y2="430" stroke="{BLUE}" stroke-width="1.5" stroke-dasharray="4 4"/><line x1="{360+170}" y1="230" x2="{360+170}" y2="430" stroke="{BLUE}" stroke-width="1.5" stroke-dasharray="4 4"/>'
+b+=label(360,460,'Eye length','middle',22,'700',BLUE)
+f0=gpt(-140,172,360,230); f1=gpt(140,172,360,230)
+b+=f'<path d="M{f0[0]-22:.1f},{f0[1]-10:.1f} Q{360-238-26},230 {f1[0]-22:.1f},{f1[1]+10:.1f}" fill="none" stroke="#16a34a" stroke-width="4" stroke-dasharray="7 6"/>'
+b+=label(20,60,'Curve of the cornea','start',22,'700','#15803d')+leader(120,68,f0[0]-28,f0[1]+8)
+b+=label(560,40,'These two numbers','start',20,'600')+label(560,64,'set the power of','start',20,'400')+label(560,88,'the lens implant','start',20,'400')
+figs['iol-measure']=('Before cataract surgery the length of the eye and the curve of the cornea are measured, which sets the power of the lens implant',760,480,b)
+
+# 26. glaucoma suspect: pressure and the nerve are separate questions
+def small_disc(cx,cy,cup,k=0.5):
+    return f'<g transform="translate({cx},{cy}) scale({k}) translate({-200},{-190})">{disc(200,190,cup)}</g>'
+b=''
+b+=label(330,40,'Normal pressure','middle',22,'700')+label(590,40,'High pressure','middle',22,'700')
+b+=label(150,150,'Healthy','end',22,'700')+label(150,174,'nerve','end',22,'400')
+b+=label(150,350,'Damaged','end',22,'700')+label(150,374,'nerve','end',22,'400')
+cells=[(330,150,30,'Normal','',INK),(590,150,30,'Ocular hypertension','watched, sometimes treated','#b45309'),
+       (330,350,74,'Normal-tension glaucoma','treated','#b91c1c'),(590,350,74,'Glaucoma','treated','#b91c1c')]
+for (cx,cy,cup,t,sub,c) in cells:
+    b+=f'<rect x="{cx-125}" y="{cy-92}" width="250" height="190" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/>'
+    b+=small_disc(cx,cy-18,cup,0.42)
+    b+=label(cx,cy+66,t,'middle',19,'700',c)
+    if sub: b+=label(cx,cy+88,sub,'middle',16,'400',MUTED)
+figs['glaucoma-suspect']=('Eye pressure and the optic nerve are separate questions: normal, ocular hypertension, normal-tension glaucoma and glaucoma',760,460,b)
+
+# 27. where each kind of glaucoma drop works
+GREEN='#16a34a'
+side=f'<path d="M330,152 C350,140 372,128 410,104 C450,86 520,74 600,70" stroke="{GREEN}" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="9 6" marker-end="url(#ahg)"/>'
+main=f'<path d="M270,150 C280,132 288,122 300,114" stroke="{BLUE}" stroke-width="4" fill="none" stroke-linecap="round" marker-end="url(#ah)"/>'
+b=eye()+side+main
+b+=label(20,-50,'Main drain (meshwork)','start',20,'700',BLUE)+label(20,-26,'netarsudil, pilocarpine,','start',18,'400')+label(20,-4,'latanoprostene bunod','start',18,'400')+leader(150,4,296,110)
+b+=label(470,-50,'Side drain','start',20,'700','#15803d')+label(470,-26,'prostaglandins: latanoprost,','start',18,'400')+label(470,-4,'travoprost, bimatoprost,','start',18,'400')+label(470,18,'tafluprost; also omidenepag','start',18,'400')+leader(560,26,540,72)
+b+=label(500,170,'Faucet (ciliary body)','start',20,'700','#b45454')+label(500,194,'makes less fluid:','start',18,'400')+label(500,216,'timolol (beta blockers),','start',18,'400')+label(500,238,'brimonidine, dorzolamide,','start',18,'400')+label(500,260,'brinzolamide, and the','start',18,'400')+label(500,282,'acetazolamide pills','start',18,'400')+leader(496,176,392,118)
+figs['glaucoma-drops']=('Where each kind of glaucoma drop works: the faucet that makes fluid, the main drain and the side drain',760,420+DY,shifted(b))
+
+# 28. open, narrow and closed angles, close up
+def angle_panel(ox,bow,closed=False):
+    s=f'<clipPath id="ap{ox}"><rect x="{ox}" y="40" width="250" height="300"/></clipPath>'
+    body=eye(iris=iris_strip(bow), behind=behind_iris(bow) if bow else '')
+    if closed:  # the outer iris pressed up against the drain, covering it
+        front,_=iris_sides(bow)
+        f=front[5]
+        body+=(f'<path d="M287,99 C295,96 304,96 311,101 L313,127 L{f[0]+6:.1f},{f[1]:.1f} '
+               f'C{f[0]-6:.1f},{f[1]-14:.1f} 284,124 283,108 Z" fill="#8b5e3c" stroke="#5c3d26" stroke-width="1.5" stroke-linejoin="round"/>')
+    s+=f'<g clip-path="url(#ap{ox})"><g transform="translate({ox+125},190) scale(1.15) translate(-300,-170)">{body}</g></g>'
+    s+=f'<rect x="{ox}" y="40" width="250" height="300" fill="none" stroke="#e5e7eb" stroke-width="2" rx="10"/>'
+    return s
+b=angle_panel(10,0)+angle_panel(275,1)+angle_panel(540,1,True)
+b+=label(135,28,'Open angle','middle',22,'700')+label(400,28,'Narrow angle','middle',22,'700')+label(665,28,'Closed angle','middle',22,'700')
+b+=label(135,372,'Fluid reaches','middle',18,'400',GREEN_D)+label(135,394,'the drain','middle',18,'400',GREEN_D)
+b+=label(400,372,'The iris bows forward','middle',18,'400','#b45309')+label(400,394,'and crowds the drain','middle',18,'400','#b45309')
+b+=label(665,372,'The iris covers the drain:','middle',18,'400',RED_D)+label(665,394,'pressure can rise fast','middle',18,'400',RED_D)
+figs['angle-types']=('The drainage angle close up: open, narrow with the iris crowding the drain, and closed with the iris covering it',800,410,b)
+
+# 29. pseudoexfoliation and pigment dispersion, seen from the front
+def big_pupil_eye(cx,cy):
+    e=f'M{cx-160},{cy} Q{cx},{cy-175} {cx+160},{cy} Q{cx},{cy+175} {cx-160},{cy} Z'
+    s=f'<clipPath id="bp{cx}"><path d="{e}"/></clipPath><path d="{e}" fill="#ffffff" stroke="{INK}" stroke-width="3"/>'
+    return s,f'url(#bp{cx})'
+b=''
+cx,cy=200,200
+s,clip=big_pupil_eye(cx,cy)
+s+=f'<g clip-path="{clip}"><circle cx="{cx}" cy="{cy}" r="80" fill="#8b5e3c" stroke="#5c3d26" stroke-width="2"/><circle cx="{cx}" cy="{cy}" r="52" fill="#1f2937"/>'
+s+=f'<circle cx="{cx}" cy="{cy}" r="22" fill="#e5e7eb" opacity="0.85"/>'
+import random
+rnd=random.Random(7)
+for k in range(46):
+    a=rnd.uniform(0,2*math.pi); r=rnd.uniform(38,50)
+    s+=f'<circle cx="{cx+r*math.cos(a):.1f}" cy="{cy+r*math.sin(a):.1f}" r="{rnd.uniform(1.6,3.2):.1f}" fill="#f1f5f9"/>'
+for k in range(14):
+    a=rnd.uniform(0,2*math.pi); r=rnd.uniform(52,57)
+    s+=f'<circle cx="{cx+r*math.cos(a):.1f}" cy="{cy+r*math.sin(a):.1f}" r="2" fill="#f1f5f9"/>'
+s+='</g>'
+s+=f'<path d="M{cx-160},{cy} Q{cx},{cy-175} {cx+160},{cy}" fill="none" stroke="{INK}" stroke-width="5"/>'
+b+=s
+b+=label(cx,40,'Pseudoexfoliation','middle',24,'700')
+b+=label(cx,360,'White, flaky material on the lens,','middle',18,'400')+label(cx,382,'seen when the pupil is dilated','middle',18,'400')
+cx=600
+s,clip=big_pupil_eye(cx,cy)
+s+=f'<g clip-path="{clip}"><circle cx="{cx}" cy="{cy}" r="80" fill="#5b8bb5" stroke="#2c4f6e" stroke-width="2"/>'
+for k in range(16):
+    a=k*2*math.pi/16+0.1; x0=cx+44*math.cos(a); y0=cy+44*math.sin(a); x1=cx+62*math.cos(a); y1=cy+62*math.sin(a)
+    s+=f'<line x1="{x0:.1f}" y1="{y0:.1f}" x2="{x1:.1f}" y2="{y1:.1f}" stroke="#dbeafe" stroke-width="4" stroke-linecap="round" opacity="0.9"/>'
+s+=f'<circle cx="{cx}" cy="{cy}" r="30" fill="#111827"/>'
+s+=f'<ellipse cx="{cx}" cy="{cy+6}" rx="7" ry="44" fill="#92400e" opacity="0.55"/></g>'
+s+=f'<path d="M{cx-160},{cy} Q{cx},{cy-175} {cx+160},{cy}" fill="none" stroke="{INK}" stroke-width="5"/>'
+b+=s
+b+=label(cx,40,'Pigment dispersion','middle',24,'700')
+b+=label(792,84,'Thin spots','end',17,'600')+label(792,104,'in the iris','end',17,'400')+leader(744,110,cx+52,cy-28)
+b+=label(cx,360,'Pigment rubbed off the iris settles on','middle',18,'400')+label(cx,382,'the cornea and in the drain','middle',18,'400')
+b+=label(452,300,'Pigment on','end',17,'600')+label(452,320,'the cornea','end',17,'400')+leader(456,300,cx-4,cy+30)
+b+=f'<line x1="400" y1="20" x2="400" y2="390" stroke="#e5e7eb" stroke-width="2"/>'
+figs['glaucoma-types']=('Two eyes seen from the front: pseudoexfoliation, with flaky material on the lens, and pigment dispersion, with thin spots in the iris and pigment on the cornea',800,400,b)
+
+
 for name,(title,w,h,body) in figs.items():
     open(os.path.join(OUT,name+'.svg'),'w').write(svg(w,h,body,title))
     print(name, os.path.getsize(os.path.join(OUT,name+'.svg')),'bytes')

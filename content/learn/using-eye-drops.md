@@ -3,7 +3,7 @@ title = "Using Eye Drops"
 description = "Step-by-step technique for putting in eye drops, why to wait five minutes between drops, pressing the tear duct, missed doses, storage and refills."
 template = "page.html"
 date = 2026-10-02
-updated = 2026-11-10
+updated = 2026-11-11
 weight = 40
 
 [extra]
@@ -56,7 +56,7 @@ Most glaucoma drops contain a preservative that contact lenses absorb. Take lens
 - Keep the cap on and store at room temperature unless the label says to refrigerate (some, like latanoprost, are kept cold until opened).
 - Never let the tip touch anything. A contaminated bottle can cause an infection.
 - Most bottles should be discarded a set time after opening, often 28 days for preservative-free multidose bottles and up to several months for others. Your pharmacist can tell you for each one.
-- Cap colors follow a standard: for example teal or turquoise for prostaglandins, yellow or blue for beta blockers, orange for carbonic anhydrase inhibitors, purple for alpha agonists, pink for steroids, tan for antibiotics and gray for NSAIDs. The [Eye Medication Reference](@/patients/eye-drops.md) shows a photo and cap color for each drop so you can tell bottles apart.
+- Cap colors follow a standard: for example teal or turquoise for prostaglandins, yellow or blue for beta blockers, orange for carbonic anhydrase inhibitors, purple for alpha agonists, pink for steroids, tan for antibiotics and gray for NSAIDs. The [Eye Medication Reference](@/patients/eye-drops.md) shows a photo and cap color for each drop so you can tell bottles apart, and [Glaucoma Eye Drops](@/learn/glaucoma-drops.md) explains what each family of glaucoma drop does.
 
 ## Refills and cost
 
