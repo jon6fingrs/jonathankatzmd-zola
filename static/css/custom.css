@@ -217,7 +217,7 @@ body { color: var(--jk-ink); font-family: var(--jk-body); }
   .jk-navwrap { padding: 0 1.25rem; }
   /* Keep the menu button beside the name: a long page label wraps onto a
      second line instead of pushing the button onto a row of its own. */
-  .jk-brand { min-width: 0; max-width: calc(100% - 3.75rem); }
+  .jk-brand { min-width: 0; max-width: calc(100% - 3.75rem); white-space: normal; }
   .jk-brand__page { line-height: 1.25; }
   .jk-navbar .navbar-collapse { margin-top: .75rem; flex-basis: 100%; }
   .jk-navbar .nav-link { padding: .75rem 0 !important; }
