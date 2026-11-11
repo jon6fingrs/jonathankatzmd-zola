@@ -3,7 +3,7 @@ title = "What Is Glaucoma?"
 description = "Glaucoma is damage to the optic nerve, usually linked to eye pressure. Why it has no symptoms early, who is at risk, and how it is treated."
 template = "page.html"
 date = 2026-10-02
-updated = 2026-11-10
+updated = 2026-11-11
 weight = 10
 
 [extra]
@@ -28,9 +28,9 @@ To see how each treatment changes this balance, try the [eye pressure sink](@/le
 
 The most common form, **primary open-angle glaucoma**, takes away peripheral (side) vision first and very gradually. The two eyes overlap and the brain fills in gaps, so most people notice nothing until a great deal of nerve has already been lost. There is no pain, no redness, and no change in reading vision until late. This is why glaucoma is found at routine eye exams and why regular follow-up matters even when you feel fine.
 
-**Angle-closure glaucoma** is different and less common. The drainage angle becomes physically blocked by the iris. If that happens suddenly, pressure spikes and causes a red, painful eye, blurred vision, halos around lights, headache and nausea. That is an emergency and needs same-day care. More often angle closure develops slowly and silently, and is found on exam.
+**Angle-closure glaucoma** is different and less common. The drainage angle becomes physically blocked by the iris. If that happens suddenly, pressure spikes and causes a red, painful eye, blurred vision, halos around lights, headache and nausea. That is an emergency and needs same-day care. More often angle closure develops slowly and silently, and is found on exam. See [Narrow Angles and Angle Closure](@/learn/angle-closure.md).
 
-Other types include **pseudoexfoliation** and **pigmentary** glaucoma (material clogs the drain), **secondary** glaucoma from inflammation, injury, steroid medicines or other eye disease, and **congenital** glaucoma in infants.
+Other types include **pseudoexfoliation** and **pigmentary** glaucoma (material clogs the drain), **secondary** glaucoma from inflammation, injury, steroid medicines or other eye disease, and **congenital** glaucoma in infants. [Other Types of Glaucoma](@/learn/other-glaucoma-types.md) covers each, and normal-tension glaucoma. Raised pressure or a suspicious nerve without damage is covered on [Glaucoma Suspect and Ocular Hypertension](@/learn/glaucoma-suspect.md).
 
 ## Who is at risk
 
@@ -54,7 +54,7 @@ Lost nerve fibers cannot be restored, so the goal of every treatment is to **low
 
 There are three ways to lower pressure, often used in combination:
 
-1. **Eye drops.** The most common first step. Some reduce fluid production, others improve drainage. Most are used once or twice a day, long term. See [Using Eye Drops](@/learn/using-eye-drops.md) for technique, and the [Eye Medication Reference](@/patients/eye-drops.md) for the specific drops.
+1. **Eye drops.** The most common first step. Some reduce fluid production, others improve drainage. Most are used once or twice a day, long term. [Glaucoma Eye Drops](@/learn/glaucoma-drops.md) explains each family, [Using Eye Drops](@/learn/using-eye-drops.md) covers technique, and the [Eye Medication Reference](@/patients/eye-drops.md) has photos of each bottle.
 2. **Laser.** [Selective laser trabeculoplasty (SLT)](@/learn/slt-laser.md) treats the drain itself, takes a few minutes in the office, and can be a first treatment instead of drops or an addition to them. A different laser, [iridotomy](@/learn/laser-iridotomy.md), is used for narrow angles and angle closure. A third, [cyclophotocoagulation](@/learn/cyclophotocoagulation.md), reduces how much fluid the eye makes.
 3. **Surgery.** When drops and laser are not enough, surgery creates a new path for fluid. Options range from [minimally invasive glaucoma surgery (MIGS)](@/learn/migs.md), often done with cataract surgery, to [trabeculectomy](@/learn/trabeculectomy.md) and [tube shunt surgery](@/learn/tube-shunt-surgery.md) for more advanced disease.
 

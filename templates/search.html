@@ -48,7 +48,7 @@
 {%- for p in tools.pages %}
 {"k":"topic","t":{{ p.title | json_encode | safe }},"d":{{ p.description | default(value="") | json_encode | safe }},"s":"Tools","u":{{ p.permalink | json_encode | safe }},"b":""},
 {%- endfor %}
-{%- for path in ["about.md", "privacy.md"] %}{% set p = get_page(path=path) %}
+{%- for path in ["about.md", "about-this-site.md", "privacy.md"] %}{% set p = get_page(path=path) %}
 {"t":{{ p.title | json_encode | safe }},"d":{{ p.description | default(value="") | json_encode | safe }},"s":"About this site","u":{{ p.permalink | json_encode | safe }},"b":{{ p.content | json_encode | safe }}},
 {%- endfor %}
 {%- set contact = get_section(path="contact/_index.md") %}

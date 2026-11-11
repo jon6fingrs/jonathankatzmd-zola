@@ -47,7 +47,7 @@ The laser does not improve vision, and it is not a treatment for [cataract](@/le
 - You have symptoms of on-and-off closure, such as aching and halos in dim light
 - Your angle is narrow and you need frequent dilation, or take medicines that can narrow it further
 
-Not every narrow angle needs a laser. A large study (the ZAP trial) found that eyes with narrow angles but no other problems had a low risk of an attack over many years, so for some people careful watching is reasonable. Your doctor weighs how narrow the angle is, your pressure, the nerve, and your circumstances.
+[Narrow Angles and Angle Closure](@/learn/angle-closure.md) covers the condition itself. Not every narrow angle needs a laser. A large study (the ZAP trial) found that eyes with narrow angles but no other problems had a low risk of an attack over many years, so for some people careful watching is reasonable. Your doctor weighs how narrow the angle is, your pressure, the nerve, and your circumstances.
 
 **Cataract surgery is the other way to open a narrow angle.** The natural lens is thick and the implant that replaces it is thin, which makes much more room. If you have a cataract that is ready, or higher pressure with angle closure, your doctor may recommend lens surgery instead of, or after, the laser.
 

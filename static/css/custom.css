@@ -1212,3 +1212,42 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-search__druglist span { color: var(--jk-muted); font-size: .92rem; }
 .jk-search__try { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; }
 .jk-search__try a { display: inline-block; padding: .4rem .8rem; border: 1px solid var(--jk-line); border-radius: 999px; background: #fff; text-decoration: none; min-height: 36px; }
+
+/* Lens implant chooser (learn/lens-implants, static/js/iol.js). Phones show
+   one distance at a time with a strip rating all three; from 768px the three
+   photos sit side by side. */
+.jk-iol { margin: 1.5rem 0 2rem; background: #fff; border: 1px solid var(--jk-line); border-radius: 10px; padding: 1rem; }
+.jk-iol__lenses { margin-bottom: .6rem; }
+.jk-iol__opts { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; margin: 0 0 .75rem; }
+.jk-iol__opt { display: inline-flex; align-items: center; gap: .45rem; min-height: 40px; font-size: .98rem; cursor: pointer; }
+.jk-iol__opt input { width: 1.15rem; height: 1.15rem; margin: 0; }
+.jk-iol__tabs { margin-bottom: .6rem; }
+.jk-iol__panes { display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem; }
+.jk-iol__pane { margin: 0; min-width: 0; }
+.jk-iol__panes[data-show="far"] .jk-iol__pane:not([data-pane="far"]),
+.jk-iol__panes[data-show="mid"] .jk-iol__pane:not([data-pane="mid"]),
+.jk-iol__panes[data-show="near"] .jk-iol__pane:not([data-pane="near"]) { display: none; }
+.jk-iol__photo { position: relative; aspect-ratio: 3 / 2; border-radius: 8px; overflow: hidden; background: #111; }
+.jk-iol__img, .jk-iol__ghost { position: absolute; inset: -3%; width: 106%; height: 106%; object-fit: cover; display: block; margin: 0; max-width: none; }
+.jk-iol__ghost { opacity: 0; mix-blend-mode: screen; }
+.jk-iol__halo { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; }
+.jk-page--article .jk-page__body .jk-iol figcaption, .jk-iol figcaption { margin-top: .4rem; font-size: .95rem; line-height: 1.35; text-align: left; }
+.jk-iol__sub { color: var(--jk-muted); }
+.jk-iol__rate { display: block; font-weight: 600; }
+.jk-iol__rate--2 { color: #15803d; }
+.jk-iol__rate--1 { color: #b45309; }
+.jk-iol__rate--0 { color: #64748b; }
+.jk-page--article .jk-page__body .jk-iol__strip, .jk-iol__strip { list-style: none; display: flex; flex-wrap: wrap; gap: .3rem 1rem; padding: 0; margin: .75rem 0 0; font-size: .95rem; }
+.jk-iol__strip li { display: inline-flex; align-items: center; gap: .35rem; margin: 0; }
+.jk-iol__dot { width: 14px; height: 14px; border-radius: 50%; border: 2.5px solid #15803d; display: inline-block; flex: none; }
+.jk-iol__dot--yes { background: #15803d; }
+.jk-iol__dot--some { background: linear-gradient(90deg, #fff 50%, #15803d 50%); }
+.jk-iol__dot--no { border-color: #94a3b8; background: #fff; }
+.jk-page--article .jk-page__body .jk-iol__text, .jk-iol__text { margin: .75rem 0 0; font-size: .98rem; min-height: 4.2em; }
+@media (min-width: 768px) {
+  .jk-iol { padding: 1.25rem 1.4rem; }
+  .jk-iol__tabs, .jk-page--article .jk-page__body .jk-iol__strip, .jk-iol__strip { display: none; }
+  .jk-iol__panes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .jk-iol__panes .jk-iol__pane { display: block !important; }
+}
+@media print { .jk-iol__lenses, .jk-iol__opts, .jk-iol__tabs { display: none; } .jk-iol__panes .jk-iol__pane { display: block !important; } }
