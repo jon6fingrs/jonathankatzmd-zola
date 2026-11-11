@@ -104,6 +104,9 @@ icon = "images/nav/human-greeting-proximity.svg"
 name = "SEARCH"
 url = "/search/"
 icon = "images/nav/search.svg"
+# On wide screens show only the magnifier (the word stays for screen readers
+# and in the phone menu), so the menu still fits on one row next to the name.
+icon_only = true
 
 # Katzen Eye Group office locations
 [[extra.offices]]
