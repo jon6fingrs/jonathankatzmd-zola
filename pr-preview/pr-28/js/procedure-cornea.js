@@ -173,12 +173,12 @@
       + '<g fill="none" stroke="#dc2626" stroke-width="1.8" stroke-linecap="round"><path d="M' + (PX + 166) + ',' + (PY - 8) + ' C' + (PX + 130) + ',' + (PY - 12) + ' ' + (PX + 100) + ',' + (PY - 6) + ' ' + (PX + 70) + ',' + (PY - 2) + '"/><path d="M' + (PX + 166) + ',' + (PY + 8) + ' C' + (PX + 130) + ',' + (PY + 12) + ' ' + (PX + 100) + ',' + (PY + 6) + ' ' + (PX + 70) + ',' + (PY + 2) + '"/></g></g>'
       + '</g>'
       + '<path d="M' + (PX - 170) + ',' + PY + ' Q' + PX + ',' + (PY - 172) + ' ' + (PX + 170) + ',' + PY + '" fill="none" stroke="' + INK + '" stroke-width="5"/>'
-      + '<g id="pt-take" opacity="0">' + arrow('pt-take-a', 'M' + (PX + 60) + ',' + (PY - 150) + ' C' + (PX + 100) + ',' + (PY - 110) + ' ' + (PX + 112) + ',' + (PY - 70) + ' ' + (PX + 114) + ',' + (PY - 34), '#c2410c', 3.5) + '</g>'
+      + '<g id="pt-take" opacity="0">' + arrow('pt-take-a', 'M' + (PX + 60) + ',' + (PY + 150) + ' C' + (PX + 100) + ',' + (PY + 110) + ' ' + (PX + 112) + ',' + (PY + 70) + ' ' + (PX + 114) + ',' + (PY + 34), '#c2410c', 3.5) + '</g>'
       + txt(20, 30, 'Cornea', 'start') + lead(92, 36, PX - 40, PY - 50)
       + txt(540, 30, 'Inner corner,', 'end') + txt(540, 52, 'beside the nose', 'end', MUTED, 400, 17) + lead(500, 60, PX + 164, PY - 4)
       + '<g id="pt-lab-a" opacity="0">' + txt(280, 424, 'Pinguecula: a yellowish bump on the white', 'middle', '#a16207', 700, 19) + '</g>'
       + '<g id="pt-lab-b" opacity="0">' + txt(280, 424, 'Pterygium: tissue growing onto the cornea', 'middle', '#b91c1c', 700, 19) + '</g>'
-      + '<g id="pt-lab-c" opacity="0">' + txt(280, 424, 'Removed; a graft from under the upper lid covers the spot', 'middle', '#c2410c', 700, 18) + '</g>';
+      + '<g id="pt-lab-c" opacity="0">' + txt(280, 424, 'Removed; a graft from under the lower lid covers the spot', 'middle', '#c2410c', 700, 18) + '</g>';
     return h + '</svg>';
   }
   var PTERY = {
@@ -189,7 +189,7 @@
         draw: function (p) { var e = ease(p); at('pt-ping', 'rx', 15 * e); at('pt-ping', 'ry', 20 * e); op('pt-lab-a', e); } },
       { label: 'Pterygium', dur: 3000, caption: '<strong>A pterygium.</strong> A wedge of tissue with its own blood vessels that grows from the white of the eye onto the cornea, slowly, over years. It causes redness, a gritty feeling and dryness. As it advances it pulls on the cornea and distorts its shape, blurring vision, and it can eventually reach the pupil.',
         draw: function (p) { var e = ease(p); at('pt-wedge-p', 'd', ptWedge(e)); op('pt-wedge', ease(clamp(p * 4, 0, 1))); op('pt-lab-b', e); if (p > 0) { op('pt-lab-a', 1 - e); op('pt-ping', 1 - ease(clamp(p * 4, 0, 1))); } else op('pt-ping', 1); } },
-      { label: 'Surgery', dur: 3000, caption: '<strong>Surgery.</strong> The pterygium is removed, and the bare spot is covered with a small graft of your own conjunctiva taken from under the upper eyelid, held with tissue glue or fine stitches. The graft is what keeps it from growing back; without one, most return. Sunglasses and a hat matter afterward.',
+      { label: 'Surgery', dur: 3000, caption: '<strong>Surgery.</strong> The pterygium is removed, and the bare spot is covered with a small graft of your own conjunctiva taken from under the lower eyelid, held with tissue glue or fine stitches. (Amniotic membrane, a thin donor tissue, can be used instead.) The graft is what keeps it from growing back; without one, most return. Sunglasses and a hat matter afterward.',
         draw: function (p) { var a = ease(clamp(p * 2, 0, 1)), b = ease(clamp(p * 2 - 1, 0, 1)); if (p > 0) { op('pt-wedge', 1 - a); op('pt-lab-b', 1 - a); } op('pt-take', p > 0.45 && p < 0.95 ? 1 : 0); op('pt-graft', b); op('pt-lab-c', ease(p)); } }
     ]
   };

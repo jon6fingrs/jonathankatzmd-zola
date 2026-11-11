@@ -1162,10 +1162,6 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-amsler__grid { max-width: 420px; margin: 0 auto; }
 .jk-amsler__svg { display: block; width: 100%; height: auto; }
 .jk-page--article .jk-page__body .jk-amsler__note, .jk-amsler__note { margin: .75rem auto 0; max-width: 34rem; font-size: .98rem; min-height: 3em; }
-/* "Print the grid" prints only the grid, at about 10 cm, the size it is meant to be used at */
-@media print {
-  body.jk-print-amsler * { visibility: hidden !important; }
-  body.jk-print-amsler .jk-amsler__grid, body.jk-print-amsler .jk-amsler__grid * { visibility: visible !important; }
-  body.jk-print-amsler .jk-amsler__grid { position: fixed; left: 50%; top: 30mm; width: 100mm; max-width: none; transform: translateX(-50%); }
-  .jk-amsler__tabs, .jk-amsler .jk-lpi__controls { display: none; }
-}
+/* "Print the grid" opens static/print/amsler-grid.html. Printing the article
+   itself shows the grid without its buttons. */
+@media print { .jk-amsler__tabs, .jk-amsler .jk-lpi__controls { display: none; } }
