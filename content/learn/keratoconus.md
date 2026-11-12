@@ -3,7 +3,7 @@ title = "Keratoconus"
 description = "Keratoconus: a cornea that thins and bulges into a cone, often from the teens. Symptoms, diagnosis, cross-linking to stop it, and lenses that restore vision."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-11
+updated = 2026-11-12
 weight = 530
 
 [extra]
@@ -15,7 +15,7 @@ scripts = ["js/procedure-cornea.js", "js/procedure.js"]
 
 **Keratoconus** is a condition in which the cornea, normally a smooth dome, gradually thins and bulges forward into a cone. Because the cornea does most of the eye's focusing, the irregular shape blurs and distorts vision. It usually begins in the teens or twenties, affects both eyes, though often unequally, and tends to progress for 10 to 20 years before settling. A treatment called **cross-linking** can now stop it from getting worse, so finding it early matters.
 
-Press **Play** to see what happens.
+Press **Play** to see what happens, from the cone forming to cross-linking and a scleral lens.
 
 <div id="jk-proc" class="jk-lpi" data-proc="kc">
   <p class="jk-vis__noscript">The animation needs JavaScript. The explanation below covers the same thing.</p>
