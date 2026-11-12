@@ -1301,7 +1301,7 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
   .jk-handout__qr { display: block; width: .95in; font-size: 7pt; }
   .jk-handout__code svg { width: .95in; height: .95in; }
   .jk-handout__fig { max-width: 4.6in; margin-bottom: .1in; }
-  .jk-handout__fig img { max-height: 2.1in; width: auto; margin: 0 auto; }
+  .jk-handout__fig img { max-height: 1.95in; width: auto; margin: 0 auto; }
   .jk-handout__cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .3in; align-items: start; }
   .jk-handout__body h2 { font-size: 12.5pt; margin: .12in 0 .04in; }
   .jk-handout__body p, .jk-handout__body li { font-size: 10.5pt; line-height: 1.32; }

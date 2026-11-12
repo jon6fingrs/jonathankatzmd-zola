@@ -28,10 +28,10 @@ The surgeon makes a small trapdoor in the wall of the eye under the upper lid. F
 ## Recovery
 
 - Vision is often blurry for several weeks.
-- **Drops:** a steroid often eight times a day at first, tapered slowly over about twelve weeks; an antibiotic for the first week; an antibiotic ointment at bedtime for about two weeks. Glaucoma drops in the operated eye are usually stopped; keep using drops in the other eye unless told otherwise.
 
 </div><div class="jk-handout__col">
 
+- **Drops:** a steroid often eight times a day at first, tapered slowly over about twelve weeks; an antibiotic for the first week; an antibiotic ointment at bedtime for about two weeks. Glaucoma drops in the operated eye are usually stopped; keep using drops in the other eye unless told otherwise.
 - **Visits:** the next day, then weekly for several weeks. Stitch adjustments take a minute in the office.
 - Wear the shield at night for two weeks.
 - For about a month: no rubbing, no bending with your head below your waist, no lifting more than about ten pounds, no swimming or straining.

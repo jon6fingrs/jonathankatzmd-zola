@@ -27,10 +27,10 @@ A soft silicone tube is placed just inside the front of the eye and carries flui
 ## Recovery
 
 - **Drops:** a steroid often at first, tapered over about six weeks; an antibiotic for the first week; an antibiotic ointment at bedtime for about two weeks. With a non-valved device, keep using the glaucoma drops you are told to until the tube opens.
-- **Visits:** the next day, one week, then every one to two weeks for the first six weeks.
 
 </div><div class="jk-handout__col">
 
+- **Visits:** the next day, one week, then every one to two weeks for the first six weeks.
 - Wear the shield at night for two weeks. For the first month, avoid rubbing the eye, swimming, heavy lifting and bending with your head down.
 - **Normal at first:** blurry vision, a scratchy feeling, mild ache, and a red, swollen eye for one to two weeks. The eye may feel slightly full where the plate sits. Early double vision usually settles.
 

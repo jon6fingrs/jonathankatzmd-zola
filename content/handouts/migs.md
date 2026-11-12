@@ -27,10 +27,10 @@ MIGS improves the eye's natural drain through tiny openings: a stent smaller tha
 ## Afterward
 
 - Vision is blurry for a day or two and improves over the first week. A little blood inside the eye is common and clears within days.
-- Use the drops exactly as prescribed: typically an antibiotic for about a week and a steroid tapered over about a month.
 
 </div><div class="jk-handout__col">
 
+- Use the drops exactly as prescribed: typically an antibiotic for about a week and a steroid tapered over about a month.
 - Your glaucoma drops may be continued, reduced or stopped depending on your pressure. Ask which to use.
 - Visits at about one day, one week and one month.
 - For the first couple of weeks, avoid rubbing the eye, swimming and heavy lifting.
