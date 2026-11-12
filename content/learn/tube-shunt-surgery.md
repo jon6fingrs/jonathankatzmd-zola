@@ -7,6 +7,7 @@ updated = 2026-11-10
 weight = 90
 
 [extra]
+handout = "handouts/tube-shunt-surgery.md"
 article = true
 topic = "glaucoma"
 group = "Surgery"

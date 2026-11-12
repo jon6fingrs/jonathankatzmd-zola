@@ -7,6 +7,7 @@ updated = 2026-11-11
 weight = 50
 
 [extra]
+handout = "handouts/slt-laser.md"
 article = true
 topic = "glaucoma"
 group = "Lasers"

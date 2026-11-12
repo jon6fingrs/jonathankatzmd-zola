@@ -94,6 +94,9 @@ mega = true
   [[extra.menus.children]]
   name = "All topics"
   url = "/learn/"
+  [[extra.menus.children]]
+  name = "Printable handouts"
+  url = "/handouts/"
 
 [[extra.menus]]
 name = "CONTACT"
