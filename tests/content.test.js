@@ -148,3 +148,15 @@ test('recovery pages agree with the tool on how long drops last', () => {
     assert.strictEqual(rules.antibioticCount(s, 'Moxifloxacin', 7), 0, s + ': antibiotic stops after a week');
   }
 });
+
+test('every handout points at a Learn page, and that page links back', () => {
+  const bad = [];
+  for (const f of fs.readdirSync(path.join(ROOT, 'content/handouts')).filter((x) => x.endsWith('.md') && x !== '_index.md')) {
+    const { top, extra } = frontMatter('content/handouts/' + f);
+    if (top.template !== 'handout.html') bad.push(f + ': template');
+    if (!extra.article || !fs.existsSync(path.join(ROOT, 'content', extra.article))) { bad.push(f + ': article missing'); continue; }
+    if (frontMatter('content/' + extra.article).extra.handout !== 'handouts/' + f) bad.push(extra.article + ': no handout = "handouts/' + f + '"');
+    if (extra.figure && !fs.existsSync(path.join(ROOT, 'static', extra.figure))) bad.push(f + ': figure missing');
+  }
+  assert.deepStrictEqual(bad, []);
+});

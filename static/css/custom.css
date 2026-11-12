@@ -712,7 +712,9 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-related li { margin: 0; }
 .jk-related li a { display: inline-flex; align-items: center; padding: .35rem .85rem; border: 1px solid var(--jk-line); border-radius: 999px; background: var(--jk-bg); color: var(--jk-ink); text-decoration: none; min-height: 38px; }
 .jk-related li a:hover { border-color: var(--jk-accent); color: var(--jk-accent); }
-.jk-related__all { color: var(--jk-accent); text-decoration: none; font-weight: 500; font-size: .92rem; white-space: nowrap; }
+.jk-related__all { color: var(--jk-accent); text-decoration: none; font-weight: 500; font-size: .92rem; white-space: nowrap;  display: inline-block; padding: .7rem .4rem; margin: -.7rem -.4rem; }
+/* The padding above makes the link a 44px tap target; the matching negative
+   margin keeps the text exactly where it was. */
 .jk-related__all:hover { text-decoration: underline; }
 .jk-sectionhead--minor { margin-top: 2.75rem; font-size: 1.15rem; color: var(--jk-muted); }
 .jk-cardgrid--compact .jk-card h3 { font-size: 1rem; }
@@ -1254,3 +1256,58 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
   .jk-iol__panes .jk-iol__pane { display: block !important; }
 }
 @media print { .jk-iol__lenses, .jk-iol__opts, .jk-iol__tabs { display: none; } .jk-iol__panes .jk-iol__pane { display: block !important; } }
+
+/* Procedure handouts (templates/handout.html). On screen: a sheet of paper
+   with a Print button. Printed: only the sheet, on one Letter page, with the
+   text in two columns under the picture. */
+.jk-handout__bar { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.25rem; margin: 0 0 1rem; }
+.jk-handout__bar .btn { margin-left: auto; min-height: 44px; }
+.jk-handout__bar a:not(.btn) { display: inline-block; padding: .6rem 0; }
+.jk-handout__sheet { background: #fff; border: 1px solid var(--jk-line); border-radius: 6px; box-shadow: 0 2px 10px rgba(15, 23, 42, .06); padding: 1.25rem 1.1rem; }
+.jk-handout__head { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; border-bottom: 2px solid var(--jk-ink); padding-bottom: .75rem; margin-bottom: .9rem; }
+.jk-handout__kicker { margin: 0; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--jk-muted); }
+.jk-handout__title { font-size: 1.6rem; font-weight: 700; margin: .1rem 0 .3rem; }
+.jk-handout__lede { margin: 0; color: var(--jk-muted); font-size: .98rem; }
+.jk-handout__qr { flex: none; width: 96px; text-align: center; font-size: .7rem; line-height: 1.25; color: var(--jk-muted); }
+.jk-handout__code svg { display: block; width: 96px; height: 96px; margin-bottom: .25rem; }
+.jk-handout__fig { margin: 0 auto 1rem; max-width: 560px; }
+.jk-handout__fig img { display: block; width: 100%; height: auto; margin: 0; }
+.jk-handout__body h2 { font-size: 1.05rem; font-weight: 700; margin: 1rem 0 .35rem; break-after: avoid; }
+.jk-handout__body h2:first-child { margin-top: 0; }
+.jk-handout__body p, .jk-handout__body li { font-size: .98rem; line-height: 1.45; }
+.jk-handout__body p { margin: 0 0 .5rem; }
+.jk-handout__body ul { margin: 0 0 .5rem; padding-left: 1.15rem; }
+.jk-handout__body li { margin-bottom: .2rem; break-inside: avoid; }
+.jk-handout__body .jk-handout__call { border: 2px solid #b91c1c; border-radius: 6px; padding: .5rem .75rem .25rem; break-inside: avoid; }
+.jk-handout__body .jk-handout__call h2 { color: #b91c1c; margin-top: 0; }
+.jk-handout__foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 1rem; border-top: 1px solid var(--jk-line); margin-top: 1rem; padding-top: .5rem; font-size: .8rem; color: var(--jk-muted); }
+@media (max-width: 480px) { .jk-handout__qr { display: none; } .jk-handout__bar .btn { margin-left: 0; width: 100%; } }
+@media (min-width: 768px) {
+  .jk-handout__sheet { padding: 2rem 2.25rem; }
+  .jk-handout__body { column-count: 2; column-gap: 2rem; }
+}
+@media print {
+  @page { size: letter; margin: .45in; }
+  .jk-handout__bar, .jk-preview-banner { display: none !important; }
+  .jk-handout .container, .jk-handout .jk-page__body { max-width: none; padding: 0; margin: 0; }
+  .jk-page.jk-handout { padding: 0; }
+  .jk-handout__sheet { border: 0; box-shadow: none; padding: 0; border-radius: 0; }
+  .jk-handout__head { margin-bottom: .1in; padding-bottom: .08in; }
+  .jk-handout__title { font-size: 19pt; }
+  .jk-handout__lede { font-size: 10pt; }
+  .jk-handout__qr { display: block; width: .95in; font-size: 7pt; }
+  .jk-handout__code svg { width: .95in; height: .95in; }
+  .jk-handout__fig { max-width: 4.6in; margin-bottom: .1in; }
+  .jk-handout__fig img { max-height: 2.3in; width: auto; margin: 0 auto; }
+  .jk-handout__body { column-count: 2; column-gap: .3in; }
+  .jk-handout__body h2 { font-size: 11pt; margin: .1in 0 .03in; }
+  .jk-handout__body p, .jk-handout__body li { font-size: 9.5pt; line-height: 1.3; }
+  .jk-handout__body li { margin-bottom: .02in; }
+  .jk-handout__foot { font-size: 7.5pt; margin-top: .1in; padding-top: .05in; }
+}
+
+/* "Print a one-page handout" link at the end of a procedure page. */
+.jk-page--article .jk-page__body .jk-handoutlink, .jk-handoutlink { margin: 2rem 0 0; }
+.jk-handoutlink a { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: .45rem .9rem; border: 1px solid var(--jk-line); border-radius: 8px; background: #fff; text-decoration: none; font-weight: 500; }
+.jk-handoutlink a::before { content: ""; width: 18px; height: 18px; flex: none; background: currentColor; -webkit-mask: url("../images/nav/print.svg") center / contain no-repeat; mask: url("../images/nav/print.svg") center / contain no-repeat; }
+@media print { .jk-handoutlink { display: none; } }

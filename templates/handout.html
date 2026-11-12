@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{#- A one-page printable handout (content/handouts/*.md). On screen it is a
+    sheet with a Print button; printed, only the sheet appears, sized to fit
+    one Letter page. [extra] article = the Learn page it summarizes (its link
+    and QR code), figure / figure_alt = a picture from static/images/learn/.
+    The QR code is drawn in the browser by static/js/handout.js. -#}
+{% block content %}
+{%- set art = get_page(path=page.extra.article) %}
+{%- set index = get_section(path="handouts/_index.md") %}
+<section class="jk-page jk-handout">
+  <div class="container">
+    <div class="jk-page__body">
+      <div class="jk-handout__bar">
+        <a href="{{ index.permalink }}">&larr; All handouts</a>
+        <a href="{{ art.permalink }}">Full page, with the animation</a>
+        <button type="button" class="btn btn-primary" data-print>Print this handout</button>
+      </div>
+      <article class="jk-handout__sheet">
+        <header class="jk-handout__head">
+          <div class="jk-handout__titles">
+            <p class="jk-handout__kicker">Patient information</p>
+            <h1 class="jk-handout__title">{{ page.extra.heading | default(value=page.title) }}</h1>
+            <p class="jk-handout__lede">{{ page.description }}</p>
+          </div>
+          <div class="jk-handout__qr">
+            <div class="jk-handout__code" data-qr="{{ art.permalink }}"></div>
+            <span>Scan for the full page, with an animation</span>
+          </div>
+        </header>
+        {%- if page.extra.figure %}
+        <figure class="jk-handout__fig"><img src="{{ get_url(path=page.extra.figure) }}" alt="{{ page.extra.figure_alt }}"></figure>
+        {%- endif %}
+        <div class="jk-handout__body">
+          {{ page.content | safe }}
+        </div>
+        <footer class="jk-handout__foot">
+          <span>General information, not medical advice. Your own doctor's instructions come first and may differ.</span>
+          <span>jonathankatzmd.com{% if page.updated %} &middot; Updated {{ page.updated | date(format="%b %-d, %Y") }}{% endif %}</span>
+        </footer>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock content %}
+
+{% block javascripts %}
+{{ super() }}
+<script src="{{ get_url(path='vendor/qrcode.js', cachebust=true) }}"></script>
+<script src="{{ get_url(path='js/handout.js', cachebust=true) }}"></script>
+{% endblock javascripts %}

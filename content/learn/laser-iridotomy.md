@@ -7,6 +7,7 @@ updated = 2026-11-11
 weight = 60
 
 [extra]
+handout = "handouts/laser-iridotomy.md"
 article = true
 topic = "glaucoma"
 group = "Lasers"

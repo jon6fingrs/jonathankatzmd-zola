@@ -18,6 +18,10 @@
       {% if page.extra.article and page.date and "learn" in page.components %}<p class="jk-dates"><span>Published <time datetime="{{ page.date }}">{{ page.date | date(format="%b %-d, %Y") }}</time></span>{% if page.updated and page.updated != page.date %} &middot; <span>Updated <time datetime="{{ page.updated }}">{{ page.updated | date(format="%b %-d, %Y") }}</time></span>{% endif %}</p>
       {% elif page.extra.article and page.updated %}<p class="jk-dates">Last updated <time datetime="{{ page.updated }}">{{ page.updated | date(format="%B %-d, %Y") }}</time></p>{% endif %}
       {{ page.content | safe }}
+      {#- A procedure page with a printable handout ([extra] handout = "handouts/x.md") links to it. -#}
+      {% if page.extra.handout %}{% set ho = get_page(path=page.extra.handout) %}
+      <p class="jk-handoutlink"><a href="{{ ho.permalink }}">Print a one-page handout on {{ ho.extra.heading | default(value=ho.title) }}</a></p>
+      {% endif %}
       {#- Learn articles end with the other pages in the same topic and group,
           and a link to the topic page. Pages with no topic get nothing. -#}
       {% if page.extra.article and page.extra.topic %}

@@ -7,6 +7,7 @@ updated = 2026-11-11
 weight = 110
 
 [extra]
+handout = "handouts/yag-capsulotomy.md"
 article = true
 topic = "cataract"
 group = ""

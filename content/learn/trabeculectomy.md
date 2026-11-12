@@ -7,6 +7,7 @@ updated = 2026-11-11
 weight = 80
 
 [extra]
+handout = "handouts/trabeculectomy.md"
 article = true
 topic = "glaucoma"
 group = "Surgery"

@@ -7,6 +7,7 @@ updated = 2026-11-11
 weight = 100
 
 [extra]
+handout = "handouts/cataract-surgery.md"
 article = true
 topic = "cataract"
 group = ""
