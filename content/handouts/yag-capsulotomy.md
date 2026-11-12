@@ -13,6 +13,8 @@ figure = "images/learn/yag-capsulotomy.svg"
 figure_alt = "A cloudy capsule behind the lens implant, and the clear opening the laser makes in its center."
 +++
 
+<div class="jk-handout__cols"><div class="jk-handout__col">
+
 ## Why it is done
 
 Months or years after cataract surgery, the thin capsule behind the lens implant can turn hazy. This is common and is not a complication. The laser makes a clear opening in its center, which usually brings vision back to where it was after the surgery. It is normally needed only once in each eye.
@@ -23,6 +25,8 @@ Months or years after cataract surgery, the thin capsule behind the lens implant
 - You sit at the laser with your chin on a rest. You see flashes and hear soft clicks. It does not hurt and takes a minute or two.
 - Usually nothing touches the eye.
 - Bring a driver: the dilating drops blur vision for several hours.
+
+</div><div class="jk-handout__col">
 
 ## Afterward
 
@@ -41,3 +45,5 @@ Months or years after cataract surgery, the thin capsule behind the lens implant
 <li>Vision that gets worse instead of better</li>
 </ul>
 </div>
+
+</div></div>

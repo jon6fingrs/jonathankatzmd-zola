@@ -157,6 +157,8 @@ test('every handout points at a Learn page, and that page links back', () => {
     if (!extra.article || !fs.existsSync(path.join(ROOT, 'content', extra.article))) { bad.push(f + ': article missing'); continue; }
     if (frontMatter('content/' + extra.article).extra.handout !== 'handouts/' + f) bad.push(extra.article + ': no handout = "handouts/' + f + '"');
     if (extra.figure && !fs.existsSync(path.join(ROOT, 'static', extra.figure))) bad.push(f + ': figure missing');
+    // Two columns written into the file: Safari on iPhone ignores CSS multi-column when printing.
+    if ((read('content/handouts/' + f).match(/class="jk-handout__col"/g) || []).length !== 2) bad.push(f + ': needs its two jk-handout__col divs');
   }
   assert.deepStrictEqual(bad, []);
 });

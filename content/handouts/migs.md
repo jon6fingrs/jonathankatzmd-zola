@@ -13,6 +13,8 @@ figure = "images/learn/migs-stent.svg"
 figure_alt = "Close-up of the drain: a tiny stent passing from the front of the eye through the meshwork into the canal behind it."
 +++
 
+<div class="jk-handout__cols"><div class="jk-handout__col">
+
 ## What it is
 
 MIGS improves the eye's natural drain through tiny openings: a stent smaller than a grain of rice, a goniotomy that opens a strip of the drain, or viscodilation that stretches the canal behind it. These are often combined, and often done with cataract surgery. MIGS is for mild to moderate glaucoma. It lowers pressure and the number of drops needed, though less than a trabeculectomy or tube shunt.
@@ -21,6 +23,8 @@ MIGS improves the eye's natural drain through tiny openings: a stent smaller tha
 
 - Outpatient, with numbing and light sedation. With cataract surgery it takes about 15 to 30 minutes.
 - You go home with a shield over the eye. Bring a driver.
+
+</div><div class="jk-handout__col">
 
 ## Afterward
 
@@ -39,3 +43,5 @@ MIGS improves the eye's natural drain through tiny openings: a stent smaller tha
 <li>New flashes, a shower of floaters, or a curtain over your vision</li>
 </ul>
 </div>
+
+</div></div>

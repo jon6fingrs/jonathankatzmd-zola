@@ -13,6 +13,8 @@ figure = "images/learn/cataract-lens.svg"
 figure_alt = "A cloudy natural lens behind the iris, and the thin clear lens implant that replaces it in the same capsule."
 +++
 
+<div class="jk-handout__cols"><div class="jk-handout__col">
+
 ## Before
 
 - The eye is measured to choose the power of the lens implant. Contact lenses may need to stay out for some days first.
@@ -25,6 +27,8 @@ figure_alt = "A cloudy natural lens behind the iris, and the thin clear lens imp
 - Follow the eating and drinking instructions. Take your usual medicines unless told otherwise.
 - Expect two to three hours at the center. The eye is numbed and you are given light sedation; the operation takes about 10 to 20 minutes.
 - You go home with a shield over the eye.
+
+</div><div class="jk-handout__col">
 
 ## The first weeks
 
@@ -46,3 +50,5 @@ figure_alt = "A cloudy natural lens behind the iris, and the thin clear lens imp
 <li>You see many new floaters, flashes, or a curtain over your vision</li>
 </ul>
 </div>
+
+</div></div>

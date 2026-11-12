@@ -13,6 +13,8 @@ figure = "images/learn/trabeculectomy.svg"
 figure_alt = "A small flap and opening in the eye wall near the cornea, with fluid collecting in a blister called a bleb under the conjunctiva."
 +++
 
+<div class="jk-handout__cols"><div class="jk-handout__col">
+
 ## What it is
 
 The surgeon makes a small trapdoor in the wall of the eye under the upper lid. Fluid leaves through it and collects in a small blister, the bleb, hidden under the lid, where it is absorbed. Stitches in the trapdoor can be loosened in the weeks afterward to fine-tune the pressure, so the first months involve close follow-up.
@@ -22,6 +24,8 @@ The surgeon makes a small trapdoor in the wall of the eye under the upper lid. F
 - Outpatient, with a numbing block and sedation; about 45 to 60 minutes.
 - You go home with a patch and shield. Bring a driver.
 - Ask well beforehand about any blood thinners.
+
+</div><div class="jk-handout__col">
 
 ## Recovery
 
@@ -41,3 +45,5 @@ The surgeon makes a small trapdoor in the wall of the eye under the upper lid. F
 </ul>
 <p><strong>For life:</strong> an eye that turns red, painful or sticky at any time, even years later, should be seen promptly.</p>
 </div>
+
+</div></div>

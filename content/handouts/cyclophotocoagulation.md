@@ -13,6 +13,8 @@ figure = "images/learn/aqueous-flow.svg"
 figure_alt = "The front of the eye: the ciliary body behind the iris makes the fluid, which flows through the pupil and leaves through the drain."
 +++
 
+<div class="jk-handout__cols"><div class="jk-handout__col">
+
 ## What it does
 
 Cyclophotocoagulation (CPC) treats the ciliary body, the tissue behind the iris that makes the eye's fluid, through the white of the eye. Less fluid is made, so the pressure falls. There are no cuts or stitches.
@@ -24,6 +26,8 @@ Cyclophotocoagulation (CPC) treats the ciliary body, the tissue behind the iris 
 
 - In a procedure room or operating room; the laser itself takes a few minutes.
 - The eye may be patched for the rest of the day. Bring a driver.
+
+</div><div class="jk-handout__col">
 
 ## Afterward
 
@@ -40,3 +44,5 @@ Cyclophotocoagulation (CPC) treats the ciliary body, the tissue behind the iris 
 <li>Increasing redness</li>
 </ul>
 </div>
+
+</div></div>

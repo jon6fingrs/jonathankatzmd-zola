@@ -13,6 +13,8 @@ figure = "images/learn/tube-shunt.svg"
 figure_alt = "A thin tube entering the front of the eye and running under a patch along the eye wall to a plate further back."
 +++
 
+<div class="jk-handout__cols"><div class="jk-handout__col">
+
 ## What it is
 
 A soft silicone tube is placed just inside the front of the eye and carries fluid to a thin plate on the wall of the eye, under the upper lid, where it is absorbed. The tube is covered with a patch. Some devices have a valve and work right away (Ahmed). Others have no valve and are tied off for the first four to six weeks while healing takes place (Baerveldt and similar); drops control the pressure until the tube opens.
@@ -21,6 +23,8 @@ A soft silicone tube is placed just inside the front of the eye and carries flui
 
 - Outpatient, with a numbing block and sedation; about an hour.
 - You go home with a patch and shield. Bring a driver.
+
+</div><div class="jk-handout__col">
 
 ## Recovery
 
@@ -38,3 +42,5 @@ A soft silicone tube is placed just inside the front of the eye and carries flui
 <li>You can see or feel the tube, or the eye feels very hard or very soft</li>
 </ul>
 </div>
+
+</div></div>

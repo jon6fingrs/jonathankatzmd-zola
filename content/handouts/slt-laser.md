@@ -13,6 +13,8 @@ figure = "images/learn/slt.svg"
 figure_alt = "The front of the eye with a contact lens on the cornea and a laser beam aimed at the drain where the iris meets the cornea."
 +++
 
+<div class="jk-handout__cols"><div class="jk-handout__col">
+
 ## What it does
 
 Selective laser trabeculoplasty (SLT) treats the eye's drain with short, gentle pulses of light. Over four to six weeks the drain works better and the pressure falls, on average by about as much as one drop. It can be a first treatment instead of drops, or added to them. The effect can wear off over years, and it can usually be repeated.
@@ -23,6 +25,8 @@ Selective laser trabeculoplasty (SLT) treats the eye's drain with short, gentle 
 - **Standard SLT:** a contact lens rests on the eye and the laser is applied around the drain over a few minutes. You see flashes and may feel a brief pinch.
 - **Direct SLT:** no contact lens. You look at a light, and the treatment takes two to three seconds.
 - The pressure is checked afterward, or at a visit soon after.
+
+</div><div class="jk-handout__col">
 
 ## Afterward
 
@@ -40,3 +44,5 @@ Selective laser trabeculoplasty (SLT) treats the eye's drain with short, gentle 
 <li>Increasing redness</li>
 </ul>
 </div>
+
+</div></div>

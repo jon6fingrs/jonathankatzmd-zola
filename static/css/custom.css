@@ -1259,7 +1259,10 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 
 /* Procedure handouts (templates/handout.html). On screen: a sheet of paper
    with a Print button. Printed: only the sheet, on one Letter page, with the
-   text in two columns under the picture. */
+   text in two columns under the picture. The two columns are written into
+   each handout (.jk-handout__col) and laid out with a grid: Safari on iPhone
+   ignores CSS multi-column when printing, and the text then ran onto a
+   second page. */
 .jk-handout__bar { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.25rem; margin: 0 0 1rem; }
 .jk-handout__bar .btn { margin-left: auto; min-height: 44px; }
 .jk-handout__bar a:not(.btn) { display: inline-block; padding: .6rem 0; }
@@ -1273,7 +1276,7 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 .jk-handout__fig { margin: 0 auto 1rem; max-width: 560px; }
 .jk-handout__fig img { display: block; width: 100%; height: auto; margin: 0; }
 .jk-handout__body h2 { font-size: 1.05rem; font-weight: 700; margin: 1rem 0 .35rem; break-after: avoid; }
-.jk-handout__body h2:first-child { margin-top: 0; }
+.jk-handout__body h2:first-child, .jk-handout__col > h2:first-child { margin-top: 0; }
 .jk-handout__body p, .jk-handout__body li { font-size: .98rem; line-height: 1.45; }
 .jk-handout__body p { margin: 0 0 .5rem; }
 .jk-handout__body ul { margin: 0 0 .5rem; padding-left: 1.15rem; }
@@ -1284,7 +1287,7 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 @media (max-width: 480px) { .jk-handout__qr { display: none; } .jk-handout__bar .btn { margin-left: 0; width: 100%; } }
 @media (min-width: 768px) {
   .jk-handout__sheet { padding: 2rem 2.25rem; }
-  .jk-handout__body { column-count: 2; column-gap: 2rem; }
+  .jk-handout__cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
 }
 @media print {
   @page { size: letter; margin: .45in; }
@@ -1298,8 +1301,8 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
   .jk-handout__qr { display: block; width: .95in; font-size: 7pt; }
   .jk-handout__code svg { width: .95in; height: .95in; }
   .jk-handout__fig { max-width: 4.6in; margin-bottom: .1in; }
-  .jk-handout__fig img { max-height: 2.3in; width: auto; margin: 0 auto; }
-  .jk-handout__body { column-count: 2; column-gap: .3in; }
+  .jk-handout__fig img { max-height: 2.1in; width: auto; margin: 0 auto; }
+  .jk-handout__cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .3in; align-items: start; }
   .jk-handout__body h2 { font-size: 12.5pt; margin: .12in 0 .04in; }
   .jk-handout__body p, .jk-handout__body li { font-size: 10.5pt; line-height: 1.32; }
   .jk-handout__body li { margin-bottom: .02in; }

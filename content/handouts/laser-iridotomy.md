@@ -13,6 +13,8 @@ figure = "images/learn/iridotomy.svg"
 figure_alt = "Before: the iris bowed forward and crowding the drain. After: a small opening in the iris lets fluid through and the drain is open."
 +++
 
+<div class="jk-handout__cols"><div class="jk-handout__col">
+
 ## Why it is done
 
 In an eye with a narrow drainage angle, the iris can block the eye's drain and raise the pressure, slowly or suddenly. A tiny opening near the edge of the iris lets fluid pass through, so the iris falls back and the drain is uncovered.
@@ -23,6 +25,8 @@ In an eye with a narrow drainage angle, the iris can block the eye's drain and r
 - A contact lens rests on the eye. The laser takes a few pulses; each is a bright flash with a click, and you may feel a quick pinch.
 - The pressure is checked 30 to 60 minutes later.
 - Bring a driver: vision is blurred for several hours. Often both eyes are treated, on the same day or separately.
+
+</div><div class="jk-handout__col">
 
 ## Afterward
 
@@ -42,3 +46,5 @@ In an eye with a narrow drainage angle, the iris can block the eye's drain and r
 <li>A very red eye</li>
 </ul>
 </div>
+
+</div></div>
