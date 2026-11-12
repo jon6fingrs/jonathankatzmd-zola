@@ -42,7 +42,7 @@
     { id: 'monovision', label: 'Monovision', blur: { far: 0.5, mid: 1, near: 0.8 }, contrast: 1, halo: 0, toricIfNeeded: true,
       text: 'Monofocal lenses with one eye set for distance and the other for near; the brain uses whichever eye is clear. Many people manage most things without glasses, with slightly less depth perception. It is often tried with contact lenses first.' },
     { id: 'toric', label: 'Toric', blur: { far: 0, mid: 1.8, near: 3.6 }, contrast: 1, halo: 0, toric: true,
-      text: 'A monofocal lens that also corrects astigmatism, so distance is sharp without the smearing that astigmatism causes. Turn on “This eye has astigmatism” and compare it with a plain monofocal.' },
+      text: 'A monofocal lens that also corrects astigmatism, so distance is sharp without the smearing that astigmatism causes. With “This eye has astigmatism” on, compare it with a plain monofocal.' },
     { id: 'edof', label: 'Extended depth', blur: { far: 0, mid: 0.2, near: 1.7 }, contrast: 0.95, halo: 1, toricIfNeeded: true,
       text: 'Stretches clear vision from far to arm’s length; reading small print usually still needs light reading glasses. Mild halos around lights at night for some people.' },
     { id: 'multi', label: 'Multifocal', blur: { far: 0.3, mid: 0.4, near: 0.3 }, contrast: 0.86, halo: 2, toricIfNeeded: true,
@@ -120,7 +120,7 @@
     panes.setAttribute('data-show', state.dist);
     nightBox.checked = state.night; astigBox.checked = state.astig;
     textEl.textContent = lens.text + (!state.astig || lens.toric ? ''
-      : lens.toricIfNeeded ? ' With astigmatism, the toric version of this lens is used, so the astigmatism is corrected too.'
+      : lens.toricIfNeeded ? ' With astigmatism, toric versions of these lenses are used, so the astigmatism is corrected too.'
       : ' With astigmatism left uncorrected, everything is a little smeared and lights may streak; glasses, or a toric version of the lens, fix that.');
   }
 
