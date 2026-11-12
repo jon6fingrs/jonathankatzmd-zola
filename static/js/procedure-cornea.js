@@ -115,6 +115,10 @@
     return 'M230,60 Q' + ox + ',' + oy + ' 230,380 L246,366 Q' + ix + ',' + iy + ' 246,74 Z';
   }
   var KC_RAYS = [-110, -55, 0, 55, 110], KC_OFF = [70, -44, 30, 96, -60];
+  // A scleral lens vaults over the whole cornea (shown at its full cone,
+  // kcShape(1)) and rests on the white of the eye; fluid fills the space.
+  var KC_LENS = 'M236,30 Q-22,220 236,410 L240,396 Q0,220 240,44 Z';
+  var KC_FLUID = 'M240,44 Q0,220 240,396 L230,380 Q52,276 230,60 Z';
   function kcSvg() {
     var h = svgOpen('0 0 560 440', 'The cornea seen from the side, with light passing through it to a focus'), i;
     h += '<defs><pattern id="kc-x" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0,0 L12,12 M12,0 L0,12" stroke="#7c3aed" stroke-width="1.6"/></pattern></defs>'
@@ -125,22 +129,28 @@
       + '<ellipse cx="292" cy="220" rx="24" ry="70" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/>'
       + '<path id="kc-cornea" fill="' + STROMA + '" stroke="#3b82f6" stroke-width="2.5" stroke-linejoin="round"/>'
       + '<path id="kc-links" fill="url(#kc-x)" opacity="0"/>'
+      + '<path id="kc-fluid" d="' + KC_FLUID + '" fill="#bae6fd" opacity="0"/>'
+      + '<g id="kc-scleral" opacity="0"><path d="' + KC_LENS + '" fill="#f0f9ff" fill-opacity="0.55" stroke="#0369a1" stroke-width="2.5" stroke-linejoin="round"/>' + txt(24, 44, 'Scleral lens', 'start', '#0369a1', 700, 19) + lead(84, 52, 142, 120, '#0369a1') + '</g>'
       + '<g id="kc-uv" opacity="0" stroke="#7c3aed" stroke-width="4" stroke-linecap="round"><line x1="20" y1="150" x2="92" y2="176"/><line x1="20" y1="220" x2="88" y2="226"/><line x1="20" y1="290" x2="92" y2="276"/></g>'
       + '<g id="kc-drop" opacity="0"><path d="M70,60 c12,18 12,32 0,36 c-12,-4 -12,-18 0,-36 Z" fill="#fde047" stroke="#ca8a04" stroke-width="2"/></g>'
       + '<line x1="540" y1="120" x2="540" y2="320" stroke="#fb923c" stroke-width="8" stroke-linecap="round"/>'
-      + txt(300, 30, 'Cornea', 'start') + lead(296, 36, 200, 84)
+      + txt(300, 30, 'Cornea', 'start') + lead(296, 36, 224, 82)
       + txt(540, 96, 'Retina', 'end', '#c2410c', 600, 18)
       + txt(20, 420, 'Light', 'start', '#b45309', 600, 18)
       + '<g id="kc-lab-a" opacity="0">' + txt(300, 420, 'The cornea thins and bulges into a cone', 'middle', '#1d4ed8', 700, 19) + '</g>'
       + '<g id="kc-lab-b" opacity="0">' + txt(300, 420, 'Light no longer comes to one focus', 'middle', '#b45309', 700, 19) + '</g>'
-      + '<g id="kc-lab-c" opacity="0">' + txt(300, 420, 'Cross-linking stiffens the cornea', 'middle', '#6d28d9', 700, 19) + '</g>';
+      + '<g id="kc-lab-c" opacity="0">' + txt(300, 420, 'Cross-linking stiffens the cornea', 'middle', '#6d28d9', 700, 19) + '</g>'
+      + '<g id="kc-lab-d" opacity="0">' + txt(300, 420, 'A scleral lens brings light back to one focus', 'middle', '#0369a1', 700, 19) + '</g>';
     return h + '</svg>';
   }
-  function kcDraw(c) {
+  // c: how far the cone has formed; rc: how scattered the light is (the
+  // same as c unless a lens has smoothed the front surface).
+  function kcDraw(c, rc) {
+    if (rc === undefined) rc = c;
     at('kc-cornea', 'd', kcShape(c)); at('kc-links', 'd', kcShape(c));
     var r = document.querySelectorAll('#kc-rays path'), i, y, sx;
     for (i = 0; i < r.length; i++) { y = 220 + KC_RAYS[i]; sx = 150 + Math.abs(KC_RAYS[i]) * 0.5 - 30 * c * (KC_RAYS[i] > 0 ? 1 : 0.2);
-      r[i].setAttribute('d', 'M20,' + y + ' L' + sx.toFixed(0) + ',' + y + ' L536,' + (220 + c * KC_OFF[i]).toFixed(1)); }
+      r[i].setAttribute('d', 'M20,' + y + ' L' + sx.toFixed(0) + ',' + y + ' L536,' + (220 + rc * KC_OFF[i]).toFixed(1)); }
   }
   var KC = {
     views: [['The cornea from the side', kcSvg]],
@@ -150,8 +160,14 @@
         draw: function (p) { var e = ease(p); kcDraw(0.45 * e); op('kc-lab-a', e); } },
       { label: 'Bulging', dur: 2600, caption: '<strong>Bulging.</strong> The thin area is pushed forward by the pressure inside the eye, and the dome becomes a cone. Light is bent unevenly and no longer comes to one focus, so vision is blurred and ghosted, with streaks around lights, and glasses stop correcting it fully.',
         draw: function (p) { var e = ease(p); if (p > 0) { kcDraw(0.45 + 0.55 * e); op('kc-lab-a', 1 - e); } op('kc-lab-b', e); } },
-      { label: 'Cross-linking', dur: 3000, caption: '<strong>Cross-linking.</strong> Vitamin B2 drops are soaked into the cornea and activated with ultraviolet light. This forms new links between the cornea&rsquo;s fibers and stiffens it, which stops the cone from progressing in most people. It does not undo the change already there, so it is best done early. Vision is then corrected with special contact lenses.',
-        draw: function (p) { var a = ease(clamp(p * 3, 0, 1)), e = ease(p); op('kc-drop', p > 0 && p < 0.45 ? 1 : 0); at('kc-drop', 'transform', 'translate(0,' + (80 * a).toFixed(1) + ')'); op('kc-uv', p > 0.4 && p < 1 ? 1 : 0); op('kc-links', 0.7 * ease(clamp(p * 2 - 0.8, 0, 1))); op('kc-lab-c', e); if (p > 0) op('kc-lab-b', 1 - e); } }
+      { label: 'Cross-linking', dur: 3000, caption: '<strong>Cross-linking.</strong> Vitamin B2 drops are soaked into the cornea and activated with ultraviolet light. This forms new links between the cornea&rsquo;s fibers and stiffens it, which stops the cone from progressing in most people. It does not undo the change already there, so it is best done early.',
+        draw: function (p) { var a = ease(clamp(p * 3, 0, 1)), e = ease(p); op('kc-drop', p > 0 && p < 0.45 ? 1 : 0); at('kc-drop', 'transform', 'translate(0,' + (80 * a).toFixed(1) + ')'); op('kc-uv', p > 0.4 && p < 1 ? 1 : 0); op('kc-links', 0.7 * ease(clamp(p * 2 - 0.8, 0, 1))); op('kc-lab-c', e); if (p > 0) op('kc-lab-b', 1 - e); } },
+      { label: 'Scleral lens', dur: 3200, caption: '<strong>A scleral lens.</strong> The cornea is now stable, but still cone-shaped. A scleral lens is a large rigid contact lens that vaults over the whole cornea and rests on the white of the eye, with a layer of fluid underneath. Its smooth front surface takes over the focusing, so light comes back to one focus and vision is sharp again. Rigid and hybrid lenses work in a similar way.',
+        draw: function (p) {
+          var a = ease(clamp(p * 2, 0, 1)), b = ease(clamp(p * 2 - 1, 0, 1)), e = ease(p);
+          op('kc-scleral', a); at('kc-scleral', 'transform', 'translate(' + (-180 * (1 - a)).toFixed(1) + ',0)'); op('kc-fluid', 0.8 * b); op('kc-lab-d', e);
+          if (p > 0) { kcDraw(1, 1 - b); op('kc-lab-c', 1 - e); }
+        } }
     ]
   };
 
