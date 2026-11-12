@@ -39,13 +39,13 @@
       text: 'Set for distance, the usual choice. Far is clear, arm’s length is a little soft, and reading needs glasses. Crisp at night.' },
     { id: 'mononear', label: 'Monofocal for near', blur: { far: 3.6, mid: 1.4, near: 0 }, contrast: 1, halo: 0,
       text: 'The same lens set for reading instead. Near is clear without glasses, and glasses are worn for driving and distance. Some people who were nearsighted all their lives prefer this.' },
-    { id: 'monovision', label: 'Monovision', blur: { far: 0.5, mid: 1, near: 0.8 }, contrast: 1, halo: 0,
+    { id: 'monovision', label: 'Monovision', blur: { far: 0.5, mid: 1, near: 0.8 }, contrast: 1, halo: 0, toricIfNeeded: true,
       text: 'Monofocal lenses with one eye set for distance and the other for near; the brain uses whichever eye is clear. Many people manage most things without glasses, with slightly less depth perception. It is often tried with contact lenses first.' },
     { id: 'toric', label: 'Toric', blur: { far: 0, mid: 1.8, near: 3.6 }, contrast: 1, halo: 0, toric: true,
       text: 'A monofocal lens that also corrects astigmatism, so distance is sharp without the smearing that astigmatism causes. Turn on “This eye has astigmatism” and compare it with a plain monofocal.' },
-    { id: 'edof', label: 'Extended depth', blur: { far: 0, mid: 0.2, near: 1.7 }, contrast: 0.95, halo: 1,
+    { id: 'edof', label: 'Extended depth', blur: { far: 0, mid: 0.2, near: 1.7 }, contrast: 0.95, halo: 1, toricIfNeeded: true,
       text: 'Stretches clear vision from far to arm’s length; reading small print usually still needs light reading glasses. Mild halos around lights at night for some people.' },
-    { id: 'multi', label: 'Multifocal', blur: { far: 0.3, mid: 0.4, near: 0.3 }, contrast: 0.86, halo: 2,
+    { id: 'multi', label: 'Multifocal', blur: { far: 0.3, mid: 0.4, near: 0.3 }, contrast: 0.86, halo: 2, toricIfNeeded: true,
       text: 'Splits light between distances, so far, arm’s length and near are all usable without glasses for most people. The trade-offs are rings or halos around lights at night and a little less contrast, which matters more if the eye also has glaucoma or macular disease.' }
   ];
   var ASTIG_GHOST = 3.2;   // px offset of the ghost image with uncorrected astigmatism
@@ -92,7 +92,10 @@
   }
 
   function render() {
-    var lens = lensById(state.lens), astigOff = state.astig && !lens.toric;
+    // Lenses chosen to do without glasses come in toric versions, and the
+    // toric one is used when the eye has astigmatism, so only the plain
+    // monofocals are shown with it uncorrected.
+    var lens = lensById(state.lens), astigOff = state.astig && !lens.toric && !lens.toricIfNeeded;
     DISTANCES.forEach(function (d) {
       var pane = root.querySelector('[data-pane="' + d.id + '"]'), scene = SCENES[state.night ? d.night : d.day];
       var img = pane.querySelector('.jk-iol__img'), ghost = pane.querySelector('.jk-iol__ghost'), halo = pane.querySelector('.jk-iol__halo');
@@ -116,7 +119,9 @@
     distBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-dist') === state.dist)); b.classList.toggle('is-active', b.getAttribute('data-dist') === state.dist); });
     panes.setAttribute('data-show', state.dist);
     nightBox.checked = state.night; astigBox.checked = state.astig;
-    textEl.textContent = lens.text + (state.astig && !lens.toric ? ' With astigmatism left uncorrected, everything is a little smeared and lights may streak; glasses, or a toric version of the lens, fix that.' : '');
+    textEl.textContent = lens.text + (!state.astig || lens.toric ? ''
+      : lens.toricIfNeeded ? ' With astigmatism, the toric version of this lens is used, so the astigmatism is corrected too.'
+      : ' With astigmatism left uncorrected, everything is a little smeared and lights may streak; glasses, or a toric version of the lens, fix that.');
   }
 
   root.addEventListener('click', function (e) {
