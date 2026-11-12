@@ -28,12 +28,13 @@ figure_alt = "A cloudy natural lens behind the iris, and the thin clear lens imp
 - Expect two to three hours at the center. The eye is numbed and you are given light sedation; the operation takes about 10 to 20 minutes.
 - You go home with a shield over the eye.
 
-</div><div class="jk-handout__col">
-
 ## The first weeks
 
 - A check the next day or within a few days.
 - Use the drops exactly as prescribed. A typical plan is an antibiotic for a week and a steroid and an anti-inflammatory for about four weeks.
+
+</div><div class="jk-handout__col">
+
 - Wear the shield at night for about a week. Do not rub the eye.
 - No heavy lifting or bending with your head down for the first week; no swimming or hot tubs for two weeks. Showering is fine; keep soap out of the eye.
 - Reading and screens are fine. Drive once your vision allows and your surgeon agrees.

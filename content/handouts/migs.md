@@ -24,12 +24,13 @@ MIGS improves the eye's natural drain through tiny openings: a stent smaller tha
 - Outpatient, with numbing and light sedation. With cataract surgery it takes about 15 to 30 minutes.
 - You go home with a shield over the eye. Bring a driver.
 
-</div><div class="jk-handout__col">
-
 ## Afterward
 
 - Vision is blurry for a day or two and improves over the first week. A little blood inside the eye is common and clears within days.
 - Use the drops exactly as prescribed: typically an antibiotic for about a week and a steroid tapered over about a month.
+
+</div><div class="jk-handout__col">
+
 - Your glaucoma drops may be continued, reduced or stopped depending on your pressure. Ask which to use.
 - Visits at about one day, one week and one month.
 - For the first couple of weeks, avoid rubbing the eye, swimming and heavy lifting.
