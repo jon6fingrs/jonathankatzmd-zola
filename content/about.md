@@ -7,7 +7,8 @@ weight = 2
 
 <hr class="jk-rule">
 
-<p class="jk-biolink"><a href="https://www.katzeneye.com/doctors/jonathan-katz/" target="_blank" rel="noopener">Biography at Katzen Eye Group</a><span class="jk-biolink__sep" aria-hidden="true">&middot;</span><a href="../about-this-site/">About this site</a></p>
+<p class="jk-biolink"><a href="https://www.katzeneye.com/doctors/jonathan-katz/" target="_blank" rel="noopener">Biography at Katzen Eye Group</a></p>
+<p class="jk-biolink"><a href="../about-this-site/">About this site</a></p>
 
 <hr class="jk-rule">
 
