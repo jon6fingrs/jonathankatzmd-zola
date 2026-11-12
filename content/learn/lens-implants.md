@@ -3,7 +3,7 @@ title = "Choosing a Lens Implant"
 description = "Monofocal, toric, extended depth and multifocal lens implants for cataract surgery: what each does for far, arm's length and near vision, and the trade-offs."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-11
+updated = 2026-11-12
 weight = 103
 
 [extra]
@@ -40,7 +40,7 @@ A **monofocal** lens focuses at one distance. It is the standard lens, the one m
 
 **Astigmatism** means the front of the eye is curved more like a football than a basketball, which smears vision in one direction. A **toric** lens has astigmatism correction built in. It has small marks at its edge so the surgeon can turn it to line up with your astigmatism. Without it, an eye with significant astigmatism would need glasses for clear distance vision even after surgery.
 
-Toric versions exist of most kinds of lens, including extended depth and multifocal lenses. A toric lens can occasionally rotate in the first weeks and need a small procedure to turn it back.
+Toric versions exist of most kinds of lens, including extended depth and multifocal lenses, and are used whenever one of those is chosen for an eye with significant astigmatism, since leaving the astigmatism would undo much of the benefit. A toric lens can occasionally rotate in the first weeks and need a small procedure to turn it back.
 
 ## Extended depth of focus lenses
 
