@@ -13,6 +13,15 @@ Cloudflare and GitHub secrets, never files in the repo; see SETUP.md.
 The owner's write-up of the move:
 https://thehelpfulidiot.com/moving-four-websites-off-my-home-server-to-cloudflare-pages/
 
+## License
+
+Code is under the [GNU AGPL-3.0](LICENSE); articles, handouts,
+illustrations and the medication data are under
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), with
+credit to Jonathan Katz, MD. Drug photos, photos of Dr. Katz, the logo and
+third-party code and fonts are excluded. Details in
+[LICENSING.md](LICENSING.md).
+
 ## Working on this repo (start here in a new coding session)
 
 **Workflow.**
