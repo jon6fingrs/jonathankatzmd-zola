@@ -5,6 +5,9 @@ template = "page.html"
 date = 2026-11-13
 updated = 2026-11-13
 weight = 910
+# Parked: not built or linked until terms in the articles link to it (see
+# "Ideas parked for later" in README.md). Remove this line to publish.
+draft = true
 
 [extra]
 article = true
