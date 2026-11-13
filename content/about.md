@@ -1,5 +1,5 @@
 +++
-description = "About Dr. Jonathan Katz — cataract surgery and the medical and surgical management of glaucoma."
+description = "About Dr. Jonathan Katz — cataract surgery, LASIK, and the medical and surgical management of glaucoma."
 title = "About"
 template = "page.html"
 weight = 2
@@ -14,7 +14,7 @@ weight = 2
 
 ## Jonathan Katz, M.D.
 
-Cataract Surgery, Medical and Surgical Management of Glaucoma
+Cataract Surgery, LASIK, Medical and Surgical Management of Glaucoma
 
 <img class="jk-about-photo" src="../images/team/jonathan-katz.jpg" alt="Dr. Jonathan Katz">
 
