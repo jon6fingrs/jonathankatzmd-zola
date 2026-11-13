@@ -5,8 +5,9 @@
  *                 and the printed daily routine)
  *   JK.ics      — build and download an .ics calendar file
  *   JK.qr       — render a QR code (vendor/qrcode.js) for the page URL
- *   JK.url      — read/write the form state in the query string so a
- *                 schedule can be reopened from a link or a QR code
+ *   JK.url      — read/write the form state in the address's #fragment so
+ *                 a schedule can be reopened from a link or a QR code
+ *                 (browsers never send the fragment to the server)
  *   JK.print    — document title swap + landscape toggle for printing
  *
  * No dependencies beyond vendor/qrcode.js (loaded only where QR is used).
@@ -165,7 +166,7 @@
   // The copied link carries a marker (safari=1); a page opened from it was
   // pasted into Safari on purpose, so it skips the note. Read it at load,
   // before the page rewrites its own address.
-  var FROM_COPY = /[?&]safari=1(&|$)/.test(window.location.search);
+  var FROM_COPY = /[?#&]safari=1(&|$)/.test((window.location.hash || '') + '&' + (window.location.search || ''));
   function isIOS() {
     var ua = navigator.userAgent || '';
     return /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
@@ -173,7 +174,7 @@
   // Inserts the note after `after` (an element) on iPhone/iPad.
   function safariNote(after, url) {
     if (!after || !isIOS() || FROM_COPY) return;
-    url += (url.indexOf('?') < 0 ? '?' : '&') + 'safari=1';
+    url += (url.indexOf('#') < 0 ? '#' : '&') + 'safari=1';
     var p = document.createElement('div');
     p.className = 'jk-note jk-safari-note';
     p.innerHTML = '<p><strong>iPhone tip:</strong> calendar reminders are added all at once only in Safari. '
@@ -215,8 +216,19 @@
   }
 
   // ---------- url state ----------
+  // The state lives after "#", which browsers keep on the device: it is not
+  // sent with the page request and analytics never sees it. Links and QR
+  // codes made before the switch used "?"; those are still read, and the
+  // address is rewritten to "#" at once (that first request has already
+  // gone out, but nothing after it carries the state).
   function readParams() {
-    var out = {}, q = window.location.search.replace(/^\?/, '');
+    var out = {}, loc = window.location;
+    var q = (loc.hash || '').replace(/^#/, '');
+    var legacy = (loc.search || '').replace(/^\?/, '');
+    if (!q && legacy) {
+      q = legacy;
+      try { history.replaceState(null, '', loc.pathname + '#' + legacy); } catch (e) { /* file:// etc. */ }
+    }
     if (!q) return out;
     q.split('&').forEach(function (kv) {
       var i = kv.indexOf('='), k = decodeURIComponent(i < 0 ? kv : kv.slice(0, i)).replace(/\+/g, ' ');
@@ -232,12 +244,26 @@
       if (v === '' || v == null) return;
       parts.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
     });
-    var url = window.location.pathname + (parts.length ? '?' + parts.join('&') : '');
+    var url = window.location.pathname + (parts.length ? '#' + parts.join('&') : '');
     try { history.replaceState(null, '', url); } catch (e) { /* file:// etc. */ }
     return window.location.origin + url;
   }
   function clearParams() {
     try { history.replaceState(null, '', window.location.pathname); } catch (e) {}
+  }
+  // With the state in the fragment, an in-page link ("How this works",
+  // "Skip to content") would replace it. Scroll to the target instead.
+  if (document.addEventListener) {
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
+      if (!a || !window.location.hash) return;
+      var t = document.getElementById(a.getAttribute('href').slice(1));
+      if (!t) return;
+      e.preventDefault();
+      t.scrollIntoView();
+      if (!t.hasAttribute('tabindex')) t.setAttribute('tabindex', '-1');
+      t.focus({ preventScroll: true });
+    });
   }
 
   // ---------- print ----------

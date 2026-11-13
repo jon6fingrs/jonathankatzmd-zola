@@ -163,8 +163,8 @@ test('the "use Safari" note shows on every iPhone/iPad browser, nowhere else', (
 });
 
 test('a page opened from the copied link (safari=1) skips the note', () => {
-  const run = search => {
-    const ctx = { window: { location: { search } }, document: { title: '', querySelector: () => null }, history: {}, navigator: { userAgent: 'iPhone', maxTouchPoints: 0 } };
+  const run = (search, hash = '') => {
+    const ctx = { window: { location: { search, hash } }, document: { title: '', querySelector: () => null }, history: {}, navigator: { userAgent: 'iPhone', maxTouchPoints: 0 } };
     vm.createContext(ctx);
     vm.runInContext(fs.readFileSync(path.join(__dirname, '../static/js/schedule-common.js'), 'utf8'), ctx);
     return ctx.window.JK.ios.fromCopy();
@@ -173,6 +173,10 @@ test('a page opened from the copied link (safari=1) skips the note', () => {
   assert.equal(run('?safari=1'), true);
   assert.equal(run('?r=x'), false);
   assert.equal(run('?r=x&safari=10'), false);
+  assert.equal(run('', '#r=x&safari=1'), true);
+  assert.equal(run('', '#safari=1'), true);
+  assert.equal(run('', '#r=x'), false);
+  assert.equal(run('', '#r=x&safari=10'), false);
 });
 
 test('every other day: last step of a taper, dosed from its first day', () => {

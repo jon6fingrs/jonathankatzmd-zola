@@ -240,8 +240,8 @@
   "brand": "Restasis, Cequa",
   "color": "Vial",
   "use": "Dry Eye",
-  "dosage": "2-4x/day",
-  "notes": "Generic, Multiple Concentrations, Preservative Free",
+  "dosage": "2x/day",
+  "notes": "Generic, Multiple Concentrations, Preservative Free, Sometimes 4x/day for Severe Dryness",
   "photos": [
    "restasis.jpeg",
    "cequa.jpeg"
@@ -408,7 +408,7 @@
  {
   "generic": "Latanoprost Emulsion",
   "brand": "Xelpros",
-  "color": "Vial",
+  "color": "Teal/Green",
   "use": "Glaucoma",
   "dosage": "1x/day",
   "notes": "BAK Free",
