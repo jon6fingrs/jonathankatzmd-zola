@@ -17,8 +17,8 @@ https://thehelpfulidiot.com/moving-four-websites-off-my-home-server-to-cloudflar
 
 Code is under the [GNU AGPL-3.0](LICENSE); articles, handouts,
 illustrations and the medication data are under
-[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), with
-credit to Jonathan Katz, MD. Drug photos, photos of Dr. Katz, the logo and
+[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+(non-commercial), with credit to Jonathan Katz, MD. Drug photos, photos of Dr. Katz, the logo and
 third-party code and fonts are excluded. Details in
 [LICENSING.md](LICENSING.md).
 

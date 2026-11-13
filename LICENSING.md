@@ -16,19 +16,26 @@ run one as a website or service that other people use, you must make your
 source code available to them under the same license and keep the copyright
 and license notices.
 
-## Content: CC BY-SA 4.0
+## Content: CC BY-NC-SA 4.0
 
 The written content (articles, handouts, page text and the medication
 reference data in `static/data/`), and the illustrations, diagrams and
 animations made for this site (including `static/images/learn/`), are
 licensed under the
-[Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).
+[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
-You may copy, adapt and share them, including commercially, as long as you:
+You may copy, adapt and share them for non-commercial purposes, as long as
+you:
 
 - credit **Jonathan Katz, MD** and link to https://jonathankatzmd.com,
 - say what you changed, and
 - release your adapted version under the same license.
+
+Non-commercial use includes, for example, a clinician printing a handout
+for their patients, a teacher using an illustration in a class, or a
+nonprofit adapting an article. Using the content in a paid
+product, app or course, or to sell or advertise something, needs Dr.
+Katz's written permission.
 
 Please do not present a changed version as Dr. Katz's own or as endorsed
 by him. This matters especially for medical content: if you change any
