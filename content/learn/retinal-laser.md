@@ -3,7 +3,7 @@ title = "Laser for the Retina"
 description = "Retinal laser: scatter laser (PRP) for new blood vessels in diabetic eye disease and vein blockages, and focal laser for leaks near the macula."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-11
+updated = 2026-11-13
 weight = 460
 
 [extra]
@@ -23,7 +23,7 @@ Choose a kind and press **Play**.
 
 ## Scatter laser (panretinal photocoagulation, PRP)
 
-**What it treats.** When parts of the retina lose their blood supply, as in advanced [diabetic eye disease](@/learn/diabetic-retinopathy.md) or after a blocked retinal vein, they send out a signal that makes fragile new vessels grow. These can bleed into the gel inside the eye, form scar tissue that pulls the retina off, or grow over the eye's drain and cause a severe form of glaucoma (neovascular glaucoma).
+**What it treats.** When parts of the retina lose their blood supply, as in advanced [diabetic eye disease](@/learn/diabetic-retinopathy.md) or after a [blocked retinal vein](@/learn/retinal-vein-occlusion.md), they send out a signal that makes fragile new vessels grow. These can bleed into the gel inside the eye, form scar tissue that pulls the retina off, or grow over the eye's drain and cause a severe form of glaucoma (neovascular glaucoma).
 
 **How it works.** Hundreds to a couple of thousand small laser spots are placed across the outer retina, avoiding the center. The treated retina uses less oxygen, the signal switches off, and the new vessels shrink. It is usually done over two or three sessions, a week or two apart.
 

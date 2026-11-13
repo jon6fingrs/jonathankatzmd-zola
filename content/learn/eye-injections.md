@@ -3,7 +3,7 @@ title = "Injections into the Eye"
 description = "What to expect from an injection into the eye for wet macular degeneration, diabetic swelling or a vein blockage: the visit, aftercare, risks, how often."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-11
+updated = 2026-11-13
 weight = 440
 
 [extra]
@@ -25,7 +25,7 @@ Press **Play** to see the steps.
 
 - **[Wet macular degeneration](@/learn/macular-degeneration.md)**
 - **[Diabetic macular edema](@/learn/diabetic-retinopathy.md)** and proliferative diabetic retinopathy
-- **Swelling after a blocked retinal vein**
+- **Swelling after a [blocked retinal vein](@/learn/retinal-vein-occlusion.md)**
 - Some other causes of swelling or abnormal vessels at the back of the eye
 
 In each of these, leaky or abnormal blood vessels damage the macula. The medicines used, called **anti-VEGF** drugs (such as bevacizumab, ranibizumab, aflibercept and faricimab), block the signal that makes vessels leak and grow. Steroids are sometimes used instead. A drop on the surface cannot reach the retina in a useful amount, which is why the medicine is placed inside the eye.

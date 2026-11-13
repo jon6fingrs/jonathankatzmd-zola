@@ -177,7 +177,7 @@ set `topic = "glaucoma"` (or `cataract`, `dry-eye`, `cornea`, `retina`, `simulat
 (a heading from that hub's `groups`, or `""` if the hub has none) in its
 `[extra]`. Both keys are required on every Learn page: the templates
 compare them directly. A page with `topic = ""` (When to Call the Same
-Day) belongs to no topic and gets no breadcrumb or related block. Tools
+Day) belongs to no topic and gets no breadcrumb or related block; it is linked from the bottom row of the Learn menu. Tools
 are only the three drop tools in `content/patients/`; the simulators and
 the eye pressure sink are Learn pages.
 To add a topic: create `content/learn/<topic>/_index.md` with
@@ -405,6 +405,12 @@ The owner has seen these and chose to wait. Ask before starting any of them.
   reference entry. A taper in the schedule builder would need a
   different start date for each row, which the builder doesn't support.
   It's rarely prescribed, so it isn't added yet.
+- **Glossary of eye terms.** Drafted at `content/learn/glossary.md`
+  (`draft = true`, so not built; its share card and `.jk-glossary__letters`
+  styles are already in place). The owner wants it published only once the
+  terms are linked where the articles use them, which touches many pages.
+  One option that avoids editing each page: a small script that reads the
+  glossary's terms and links the first use of each on an article.
 - **Videos page.** `content/videos.md` stays `draft = true` until there
   are videos. To publish it, set it to `false` and add it back to the nav
   in `config.toml`.

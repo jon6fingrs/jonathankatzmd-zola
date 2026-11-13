@@ -3,7 +3,7 @@ title = "Vitrectomy"
 description = "Vitrectomy (PPV): surgery to remove the gel inside the eye to clear blood, repair a detachment or macular hole, or remove scar tissue. What recovery involves."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-11
+updated = 2026-11-13
 weight = 450
 
 [extra]
@@ -25,8 +25,8 @@ Press **Play** to see the steps.
 
 - **Bleeding into the gel** that does not clear on its own, most often from [diabetic eye disease](@/learn/diabetic-retinopathy.md)
 - **[Retinal detachment](@/learn/retinal-detachment.md)**
-- **Scar tissue on the retina:** a wrinkled membrane over the macula (epiretinal membrane, or macular pucker), or scar tissue pulling on the retina in advanced diabetic disease
-- **A macular hole**, a small break in the center of the retina
+- **Scar tissue on the retina:** a wrinkled membrane over the macula ([epiretinal membrane](@/learn/epiretinal-membrane.md), or macular pucker), or scar tissue pulling on the retina in advanced diabetic disease
+- **A [macular hole](@/learn/macular-hole.md)**, a small break in the center of the retina
 - **Severe infection inside the eye**
 - **A lens or lens fragment** that has fallen into the back of the eye during cataract surgery
 
