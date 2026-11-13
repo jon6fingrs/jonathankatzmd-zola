@@ -3,7 +3,7 @@ title = "What Vision Loss Looks Like"
 description = "An interactive simulator of glaucoma, cataract, macular degeneration, diabetic eye disease, retinal detachment, stroke, dry eye and floaters."
 template = "page.html"
 date = 2026-10-03
-updated = 2026-11-11
+updated = 2026-11-13
 weight = 20
 
 [extra]
@@ -87,12 +87,18 @@ More on [Flashes and Floaters](@/learn/flashes-and-floaters.md).
 
 Color vision depends on three types of light-sensing cells in the retina. When one type is missing or shifted, usually from birth and most often in men, certain colors blend together. Red–green deficiency is by far the most common; blue–yellow is rare. Vision is otherwise sharp, and most people adapt without noticing much. Acquired changes in color vision, on the other hand, can be a sign of optic nerve or retinal disease and are worth mentioning to your doctor.
 
+## Go to an emergency room now if
+
+- Vision in one eye, or part of it, is suddenly lost, even if it does not hurt or comes back within minutes
+- You suddenly see double
+- A sudden change in vision comes with weakness, numbness, a drooping face or trouble speaking
+
 ## Call the same day if
 
-- A curtain, shadow or dark area appears in part of your vision
+- A curtain or shadow spreads in from the edge of your vision
 - A sudden shower of new floaters, with or without flashes of light
 - Straight lines suddenly look bent or wavy in one eye
-- Sudden loss or blurring of vision in one eye
+- Sudden blurring of vision in one eye
 - Eye pain with nausea, halos around lights and a red eye (possible acute angle-closure glaucoma)
 
 <p class="jk-note">Scene photographs are public domain (CC0): "Nighttime Traffic" by Anthony Delanoix; "Family Breakfast" by Direct Media; "Newspaper Magazine" by Patryk Dziejma; "Crosswalk Intersection" by Peter Miranda; kitchen by rawpixel. Color vision matrices from Machado, Oliveira and Fernandes (2009).</p>

@@ -21,7 +21,7 @@
  *
  * Masks are tiny canvases (a grid of alpha values) scaled up by the
  * browser, which gives smooth, soft-edged regions with no filter support
- * needed. State lives in the query string (JK.url) so a view can be shared
+ * needed. State lives in the address fragment (JK.url) so a view can be shared
  * or opened from the QR code.
  *
  * Prescription mode (data-mode="rx" on the root, used by
