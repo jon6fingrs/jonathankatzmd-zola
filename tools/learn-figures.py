@@ -697,6 +697,83 @@ b+=f'<line x1="400" y1="20" x2="400" y2="390" stroke="#e5e7eb" stroke-width="2"/
 figs['glaucoma-types']=('Two eyes seen from the front: pseudoexfoliation, with flaky material on the lens, and pigment dispersion, with thin spots in the iris and pigment on the cornea',800,400,b)
 
 
+# ---------- retina, round two ----------
+# 30. a slice through the macula, as an OCT scan shows it: normal, a membrane, a hole
+def macula_panel(ox, kind):
+    W=240; c=ox+W/2; ty=120; by=200; N=80
+    def top(x):
+        if kind=='erm':   # pit flattened, surface pulled into folds, retina thickened
+            return ty-28*math.exp(-((x-c)/75)**2)+3.4*math.sin((x-ox)/5.5)*math.exp(-((x-c)/90)**2)
+        d=36*math.exp(-((x-c)/26)**2)
+        if kind=='hole': d=-10*math.exp(-((x-c)/34)**2)  # edges lifted and swollen around the hole
+        return ty+d
+    xs=[ox+W*i/N for i in range(N+1)]
+    s=f'<clipPath id="mp{ox}"><rect x="{ox}" y="40" width="{W}" height="200" rx="10"/></clipPath><g clip-path="url(#mp{ox})">'
+    s+=f'<rect x="{ox}" y="40" width="{W}" height="200" fill="#f0f9ff"/>'  # gel above
+    s+=f'<rect x="{ox}" y="{by}" width="{W}" height="40" fill="#c2410c"/><rect x="{ox}" y="{by}" width="{W}" height="6" fill="#7c2d12"/>'
+    if kind=='hole':
+        g=16
+        for side in (-1,1):
+            pts=[x for x in xs if (x<=c-g if side<0 else x>=c+g)]
+            edge=c+side*g
+            path='M'+' L'.join(f'{x:.1f},{top(x):.1f}' for x in (pts if side<0 else pts))
+            if side<0: path+=f' L{edge:.1f},{top(edge)+8:.1f} C{edge+4:.1f},{(top(edge)+by)/2:.1f} {edge+2:.1f},{by-14:.1f} {edge+6:.1f},{by:.1f} L{ox},{by} Z'
+            else: path=f'M{edge-6:.1f},{by} C{edge-2:.1f},{by-14:.1f} {edge-4:.1f},{(top(edge)+by)/2:.1f} {edge:.1f},{top(edge)+8:.1f} '+'L'+' L'.join(f'{x:.1f},{top(x):.1f}' for x in pts)+f' L{ox+W},{by} Z'
+            s+=f'<path d="{path}" fill="#fecdd3" stroke="#be123c" stroke-width="1.5" stroke-linejoin="round"/>'
+            for (dx,dy,rx) in [(14,10,6),(26,22,5),(12,34,4)]:
+                s+=f'<ellipse cx="{edge-side*dx:.1f}" cy="{top(edge-side*dx)+dy:.1f}" rx="{rx}" ry="{rx*0.7:.1f}" fill="#f0f9ff" stroke="#be123c" stroke-width="0.8"/>'
+        s+=f'<ellipse cx="{c:.1f}" cy="{ty-34}" rx="9" ry="4" fill="#fecdd3" stroke="#be123c" stroke-width="1"/>'
+    else:
+        path='M'+' L'.join(f'{x:.1f},{top(x):.1f}' for x in xs)+f' L{ox+W},{by} L{ox},{by} Z'
+        s+=f'<path d="{path}" fill="#fecdd3" stroke="#be123c" stroke-width="1.5" stroke-linejoin="round"/>'
+        if kind=='erm':
+            mem='M'+' L'.join(f'{x:.1f},{top(x)-3:.1f}' for x in xs if abs(x-c)<95)
+            s+=f'<path d="{mem}" fill="none" stroke="#f8fafc" stroke-width="5" stroke-linecap="round"/><path d="{mem}" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"/>'
+    s+='</g>'+f'<rect x="{ox}" y="40" width="{W}" height="200" rx="10" fill="none" stroke="#e5e7eb" stroke-width="2"/>'
+    return s
+b=macula_panel(10,'normal')+macula_panel(280,'erm')+macula_panel(550,'hole')
+b+=label(130,28,'Healthy macula','middle',22,'700')+label(400,28,'Membrane (pucker)','middle',22,'700')+label(670,28,'Macular hole','middle',22,'700')
+b+=label(130,268,'A small dip at the center','middle',17,'400',MUTED)+label(130,290,'of vision','middle',17,'400',MUTED)
+b+=label(400,268,'A film on the surface','middle',17,'400',MUTED)+label(400,290,'wrinkles and thickens it','middle',17,'400',MUTED)
+b+=label(670,268,'A gap through the','middle',17,'400',MUTED)+label(670,290,'center of the retina','middle',17,'400',MUTED)
+b+=label(22,64,'Gel','start',16,'600','#0369a1')+label(22,186,'Retina','start',16,'600','#be123c')
+figs['macula-slice']=('A slice through the macula: healthy with a small central dip, wrinkled and thickened by a membrane on its surface, and with a full-thickness hole at its center',800,300,b)
+
+# 31. retinal vein occlusion: a branch and the central vein
+def flames(X,Y,rnd,pts,n,spread):
+    s=''
+    for _ in range(n):
+        x,y,ang=pts[rnd.randrange(len(pts))]
+        x+=rnd.uniform(-spread,spread); y+=rnd.uniform(-spread,spread)
+        s+=f'<ellipse cx="{X(x):.1f}" cy="{Y(y):.1f}" rx="{rnd.uniform(7,13):.1f}" ry="{rnd.uniform(2.5,4):.1f}" transform="rotate({ang:.0f} {X(x):.1f} {Y(y):.1f})" fill="#7f1d1d" opacity="0.85"/>'
+    return s
+def along(p0,p1,p2,p3,n):  # points along a cubic, with the direction of the curve
+    out=[]
+    for i in range(1,n):
+        t=i/n; mt=1-t
+        x=mt**3*p0[0]+3*mt*mt*t*p1[0]+3*mt*t*t*p2[0]+t**3*p3[0]
+        y=mt**3*p0[1]+3*mt*mt*t*p1[1]+3*mt*t*t*p2[1]+t**3*p3[1]
+        dx=3*mt*mt*(p1[0]-p0[0])+6*mt*t*(p2[0]-p1[0])+3*t*t*(p3[0]-p2[0]); dy=3*mt*mt*(p1[1]-p0[1])+6*mt*t*(p2[1]-p1[1])+3*t*t*(p3[1]-p2[1])
+        out.append((x,y,math.degrees(math.atan2(dy,dx))))
+    return out
+ARC=[((372,196),(340,120),(250,80),(120,110)),((372,224),(340,300),(250,340),(120,312)),((380,196),(420,140),(450,110),(480,70)),((380,224),(420,280),(450,310),(480,350))]
+b=''
+for i,(kind,title,sub) in enumerate([('b','Branch vein','bleeding in one part of the retina'),('c','Central vein','bleeding everywhere, swollen nerve')]):
+    cx=200+i*400; rnd=random.Random(11+i)
+    _,X,Y=fundus(cx,205,150,'',uid='v'+kind)
+    arcs=ARC[:1] if kind=='b' else ARC
+    ex=''
+    for a in arcs:
+        ex+=flames(X,Y,rnd,along(*a,14),24 if kind=='b' else 22,16)
+    if kind=='c':
+        ex+=f'<circle cx="{X(376):.0f}" cy="{Y(210):.0f}" r="{40*150/190:.0f}" fill="#fde68a" opacity="0.55"/>'
+        ex+=''.join(f'<circle cx="{X(rnd.uniform(140,460)):.0f}" cy="{Y(rnd.uniform(90,330)):.0f}" r="4" fill="#f8fafc" opacity="0.8"/>' for _ in range(6))
+    else:
+        ex+=f'<circle cx="{X(250):.0f}" cy="{Y(212):.0f}" r="{30*150/190:.0f}" fill="#fde68a" opacity="0.25"/>'
+    f,X,Y=fundus(cx,205,150,ex,uid='v'+kind)
+    b+=f+label(cx,36,title,'middle',24,'700')+label(cx,392,sub,'middle',19,'400',MUTED)
+figs['vein-occlusion']=('The back of the eye after a retinal vein blockage: a branch vein, with bleeding in one part of the retina, and the central vein, with bleeding everywhere and a swollen optic nerve',800,410,b)
+
 for name,(title,w,h,body) in figs.items():
     open(os.path.join(OUT,name+'.svg'),'w').write(svg(w,h,body,title))
     print(name, os.path.getsize(os.path.join(OUT,name+'.svg')),'bytes')

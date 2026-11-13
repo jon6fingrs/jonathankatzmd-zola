@@ -177,7 +177,7 @@ set `topic = "glaucoma"` (or `cataract`, `dry-eye`, `cornea`, `retina`, `simulat
 (a heading from that hub's `groups`, or `""` if the hub has none) in its
 `[extra]`. Both keys are required on every Learn page: the templates
 compare them directly. A page with `topic = ""` (When to Call the Same
-Day) belongs to no topic and gets no breadcrumb or related block. Tools
+Day, the Glossary of Eye Terms) belongs to no topic and gets no breadcrumb or related block; both are linked from the bottom row of the Learn menu. Tools
 are only the three drop tools in `content/patients/`; the simulators and
 the eye pressure sink are Learn pages.
 To add a topic: create `content/learn/<topic>/_index.md` with

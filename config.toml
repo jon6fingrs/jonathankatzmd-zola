@@ -92,6 +92,9 @@ mega = true
   name = "When to call the same day"
   url = "/learn/when-to-call/"
   [[extra.menus.children]]
+  name = "Glossary of eye terms"
+  url = "/learn/glossary/"
+  [[extra.menus.children]]
   name = "All topics"
   url = "/learn/"
   [[extra.menus.children]]
