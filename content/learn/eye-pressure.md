@@ -3,7 +3,7 @@ title = "How Treatments Lower Eye Pressure"
 description = "The eye as a sink: a faucet that makes fluid, drains that carry it away, and a water level that is the pressure. See what each glaucoma treatment changes."
 template = "page.html"
 date = 2026-11-10
-updated = 2026-11-10
+updated = 2026-11-14
 weight = 15
 
 [extra]
@@ -40,9 +40,9 @@ In the most common kind of glaucoma, the faucet is normal. The main drain is par
 
 ## Why there is a floor, and why adding more helps less
 
-The main drain empties into small veins on the surface of the eye, and those veins have a pressure of their own, around 8 to 10 mm Hg. Fluid cannot run out through the main drain into veins that are at a higher pressure, so that vein pressure is a **floor**. Turning the faucet down, or opening the drains, brings the level toward the floor but not under it. It is the dotted line near the bottom of the sink.
+The main drain empties into small veins on the surface of the eye, and those veins have a pressure of their own, around 8 to 10 mm Hg. Fluid cannot run out through the main drain into veins that are at a higher pressure, so that vein pressure is a **floor**. Turning the faucet down, or opening the drains, brings the level toward the floor but rarely much under it. It is the dotted line near the bottom of the sink. (The side drain does not empty into those veins, but it carries only a small share of the fluid, so in practice the floor still holds.)
 
-Only a new drain gets past it. A trabeculectomy or tube shunt carries fluid somewhere other than those veins, which is why surgery can reach pressures that drops and laser cannot.
+A new drain gets past it. A trabeculectomy or tube shunt carries fluid somewhere other than those veins, which is why surgery can reach pressures that drops and laser usually cannot.
 
 Treatments also give **diminishing returns**:
 

@@ -3,7 +3,7 @@ title = "Glaucoma Testing"
 description = "What happens at a glaucoma visit: eye pressure, the visual field test, OCT imaging, gonioscopy and corneal thickness, and what the results mean."
 template = "page.html"
 date = 2026-10-02
-updated = 2026-11-10
+updated = 2026-11-14
 weight = 30
 
 [extra]
@@ -22,7 +22,7 @@ Pressure varies through the day, often highest in the early morning, so your doc
 
 ## Corneal thickness (pachymetry)
 
-A quick ultrasound or optical measurement of how thick the cornea is, usually done once. A thick cornea makes pressure readings come out higher than the true pressure and a thin one makes them read lower, so this number helps interpret every pressure reading that follows. A thin cornea is also, on its own, a risk factor for glaucoma.
+A quick ultrasound or optical measurement of how thick the cornea is, usually done once. A thick cornea tends to make pressure readings come out higher than the true pressure, and a thin one lower. There is no reliable formula to correct for it, because how stiff the cornea is matters too, so this number helps your doctor interpret every pressure reading that follows rather than adjust it. A thin cornea is also, on its own, a risk factor for glaucoma.
 
 ## Looking at the optic nerve
 

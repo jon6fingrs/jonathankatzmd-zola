@@ -3,7 +3,7 @@ title = "Macular Degeneration"
 description = "Dry and wet macular degeneration: what each does to vision, AREDS2 vitamins, a printable Amsler grid for home checks, and treatment with injections."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-11
+updated = 2026-11-14
 weight = 420
 
 [extra]
@@ -69,7 +69,7 @@ Dry AMD can turn wet without warning, and the first sign is usually distortion. 
 - **Diet:** leafy green vegetables and fish.
 - **Sunglasses and a hat** outdoors.
 - **Regular dilated exams**, with a scan of the macula (OCT), and the Amsler grid at home.
-- For advanced dry AMD (geographic atrophy), injections that slow the spread of the damaged area are now available. They do not restore vision, and they are worth discussing with a retina specialist.
+- For advanced dry AMD (geographic atrophy), injections that slow the spread of the damaged area are now available. They do not restore or improve vision, and the slowing is modest. They are given into the eye every month or every other month, usually for years, and carry the risks of any [eye injection](@/learn/eye-injections.md), including rare infection or inflammation, as well as a small chance of the eye developing wet AMD. Whether that trade is worthwhile is a decision to make with a retina specialist.
 
 ## Treating wet AMD
 
