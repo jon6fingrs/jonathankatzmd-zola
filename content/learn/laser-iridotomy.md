@@ -3,7 +3,7 @@ title = "Laser Iridotomy"
 description = "Laser iridotomy: a quick office laser that makes a tiny opening in the iris to open a narrow drainage angle. The visit, recovery and risks."
 template = "page.html"
 date = 2026-11-10
-updated = 2026-11-11
+updated = 2026-11-14
 weight = 60
 
 [extra]
@@ -92,7 +92,7 @@ Laser iridotomy is a safe procedure, and serious problems are rare.
 
 ## Medicines with a glaucoma warning
 
-Many cold, allergy, sleep, bladder and stomach medicines carry a warning for people with "narrow-angle glaucoma", because they can widen the pupil and set off an attack in an eye at risk. After a working iridotomy these medicines are generally safe to take. Ask your eye doctor to confirm this for your eyes, and tell your other doctors and pharmacist that you have had the laser.
+Many cold, allergy, sleep, bladder and stomach medicines carry a warning for people with "narrow-angle glaucoma", because they can widen the pupil and set off an attack in an eye at risk. Once an iridotomy is working and the angle has opened, these medicines are generally safe to take. If your angle is still narrow after the laser, the warning may still apply. Ask your eye doctor to confirm this for your eyes, and tell your other doctors and pharmacist that you have had the laser.
 
 ## Questions worth asking
 

@@ -3,7 +3,7 @@ title = "What Is Glaucoma?"
 description = "Glaucoma is damage to the optic nerve, usually linked to eye pressure. Why it has no symptoms early, who is at risk, and how it is treated."
 template = "page.html"
 date = 2026-10-02
-updated = 2026-11-11
+updated = 2026-11-14
 weight = 10
 
 [extra]
@@ -16,7 +16,7 @@ Glaucoma is a group of eye diseases that damage the **optic nerve**, the cable t
 
 ## How the eye makes pressure
 
-The front of the eye is filled with a clear fluid called **aqueous humor**. It is made continuously behind the iris, flows through the pupil, and drains out through a mesh of tissue called the **trabecular meshwork** in the angle where the iris meets the cornea. Eye pressure is the balance between how much fluid is made and how easily it drains. In glaucoma the drain usually works less well than it should, pressure rises, and over years the optic nerve fibers die off.
+The front of the eye is filled with a clear fluid called **aqueous humor**. It is made continuously behind the iris, flows through the pupil, and drains out through a mesh of tissue called the **trabecular meshwork** in the angle where the iris meets the cornea. Eye pressure is the balance between how much fluid is made and how easily it drains. In many people with glaucoma the drain works less well than it should, pressure rises, and over years the optic nerve fibers die off. Pressure is not the whole story: blood flow to the nerve and how sensitive a particular nerve is also play a part. But pressure is the one risk factor that treatment can change, which is why every glaucoma treatment aims to lower it.
 
 {{<figure src="images/learn/aqueous-flow.svg" alt="Cross-section of the front of the eye. Fluid is made by the ciliary body, flows through the pupil, and drains out through the trabecular meshwork at the edge of the cornea." caption="Fluid is made behind the iris, flows through the pupil into the front chamber, and leaves through the drain where the iris meets the cornea. Simplified, not to scale." />}}
 

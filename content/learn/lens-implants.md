@@ -3,7 +3,7 @@ title = "Choosing a Lens Implant"
 description = "Monofocal, toric, extended depth and multifocal lens implants for cataract surgery: what each does for far, arm's length and near vision, and the trade-offs."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-12
+updated = 2026-11-14
 weight = 103
 
 [extra]
@@ -32,6 +32,8 @@ A **monofocal** lens focuses at one distance. It is the standard lens, the one m
 - **Set for distance**, the most common choice: driving, television and faces across a room are clear without glasses. Reading glasses are needed for near, and arm's length (a computer or the car dashboard) is usable but softer.
 - **Set for near:** reading is clear without glasses, and glasses are worn for distance. Some people who have been nearsighted all their lives, and are used to reading without glasses, prefer this.
 
+Some newer monofocal lenses, often called **enhanced monofocal** lenses, are shaped to give a little more range at arm's length than a standard monofocal, while keeping its sharpness and low glare. The gain is modest, and they are not the same as extended depth of focus lenses, which stretch the range further.
+
 ## Monovision
 
 **Monovision** uses monofocal lenses with one eye set for distance and the other for near (or arm's length). The brain learns to use whichever eye is clear for the task. Many people get through most of the day without glasses. The trade-offs are slightly less depth perception and a little less sharpness with both eyes together, and glasses may still help for night driving or long reading. It suits people who have used monovision with contact lenses before, and it is often tried with contact lenses first.
@@ -44,7 +46,7 @@ Toric versions exist of most kinds of lens, including extended depth and multifo
 
 ## Extended depth of focus lenses
 
-An **extended depth of focus** (EDOF) lens stretches the range of clear vision from distance to arm's length. Most people can drive, use a computer and see a dashboard without glasses, and use light reading glasses for small print. Some notice mild halos or glare around lights at night.
+An **extended depth of focus** (EDOF) lens stretches the range of clear vision from distance to arm's length. Most people can drive, use a computer and see a dashboard without glasses, and use light reading glasses for small print. Some notice mild halos or glare around lights at night. Designs differ: some use fine rings, like a multifocal, and give more near vision with more halos; others are shaped without rings and give fewer halos with a little less near vision.
 
 ## Multifocal lenses
 
