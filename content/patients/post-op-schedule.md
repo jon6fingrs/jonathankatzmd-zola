@@ -15,7 +15,7 @@ centered = true
   <div class="jk-field">
     <label for="surgery_date">Surgery Date</label>
     <input type="date" id="surgery_date" name="surgery_date">
-    <p class="jk-field__hint">Drops begin the day after surgery. Leave blank to use today.</p>
+    <p class="jk-field__hint">This schedule starts drops the day after surgery. If your surgeon gave you a different start day, follow their instructions. Leave blank to use today.</p>
   </div>
 
   <div class="jk-field">
