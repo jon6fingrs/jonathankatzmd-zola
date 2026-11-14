@@ -3,7 +3,7 @@ title = "Cataract Surgery"
 description = "What a cataract is, when surgery makes sense, lens implant choices, the day of surgery and the four-week recovery, and what changes if you have glaucoma."
 template = "page.html"
 date = 2026-10-02
-updated = 2026-11-11
+updated = 2026-11-14
 weight = 100
 
 [extra]
@@ -11,6 +11,7 @@ handout = "handouts/cataract-surgery.md"
 article = true
 topic = "cataract"
 group = ""
+scripts = ["js/procedure-cataract.js", "js/procedure.js"]
 +++
 
 A **cataract** is clouding of the eye's natural lens, which sits behind the pupil and focuses light onto the retina. Almost everyone develops some cataract with age; it becomes a problem when it blurs vision, dulls colors, causes glare from headlights or sunlight, or changes your glasses prescription frequently. Cataract surgery replaces the cloudy lens with a clear artificial one and is among the most common and successful operations performed.
@@ -37,6 +38,14 @@ For patients with glaucoma, a monofocal or toric lens is usually recommended. Mu
 ## Before surgery
 
 Measurements of the eye's length and curvature are taken in the office to select the lens power. You may be asked to start an antibiotic or anti-inflammatory drop a day or two before, and to use nothing by mouth for several hours before surgery. Most medicines, including blood thinners, are continued; confirm with your surgeon. Tell the team if you take or have ever taken tamsulosin (Flomax) or similar prostate medicines, as they affect the iris during surgery and the surgeon plans for it. [Preparing for Cataract Surgery](@/learn/preparing-for-cataract-surgery.md) goes through the lead-up and the first month step by step.
+
+## The operation, step by step
+
+The animation shows the operation the way the surgeon sees it through the microscope. Press **Play** to watch, or tap a step to go through it at your own pace.
+
+<div id="jk-proc" class="jk-lpi" data-proc="cataract">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The explanation below covers the same thing.</p>
+</div>
 
 ## The day of surgery
 

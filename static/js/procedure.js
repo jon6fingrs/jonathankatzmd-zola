@@ -16,8 +16,9 @@
  *
  * Layout and buttons share the .jk-lpi styles with the iridotomy demo.
  *
- * Retina and cornea demos live in procedure-retina.js and
- * procedure-cornea.js, which a page loads before this file.
+ * Retina, cornea and cataract surgery demos live in procedure-retina.js,
+ * procedure-cornea.js and procedure-cataract.js, which a page loads before
+ * this file.
  */
 (function () {
   'use strict';
@@ -908,7 +909,7 @@
   };
 
   // Topic files loaded before this one (procedure-retina.js,
-  // procedure-cornea.js) add their own entries: each pushes a function onto
+  // procedure-cornea.js, procedure-cataract.js) add their own entries: each pushes a function onto
   // window.JK_PROC_EXTRA that takes these helpers and returns more PROCS.
   var HELPERS = { clamp: clamp, ease: ease, lerp: lerp, txt: txt, lead: lead, op: op, at: at, arrow: arrow, svgOpen: svgOpen, $: $,
     FONT: FONT, INK: INK, BLUE: BLUE, MUTED: MUTED, GREEN: GREEN, WATER: WATER };

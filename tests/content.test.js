@@ -56,7 +56,7 @@ test('page descriptions fit in a search result (160 characters)', () => {
 test('American spelling in everything patients read', () => {
   const BRITISH = /\b(labell(ed|ing)|grey(s|ish)?|colour\w*|centre|metres?|centimetres?|millimetres?|mould|recognis(e|ed|es|ing)|anaesthe\w*|anesthetist|behaviour|favour\w*|tumour|oedema|haemorrhage|organis(e|ed|ation)|minimis(e|ed)|travell(ed|ing)|honour\w*)\b/i;
   const files = content.concat(walk('static/print', '.html'), [
-    'static/js/procedure.js', 'static/js/procedure-retina.js', 'static/js/procedure-cornea.js', 'static/js/lpi.js',
+    'static/js/procedure.js', 'static/js/procedure-retina.js', 'static/js/procedure-cornea.js', 'static/js/procedure-cataract.js', 'static/js/lpi.js',
     'static/js/yag.js', 'static/js/sink.js', 'static/js/amsler.js', 'static/js/tearpicker-rules.js', 'templates/search.html',
   ]);
   const found = [];
