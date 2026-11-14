@@ -589,6 +589,12 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
   border: 1px solid var(--jk-line); border-radius: 6px;
   background: #fff; font-size: 1rem;
 }
+/* iPhone Safari gives date inputs a built-in minimum width that ignores
+   width: 100% (the box runs off the right edge) and centers the date.
+   Dropping the native appearance lets them fit; tapping still opens the
+   date picker. */
+input[type="date"] { -webkit-appearance: none; appearance: none; min-width: 0; display: block; }
+input[type="date"]::-webkit-date-and-time-value { text-align: left; }
 .jk-postop select:disabled, .jk-postop input:disabled { background: var(--jk-soft); color: var(--jk-muted); cursor: not-allowed; }
 .jk-postop option:disabled { color: #a3aab5; }
 .jk-field__hint { margin: .3rem 0 0; font-size: .85rem; color: var(--jk-muted); min-height: 1.1em; }
