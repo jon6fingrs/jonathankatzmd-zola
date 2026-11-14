@@ -593,7 +593,7 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
    width: 100% (the box runs off the right edge) and centers the date.
    Dropping the native appearance lets them fit; tapping still opens the
    date picker. */
-input[type="date"] { -webkit-appearance: none; appearance: none; min-width: 0; display: block; }
+input[type="date"] { -webkit-appearance: none; appearance: none; min-width: 0; display: block; color: var(--bs-body-color, #212529); }
 input[type="date"]::-webkit-date-and-time-value { text-align: left; }
 .jk-postop select:disabled, .jk-postop input:disabled { background: var(--jk-soft); color: var(--jk-muted); cursor: not-allowed; }
 .jk-postop option:disabled { color: #a3aab5; }
