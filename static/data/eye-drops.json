@@ -241,7 +241,7 @@
   "color": "Vial",
   "use": "Dry Eye",
   "dosage": "2x/day",
-  "notes": "Generic, Multiple Concentrations, Preservative Free, Sometimes 4x/day for Severe Dryness",
+  "notes": "Generic, Multiple Concentrations, Preservative Free, Restasis also comes in a multidose bottle, Sometimes 4x/day for Severe Dryness",
   "photos": [
    "restasis.jpeg",
    "cequa.jpeg"
@@ -340,7 +340,7 @@
  {
   "generic": "Fluorometholone (FML)",
   "brand": "FML Liquifilm, FML Forte, Flarex",
-  "color": "Pink",
+  "color": "Pink / White",
   "use": "Steroid, Corneal Edema",
   "dosage": "Variable",
   "notes": "Generic, Multiple Concentrations",
@@ -656,7 +656,7 @@
   "brand": "Polytrim",
   "color": "White",
   "use": "Antibiotic",
-  "dosage": "~4x/day, Variable",
+  "dosage": "~4x/day, up to 6x/day",
   "notes": "Generic",
   "photos": [
    "polymyxin.webp"
@@ -680,7 +680,7 @@
   "color": "Green",
   "use": "Steroid, Non-steroidal Anti-inflammatory, Corneal Edema",
   "dosage": "2-3x/day",
-  "notes": "Combination Drop",
+  "notes": "Combination Drop, Compounded by specialty pharmacies",
   "photos": [
    "Pred-Brom.png"
   ]
@@ -691,7 +691,7 @@
   "color": "Purple",
   "use": "Steroid, Antibiotic, Non-steroidal Anti-inflammatory, Corneal Edema",
   "dosage": "2-3x/day",
-  "notes": "Combination Drop",
+  "notes": "Combination Drop, Compounded by specialty pharmacies",
   "photos": [
    "Pred-Moxi-Brom_8mL.png"
   ]
@@ -756,7 +756,7 @@
  {
   "generic": "Tobramycin",
   "brand": "Tobrex",
-  "color": "White",
+  "color": "White / Tan",
   "use": "Antibiotic",
   "dosage": "~4x/day, Variable",
   "notes": "Generic",
