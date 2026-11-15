@@ -17,7 +17,7 @@ The fluid inside the eye leaves through a drain, the trabecular meshwork, in the
 
 {{<figure src="images/learn/angle-types.svg" alt="Three close-up cross-sections of the drainage angle. Open: a wide gap between the iris and the drain. Narrow: the iris bows forward and crowds the drain. Closed: the iris presses against the drain and covers it." caption="The drainage angle close up. In a narrow angle the iris bows forward toward the drain; when it touches and covers it, fluid cannot get out. Simplified, not to scale." />}}
 
-The animation shows how an angle narrows and closes, and what each treatment does. Press **Play** to watch, or tap a step to go through it at your own pace.
+The animation shows how an angle narrows and closes, and what each treatment does. Choose **Laser opening** or **Lens surgery**, then press **Play**, or tap a step to go through it at your own pace.
 
 <div id="jk-proc" class="jk-lpi" data-proc="angle">
   <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
