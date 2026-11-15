@@ -984,7 +984,117 @@
     ]
   };
 
+  // ---------- angle closure: why the angle narrows, closes, and reopens ----------
+  // The iris is the same strip as the iridotomy demo (irisCenter() in
+  // lpi.js, after iris_center() in tools/learn-figures.py): bow = 1 is the
+  // narrow-angle shape. Here it also moves forward with a thicker lens
+  // (fwd), and gets shorter and thicker when the pupil widens (dil). One
+  // state, set by the steps in order; the last step paints it.
+  var AC = { thick: 0, block: 0, close: 0, laser: 0, lens: 0 }, AC_N = 30, AC_HOLE = 0.25;
+  function acCenter(u, bow, fwd, dil) {
+    var push = 40 * (1 - Math.exp(-u / 0.07)) * Math.pow(1 - u, 1.1) - 9 * Math.pow(u, 4);
+    return [308 - 30 * u - bow * push - fwd * u, 126 + 175 * u * (1 - 0.22 * dil)];
+  }
+  function acSides(bow, fwd, dil) {
+    var front = [], back = [];
+    for (var i = 0; i <= AC_N; i++) {
+      var u = i / AC_N, c = acCenter(u, bow, fwd, dil), a = acCenter(Math.max(0, u - 0.02), bow, fwd, dil), b = acCenter(Math.min(1, u + 0.02), bow, fwd, dil);
+      var dx = b[0] - a[0], dy = b[1] - a[1], len = Math.hypot(dx, dy) || 1;
+      var h = (16 - 3 * u + dil * 10 * Math.pow(1 - u, 2)) / 2, nx = -dy / len, ny = dx / len;
+      front.push([c[0] - nx * h, c[1] - ny * h]); back.push([c[0] + nx * h, c[1] + ny * h]);
+    }
+    return { front: front, back: back };
+  }
+  function acPts(a) { return a.map(function (q) { return q[0].toFixed(1) + ',' + q[1].toFixed(1); }).join(' L'); }
+  function acIrisPath(s) {
+    var m = s.front[AC_N], n = s.back[AC_N], r = (Math.hypot(n[0] - m[0], n[1] - m[1]) / 2).toFixed(1);
+    return 'M' + acPts(s.front) + ' A' + r + ',' + r + ' 0 0,1 ' + n[0].toFixed(1) + ',' + n[1].toFixed(1) + ' L' + acPts(s.back.slice().reverse()) + ' Z';
+  }
+  function acLens(rx) { return 'M385,400 m-' + rx.toFixed(1) + ',0 a' + rx.toFixed(1) + ',222 0 0,1 ' + (2 * rx).toFixed(1) + ',0 Z'; }
+  function acSvg() {
+    var h = svgOpen('40 0 560 420', 'Side view of the front of the eye, showing the angle where the iris meets the cornea');
+    h += '<path d="M298,92 C420,50 560,40 720,44 L720,70 C560,66 422,76 304,116 Z" fill="#f8fafc" stroke="#6b7280" stroke-width="2"/>'
+      + '<path d="M110,400 C110,250 190,128 298,92 L304,116 C204,148 128,262 128,400 Z" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>'
+      + '<path id="ac-pc" fill="#a78bfa" opacity="0"/>'
+      + '<path d="M312,118 C340,106 372,98 400,96 C392,130 372,160 340,170 C326,160 314,142 312,118 Z" fill="#f2b8b5" stroke="#b45454" stroke-width="1.5"/>'
+      + '<path id="ac-bag" d="' + acLens(100) + '" fill="none" stroke="#ca8a04" stroke-width="1.5" stroke-dasharray="5 5" opacity="0"/>'
+      + '<path id="ac-lens" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/>'
+      + '<g id="ac-iol" opacity="0"><path d="M340,400 m-13,0 a13,84 0 0,1 26,0 Z" fill="#e0f2fe" stroke="#2563eb" stroke-width="2"/>'
+      + '<path d="M342,318 C350,270 372,220 384,186" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/></g>';
+    [[342, 166, 372, 184], [352, 160, 388, 180], [362, 152, 400, 183], [372, 144, 412, 190]].forEach(function (z) {
+      h += '<line x1="' + z[0] + '" y1="' + z[1] + '" x2="' + z[2] + '" y2="' + z[3] + '" stroke="#a8a29e" stroke-width="1"/>';
+    });
+    h += '<path id="ac-iris" fill="#8b5e3c" stroke="#5c3d26" stroke-width="1.5" stroke-linejoin="round"/>'
+      + '<line id="ac-hole" stroke="#fff" stroke-width="0" stroke-linecap="round"/>'
+      + '<path d="M292,104 L305,100 L309,122 L299,126 Z" fill="url(#pr-tm)" stroke="#b45309" stroke-width="1.2"/>'
+      + '<ellipse cx="312" cy="100" rx="8" ry="4.5" fill="#93c5fd" stroke="#1d4ed8" stroke-width="1.2"/>'
+      + '<line x1="60" y1="400" x2="600" y2="400" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="4 6"/>'
+      // fluid: through the pupil and out the drain; held back; through the laser opening
+      + '<g id="ac-flow">' + arrow('ac-f1', 'M352,186 C330,232 312,276 300,312') + arrow('ac-f2', 'M264,326 C226,300 228,220 282,140') + '</g>'
+      + '<g id="ac-push" opacity="0">'
+      + '<path d="M340,214 L314,212" stroke="#6d28d9" stroke-width="3.5" fill="none" stroke-linecap="round" marker-end="url(#pr-ahm)"/>'
+      + '<path d="M338,250 L314,250" stroke="#6d28d9" stroke-width="3.5" fill="none" stroke-linecap="round" marker-end="url(#pr-ahm)"/></g>'
+      + '<g id="ac-holeflow" opacity="0">' + arrow('ac-h1', 'M344,184 C326,180 310,174 284,164') + arrow('ac-h2', 'M268,156 C266,144 274,134 286,126') + '</g>'
+      // labels
+      + txt(150, 300, 'Cornea', 'end') + lead(156, 294, 186, 280)
+      + '<g id="ac-lab-lens">' + txt(470, 330, 'Lens', 'start') + lead(466, 324, 440, 324) + '</g>'
+      + '<g id="ac-lab-iol" opacity="0">' + txt(596, 330, 'Thin implant', 'end', '#1d4ed8') + lead(470, 324, 352, 360, '#1d4ed8') + '</g>'
+      + txt(215, 392, 'Iris', 'end') + lead(221, 386, 276, 262)
+      + txt(596, 140, 'Eye pressure', 'end', MUTED, 600, 18)
+      + '<text id="ac-p" x="596" y="182" ' + FONT + ' font-size="34" font-weight="700" fill="' + GREEN + '" text-anchor="end">15</text>'
+      + txt(596, 204, 'mm Hg', 'end', MUTED, 400, 16)
+      + '<g id="ac-lab-fluid" opacity="0">' + txt(440, 262, 'Fluid held', 'start', '#6d28d9') + txt(440, 286, 'behind the iris', 'start', '#6d28d9', 400) + lead(436, 256, 334, 232, '#6d28d9') + '</g>';
+    [['open', 'Angle open', GREEN], ['narrow', 'Angle narrow', '#b45309'], ['closed', 'Angle closed', '#b91c1c'], ['again', 'Angle open again', GREEN], ['wide', 'Angle wide open', GREEN]].forEach(function (s, i) {
+      h += '<g id="ac-st-' + s[0] + '"' + (i ? ' opacity="0"' : '') + '>' + txt(60, 40, s[1], 'start', s[2], 700) + lead(214 + (i === 3 ? 40 : 0), 46, 296, 114, s[2]) + '</g>';
+    });
+    return h + '</svg>';
+  }
+  function acPaint() {
+    // only one treatment is shown at a time: laser or lens, so treat is either
+    var lens = AC.lens, treat = AC.laser + AC.lens, thick = AC.thick * (1 - lens);
+    var bow = 0.75 * AC.block + 0.45 * AC.close - 1.05 * treat - 0.25 * lens;
+    var dil = AC.close * (1 - treat), fwd = 20 * thick;
+    var s = acSides(bow, fwd, dil);
+    at('ac-iris', 'd', acIrisPath(s));
+    at('ac-pc', 'd', 'M' + acPts(s.back) + ' L300,306 L385,178 L345,166 L316,128 Z');
+    var trapped = clamp(AC.block + AC.close, 0, 1) * (1 - treat);
+    op('ac-pc', 0.5 * trapped); op('ac-push', trapped); op('ac-lab-fluid', trapped);
+    op('ac-flow', (1 - AC.block) + lens); op('ac-holeflow', AC.laser);
+    at('ac-lens', 'd', acLens(100 + 24 * AC.thick)); op('ac-lab-lens', 1 - lens); op('ac-lab-iol', lens); op('ac-lens', 1 - lens); op('ac-iol', lens); op('ac-bag', 0.8 * lens);
+    var k = Math.round(AC_HOLE * AC_N), a = s.front[k], b = s.back[k];
+    at('ac-hole', 'x1', a[0]); at('ac-hole', 'y1', a[1]); at('ac-hole', 'x2', b[0]); at('ac-hole', 'y2', b[1]); at('ac-hole', 'stroke-width', 7 * AC.laser);
+    var pr = Math.round(15 + 40 * AC.close - 37 * AC.close * treat), pe = $('ac-p');
+    if (pe) { pe.textContent = pr; pe.setAttribute('fill', pr >= 22 ? '#b91c1c' : GREEN); }
+  }
+  function acStatus(prev, next, p) { if (p > 0) op('ac-st-' + prev, 1 - ease(clamp(p * 4, 0, 1))); op('ac-st-' + next, ease(clamp(p * 4 - 1, 0, 1))); }
+  // Two variants, switched by chips: the same three steps, then either a
+  // laser opening or lens surgery.
+  var ANGLE_VARIANTS = [['angle', 'Laser opening'], ['anglelens', 'Lens surgery']];
+  function angleProc(lens) {
+    var last = lens
+      ? { label: 'Lens surgery', dur: 4400, caption: '<strong>Lens surgery.</strong> Instead of a laser opening, the thick natural lens is replaced with a thin implant, which takes up far less room. The iris settles back and the angle opens wider than the laser can make it. For many people with angle closure, especially when a cataract is present, this works better than the laser.',
+        draw: function (p) { AC.laser = 0; AC.lens = ease(p); acStatus('closed', 'wide', p); acPaint(); } }
+      : { label: 'Laser opening', dur: 4400, caption: '<strong>A laser opening.</strong> A laser iridotomy makes a tiny hole in the outer iris. Fluid now has a way around the pupil, the pressure behind the iris evens out, and the iris falls back from the drain. Drops bring the pressure down in the meantime. It is the usual first treatment, and is often done in both eyes.',
+        draw: function (p) { AC.lens = 0; AC.laser = ease(p); acStatus('closed', 'again', p); acPaint(); } };
+    return {
+      variants: ANGLE_VARIANTS,
+      views: [['Side view', acSvg]],
+      intro: '<strong>An open angle.</strong> The front of the eye, cut in half. Fluid is made behind the iris, flows forward through the pupil, and leaves through the drain in the angle, where the iris meets the cornea. Here the angle is wide open. Choose a treatment above, then press Play.',
+      steps: [
+        { label: 'Lens thickens', dur: 3200, caption: '<strong>The lens thickens with age.</strong> The natural lens keeps growing slowly throughout life. As it thickens it pushes the iris forward, and the space in front of the iris gets shallower. This happens sooner in eyes that are small or farsighted.',
+          draw: function (p) { AC.thick = ease(p); if (p <= 0) op('ac-st-open', 1); } },
+        { label: 'Fluid held back', dur: 4000, caption: '<strong>Fluid is held back.</strong> With the iris resting on the front of the lens, fluid has trouble getting through the pupil. It builds up behind the iris and pushes its thin outer part forward, so the iris bows toward the drain. This is a narrow angle. It causes no symptoms, and many people never go beyond this stage.',
+          draw: function (p) { AC.block = ease(p); acStatus('open', 'narrow', p); } },
+        { label: 'Angle closes', dur: 4400, caption: '<strong>The angle closes.</strong> When the pupil widens, in dim light or from some medicines, the iris bunches up at its outer edge and can cover the drain completely. Fluid can no longer get out, and the pressure can climb within hours to several times normal. A sudden attack makes the eye red and painful, blurs vision with halos around lights, and can bring headache and vomiting. It is an emergency.',
+          draw: function (p) { AC.close = ease(p); acStatus('narrow', 'closed', p); } },
+        last
+      ]
+    };
+  }
+
   var PROCS = {
+    angle: angleProc(false),
+    anglelens: angleProc(true),
     glaucoma: GLAUCOMA,
     reflex: wateryProc('reflex'),
     blocked: wateryProc('blocked'),
