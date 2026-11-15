@@ -5,6 +5,9 @@
  * and this file builds it. SLT (standard, direct), MIGS (stent, goniotomy, viscodilation, viscodilation + stent) and
  * cyclophotocoagulation (micropulse, standard) have variants switched by
  * chips; see `variants`.
+ * A step may name a `view` ('side' or 'front', the first or second
+ * drawing); on phones, which show one drawing at a time, playing into that
+ * step switches to it.
  *
  * Each procedure is an entry in PROCS: one or two drawings (inline SVG,
  * using the same eye geometry as tools/learn-figures.py) and a list of
@@ -860,7 +863,129 @@
     ]
   };
 
+  // ---------- what is glaucoma: fluid, pressure, the nerve ----------
+  // Two drawings share one state, set by the steps in order (made, drain,
+  // clog, damage, treat); the last step's draw then paints the moving fluid
+  // and the pressure from it. The fluid is dots that run along one path,
+  // from the ciliary body, through the pupil, across the front chamber and
+  // out through the drain; a dot's place is a pure function of t.
+  var GL = { made: 0, drain: 0, clog: 0, dmg: 0, treat: 0 }, GL_N = 20, GL_LOOP = 4200, glTable = null;
+  var GL_PATH = 'M346,170 C326,220 302,270 286,318 C232,346 192,272 232,182 C252,150 274,130 294,116 L312,100 C344,82 372,72 404,66';
+  var GL_PASS = 0.8; // beyond this along the path a dot has gone through the drain
+  function glSide() {
+    var h = svgOpen('40 -10 580 430', 'Side view of the front of the eye: fluid is made behind the iris, flows through the pupil, and leaves through the drain');
+    h += eyeSide()
+      + '<path id="gl-ac" d="M304,116 C204,148 128,262 128,400 L280,400 L270,300 C280,250 292,180 300,124 Z" fill="#2563eb" opacity="0"/>'
+      + '<path id="gl-path" d="' + GL_PATH + '" fill="none" stroke="none"/>'
+      + '<g id="gl-push" opacity="0">' + arrow('gl-push1', 'M220,250 L170,222', '#b91c1c', 4) + arrow('gl-push2', 'M200,330 L150,330', '#b91c1c', 4) + '</g>'
+      + '<g id="gl-dots" fill="' + WATER + '">';
+    for (var i = 0; i < GL_N; i++) h += '<circle r="5" opacity="0"/>';
+    h += '</g>'
+      + '<g id="gl-plug" fill="#7c2d12" opacity="0">';
+    [[296, 108], [302, 112], [298, 117], [304, 106], [301, 121], [295, 113], [306, 116], [299, 104]].forEach(function (c) { h += '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="2.6"/>'; });
+    h += '</g>'
+      + txt(210, 392, 'Iris', 'end') + lead(216, 386, 280, 290)
+      + txt(440, 330, 'Lens', 'start') + lead(436, 324, 420, 324)
+      + txt(150, 40, 'Cornea', 'end') + lead(156, 46, 210, 120)
+      + '<g id="gl-lab-made" opacity="0">' + txt(420, 136, 'Fluid is made here', 'start', '#b45454') + lead(416, 130, 360, 140, '#b45454') + '</g>'
+      + '<g id="gl-lab-drain" opacity="0">' + txt(380, 12, 'Drain', 'start') + lead(376, 18, 304, 106) + '</g>'
+      + '<g id="gl-lab-clog" opacity="0">' + txt(380, 36, 'works less well', 'start', '#7c2d12', 600, 18) + '</g>'
+      + txt(612, 214, 'Eye pressure', 'end', MUTED, 600, 18)
+      + '<text id="gl-p1" x="612" y="254" ' + FONT + ' font-size="34" font-weight="700" fill="' + GREEN + '" text-anchor="end">15</text>'
+      + txt(612, 278, 'mm Hg', 'end', MUTED, 400, 16);
+    return h + '</svg>';
+  }
+  var GL_DISC = [150, 200], GL_FIELD = [418, 200];
+  function glCupPath(d) { // the cup grows with damage, faster downward (the bottom of the rim goes first)
+    var cx = GL_DISC[0] + 4, cy = GL_DISC[1] + 14 * d, rx = 26 + 30 * d, ry = 30 + 44 * d;
+    return 'M' + (cx - rx).toFixed(1) + ',' + cy.toFixed(1) + ' a' + rx.toFixed(1) + ',' + ry.toFixed(1) + ' 0 1,0 ' + (2 * rx).toFixed(1) + ',0 a' + rx.toFixed(1) + ',' + ry.toFixed(1) + ' 0 1,0 ' + (-2 * rx).toFixed(1) + ',0';
+  }
+  function glArc(c, r0, r1, a0, a1) { // a ring segment, angles in degrees (negative is up)
+    function q(r, a) { a = a * Math.PI / 180; return (c[0] + r * Math.cos(a)).toFixed(1) + ',' + (c[1] + r * Math.sin(a)).toFixed(1); }
+    var big = Math.abs(a1 - a0) > 180 ? 1 : 0;
+    return 'M' + q(r1, a0) + ' A' + r1 + ',' + r1 + ' 0 ' + big + ',' + (a1 > a0 ? 1 : 0) + ' ' + q(r1, a1) + ' L' + q(r0, a1) + ' A' + r0 + ',' + r0 + ' 0 ' + big + ',' + (a1 > a0 ? 0 : 1) + ' ' + q(r0, a0) + ' Z';
+  }
+  function glNerve() {
+    var h = svgOpen('0 0 560 420', 'The optic nerve as the doctor sees it, and what this eye sees'), i, a, d = GL_DISC;
+    h += '<clipPath id="gl-fundus"><rect x="20" y="40" width="260" height="320" rx="14"/></clipPath>'
+      + '<rect x="20" y="40" width="260" height="320" rx="14" fill="#b4472a"/>'
+      + '<g clip-path="url(#gl-fundus)">'
+      + '<g id="gl-nfl" stroke="#fed7aa" stroke-width="2" stroke-linecap="round" opacity="0.75">';
+    for (i = 0; i < 48; i++) {
+      a = i / 48 * Math.PI * 2;
+      h += '<line x1="' + (d[0] + 84 * Math.cos(a)).toFixed(1) + '" y1="' + (d[1] + 94 * Math.sin(a)).toFixed(1) + '" x2="' + (d[0] + 116 * Math.cos(a)).toFixed(1) + '" y2="' + (d[1] + 128 * Math.sin(a)).toFixed(1) + '"/>';
+    }
+    h += '</g>'
+      + '<ellipse cx="' + d[0] + '" cy="' + d[1] + '" rx="74" ry="84" fill="#f6b48f" stroke="#fcd9bd" stroke-width="3"/>'
+      + '<path id="gl-cup" d="' + glCupPath(0) + '" fill="#fff4dc" stroke="#fde68a" stroke-width="1.5"/>'
+      // the vessels come out of the cup and arch up and down (the arcades)
+      + '<g fill="none" stroke-linecap="round">'
+      + '<path d="M144,196 L144,128 C144,98 104,82 10,74 M144,128 C144,98 190,80 290,70 M144,204 L144,272 C144,302 104,318 10,326 M144,272 C144,302 190,320 290,330" stroke="#7f1d1d" stroke-width="7"/>'
+      + '<path d="M156,196 L156,136 C156,110 120,104 10,106 M156,136 C156,110 200,104 290,104 M156,204 L156,264 C156,290 120,296 10,294 M156,264 C156,290 200,296 290,296" stroke="#c0392b" stroke-width="4.5"/>'
+      + '</g></g>'
+      + '<rect x="20" y="40" width="260" height="320" rx="14" fill="none" stroke="#7c2d12" stroke-width="1.5"/>'
+      // what this eye sees
+      + '<circle cx="' + GL_FIELD[0] + '" cy="' + GL_FIELD[1] + '" r="112" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>'
+      + '<g stroke="#e2e8f0" stroke-width="1.5"><line x1="' + (GL_FIELD[0] - 112) + '" y1="' + GL_FIELD[1] + '" x2="' + (GL_FIELD[0] + 112) + '" y2="' + GL_FIELD[1] + '"/><line x1="' + GL_FIELD[0] + '" y1="' + (GL_FIELD[1] - 112) + '" x2="' + GL_FIELD[0] + '" y2="' + (GL_FIELD[1] + 112) + '"/></g>'
+      + '<path id="gl-arc-sup" d="' + glArc(GL_FIELD, 30, 76, -12, -178) + ' ' + glArc(GL_FIELD, 76, 112, -150, -180) + '" fill="#334155" opacity="0"/>'
+      + '<path id="gl-arc-inf" d="' + glArc(GL_FIELD, 64, 112, 150, 180) + '" fill="#334155" opacity="0"/>'
+      + '<ellipse cx="' + (GL_FIELD[0] + 52) + '" cy="' + (GL_FIELD[1] + 4) + '" rx="9" ry="12" fill="#94a3b8"/>'
+      + '<circle cx="' + GL_FIELD[0] + '" cy="' + GL_FIELD[1] + '" r="4" fill="' + INK + '"/>'
+      + txt(150, 28, 'The optic nerve', 'middle') + txt(418, 28, 'What this eye sees', 'middle')
+      + txt(150, 392, 'Pale center: the cup', 'middle', MUTED, 400, 16)
+      + txt(150, 412, 'Orange-pink rim: nerve fibers', 'middle', MUTED, 400, 16)
+      + '<g id="gl-lab-dmg" opacity="0">' + txt(418, 346, 'Side vision lost in a patch', 'middle', '#334155', 700, 17) + '</g>'
+      + txt(418, 384, 'Eye pressure', 'end', MUTED, 600, 17)
+      + '<text id="gl-p2" x="426" y="385" ' + FONT + ' font-size="22" font-weight="700" fill="' + GREEN + '">15 mm Hg</text>'
+      + '<g id="gl-lab-stop" opacity="0">' + txt(418, 412, 'Lost vision does not return', 'middle', '#1d4ed8', 700, 16) + '</g>';
+    return h + '</svg>';
+  }
+  function glPaint(t) {
+    var path = $('gl-path'), dots = document.querySelectorAll('#gl-dots circle'), i;
+    if (!path || !dots.length) return;
+    if (!glTable) { var L = path.getTotalLength(); glTable = []; for (i = 0; i <= 200; i++) { var q = path.getPointAtLength(L * i / 200); glTable.push([q.x, q.y]); } }
+    var blocked = GL.clog * (1 - GL.treat);
+    for (i = 0; i < dots.length; i++) {
+      var u = (t / GL_LOOP + i / GL_N) % 1, k = Math.round(u * 200), o = GL.made * (u < 0.36 ? 1 : GL.drain);
+      if (u > 0.3 && u < 0.36) o *= 1 - (1 - GL.drain) * (u - 0.3) / 0.06; // dots fade at the pupil until the drain step shows the rest
+      if (u > GL_PASS - 0.04 && i % 3) o *= 1 - blocked; // through the drain: only a third get through when it is clogged
+      dots[i].setAttribute('cx', glTable[k][0].toFixed(1)); dots[i].setAttribute('cy', glTable[k][1].toFixed(1));
+      dots[i].style.opacity = clamp(o, 0, 1).toFixed(3);
+    }
+    var pr = Math.round(15 + 13 * GL.clog - 12 * GL.clog * GL.treat), hot = pr >= 22 ? '#b91c1c' : GREEN;
+    var p1 = $('gl-p1'), p2 = $('gl-p2');
+    if (p1) { p1.textContent = pr; p1.setAttribute('fill', hot); }
+    if (p2) { p2.textContent = pr + ' mm Hg'; p2.setAttribute('fill', hot); }
+    op('gl-ac', 0.22 * blocked); op('gl-push', blocked);
+    op('gl-plug', GL.clog * (1 - 0.7 * GL.treat));
+    // the nerve: damage happens once and stays
+    var d = GL.dmg, nfl = document.querySelectorAll('#gl-nfl line');
+    at('gl-cup', 'd', glCupPath(d));
+    for (i = 0; i < nfl.length; i++) {
+      var ang = i / nfl.length * 360, inf = Math.abs(ang - 90) < 40 ? 1 : 0, sup = Math.abs(ang - 270) < 30 ? 0.6 : 0;
+      nfl[i].style.opacity = (1 - inf * clamp(d * 1.6, 0, 1) - sup * clamp(d * 2 - 1, 0, 1)).toFixed(3);
+    }
+    op('gl-arc-sup', 0.85 * clamp(d * 1.6, 0, 1)); op('gl-arc-inf', 0.7 * clamp(d * 2 - 1, 0, 1));
+  }
+  var GLAUCOMA = {
+    views: [['Side view', glSide], ['The nerve and vision', glNerve]],
+    intro: '<strong>A healthy eye.</strong> One drawing shows the front of the eye cut in half. The other shows the optic nerve at the back of the eye as the doctor sees it, beside what this eye sees. The pale center of the nerve is called the cup; the orange-pink rim around it is made of the nerve fibers that carry vision to the brain.',
+    steps: [
+      { label: 'Fluid made', dur: 4200, view: 'side', caption: '<strong>Fluid is made.</strong> A gland behind the iris, the ciliary body, makes a clear fluid all day and night. It flows forward through the pupil into the front of the eye. It is not tears: it stays inside the eye and nourishes the lens and cornea.',
+        draw: function (p) { GL.made = ease(clamp(p * 3, 0, 1)); op('gl-lab-made', ease(p)); } },
+      { label: 'Fluid drains', dur: 4200, view: 'side', caption: '<strong>Fluid drains.</strong> The fluid leaves through a drain where the iris meets the cornea, the trabecular meshwork. Eye pressure is the balance between how much fluid is made and how easily it drains, like a sink with the tap running.',
+        draw: function (p) { GL.drain = ease(p); op('gl-lab-drain', ease(p)); } },
+      { label: 'Drain clogs', dur: 5200, view: 'side', caption: '<strong>The drain works less well.</strong> In the most common kind of glaucoma, the drain slowly becomes less efficient. Fluid keeps coming in but leaves more slowly, so the pressure inside the eye rises. The pressure presses on every part of the eye, including the optic nerve at the back. There is no pain and nothing you would notice.',
+        draw: function (p) { GL.clog = ease(p); op('gl-lab-clog', ease(p)); } },
+      { label: 'Nerve damage', dur: 6000, view: 'front', caption: '<strong>The nerve is damaged.</strong> Over years, pressure that the nerve cannot tolerate kills nerve fibers. The rim thins, often at the bottom or top first, and the cup grows. Each lost bundle of fibers leaves a patch of side vision missing; the bottom of the nerve sees the top of the world. The other eye and the brain fill in the gaps, so most people notice nothing until a great deal is lost.',
+        draw: function (p) { GL.dmg = ease(p); op('gl-lab-dmg', ease(clamp(p * 2 - 0.4, 0, 1))); } },
+      { label: 'Treatment', dur: 5200, view: 'front', caption: '<strong>Treatment lowers the pressure.</strong> Drops, laser or surgery help fluid drain or reduce how much is made, bringing the pressure down to a target set for your eye. That stops or slows further damage. What was already lost does not come back, which is why finding glaucoma early, and keeping up treatment, matters.',
+        draw: function (p, t) { GL.treat = ease(p); op('gl-lab-stop', ease(clamp(p * 2 - 0.5, 0, 1))); glPaint(t); } }
+    ]
+  };
+
   var PROCS = {
+    glaucoma: GLAUCOMA,
     reflex: wateryProc('reflex'),
     blocked: wateryProc('blocked'),
     loose: wateryProc('loose'),
@@ -969,6 +1094,7 @@
     if (cur !== capShown) {
       capShown = cur;
       el.cap.innerHTML = cur < 0 ? proc.intro : proc.steps[cur].caption;
+      if (cur >= 0 && proc.steps[cur].view && proc.views.length > 1) setView(proc.steps[cur].view); // phones show one view: follow the step
       stepBtns.forEach(function (b, k) { b.classList.toggle('is-done', k < cur); b.classList.toggle('is-active', k === cur); b.setAttribute('aria-current', k === cur ? 'step' : 'false'); });
     }
   }

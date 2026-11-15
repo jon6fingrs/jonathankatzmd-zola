@@ -3,16 +3,23 @@ title = "What Is Glaucoma?"
 description = "Glaucoma is damage to the optic nerve, usually linked to eye pressure. Why it has no symptoms early, who is at risk, and how it is treated."
 template = "page.html"
 date = 2026-10-02
-updated = 2026-11-14
+updated = 2026-11-15
 weight = 10
 
 [extra]
 article = true
 topic = "glaucoma"
 group = "Basics"
+js = "js/procedure.js"
 +++
 
 Glaucoma is a group of eye diseases that damage the **optic nerve**, the cable that carries what the eye sees to the brain. The damage is usually slow, painless, and permanent, and in most people it is related to the **pressure inside the eye** being higher than that particular nerve can tolerate. It is one of the leading causes of irreversible blindness worldwide, and also one of the most treatable when it is found early.
+
+The animation shows how it happens, from the fluid inside the eye to the nerve and what you see. Press **Play** to watch, or tap a step to go through it at your own pace.
+
+<div id="jk-proc" class="jk-lpi" data-proc="glaucoma">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
+</div>
 
 ## How the eye makes pressure
 
