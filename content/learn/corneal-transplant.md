@@ -3,13 +3,14 @@ title = "Corneal Transplants"
 description = "Corneal transplants (DMEK, DSAEK, DALK, PK): who needs one, what the operation and recovery involve, and the warning signs of rejection."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-11
+updated = 2026-11-15
 weight = 550
 
 [extra]
 article = true
 topic = "cornea"
 group = "Surgery"
+scripts = ["js/procedure-cornea.js", "js/procedure.js"]
 +++
 
 A **corneal transplant** replaces diseased cornea with healthy tissue from a donor. It is the most common and most successful transplant in medicine: the cornea has no blood vessels of its own, so the body is less likely to reject it than other transplanted tissue. No matching of blood or tissue type is needed, and anti-rejection pills are not usually required, only drops.
@@ -17,6 +18,12 @@ A **corneal transplant** replaces diseased cornea with healthy tissue from a don
 Today, where possible, only the diseased layer is replaced. Transplants are done by a cornea specialist; your eye doctor will refer you if one is needed.
 
 {{<figure src="images/learn/corneal-transplant.svg" alt="Two slices through the cornea. On the left, a full-thickness button of donor cornea replaces all the layers and is held by stitches. On the right, only the thin inner pump layer is replaced, with no stitches." caption="Left: a full-thickness transplant replaces every layer. Right: a partial-thickness transplant replaces only the worn-out pump layer. Simplified, not to scale." />}}
+
+The animation shows each kind of transplant in a slice through the cornea. Choose one, then press **Play**, or tap a step to go through it at your own pace.
+
+<div id="jk-proc" class="jk-lpi" data-proc="dmek">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
+</div>
 
 ## Why one might be needed
 
