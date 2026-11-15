@@ -3,18 +3,25 @@ title = "Macular Hole"
 description = "A small break at the center of the retina that blurs and distorts central vision: why it forms, how it is found, and the surgery that closes it."
 template = "page.html"
 date = 2026-11-13
-updated = 2026-11-13
+updated = 2026-11-15
 weight = 436
 
 [extra]
 article = true
 topic = "retina"
 group = "Conditions"
+scripts = ["js/procedure-retina.js", "js/procedure.js"]
 +++
 
 A **macular hole** is a small, round break in the very center of the retina, the part used for reading, recognizing faces and seeing detail. It blurs and distorts central vision while side vision stays normal. Most macular holes can be closed with surgery, and the sooner they are repaired, the better the vision tends to be.
 
 {{<figure src="images/learn/macula-slice.svg" alt="Three slices through the macula. Healthy: a smooth surface with a small dip at the center. Membrane: a film on the surface, with the retina wrinkled and thickened beneath it. Macular hole: a gap through the full thickness of the retina at the center." caption="The macula in cross-section, as a scan (OCT) shows it. A macular hole is a gap through the full thickness of the retina at the very center. Simplified." />}}
+
+The animation shows how it forms and what surgery does, with what the eye sees in the corner. Press **Play** to watch, or tap a step to go through it at your own pace. The other chip shows the related condition.
+
+<div id="jk-proc" class="jk-lpi" data-proc="mh">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
+</div>
 
 ## Why it forms
 

@@ -3,18 +3,25 @@ title = "Epiretinal Membrane (Macular Pucker)"
 description = "A thin film on the surface of the macula that can wrinkle it and distort vision: symptoms, why it forms, when it is watched, and the surgery that peels it."
 template = "page.html"
 date = 2026-11-13
-updated = 2026-11-13
+updated = 2026-11-15
 weight = 433
 
 [extra]
 article = true
 topic = "retina"
 group = "Conditions"
+scripts = ["js/procedure-retina.js", "js/procedure.js"]
 +++
 
 An **epiretinal membrane** is a thin, see-through film that grows on the surface of the macula, the small central part of the retina used for reading and fine detail. It is also called a **macular pucker**, because as the film tightens it wrinkles the retina beneath it, like plastic wrap shrinking over a surface. It is common, especially after 50, and many membranes are mild and never need treatment.
 
 {{<figure src="images/learn/macula-slice.svg" alt="Three slices through the macula. Healthy: a smooth surface with a small dip at the center. Membrane: a film on the surface, with the retina wrinkled and thickened beneath it. Macular hole: a gap through the full thickness of the retina at the center." caption="The macula in cross-section, as a scan (OCT) shows it. A membrane wrinkles and thickens the retina; a macular hole is a gap through it. Simplified." />}}
+
+The animation shows how it forms and what surgery does, with what the eye sees in the corner. Press **Play** to watch, or tap a step to go through it at your own pace. The other chip shows the related condition.
+
+<div id="jk-proc" class="jk-lpi" data-proc="erm">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
+</div>
 
 ## Why it forms
 
