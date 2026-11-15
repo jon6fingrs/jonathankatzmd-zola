@@ -1,0 +1,33 @@
+# Cloudflare Pages response headers (copied into public/ by zola build).
+
+# The *.pages.dev copies (production and every preview) stay out of search
+# results; only the real domain should be indexed.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+# Security headers on every response. The Content-Security-Policy only lets
+# the page load scripts, fonts, images and data from this site (scripts
+# only from files, never inline: put any new script in static/js/), and
+# frames only from OpenStreetMap (the Contact page maps). If a Cloudflare
+# feature that injects a script is ever turned on (Web Analytics, Rocket
+# Loader, email obfuscation), add its host to script-src or it will be blocked.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-src https://www.openstreetmap.org; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000
+
+/css/*
+  Cache-Control: public, max-age=604800
+/js/*
+  Cache-Control: public, max-age=604800
+/fonts/*
+  Cache-Control: public, max-age=604800
+/images/*
+  Cache-Control: public, max-age=604800
+/processed_images/*
+  Cache-Control: public, max-age=604800
+/vendor/*
+  Cache-Control: public, max-age=604800
