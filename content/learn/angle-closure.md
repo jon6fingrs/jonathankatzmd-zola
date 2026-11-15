@@ -3,18 +3,25 @@ title = "Narrow Angles and Angle Closure"
 description = "What a narrow drainage angle is, the warning signs of an angle-closure attack, who is at risk, and how laser and lens surgery open the angle."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-11
+updated = 2026-11-15
 weight = 47
 
 [extra]
 article = true
 topic = "glaucoma"
 group = "Types"
+js = "js/procedure.js"
 +++
 
 The fluid inside the eye leaves through a drain, the trabecular meshwork, in the **angle** where the iris meets the cornea. In most eyes the angle is wide open. In some it is **narrow**: the iris sits close to the drain and can block it. That is called **angle closure**, and it can raise the eye pressure slowly over years or suddenly over hours.
 
 {{<figure src="images/learn/angle-types.svg" alt="Three close-up cross-sections of the drainage angle. Open: a wide gap between the iris and the drain. Narrow: the iris bows forward and crowds the drain. Closed: the iris presses against the drain and covers it." caption="The drainage angle close up. In a narrow angle the iris bows forward toward the drain; when it touches and covers it, fluid cannot get out. Simplified, not to scale." />}}
+
+The animation shows how an angle narrows and closes, and what each treatment does. Press **Play** to watch, or tap a step to go through it at your own pace.
+
+<div id="jk-proc" class="jk-lpi" data-proc="angle">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
+</div>
 
 ## Narrow, closed, and angle-closure glaucoma
 

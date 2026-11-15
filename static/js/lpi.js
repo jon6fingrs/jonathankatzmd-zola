@@ -31,6 +31,7 @@
   function ease(x) { return x * x * (3 - 2 * x); }
 
   // ---------- side view geometry ----------
+  // (acCenter() in procedure.js, the angle closure demo, copies this shape.)
   // The iris as a strip around a centerline from its root (u = 0) to the
   // pupil margin (u = 1). bow = 1 is the narrow-angle shape: pushed forward
   // against the eye wall near the root, and back onto the lens at the pupil.
