@@ -1050,41 +1050,51 @@
     return h + '</svg>';
   }
   function acPaint() {
-    var lensGone = AC.lens, thick = AC.thick * (1 - lensGone);
-    var bow = 0.75 * AC.block + 0.45 * AC.close - 1.05 * AC.laser - 0.25 * lensGone;
-    var dil = AC.close * (1 - AC.laser), fwd = 20 * thick;
+    // only one treatment is shown at a time: laser or lens, so treat is either
+    var lens = AC.lens, treat = AC.laser + AC.lens, thick = AC.thick * (1 - lens);
+    var bow = 0.75 * AC.block + 0.45 * AC.close - 1.05 * treat - 0.25 * lens;
+    var dil = AC.close * (1 - treat), fwd = 20 * thick;
     var s = acSides(bow, fwd, dil);
     at('ac-iris', 'd', acIrisPath(s));
     at('ac-pc', 'd', 'M' + acPts(s.back) + ' L300,306 L385,178 L345,166 L316,128 Z');
-    var trapped = clamp(AC.block + AC.close, 0, 1) * (1 - AC.laser);
+    var trapped = clamp(AC.block + AC.close, 0, 1) * (1 - treat);
     op('ac-pc', 0.5 * trapped); op('ac-push', trapped); op('ac-lab-fluid', trapped);
-    op('ac-flow', (1 - AC.block) + AC.lens * 0.0); op('ac-holeflow', AC.laser);
-    at('ac-lens', 'd', acLens(100 + 24 * AC.thick)); op('ac-lab-lens', 1 - lensGone); op('ac-lab-iol', lensGone); op('ac-lens', 1 - lensGone); op('ac-iol', lensGone); op('ac-bag', 0.8 * lensGone);
+    op('ac-flow', (1 - AC.block) + lens); op('ac-holeflow', AC.laser);
+    at('ac-lens', 'd', acLens(100 + 24 * AC.thick)); op('ac-lab-lens', 1 - lens); op('ac-lab-iol', lens); op('ac-lens', 1 - lens); op('ac-iol', lens); op('ac-bag', 0.8 * lens);
     var k = Math.round(AC_HOLE * AC_N), a = s.front[k], b = s.back[k];
     at('ac-hole', 'x1', a[0]); at('ac-hole', 'y1', a[1]); at('ac-hole', 'x2', b[0]); at('ac-hole', 'y2', b[1]); at('ac-hole', 'stroke-width', 7 * AC.laser);
-    var pr = Math.round(15 + 40 * AC.close - 37 * AC.close * AC.laser), pe = $('ac-p');
+    var pr = Math.round(15 + 40 * AC.close - 37 * AC.close * treat), pe = $('ac-p');
     if (pe) { pe.textContent = pr; pe.setAttribute('fill', pr >= 22 ? '#b91c1c' : GREEN); }
   }
   function acStatus(prev, next, p) { if (p > 0) op('ac-st-' + prev, 1 - ease(clamp(p * 4, 0, 1))); op('ac-st-' + next, ease(clamp(p * 4 - 1, 0, 1))); }
-  var ANGLE = {
-    views: [['Side view', acSvg]],
-    intro: '<strong>An open angle.</strong> The front of the eye, cut in half. Fluid is made behind the iris, flows forward through the pupil, and leaves through the drain in the angle, where the iris meets the cornea. Here the angle is wide open.',
-    steps: [
-      { label: 'Lens thickens', dur: 3200, caption: '<strong>The lens thickens with age.</strong> The natural lens keeps growing slowly throughout life. As it thickens it pushes the iris forward, and the space in front of the iris gets shallower. This happens sooner in eyes that are small or farsighted.',
-        draw: function (p) { AC.thick = ease(p); if (p <= 0) op('ac-st-open', 1); } },
-      { label: 'Fluid held back', dur: 4000, caption: '<strong>Fluid is held back.</strong> With the iris resting on the front of the lens, fluid has trouble getting through the pupil. It builds up behind the iris and pushes its thin outer part forward, so the iris bows toward the drain. This is a narrow angle. It causes no symptoms, and many people never go beyond this stage.',
-        draw: function (p) { AC.block = ease(p); acStatus('open', 'narrow', p); } },
-      { label: 'Angle closes', dur: 4400, caption: '<strong>The angle closes.</strong> When the pupil widens, in dim light or from some medicines, the iris bunches up at its outer edge and can cover the drain completely. Fluid can no longer get out, and the pressure can climb within hours to several times normal. A sudden attack makes the eye red and painful, blurs vision with halos around lights, and can bring headache and vomiting. It is an emergency.',
-        draw: function (p) { AC.close = ease(p); acStatus('narrow', 'closed', p); } },
-      { label: 'Laser opening', dur: 4400, caption: '<strong>A laser opening.</strong> A laser iridotomy makes a tiny hole in the outer iris. Fluid now has a way around the pupil, the pressure behind the iris evens out, and the iris falls back from the drain. Drops bring the pressure down in the meantime. It is the usual first treatment, and is often done in both eyes.',
-        draw: function (p) { AC.laser = ease(p); acStatus('closed', 'again', p); } },
-      { label: 'Lens surgery', dur: 4400, caption: '<strong>Or lens surgery.</strong> The thick natural lens is replaced with a thin implant, which takes up far less room. The iris settles back and the angle opens wider than the laser alone can make it. For many people with angle closure, especially when a cataract is present, this works better than the laser.',
-        draw: function (p) { AC.lens = ease(p); acStatus('again', 'wide', p); acPaint(); } }
-    ]
-  };
+  // Two variants, switched by chips: the same three steps, then either a
+  // laser opening or lens surgery.
+  var ANGLE_VARIANTS = [['angle', 'Laser opening'], ['anglelens', 'Lens surgery']];
+  function angleProc(lens) {
+    var last = lens
+      ? { label: 'Lens surgery', dur: 4400, caption: '<strong>Lens surgery.</strong> Instead of a laser opening, the thick natural lens is replaced with a thin implant, which takes up far less room. The iris settles back and the angle opens wider than the laser can make it. For many people with angle closure, especially when a cataract is present, this works better than the laser.',
+        draw: function (p) { AC.laser = 0; AC.lens = ease(p); acStatus('closed', 'wide', p); acPaint(); } }
+      : { label: 'Laser opening', dur: 4400, caption: '<strong>A laser opening.</strong> A laser iridotomy makes a tiny hole in the outer iris. Fluid now has a way around the pupil, the pressure behind the iris evens out, and the iris falls back from the drain. Drops bring the pressure down in the meantime. It is the usual first treatment, and is often done in both eyes.',
+        draw: function (p) { AC.lens = 0; AC.laser = ease(p); acStatus('closed', 'again', p); acPaint(); } };
+    return {
+      variants: ANGLE_VARIANTS,
+      views: [['Side view', acSvg]],
+      intro: '<strong>An open angle.</strong> The front of the eye, cut in half. Fluid is made behind the iris, flows forward through the pupil, and leaves through the drain in the angle, where the iris meets the cornea. Here the angle is wide open. Choose a treatment above, then press Play.',
+      steps: [
+        { label: 'Lens thickens', dur: 3200, caption: '<strong>The lens thickens with age.</strong> The natural lens keeps growing slowly throughout life. As it thickens it pushes the iris forward, and the space in front of the iris gets shallower. This happens sooner in eyes that are small or farsighted.',
+          draw: function (p) { AC.thick = ease(p); if (p <= 0) op('ac-st-open', 1); } },
+        { label: 'Fluid held back', dur: 4000, caption: '<strong>Fluid is held back.</strong> With the iris resting on the front of the lens, fluid has trouble getting through the pupil. It builds up behind the iris and pushes its thin outer part forward, so the iris bows toward the drain. This is a narrow angle. It causes no symptoms, and many people never go beyond this stage.',
+          draw: function (p) { AC.block = ease(p); acStatus('open', 'narrow', p); } },
+        { label: 'Angle closes', dur: 4400, caption: '<strong>The angle closes.</strong> When the pupil widens, in dim light or from some medicines, the iris bunches up at its outer edge and can cover the drain completely. Fluid can no longer get out, and the pressure can climb within hours to several times normal. A sudden attack makes the eye red and painful, blurs vision with halos around lights, and can bring headache and vomiting. It is an emergency.',
+          draw: function (p) { AC.close = ease(p); acStatus('narrow', 'closed', p); } },
+        last
+      ]
+    };
+  }
 
   var PROCS = {
-    angle: ANGLE,
+    angle: angleProc(false),
+    anglelens: angleProc(true),
     glaucoma: GLAUCOMA,
     reflex: wateryProc('reflex'),
     blocked: wateryProc('blocked'),
