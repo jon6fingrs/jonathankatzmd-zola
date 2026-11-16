@@ -1092,7 +1092,161 @@
     };
   }
 
+  // ---------- using eye drops: one eye from the front ----------
+  // The nose side is on the right (a right eye, as someone facing you sees
+  // it). Each step owns what it moves; later steps adjust only when p > 0.
+  var SKIN = '#f1c7a8', SKIN_S = '#b07d5b';
+  function dpLabel(k, p) { op('dp-lab-' + k, ease(clamp((p - 0.05) / 0.1, 0, 1))); if (p > 0) op('dp-lab-' + (k - 1), 1 - ease(clamp(p / 0.05, 0, 1))); else if (k === 1) op('dp-lab-0', 1); }
+  function finger(id) { // a fingertip pointing up, tip at 0,0
+    return '<g id="' + id + '" opacity="0"><path d="M-22,140 L-22,8 C-22,-14 22,-14 22,8 L22,140 Z" fill="' + SKIN + '" stroke="' + SKIN_S + '" stroke-width="2"/>'
+      + '<path d="M-12,4 C-12,-6 12,-6 12,4 L12,26 C12,30 -12,30 -12,26 Z" fill="#fde4d4" stroke="' + SKIN_S + '" stroke-width="1.2"/></g>';
+  }
+  function dropsSvg() {
+    var h = svgOpen('0 0 560 460', 'One eye from the front, with the nose side on the right'), i;
+    h += '<rect width="560" height="460" fill="' + SKIN + '"/>'
+      + '<clipPath id="dp-eye"><path d="M100,224 Q280,96 460,224 Q280,334 100,224 Z"/></clipPath>'
+      + '<g clip-path="url(#dp-eye)"><rect x="90" y="90" width="380" height="260" fill="#f8fafc"/>'
+      + '<g id="dp-iris"><circle cx="280" cy="220" r="62" fill="#5b8bb5" stroke="#2c4f6e" stroke-width="2"/><circle cx="280" cy="220" r="22" fill="#111827"/><circle cx="294" cy="204" r="7" fill="#fff"/></g></g>'
+      + '<path id="dp-pocket" fill="#fca5a5" stroke="#ef4444" stroke-width="1.5"/>'
+      + '<circle id="dp-pool" cx="280" cy="300" r="0" fill="#93c5fd" opacity="0.8"/>'
+      + '<path id="dp-low" fill="' + SKIN + '"/><path id="dp-low-edge" fill="none" stroke="' + SKIN_S + '" stroke-width="2.5"/>'
+      + '<circle cx="438" cy="236" r="3.5" fill="#7f1d1d"/>'
+      + '<path id="dp-up" fill="' + SKIN + '"/><path id="dp-up-edge" fill="none" stroke="' + INK + '" stroke-width="4" stroke-linecap="round"/>'
+      + '<g id="dp-lash" stroke="' + INK + '" stroke-width="2.5" stroke-linecap="round"></g>'
+      + '<path d="M120,98 Q280,40 440,98" fill="none" stroke="#7c5a43" stroke-width="12" stroke-linecap="round" opacity="0.6"/>'
+      + finger('dp-f1') + finger('dp-f2')
+      // the bottle, tip down, above the eye; and the drop
+      + '<g id="dp-bottle" opacity="0"><path d="M262,-120 L298,-120 L298,-10 L290,4 L284,30 L276,30 L270,4 L262,-10 Z" fill="#f8fafc" stroke="#64748b" stroke-width="2"/><rect x="262" y="-60" width="36" height="40" fill="#14b8a6" opacity="0.6"/></g>'
+      + '<path id="dp-drop" d="M0,-12 C6,-2 8,4 0,8 C-8,4 -6,-2 0,-12 Z" fill="#60a5fa" stroke="#1d4ed8" stroke-width="1.5" opacity="0"/>'
+      + '<g id="dp-duct" opacity="0">' + txt(548, 300, 'Tear duct', 'end', '#7f1d1d', 700, 17) + txt(548, 320, 'closed: the drop stays', 'end', '#7f1d1d', 400, 15) + '</g>'
+      + '<g id="dp-timer" opacity="0"><circle cx="70" cy="70" r="40" fill="#fff" stroke="#cbd5e1" stroke-width="6"/><circle id="dp-ring" cx="70" cy="70" r="40" fill="none" stroke="' + GREEN + '" stroke-width="6" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1" transform="rotate(-90 70 70)"/>' + txt(70, 68, '1 to 2', 'middle', INK, 700, 15) + txt(70, 86, 'minutes', 'middle', MUTED, 400, 13) + '</g>'
+      + txt(548, 196, 'Nose', 'end', MUTED, 600, 17) + txt(548, 216, 'side', 'end', MUTED, 600, 17);
+    ['Tilt your head back, or lie down', 'Pull the lower lid down; look up', 'One drop into the pocket', 'Close gently; blot the overflow', 'Press the inner corner'].forEach(function (s, i) {
+      h += '<g id="dp-lab-' + i + '"' + (i ? ' opacity="0"' : '') + '><rect x="0" y="420" width="560" height="40" fill="#fff" opacity="0.85"/>' + txt(280, 447, s, 'middle', '#1e3a8a', 700, 19) + '</g>';
+    });
+    return h + '</svg>';
+  }
+  var DP = { pull: 0, look: 0, close: 0 };
+  function dpPaint() {
+    var low = 334 + 64 * DP.pull * (1 - DP.close), up = 96 + 236 * DP.close;
+    at('dp-low', 'd', 'M0,224 L100,224 Q280,' + low.toFixed(1) + ' 460,224 L560,224 L560,460 L0,460 Z');
+    at('dp-pocket', 'd', 'M100,224 Q280,334 460,224 Q280,' + low.toFixed(1) + ' 100,224 Z');
+    at('dp-up', 'd', 'M0,224 L100,224 Q280,' + up.toFixed(1) + ' 460,224 L560,224 L560,0 L0,0 Z');
+    at('dp-up-edge', 'd', 'M100,224 Q280,' + up.toFixed(1) + ' 460,224');
+    at('dp-low-edge', 'd', 'M100,224 Q280,' + low.toFixed(1) + ' 460,224');
+    at('dp-iris', 'transform', 'translate(0,' + (-34 * DP.look).toFixed(1) + ')');
+    var l = document.getElementById('dp-lash');
+    if (l) { var s = '', i; for (i = 1; i < 12; i++) { var t = i / 12, x = (1 - t) * (1 - t) * 100 + 2 * (1 - t) * t * 280 + t * t * 460, y = (1 - t) * (1 - t) * 224 + 2 * (1 - t) * t * up + t * t * 224; s += '<line x1="' + x.toFixed(1) + '" y1="' + y.toFixed(1) + '" x2="' + (x + (t - 0.5) * 14).toFixed(1) + '" y2="' + (y - 16 + 26 * DP.close).toFixed(1) + '"/>'; } l.innerHTML = s; }
+  }
+  var DROPS = {
+    views: [['One eye, from the front', dropsSvg]],
+    intro: '<strong>Getting ready.</strong> Wash your hands, and shake the bottle if the label says to. Tilt your head back, or lie down; many people find lying flat on a bed easiest.',
+    steps: [
+      { label: 'Make a pocket', dur: 2800, caption: '<strong>Make a pocket.</strong> Pull the lower lid down with one finger to make a small pocket, and look up.',
+        draw: function (p) { var e = ease(p); DP.pull = e; DP.look = e; op('dp-f1', p > 0 ? 1 : 0); at('dp-f1', 'transform', 'translate(250,' + (112 + 0.5 * (334 + 64 * e) + 10).toFixed(1) + ')'); /* the tip rests just under the lid edge */ dpLabel(1, p); } },
+      { label: 'One drop', dur: 3000, caption: '<strong>One drop.</strong> Hold the bottle above the eye and squeeze one drop into the pocket. Do not let the tip touch the eye, the lashes or your fingers. One drop is already more than the eye can hold; if you are not sure it went in, one more is fine.',
+        draw: function (p) {
+          var b = ease(clamp(p * 3, 0, 1)), fall = clamp((p - 0.35) / 0.4, 0, 1), land = clamp((p - 0.75) / 0.25, 0, 1);
+          op('dp-bottle', p > 0 ? 1 : 0); at('dp-bottle', 'transform', 'translate(0,' + (-120 + 160 * b).toFixed(1) + ')');
+          op('dp-drop', fall > 0 && fall < 1 ? 1 : 0); at('dp-drop', 'transform', 'translate(280,' + (84 + 208 * fall * fall).toFixed(1) + ')');
+          at('dp-pool', 'cy', 296); at('dp-pool', 'r', 18 * land); dpLabel(2, p);
+        } },
+      { label: 'Close gently', dur: 2800, caption: '<strong>Close gently.</strong> Let go of the lid and close the eye gently, without squeezing, for one to two minutes. Blot any overflow from the closed lid with a tissue; don&rsquo;t wipe the open eye.',
+        draw: function (p) {
+          var e = ease(p); DP.close = e;
+          if (p > 0) { op('dp-bottle', 1 - ease(clamp(p * 3, 0, 1))); at('dp-f1', 'transform', 'translate(250,' + (368 + 120 * e).toFixed(1) + ')'); op('dp-f1', 1 - e); op('dp-pool', 1 - e); DP.look = 1 - e; }
+          dpLabel(3, p);
+        } },
+      { label: 'Press the corner', dur: 3600, caption: '<strong>Press the inner corner.</strong> At the same time, press lightly on the inner corner of the closed eye, beside the nose, for one to two minutes. This closes the tear duct, so the medicine stays on the eye instead of draining into the nose and throat. If you use another drop at the same time of day, wait at least five minutes before it.',
+        draw: function (p) {
+          var e = ease(clamp(p * 3, 0, 1));
+          op('dp-f2', p > 0 ? 1 : 0); at('dp-f2', 'transform', 'translate(' + (540 - 94 * e).toFixed(1) + ',' + (330 - 86 * e).toFixed(1) + ') rotate(-40)');
+          op('dp-duct', e); op('dp-timer', e); at('dp-ring', 'stroke-dashoffset', 1 - clamp((p - 0.3) / 0.7, 0, 1));
+          dpLabel(4, p); dpPaint();
+        } }
+    ]
+  };
+
+  // ---------- the eye shield after cataract surgery ----------
+  // A face as someone facing it sees it: the person's right eye is on the
+  // left of the drawing. The shield is a teardrop whose bump goes at the top,
+  // on the nose side (2 o'clock on the right eye, 10 o'clock on the left).
+  var SH_EYES = { r: [192, 214], l: [368, 214] };
+  var SH_PATH = 'M40.8,-59.3 L112.8,-9.9 A12,12 0 0,1 112.8,9.9 L40.8,59.3 A72,72 0 1,1 40.8,-59.3 Z';
+  function shFace() {
+    var h = '<rect width="560" height="460" fill="#f8fafc"/>'
+      + '<path d="M90,180 C90,40 470,40 470,180 L470,300 C470,420 380,470 280,470 C180,470 90,420 90,300 Z" fill="' + SKIN + '" stroke="' + SKIN_S + '" stroke-width="2.5"/>'
+      + '<path d="M84,170 C70,40 200,-10 280,0 C360,-10 490,40 476,170 C440,90 380,70 280,74 C180,70 120,90 84,170 Z" fill="#78553c"/>';
+    [SH_EYES.r, SH_EYES.l].forEach(function (c) {
+      h += '<path d="M' + (c[0] - 54) + ',' + (c[1] - 46) + ' Q' + c[0] + ',' + (c[1] - 74) + ' ' + (c[0] + 54) + ',' + (c[1] - 46) + '" fill="none" stroke="#5c3d26" stroke-width="9" stroke-linecap="round"/>'
+        + '<path d="M' + (c[0] - 44) + ',' + c[1] + ' Q' + c[0] + ',' + (c[1] - 32) + ' ' + (c[0] + 44) + ',' + c[1] + ' Q' + c[0] + ',' + (c[1] + 26) + ' ' + (c[0] - 44) + ',' + c[1] + ' Z" fill="#fff" stroke="' + INK + '" stroke-width="2.5"/>'
+        + '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="13" fill="#5b8bb5"/><circle cx="' + c[0] + '" cy="' + c[1] + '" r="5" fill="#111827"/>';
+    });
+    h += '<path d="M268,214 C266,260 254,292 250,304 C262,314 298,314 310,304 C306,292 294,260 292,214" fill="none" stroke="' + SKIN_S + '" stroke-width="2.5"/>'
+      + '<path d="M240,372 Q280,392 320,372" fill="none" stroke="#9f5f4a" stroke-width="4" stroke-linecap="round"/>';
+    return h;
+  }
+  function shieldSvg(side) {
+    var c = SH_EYES[side], h = svgOpen('0 0 560 460', 'A face, with a clear shield over the ' + (side === 'r' ? 'right' : 'left') + ' eye');
+    h += shFace()
+      + '<g id="sh-shield" opacity="0"><g id="sh-rot"><path d="' + SH_PATH + '" fill="#e2e8f0" fill-opacity="0.55" stroke="#64748b" stroke-width="3"/>'
+      + '<path d="' + SH_PATH + '" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.8" transform="scale(0.9)"/>';
+    [[-38, -26], [-6, -38], [26, -24], [-40, 10], [-8, 0], [26, 14], [-24, 38], [10, 40], [58, -6]].forEach(function (q) { h += '<ellipse cx="' + q[0] + '" cy="' + q[1] + '" rx="6" ry="5" fill="#fff" stroke="#94a3b8" stroke-width="1.2"/>'; });
+    h += '</g></g>'
+      + '<g id="sh-bump" opacity="0"><rect x="60" y="424" width="440" height="32" rx="6" fill="#fff" opacity="0.9"/>' + txt(280, 446, 'Bump: at the top, on the nose side', 'middle', '#1d4ed8', 700, 18) + '<line id="sh-bump-lead" stroke="#1d4ed8" stroke-width="2"/></g>';
+    // the tape: one strip, torn lengthwise into two
+    ['a', 'b'].forEach(function (k) { h += '<g id="sh-tape-' + k + '" opacity="0"><rect x="-8" y="-120" width="16" height="240" rx="2" fill="#fafaf9" fill-opacity="0.92" stroke="#a8a29e" stroke-width="1.5"/><g stroke="#e7e5e4" stroke-width="1">' + [-90, -50, -10, 30, 70].map(function (y) { return '<line x1="-6" y1="' + y + '" x2="6" y2="' + (y + 6) + '"/>'; }).join('') + '</g></g>'; });
+    h += '<line id="sh-tear" x1="0" y1="-120" x2="0" y2="120" stroke="#78716c" stroke-width="2" stroke-dasharray="6 5" opacity="0"/>'
+      + txt(side === 'r' ? 14 : 546, 30, side === 'r' ? 'Their right eye' : 'Their left eye', side === 'r' ? 'start' : 'end', INK, 700, 17);
+    return h + '</svg>';
+  }
+  function shProc(side) {
+    var c = SH_EYES[side], ang = side === 'r' ? -30 : -150, sgn = side === 'r' ? 1 : -1;
+    var start = [c[0] - sgn * 10, c[1] + 150], spare = [side === 'r' ? 500 : 60, 250];
+    function place(x, y, rot) { at('sh-shield', 'transform', 'translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ')'); at('sh-rot', 'transform', 'rotate(' + rot.toFixed(1) + ')'); }
+    function strip(k, x, y, rot) { at('sh-tape-' + k, 'transform', 'translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') rotate(' + rot.toFixed(1) + ')'); }
+    // where each half ends up: along the nose-side and ear-side edges, tilted so the top leans toward the middle of the forehead
+    var tilt = 22 * sgn, rad = tilt * Math.PI / 180, nx = Math.cos(rad), ny = Math.sin(rad), off = 64;
+    var A = [c[0] + nx * off, c[1] + ny * off], B = [c[0] - nx * off, c[1] - ny * off];
+    return {
+      variants: [['shieldr', 'Right eye'], ['shieldl', 'Left eye']],
+      views: [['A face, as someone facing you sees it', function () { return shieldSvg(side); }]],
+      intro: '<strong>The eye shield.</strong> After cataract surgery you wear a clear plastic shield over the eye at night, so you do not rub the eye in your sleep. It is shaped like a teardrop, with a bump at one end. In the drawing you are facing the person, so their right eye is on your left.',
+      steps: [
+        { label: 'Find the bump', dur: 3000, caption: '<strong>Find the bump.</strong> Turn the shield so the bump is at the top, on the nose side, where it sits above the bridge of the nose. Facing the person, that is about 2 o&rsquo;clock on the right eye and 10 o&rsquo;clock on the left.',
+          draw: function (p) {
+            var a = ease(clamp(p * 2, 0, 1)), r = ease(clamp(p * 2 - 0.6, 0, 1));
+            op('sh-shield', a); place(start[0], start[1], ang + 120 * (1 - r) * sgn); op('sh-bump', r);
+            var tip = [start[0] + 118 * Math.cos(ang * Math.PI / 180), start[1] + 118 * Math.sin(ang * Math.PI / 180)];
+            at('sh-bump-lead', 'x1', 280); at('sh-bump-lead', 'y1', 426); at('sh-bump-lead', 'x2', tip[0]); at('sh-bump-lead', 'y2', tip[1]);
+          } },
+        { label: 'Over the eye', dur: 2600, caption: '<strong>Over the eye.</strong> Rest the shield over the eye, on the bones of the brow and the cheek, so it covers the eye without pressing on it. The bump stays at the top, on the nose side.',
+          draw: function (p) {
+            var e = ease(p);
+            if (p > 0) { place(lerp(start[0], c[0], e), lerp(start[1], c[1], e), ang); op('sh-bump', 1 - e); }
+          } },
+        { label: 'Split the tape', dur: 3000, caption: '<strong>One piece of tape, split in two.</strong> Take one piece of tape a little longer than the shield, and tear it lengthwise down the middle into two narrow strips.',
+          draw: function (p) {
+            var a = ease(clamp(p * 3, 0, 1)), s = ease(clamp((p - 0.35) / 0.6, 0, 1));
+            op('sh-tape-a', a); op('sh-tape-b', a); strip('a', spare[0] - 8 - 10 * s, spare[1], 0); strip('b', spare[0] + 8 + 10 * s, spare[1], 0);
+            op('sh-tear', a * (1 - s)); at('sh-tear', 'transform', 'translate(' + spare[0] + ',' + spare[1] + ')');
+          } },
+        { label: 'Tape it', dur: 3600, caption: '<strong>Tape both sides.</strong> Place one strip along each side of the shield, the nose side and the ear side, running from the forehead down to the cheek. Each strip holds that edge of the shield to the skin.',
+          draw: function (p) {
+            var a = ease(clamp(p / 0.5, 0, 1)), b = ease(clamp((p - 0.45) / 0.5, 0, 1));
+            if (p > 0) {
+              strip('a', lerp(spare[0] - 18, A[0], a), lerp(spare[1], A[1], a), tilt * a);
+              strip('b', lerp(spare[0] + 18, B[0], b), lerp(spare[1], B[1], b), tilt * b);
+            }
+          } }
+      ]
+    };
+  }
+
   var PROCS = {
+    drops: DROPS,
+    shieldr: shProc('r'),
+    shieldl: shProc('l'),
     angle: angleProc(false),
     anglelens: angleProc(true),
     glaucoma: GLAUCOMA,

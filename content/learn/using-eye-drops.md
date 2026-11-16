@@ -3,18 +3,25 @@ title = "Using Eye Drops"
 description = "Step-by-step technique for putting in eye drops, why to wait five minutes between drops, pressing the tear duct, missed doses, storage and refills."
 template = "page.html"
 date = 2026-10-02
-updated = 2026-11-11
+updated = 2026-11-16
 weight = 40
 
 [extra]
 article = true
 topic = "glaucoma"
 group = "Basics"
+js = "js/procedure.js"
 +++
 
 Eye drops only work if they get into the eye, and the technique matters more than most people expect. Studies that watch patients put in drops find that many miss the eye, touch the tip to the lashes, or put in several drops at once. These steps make each drop count.
 
 {{<figure src="images/learn/eye-drop-technique.svg" alt="Two steps: looking up with the lower lid pulled down while one drop falls into the pocket, then the eye closed with a fingertip pressing the inner corner beside the nose." caption="One drop into the lower-lid pocket, then close gently and press the inner corner. Pressing keeps the medicine on the eye instead of draining into the nose and throat." />}}
+
+Press **Play** to see the steps, or tap a step to go through it at your own pace.
+
+<div id="jk-proc" class="jk-lpi" data-proc="drops">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The steps below cover the same thing.</p>
+</div>
 
 ## Putting in a drop
 
