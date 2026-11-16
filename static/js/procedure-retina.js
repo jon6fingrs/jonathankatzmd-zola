@@ -565,5 +565,113 @@
     };
   }
 
-  return { ppv: PPV, prp: laserProc(true), focal: laserProc(false), pvd: pvdProc(false), pvdtear: pvdProc(true), rd: rdProc(false), rdlaser: rdProc(true), inject: INJECT, amd: amdProc(false), amdwet: amdProc(true), dr: DR, erm: mxProc('erm'), mh: mxProc('mh') };
+  // ---------- retinal vein occlusion: branch and central ----------
+  // Two drawings: the back of the eye (fundus(), as in the diabetic
+  // retinopathy demo) and a slice through the macula with the same
+  // what-you-see grid as the membrane and hole demo (mxGrid). One state,
+  // RV, set by the steps in order; the last step paints.
+  var RV = { block: 0, bleed: 0, edema: 0, treat: 0 };
+  var RV_VEINS = { st: [[372, 196], [340, 120], [250, 80], [120, 110]], it: [[372, 224], [340, 300], [250, 340], [120, 312]],
+    sn: [[380, 196], [420, 140], [450, 110], [480, 70]], in: [[380, 224], [420, 280], [450, 310], [480, 350]] };
+  var RV_CROSS = 0.38; // where the artery crosses the upper vein (branch blockage)
+  function bez(c, t) {
+    var u = 1 - t;
+    return [u * u * u * c[0][0] + 3 * u * u * t * c[1][0] + 3 * u * t * t * c[2][0] + t * t * t * c[3][0],
+      u * u * u * c[0][1] + 3 * u * u * t * c[1][1] + 3 * u * t * t * c[2][1] + t * t * t * c[3][1]];
+  }
+  function rvLine(c, t0) { var d = '', t; for (t = t0; t <= 1.0001; t += 0.04) { var q = bez(c, t); d += (d ? ' L' : 'M') + q[0].toFixed(1) + ',' + q[1].toFixed(1); } return d; }
+  function rvFundus(central) {
+    var h = svgOpen('0 0 560 444', 'The back of the eye as the doctor sees it: the optic nerve, the blood vessels and the macula'), s = 11, inner = '', keys = central ? ['st', 'it', 'sn', 'in'] : ['st'];
+    function rnd() { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }
+    // swollen veins, flame-shaped bleeding along them, pale patches
+    inner += '<g id="rv-veins" opacity="0" fill="none" stroke="#7f1d1d" stroke-width="8" stroke-linecap="round">';
+    keys.forEach(function (k) { inner += '<path d="' + rvLine(RV_VEINS[k], central ? 0.02 : RV_CROSS) + '"/>'; });
+    inner += '</g><g id="rv-heme" opacity="0" fill="#991b1b">';
+    keys.forEach(function (k) {
+      var c = RV_VEINS[k], t0 = central ? 0.12 : RV_CROSS + 0.05, n = central ? 11 : 16, i;
+      for (i = 0; i < n; i++) {
+        var t = t0 + (1 - t0) * (i + rnd() * 0.6) / n, q = bez(c, t), q2 = bez(c, Math.min(1, t + 0.02)), ang = Math.atan2(q2[1] - q[1], q2[0] - q[0]) * 180 / Math.PI;
+        var off = (rnd() - 0.5) * (central ? 34 : 70) + (central ? 0 : -14), x = q[0] - Math.sin(ang * Math.PI / 180) * off, y = q[1] + Math.cos(ang * Math.PI / 180) * off;
+        inner += '<ellipse cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" rx="' + (8 + rnd() * 6).toFixed(1) + '" ry="' + (2.8 + rnd() * 1.8).toFixed(1) + '" transform="rotate(' + ang.toFixed(0) + ' ' + x.toFixed(1) + ' ' + y.toFixed(1) + ')" opacity="' + (0.7 + rnd() * 0.3).toFixed(2) + '"/>';
+      }
+    });
+    inner += '</g>';
+    if (central) inner += '<g id="rv-cws" opacity="0" fill="#fefce8"><ellipse cx="300" cy="150" rx="11" ry="7"/><ellipse cx="214" cy="270" rx="10" ry="6"/><ellipse cx="320" cy="280" rx="9" ry="6"/><ellipse cx="200" cy="160" rx="8" ry="5"/></g>';
+    inner += '<circle id="rv-edema" cx="250" cy="212" r="46" fill="#bfdbfe" opacity="0"/>';
+    if (!central) inner += '<path d="M' + (bez(RV_VEINS.st, RV_CROSS)[0] - 26).toFixed(1) + ',' + (bez(RV_VEINS.st, RV_CROSS)[1] + 18).toFixed(1) + ' l52,-36" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round"/>';
+    h += fundus(inner);
+    if (central) h += '<circle id="rv-disc" cx="376" cy="210" r="36" fill="#fdba74" stroke="#fb923c" stroke-width="6" stroke-opacity="0.5" opacity="0"/><circle cx="376" cy="210" r="9" fill="#fef9c3" opacity="0.6"/>';
+    var cx = central ? [376, 210] : bez(RV_VEINS.st, RV_CROSS);
+    h += '<circle id="rv-clot" cx="' + cx[0].toFixed(1) + '" cy="' + cx[1].toFixed(1) + '" r="0" fill="none" stroke="#111827" stroke-width="3" stroke-dasharray="5 4"/>'
+      + txt(20, 30, 'Macula', 'start') + lead(92, 36, 244, 204)
+      + txt(540, 30, 'Optic nerve', 'end') + lead(470, 38, 384, 196)
+      + '<g id="rv-lab-block" opacity="0">' + txt(280, 432, central ? 'Dashed circle: blocked behind the nerve' : 'Dashed circle: blocked where an artery crosses', 'middle', INK, 700, 18) + '</g>';
+    return h + '</svg>';
+  }
+  function rvSlice() {
+    var h = svgOpen('0 0 560 420', 'A slice through the center of the retina, as a scan shows it'), i;
+    h += '<rect x="20" y="' + (MXB + 8) + '" width="520" height="64" fill="#fecaca" stroke="#f87171" stroke-width="2"/>';
+    for (i = 0; i < 6; i++) h += '<ellipse cx="' + (70 + i * 86) + '" cy="' + (MXB + 38 + (i % 2) * 10) + '" rx="28" ry="10" fill="#dc2626" opacity="0.7"/>';
+    h += '<rect x="20" y="' + MXB + '" width="520" height="8" fill="#92400e"/>'
+      + '<path id="rs-ret" fill="#fbcfe8" stroke="#db2777" stroke-width="2" stroke-linejoin="round"/>'
+      + '<path id="rs-sub" fill="#bfdbfe" stroke="#60a5fa" stroke-width="1.2" opacity="0"/>'
+      + '<g id="rs-cyst" fill="#dbeafe" stroke="#60a5fa" stroke-width="1.2" opacity="0">';
+    [[-34, 0.55, 12, 16], [0, 0.6, 16, 22], [34, 0.55, 12, 16], [-60, 0.5, 9, 12], [60, 0.5, 9, 12], [-14, 0.35, 8, 10], [16, 0.32, 8, 10]].forEach(function (c) { h += '<ellipse data-x="' + c[0] + '" data-f="' + c[1] + '" rx="' + c[2] + '" ry="' + c[3] + '"/>'; });
+    h += '</g>'
+      + '<rect x="' + (MXG[0] - MXG_R - 9) + '" y="' + (MXG[1] - MXG_R - 9) + '" width="' + (2 * MXG_R + 18) + '" height="' + (2 * MXG_R + 18) + '" rx="6" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>'
+      + '<g id="mx-grid" fill="none" stroke="' + INK + '" stroke-width="1.4">';
+    for (i = 0; i < 14; i++) h += '<path/>';
+    h += '</g><circle id="mx-spot" cx="' + MXG[0] + '" cy="' + MXG[1] + '" r="0" fill="#64748b" opacity="0.55"/>'
+      + '<circle cx="' + MXG[0] + '" cy="' + MXG[1] + '" r="3" fill="' + INK + '"/>'
+      + txt(MXG[0], MXG[1] - MXG_R - 16, 'What you see', 'middle', MUTED, 600, 15)
+      + txt(24, 262, 'Retina', 'start', '#9d174d', 700, 18)
+      + '<g id="rs-lab-fluid" opacity="0">' + txt(24, 120, 'Fluid in the macula', 'start', '#1d4ed8', 700, 18) + lead(120, 128, MXC - 30, 230, '#1d4ed8') + '</g>'
+      + '<g id="rs-lab-inj" opacity="0">' + txt(24, 120, 'After injections: drier', 'start', '#047857', 700, 18) + '</g>';
+    return h + '</svg>';
+  }
+  function rvPaint(central) {
+    var b = RV.block, bl = RV.bleed * (1 - 0.55 * RV.treat), ed = RV.edema * (1 - 0.85 * RV.treat);
+    op('rv-veins', 0.85 * b * (1 - 0.4 * RV.treat)); at('rv-clot', 'r', 14 * b); op('rv-lab-block', b * (1 - RV.edema));
+    op('rv-heme', bl); op('rv-cws', 0.9 * bl); op('rv-disc', 0.9 * b * (1 - 0.6 * RV.treat)); op('rv-edema', 0.55 * ed);
+    var top = [], x, dx, th, size = central ? 1.15 : 0.9;
+    for (x = 20; x <= 540; x += 4) {
+      dx = x - MXC;
+      th = 110 - 52 * Math.exp(-Math.pow(dx / 42, 2)) * (1 - ed) + 78 * size * ed * Math.exp(-Math.pow(dx / 92, 2));
+      top.push(x + ',' + (MXB - th).toFixed(1));
+    }
+    at('rs-ret', 'd', 'M' + top.join(' L') + ' L540,' + MXB + ' L20,' + MXB + ' Z');
+    var thC = function (xx) { var d = xx - MXC; return 110 - 52 * Math.exp(-Math.pow(d / 42, 2)) * (1 - ed) + 78 * size * ed * Math.exp(-Math.pow(d / 92, 2)); };
+    var cy = document.querySelectorAll('#rs-cyst ellipse'), i;
+    for (i = 0; i < cy.length; i++) { var cx = MXC + (+cy[i].getAttribute('data-x')), f = +cy[i].getAttribute('data-f'); cy[i].setAttribute('cx', cx); cy[i].setAttribute('cy', (MXB - thC(cx) * f).toFixed(1)); cy[i].setAttribute('transform', 'translate(' + cx + ',' + (MXB - thC(cx) * f).toFixed(1) + ') scale(' + Math.max(0.01, ed).toFixed(3) + ') translate(' + (-cx) + ',' + (-(MXB - thC(cx) * f)).toFixed(1) + ')'); }
+    op('rs-cyst', ed > 0.02 ? 1 : 0);
+    at('rs-sub', 'd', 'M' + (MXC - 60) + ',' + MXB + ' Q' + MXC + ',' + (MXB - 34 * ed).toFixed(1) + ' ' + (MXC + 60) + ',' + MXB + ' Z'); op('rs-sub', ed);
+    op('rs-lab-fluid', RV.edema * (1 - RV.treat)); op('rs-lab-inj', RV.treat);
+    mxGrid(0.55 * ed, 0.35 * ed, 0.9 * ed);
+  }
+  var RV_TEXT = {
+    brvo: ['<strong>A branch vein is blocked.</strong> Where an artery crosses a vein, the two share a wall. A stiff artery, often from high blood pressure, can press the vein shut there. Blood backs up in the vein beyond the crossing, which swells and darkens.',
+      '<strong>Bleeding.</strong> The backed-up blood leaks out as streaks of bleeding in the part of the retina that vein drains. Only that part is affected; if it is away from the center, there may be few symptoms.',
+      '<strong>Swelling of the macula.</strong> Fluid leaks from the congested vessels and collects in the macula in small pockets, thickening it. This swelling (macular edema) is the main reason vision blurs.',
+      '<strong>Treatment.</strong> Injections into the eye of medicines that stop the leakage dry the swelling, and vision usually improves. They start about monthly and are spaced out as the swelling settles. The blood clears over months, but the vein usually stays partly blocked, so follow-up continues.'],
+    crvo: ['<strong>The main vein is blocked.</strong> The central vein, which drains the whole retina, is blocked where it leaves the eye behind the optic nerve. Every vein backs up, swells and darkens, and the optic nerve swells. High eye pressure and glaucoma raise the risk.',
+      '<strong>Bleeding everywhere.</strong> Blood leaks out along every vein, in all four parts of the retina, with pale patches where the retina is short of blood. Vision is usually more blurred than with a branch blockage.',
+      '<strong>Swelling of the macula.</strong> Fluid leaks from the congested vessels and collects in the macula in small pockets, thickening it. This swelling (macular edema) is the main reason vision blurs.',
+      '<strong>Treatment, and watching.</strong> Injections stop the leakage and dry the swelling; many people need them for a year or more. The blood clears over months. In the first months the doctor also watches closely for new, abnormal blood vessels, which can grow over the eye&rsquo;s drain and cause a painful glaucoma, and treats them early if they appear.']
+  };
+  function rvProc(central) {
+    var T = RV_TEXT[central ? 'crvo' : 'brvo'];
+    return {
+      variants: [['brvo', 'Branch'], ['crvo', 'Central']],
+      views: [['The back of the eye', function () { return rvFundus(central); }], ['A slice through the macula', rvSlice]],
+      intro: '<strong>The back of the eye.</strong> One drawing shows the retina as the doctor sees it, with the optic nerve, where the blood vessels enter and leave, and the macula at the center. The darker vessels are veins, which carry blood out. The other drawing is a slice through the macula, with what this eye sees.',
+      steps: [
+        { label: 'Blockage', dur: 3200, view: 'side', caption: T[0], draw: function (p) { RV.block = ease(p); } },
+        { label: 'Bleeding', dur: 3200, view: 'side', caption: T[1], draw: function (p) { RV.bleed = ease(p); } },
+        { label: 'Swelling', dur: 3600, view: 'front', caption: T[2], draw: function (p) { RV.edema = ease(p); } },
+        { label: 'Injections', dur: 4000, view: 'front', caption: T[3], draw: function (p) { RV.treat = ease(p); rvPaint(central); } }
+      ]
+    };
+  }
+
+  return { ppv: PPV, prp: laserProc(true), focal: laserProc(false), pvd: pvdProc(false), pvdtear: pvdProc(true), rd: rdProc(false), rdlaser: rdProc(true), inject: INJECT, amd: amdProc(false), amdwet: amdProc(true), dr: DR, erm: mxProc('erm'), mh: mxProc('mh'), brvo: rvProc(false), crvo: rvProc(true) };
 });
