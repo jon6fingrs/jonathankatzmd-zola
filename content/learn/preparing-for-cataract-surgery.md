@@ -3,13 +3,14 @@ title = "Preparing for Cataract Surgery"
 description = "What happens before, during and after cataract surgery: measurements, choosing a lens, medicines, the day itself, the first weeks, and when to call."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-11
+updated = 2026-11-16
 weight = 106
 
 [extra]
 article = true
 topic = "cataract"
 group = ""
+js = "js/procedure.js"
 +++
 
 This page walks through cataract surgery in order: the weeks before, the day itself, and the first month. Every surgeon and surgery center has its own instructions, and theirs come first. What is here is the usual pattern, so you know what to expect and what to ask. The operation itself is described on [Cataract Surgery](@/learn/cataract-surgery.md).
@@ -58,6 +59,14 @@ Some centers ask for a check-up with your own doctor before surgery. If you have
 - **Showering is fine**; keep soap and water out of the eye.
 - **Reading, screens, walking and television** are fine from the first day.
 - **Driving** is usually possible within a few days, once your vision meets the legal standard and your surgeon agrees.
+
+### Putting the shield on
+
+The shield is a clear teardrop with a bump at one end. The bump goes at the top, on the nose side, above the bridge of the nose. It is held with one piece of tape torn lengthwise into two strips, one along each side of the shield. Choose the eye, then press **Play**. Putting in drops is shown step by step on [Using Eye Drops](@/learn/using-eye-drops.md).
+
+<div id="jk-proc" class="jk-lpi" data-proc="shieldr">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The explanation above covers the same thing.</p>
+</div>
 
 Common and expected: a scratchy feeling, mild ache, light sensitivity, a red patch on the white of the eye, colors looking brighter or bluer, and an arc of light at the edge of vision for a few weeks.
 
