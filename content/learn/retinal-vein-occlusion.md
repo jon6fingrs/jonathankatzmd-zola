@@ -3,18 +3,25 @@ title = "Retinal Vein Occlusion"
 description = "A blocked vein in the retina causes bleeding and swelling that blur vision: who is at risk, treatment with injections and laser, and the link to glaucoma."
 template = "page.html"
 date = 2026-11-13
-updated = 2026-11-13
+updated = 2026-11-16
 weight = 438
 
 [extra]
 article = true
 topic = "retina"
 group = "Conditions"
+scripts = ["js/procedure-retina.js", "js/procedure.js"]
 +++
 
 The retina's blood drains out through veins that gather at the optic nerve. When one of them becomes blocked, it is called a **retinal vein occlusion**. Blood and fluid back up and leak into the retina, and vision blurs. It is one of the most common causes of vision loss from retinal blood vessel disease, after diabetes. It usually affects one eye and is painless.
 
 {{<figure src="images/learn/vein-occlusion.svg" alt="Two views of the back of the eye. Left: a branch vein blockage, with streaks of bleeding along one vein in one part of the retina. Right: a central vein blockage, with bleeding along every vein and a swollen optic nerve." caption="Left: a branch vein blockage affects one part of the retina. Right: a central vein blockage affects all of it. Simplified." />}}
+
+The animation shows a branch and a central blockage, from the back of the eye to a slice through the macula, with what the eye sees. Choose one, then press **Play**, or tap a step to go through it at your own pace.
+
+<div id="jk-proc" class="jk-lpi" data-proc="brvo">
+  <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
+</div>
 
 ## Branch and central
 
