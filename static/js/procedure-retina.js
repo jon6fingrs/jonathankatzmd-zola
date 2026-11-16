@@ -422,5 +422,148 @@
     };
   }
 
-  return { ppv: PPV, prp: laserProc(true), focal: laserProc(false), pvd: pvdProc(false), pvdtear: pvdProc(true), rd: rdProc(false), rdlaser: rdProc(true), inject: INJECT, amd: amdProc(false), amdwet: amdProc(true), dr: DR };
+
+  // ---------- epiretinal membrane and macular hole: a slice through the macula ----------
+  // As a scan (OCT) shows it: the retina on its support layer, the gel above,
+  // and a small grid in the corner for what the eye sees. One state (MX),
+  // set by the steps in order; each variant's first step zeroes the other
+  // variant's values, and its last step paints everything.
+  var MX = { mem: 0, c: 0, peel: 0, gel: 1, det: 0, t: 0, h: 0, ilm: 0, ilmPeel: 0, gas: 0, absorb: 0, k: 0, rec: 0 };
+  var MXC = 280, MXB = 300, MXG = [477, 92], MXG_R = 54;
+  function mxThick(x) {
+    var dx = x - MXC, he = MX.h * (1 - MX.k), w = 30 * he, c = MX.c * (1 - 0.7 * MX.rec), ad = Math.abs(dx);
+    if (ad < w) return 0;
+    var dip = 52 * Math.exp(-Math.pow(dx / 42, 2)) * (1 - 0.9 * c) * (1 - 0.6 * MX.h + 0.6 * MX.k);
+    var th = 110 - dip
+      + c * (26 * Math.exp(-Math.pow(dx / 140, 2)) + 7 * Math.sin(x / 13) * Math.exp(-Math.pow(dx / 170, 2)))
+      + MX.t * (1 - MX.h) * 64 * Math.exp(-Math.pow(dx / 32, 2))
+      + 34 * he * Math.exp(-Math.pow((ad - w - 14) / 26, 2));
+    return th;
+  }
+  function mxSurf(x) { return MXB - mxThick(x); }
+  function mxXs() { // sample points, with the edges of the hole put in exactly
+    var xs = [], x, w = 30 * MX.h * (1 - MX.k);
+    for (x = 20; x <= 540; x += 4) xs.push(x);
+    if (w > 0.5) xs.push(MXC - w - 0.01, MXC - w + 0.01, MXC + w - 0.01, MXC + w + 0.01);
+    return xs.sort(function (a, b) { return a - b; });
+  }
+  function mxPeelPath(x0, x1, pl, lift) { // a film on the surface, peeled up from its left edge as pl goes 0..1
+    var front = x0 + (x1 - x0) * pl, d = '', on = false, x, y;
+    for (x = front; x <= x1; x += 4) {
+      if (mxThick(x) < 6) { on = false; continue; }
+      y = mxSurf(x) - lift; d += (on ? ' L' : ' M') + x.toFixed(1) + ',' + y.toFixed(1); on = true;
+    }
+    var fx = mxThick(front) < 6 ? MXC + 30 * MX.h * (1 - MX.k) + 16 : front; // over the hole: hold the flap at the hole's edge
+    var fy = mxSurf(fx) - lift, L = 0.55 * (front - x0), E = [front + 0.34 * L, fy - 0.94 * L];
+    if (pl > 0) d += ' M' + front.toFixed(1) + ',' + fy.toFixed(1) + ' L' + E[0].toFixed(1) + ',' + E[1].toFixed(1);
+    return { d: d || 'M0,0', grip: E };
+  }
+  function mxSvg(kind) {
+    var h = svgOpen('0 0 560 420', 'A slice through the center of the retina, as a scan shows it, with the gel inside the eye above it'), i;
+    h += '<path id="mx-gel" fill="#e0f2fe"/>'
+      + '<path id="mx-gas" fill="#f0f9ff" stroke="#0284c7" stroke-width="2.5" opacity="0"/>'
+      + '<rect x="20" y="' + (MXB + 8) + '" width="520" height="64" fill="#fecaca" stroke="#f87171" stroke-width="2"/>';
+    for (i = 0; i < 6; i++) h += '<ellipse cx="' + (70 + i * 86) + '" cy="' + (MXB + 38 + (i % 2) * 10) + '" rx="28" ry="10" fill="#dc2626" opacity="0.7"/>';
+    h += '<rect x="20" y="' + MXB + '" width="520" height="8" fill="#92400e"/>'
+      + '<path id="mx-ret" fill="#fbcfe8" stroke="#db2777" stroke-width="2" stroke-linejoin="round"/>'
+      + '<path id="mx-out" fill="#f9a8d4"/>'
+      + '<g id="mx-cyst" fill="#e0f2fe" stroke="#93c5fd" stroke-width="1.2" opacity="0"></g>'
+      + '<path id="mx-hya" fill="none" stroke="#0369a1" stroke-width="2.5" stroke-dasharray="7 5"/>'
+      + '<g id="mx-pull" opacity="0">' + arrow('mx-p1', 'M' + MXC + ',150 L' + MXC + ',96', '#0369a1', 4) + '</g>'
+      + '<g id="mx-press" opacity="0">' + arrow('mx-q1', 'M224,120 L236,172', BLUE, 4) + arrow('mx-q2', 'M336,120 L324,172', BLUE, 4) + '</g>'
+      + '<path id="mx-mem" fill="none" stroke="#475569" stroke-width="3.5" stroke-linecap="round" opacity="0"/>'
+      + '<path id="mx-ilm" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" opacity="0"/>'
+      + '<g id="mx-forceps" opacity="0" fill="none" stroke="#475569" stroke-linecap="round"><path d="M0,0 L-7,-34 M0,0 L7,-34" stroke-width="3"/><path d="M-7,-34 L-4,-60 M7,-34 L4,-60" stroke-width="3"/><line x1="0" y1="-58" x2="0" y2="-320" stroke-width="6"/></g>'
+      // what the eye sees
+      + '<rect x="' + (MXG[0] - MXG_R - 9) + '" y="' + (MXG[1] - MXG_R - 9) + '" width="' + (2 * MXG_R + 18) + '" height="' + (2 * MXG_R + 18) + '" rx="6" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/>'
+      + '<g id="mx-grid" fill="none" stroke="' + INK + '" stroke-width="1.4">';
+    for (i = 0; i < 14; i++) h += '<path/>';
+    h += '</g><circle id="mx-spot" cx="' + MXG[0] + '" cy="' + MXG[1] + '" r="0" fill="#475569" opacity="0.8"/>'
+      + '<circle cx="' + MXG[0] + '" cy="' + MXG[1] + '" r="3" fill="' + INK + '"/>'
+      + txt(MXG[0], MXG[1] - MXG_R - 16, 'What you see', 'middle', MUTED, 600, 15)
+      + txt(24, 262, 'Retina', 'start', '#9d174d', 700, 18)
+      + '<g id="mx-lab-gel">' + txt(24, 40, 'Gel inside the eye', 'start', '#0369a1', 600, 17) + '</g>'
+      + txt(MXC, MXB + 92, 'Center of vision (fovea)', 'middle', MUTED, 400, 15) + '<line x1="' + MXC + '" y1="' + (MXB + 78) + '" x2="' + MXC + '" y2="' + (MXB + 10) + '" stroke="' + MUTED + '" stroke-width="1.2" stroke-dasharray="3 3"/>';
+    MX_LABELS[kind].forEach(function (s, i) { h += '<g id="mx-lab-' + i + '"' + (i ? ' opacity="0"' : '') + '>' + txt(MXC, 412, s, 'middle', '#1e3a8a', 700, 18) + '</g>'; });
+    return h + '</svg>';
+  }
+  var MX_LABELS = {
+    erm: ['A healthy macula', 'A thin film grows on the surface', 'The film tightens; the retina wrinkles', 'The film is peeled off', 'Flatter over months'],
+    mh: ['A healthy macula', 'The gel pulls on the center', 'A hole opens', 'Gel removed; inner layer peeled', 'A gas bubble holds the edges', 'The hole has closed']
+  };
+  function mxGrid(wave, bend, spot) {
+    var paths = document.querySelectorAll('#mx-grid path'), i, j;
+    function q(u, v) {
+      var r2 = u * u + v * v, f = 1 - bend * 0.32 * Math.exp(-r2 / 0.25);
+      var uu = u * f + wave * 0.07 * Math.sin(v * 9 + 1), vv = v * f + wave * 0.07 * Math.sin(u * 8);
+      return (MXG[0] + uu * MXG_R).toFixed(1) + ',' + (MXG[1] + vv * MXG_R).toFixed(1);
+    }
+    for (i = 0; i < 7; i++) {
+      var c = -1 + i / 3, a = '', b = '';
+      for (j = 0; j <= 24; j++) { var s = -1 + j / 12; a += (j ? ' L' : 'M') + q(s, c); b += (j ? ' L' : 'M') + q(c, s); }
+      paths[i].setAttribute('d', a); paths[i + 7].setAttribute('d', b);
+    }
+    at('mx-spot', 'r', 11 * spot);
+  }
+  function mxPaint() {
+    var xs = mxXs(), top = [], bot = '', outTop = [], i, x;
+    for (i = 0; i < xs.length; i++) { x = xs[i]; var th = mxThick(x); top.push(x.toFixed(1) + ',' + (MXB - th).toFixed(1)); outTop.push(x.toFixed(1) + ',' + (MXB - Math.min(th, 22)).toFixed(1)); }
+    at('mx-ret', 'd', 'M' + top.join(' L') + ' L540,' + MXB + ' L20,' + MXB + ' Z');
+    at('mx-out', 'd', 'M' + outTop.join(' L') + ' L540,' + MXB + ' L20,' + MXB + ' Z');
+    // the gel fills everything above the retina; its back face (dashed) lies on the retina until it pulls away
+    var hy = '', dx, gap, hSave = MX.h;
+    MX.h = 0; // the gel's face follows the retina as it was before the hole opened, so it never dips into it
+    for (x = 20; x <= 540; x += 6) { dx = x - MXC; gap = 70 * MX.t * (1 - Math.exp(-Math.pow(dx / 50, 2))) + 60 * MX.det; hy += (x > 20 ? ' L' : 'M') + x + ',' + (mxSurf(x) - 2 - gap).toFixed(1); }
+    MX.h = hSave;
+    at('mx-hya', 'd', hy); op('mx-hya', MX.gel); op('mx-lab-gel', MX.gel);
+    at('mx-gel', 'd', 'M20,0 L540,0 L' + top.slice().reverse().join(' L') + ' Z'); op('mx-gel', 0.75 * MX.gel);
+    op('mx-pull', MX.t * (1 - MX.h));
+    var he = MX.h * (1 - MX.k), cy = document.getElementById('mx-cyst');
+    if (cy && !cy.firstChild) cy.innerHTML = '<ellipse rx="7" ry="10"/><ellipse rx="6" ry="8"/><ellipse rx="7" ry="10"/><ellipse rx="6" ry="8"/>';
+    if (cy) { var w = 30 * he; [[-w - 16, 0.55], [-w - 34, 0.4], [w + 16, 0.55], [w + 34, 0.4]].forEach(function (d, k) { var e = cy.children[k], xx = MXC + d[0]; e.setAttribute('cx', xx.toFixed(1)); e.setAttribute('cy', (MXB - mxThick(xx) * d[1]).toFixed(1)); }); op('mx-cyst', he); }
+    // films peeled with the forceps: the membrane, or the inner layer around a hole
+    var m = mxPeelPath(120, 440, MX.peel, 4), il = mxPeelPath(170, 390, MX.ilmPeel, 2), g = null;
+    at('mx-mem', 'd', m.d); op('mx-mem', MX.mem * (MX.peel < 1 ? 1 : 0));
+    at('mx-ilm', 'd', il.d); op('mx-ilm', MX.ilm * (MX.ilmPeel < 1 ? 1 : 0));
+    if (MX.peel > 0 && MX.peel < 1) g = m.grip; else if (MX.ilmPeel > 0 && MX.ilmPeel < 1) g = il.grip;
+    op('mx-forceps', g ? 1 : 0); if (g) at('mx-forceps', 'transform', 'translate(' + g[0].toFixed(1) + ',' + g[1].toFixed(1) + ')');
+    // the gas bubble comes down from above and rests on the retina
+    var yc = 182 * MX.gas - 220 * MX.absorb;
+    at('mx-gas', 'd', 'M20,0 L540,0 L540,' + (yc - 80).toFixed(1) + ' Q' + MXC + ',' + (yc + 80).toFixed(1) + ' 20,' + (yc - 80).toFixed(1) + ' Z');
+    op('mx-gas', MX.gas > 0 && MX.absorb < 1 ? 1 : 0); op('mx-press', MX.gas * (1 - MX.k));
+    mxGrid(MX.c * (1 - 0.7 * MX.rec), 0.6 * MX.t * (1 - MX.h) + MX.h * (1 - 0.75 * MX.k), MX.h * (1 - MX.k));
+  }
+  function mxLabel(k, p) { op('mx-lab-' + k, ease(clamp((p - 0.05) / 0.1, 0, 1))); if (p > 0) op('mx-lab-' + (k - 1), 1 - ease(clamp(p / 0.05, 0, 1))); else if (k === 1) op('mx-lab-0', 1); }
+  var MX_INTRO = '<strong>A healthy macula.</strong> A slice through the center of the retina, as a scan (OCT) shows it, with the gel that fills the eye above it. The small dip in the middle, the fovea, is where vision is sharpest. The box shows what this eye sees looking at a grid of straight lines.';
+  function mxProc(kind) {
+    var steps = kind === 'erm' ? [
+      { label: 'Membrane', dur: 3000, caption: '<strong>A membrane forms.</strong> Usually after the gel inside the eye has pulled away from the retina with age, cells left on the surface of the retina grow into a thin, see-through film over the macula. Many membranes stay mild and cause no symptoms.',
+        draw: function (p) { MX.t = MX.h = MX.ilm = MX.ilmPeel = MX.gas = MX.absorb = MX.k = 0; MX.det = 1; MX.mem = ease(p); mxLabel(1, p); } },
+      { label: 'Wrinkling', dur: 3400, caption: '<strong>The retina wrinkles.</strong> As the film tightens it wrinkles and thickens the retina beneath it, like plastic wrap shrinking over a surface, and the dip at the center flattens out. Straight lines look wavy and central vision blurs.',
+        draw: function (p) { MX.c = ease(p); mxLabel(2, p); } },
+      { label: 'Peeling', dur: 4400, caption: '<strong>Peeling the membrane.</strong> When the distortion gets in the way of reading, driving or work, a vitrectomy removes the gel, and the surgeon peels the membrane off the surface of the retina with fine forceps.',
+        draw: function (p) { MX.gel = 1 - ease(clamp(p * 4, 0, 1)); MX.peel = ease(clamp((p - 0.25) / 0.65, 0, 1)); if (p >= 1) MX.peel = 1; mxLabel(3, p); } },
+      { label: 'Recovery', dur: 3600, caption: '<strong>Recovery.</strong> Over several months the retina slowly flattens. Distortion usually lessens a great deal, though it may not go away completely; the longer and worse it was before surgery, the less complete the recovery tends to be. A membrane rarely grows back.',
+        draw: function (p) { MX.rec = ease(p); mxLabel(4, p); mxPaint(); } }
+    ] : [
+      { label: 'Gel pulls', dur: 3400, caption: '<strong>The gel pulls.</strong> With age the gel shrinks and pulls away from the retina. Here it stays stuck at the very center as it pulls, tugging the thin center upward. Vision starts to blur and bend.',
+        draw: function (p) { MX.mem = MX.c = MX.peel = MX.rec = 0; MX.det = 0; MX.t = ease(p); mxLabel(1, p); } },
+      { label: 'Hole opens', dur: 3400, caption: '<strong>A hole opens.</strong> The pull tears the center open, and the gel lets go. The edges of the hole lift and swell with fluid. Central vision blurs, straight lines bend in toward the middle, and a small patch in the center can go missing.',
+        draw: function (p) { MX.h = ease(p); MX.det = MX.h; mxLabel(2, p); } },
+      { label: 'Surgery', dur: 4400, caption: '<strong>Removing the gel, peeling a layer.</strong> A vitrectomy removes the gel and its pull on the macula. The surgeon often peels the very thin inner layer of the retina around the hole, so its edges can move together.',
+        draw: function (p) { MX.gel = 1 - ease(clamp(p * 4, 0, 1)); MX.ilm = p > 0 ? 1 : 0; MX.ilmPeel = p >= 1 ? 1 : ease(clamp((p - 0.25) / 0.65, 0, 1)); mxLabel(3, p); } },
+      { label: 'Gas bubble', dur: 4000, caption: '<strong>A gas bubble.</strong> The eye is filled with gas. The bubble rises, so keeping your head positioned as your surgeon asks, often face down for several days, holds it against the macula, pressing the edges of the hole together while they heal. While there is gas in the eye, do not fly or travel to high altitude.',
+        draw: function (p) { MX.gas = ease(clamp(p * 1.6, 0, 1)); MX.k = 0.6 * ease(clamp((p - 0.45) / 0.55, 0, 1)); mxLabel(4, p); } },
+      { label: 'Closed', dur: 3600, caption: '<strong>Closed.</strong> The hole closes and the gas is absorbed over the following weeks. Vision improves gradually over months as the center of the retina reorganizes. Smaller holes, and holes repaired soon after they appear, tend to recover best.',
+        draw: function (p) { if (p > 0) MX.k = 0.6 + 0.4 * ease(clamp(p * 2, 0, 1)); MX.absorb = ease(clamp((p - 0.3) / 0.7, 0, 1)); mxLabel(5, p); mxPaint(); } }
+    ];
+    return {
+      variants: [['erm', 'Membrane (pucker)'], ['mh', 'Macular hole']],
+      views: [['A slice through the macula', function () { return mxSvg(kind); }]],
+      intro: MX_INTRO,
+      steps: steps
+    };
+  }
+
+  return { ppv: PPV, prp: laserProc(true), focal: laserProc(false), pvd: pvdProc(false), pvdtear: pvdProc(true), rd: rdProc(false), rdlaser: rdProc(true), inject: INJECT, amd: amdProc(false), amdwet: amdProc(true), dr: DR, erm: mxProc('erm'), mh: mxProc('mh') };
 });
