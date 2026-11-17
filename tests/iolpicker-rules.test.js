@@ -24,7 +24,7 @@ test('every lens gets one verdict, in one group, with a reason unless it is a cl
 });
 
 test('a monofocal set for distance is never ruled out, whatever the eye', () => {
-  for (const glasses of ['readers', 'computer', 'none']) {
+  for (const glasses of ['readers', 'near', 'computer', 'none']) {
     assert.notStrictEqual(verdict({ ...base, glasses, night: true, conditions: cond(...ALL) }, 'distance'), 'avoid');
   }
 });
@@ -89,4 +89,12 @@ test('a lens that is usually not advised lists only the reasons against it', () 
   const l = T.pick({ ...base, glasses: 'none', conditions: cond('glaucoma-mild') }).lenses.find((x) => x.id === 'multifocal');
   assert.strictEqual(l.verdict, 'avoid');
   assert.ok(!l.why.some((w) => /most freedom/.test(w)));
+});
+
+test('wanting to read without glasses, with glasses for distance, points to a monofocal set for near', () => {
+  const a = { ...base, glasses: 'near' };
+  assert.strictEqual(verdict(a, 'near'), 'good');
+  assert.strictEqual(verdict(a, 'distance'), 'possible');
+  assert.strictEqual(verdict(a, 'multifocal'), 'avoid');
+  assert.notStrictEqual(verdict({ ...a, conditions: cond(...ALL) }, 'near'), 'avoid');
 });

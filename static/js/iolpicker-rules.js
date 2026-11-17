@@ -66,7 +66,7 @@
 
   var RANK = { good: 0, possible: 1, avoid: 2 };
 
-  // answers: { glasses: 'readers' | 'computer' | 'none', night: bool,
+  // answers: { glasses: 'readers' | 'near' | 'computer' | 'none', night: bool,
   //   monovision: 'liked' | 'disliked' | 'never', adjust: 'yes' | 'no' | '',
   //   astig: 'yes' | 'no' | 'unknown', conditions: { id: true } }
   function pick(a) {
@@ -93,12 +93,19 @@
       say('enhanced', 'good', 'A little more range at arm’s length than a standard monofocal.');
       say('edof', 'good', 'Covers distance to arm’s length.');
       say('multifocal', 'possible', 'Covers arm’s length, but brings more halos than you may need.');
+    } else if (a.glasses === 'near') {
+      say('near', 'good', 'Matches what you want: reading without glasses, glasses for driving and distance.');
+      say('distance', 'possible', 'Set for distance, you would need glasses to read instead.');
+      say('enhanced', 'possible', 'Usually set for distance, so you would need glasses to read.');
+      say('lal', 'possible', 'Can be set for near, and fine-tuned once you try it.');
+      say('edof', 'possible', 'Aimed at distance and arm’s length; small print would still need glasses.');
+      say('multifocal', 'avoid', 'If glasses for distance are fine, a monofocal set for near gives sharp reading without the halos.');
     } else {
       say('distance', 'good', 'Matches what you want: clear distance, reading glasses for near.');
       say('edof', 'possible', 'More range than you need, with some halos.');
       say('multifocal', 'avoid', 'If reading glasses are fine, the halos and lower contrast are not worth it.');
     }
-    say('near', 'possible', 'Suits people who have been nearsighted all their lives and like to read without glasses; glasses are needed for driving.');
+    if (a.glasses !== 'near') say('near', 'possible', 'Suits people who have been nearsighted all their lives and like to read without glasses; glasses are needed for driving.');
 
     if (a.night) {
       say('multifocal', 'avoid', 'Halos around lights at night are common, and you drive a lot at night or worry about them.');
