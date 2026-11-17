@@ -1,9 +1,9 @@
 +++
 title = "Choosing Artificial Tears"
-description = "Answer a few questions to see which artificial tear suits you: standard or preservative-free, gel drops, or ointment at bedtime, with photos."
+description = "Answer a few questions to see which artificial tears suit you: standard or preservative-free, with oil, gel drops or bedtime ointment, and the brands that fit."
 template = "page.html"
 date = 2026-11-10
-updated = 2026-11-10
+updated = 2026-11-17
 weight = 330
 
 [extra]
@@ -15,19 +15,19 @@ scripts = ["js/tearpicker-rules.js", "js/tearpicker.js"]
 
 The artificial tears shelf at a pharmacy is long and confusing. The differences that matter are few: whether the drop has a preservative, how thick it is, and when you use it. Answer the questions below to see what to look for.
 
-<div id="jk-tears" class="jk-tears" data-chart="../../data/eye-drops.json" data-photos="../../images/drops/">
+<div id="jk-tears" class="jk-tears" data-products="../../data/artificial-tears.json" data-photos="../../images/drops/">
   <p class="jk-vis__noscript">The picker needs JavaScript. The guide below covers the same choices.</p>
 </div>
 
-<p class="jk-note">This is general guidance, not a prescription. The brands shown are examples; store brands with the same description work the same way. If your doctor has recommended a particular drop, use that one.</p>
+<p class="jk-note">This is general guidance, not a prescription. The brands shown are examples from Systane, Blink, Refresh, iVizia, GenTeal, TheraTears, Retaine and Soothe, sorted by what each product's label says; each name links to its label. Store brands with the same description work the same way. If your doctor has recommended a particular drop, use that one.</p>
 
 ## The kinds, in plain terms
 
 - **Standard artificial tears** come in an ordinary bottle with a preservative that keeps the bottle sterile. They are fine up to about four times a day.
-- **Preservative-free tears** come in single-use vials or in bottles with a special tip. Choose them if you need tears more than four times a day, wear contact lenses, have sensitive eyes, or already use other eye drops every day. The preservative itself can irritate the surface with frequent use.
+- **Preservative-free tears** come in single-use vials or in preservative-free bottles with a special tip. The bottles cost less than vials and are easier to handle. Choose them if you need tears more than four times a day, wear contact lenses, have sensitive eyes, or already use other eye drops every day. The preservative itself can irritate the surface with frequent use.
 - **Gel drops** are thicker. They last longer and blur vision for a minute or two, so they suit bad days and evenings.
-- **Ointment** is the thickest. It is for bedtime, because it blurs vision until it is blinked away.
-- **Tears with oil** in them, often labeled "lipid" or "for evaporative dry eye", help when the oil glands in the eyelids are blocked.
+- **Ointment** is the thickest. It is for bedtime, because it blurs vision until it is blinked away. Most contain lanolin; Retaine PM and Soothe Nighttime do not, if you are allergic to it.
+- **Tears with oil** in them (Systane Complete, Refresh Optive Mega-3, Retaine MGD, Soothe XP, Blink Triple Care) help when the oil glands in the eyelids are blocked. Many are milky and need shaking first.
 
 ## Getting the most from them
 

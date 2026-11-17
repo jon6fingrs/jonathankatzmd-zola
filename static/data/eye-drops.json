@@ -46,24 +46,26 @@
  },
  {
   "generic": "Artificial Tears",
-  "brand": "Refresh Tears, Systane Ultra, Blink Tears",
+  "brand": "Systane Ultra, Blink Tears, Refresh Tears, GenTeal Tears",
   "color": "Varies",
   "use": "Dry Eye",
   "dosage": "Up to 4x/day",
   "notes": "Over the counter, Preserved; use preservative-free tears if needed more than 4x/day",
   "photos": [
-   "refresh-tears.jpg",
-   "systane-ultra.jpg"
+   "systane-ultra.jpg",
+   "blink-tears.jpg",
+   "refresh-tears.jpg"
   ]
  },
  {
   "generic": "Artificial Tears PF",
-  "brand": "Refresh Plus, Systane Ultra PF, TheraTears PF",
-  "color": "Vial",
+  "brand": "iVizia, Systane Hydration PF, Refresh Plus, TheraTears PF",
+  "color": "Varies",
   "use": "Dry Eye",
   "dosage": "As needed",
-  "notes": "Over the counter, Preservative Free",
+  "notes": "Over the counter, Preservative Free, Single-use vials or preservative-free bottles",
   "photos": [
+   "ivizia.jpg",
    "refresh-plus.jpg"
   ]
  },
@@ -475,24 +477,27 @@
  },
  {
   "generic": "Lubricating Gel Drops",
-  "brand": "Refresh Liquigel, Systane Gel Drops, GenTeal Tears Severe",
+  "brand": "Systane Gel Drops, Blink GelTears, Refresh Liquigel, GenTeal Tears Severe",
   "color": "Varies",
   "use": "Dry Eye",
   "dosage": "As needed, often at bedtime",
   "notes": "Over the counter, Thicker; may blur vision briefly",
   "photos": [
+   "systane-gel-drops.jpg",
+   "blink-geltears.jpg",
    "refresh-liquigel.jpg"
   ]
  },
  {
   "generic": "Lubricating Ointment",
-  "brand": "Refresh PM, Systane Nighttime",
+  "brand": "Systane Nighttime, Refresh PM, GenTeal Tears Night-Time, Soothe Nighttime",
   "color": "Tube",
   "use": "Dry Eye",
   "dosage": "At bedtime",
   "notes": "Over the counter, Preservative Free",
   "photos": [
-   "systane-nighttime.jpg"
+   "systane-nighttime.jpg",
+   "refresh-pm.jpg"
   ]
  },
  {

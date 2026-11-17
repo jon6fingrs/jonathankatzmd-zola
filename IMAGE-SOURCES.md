@@ -17,6 +17,24 @@ tablets and capsules from other makers look different, which the chart notes.
 | refresh-plus.jpg | Refresh Plus, Allergan | carton front panel (cropped) |
 | refresh-liquigel.jpg | Refresh Liquigel, AbbVie/Allergan | carton front panel (cropped) |
 | systane-nighttime.jpg | Systane Nighttime, Alcon | carton front panel (cropped) |
+| blink-tears.jpg | Blink Tears, Bausch & Lomb (f1d07347-086f-43b2-aa5f-910764fc666e) | carton front panel (cropped) |
+| genteal-tears-moderate.jpg | GenTeal Tears Moderate, Alcon (a2992597-3490-6a5c-be45-2b6fa15e1547) | carton front panel (cropped) |
+| theratears.jpg | TheraTears, Medtech Products (661d8764-8ae6-4229-9485-867553ee8e16) | carton front panel (cropped) |
+| ivizia.jpg | iVizia, Théa Pharma (1ef73cb1-da48-a713-e063-6294a90afa9d) | carton front panel (cropped) |
+| systane-hydration-pf.jpg | Systane Hydration PF, Alcon (8936f66f-10fe-44ab-a26e-dd8b05dfa997) | carton front panel (cropped) |
+| theratears-pf.jpg | TheraTears PF, Medtech Products (797b0394-2f0f-4733-8d20-ec5bdf3e085d) | carton front panel (cropped) |
+| systane-complete.jpg | Systane Complete, Alcon (2df0de02-a3e2-471a-9e10-040c3fba75fe) | carton front panel (cropped) |
+| refresh-optive-mega-3.jpg | Refresh Optive Mega-3, Allergan (c5f2b3f2-2071-45bd-a010-67f848bc0233) | carton front panel (cropped) |
+| retaine-mgd.jpg | Retaine MGD, OcuSoft (06f57d46-96c7-4093-84aa-874ff4b2131d) | carton front panel (cropped) |
+| soothe-xp.jpg | Soothe XP, Bausch & Lomb (c0f053da-8d22-433e-a36e-79cf15ad387f) | carton front panel (cropped) |
+| blink-triple-care-pf.jpg | Blink Triple Care Preservative Free, Bausch & Lomb (65e67990-78b7-4ce9-963b-6bed3a6bed07) | carton front panel (cropped) |
+| systane-gel-drops.jpg | Systane Gel Drops, Alcon (1d679d0f-cec2-a644-79cd-079607254bb9) | carton front panel (cropped) |
+| blink-geltears.jpg | Blink GelTears, Bausch & Lomb (6f7e06c3-204d-459a-af8f-c46be9ad0e8d) | carton front panel (cropped) |
+| genteal-tears-severe.jpg | GenTeal Tears Severe, Alcon (a57854fc-f3a2-4fbb-b718-cd06f87a721e) | carton front panel (cropped) |
+| refresh-pm.jpg | Refresh P.M., Allergan (24365d64-cd94-41cc-a7e1-033102d98114) | carton front panel (cropped) |
+| genteal-tears-night-time.jpg | GenTeal Tears Night-Time, Alcon (9d5998a7-4f59-4293-87da-8419650a524d) | carton front panel (cropped) |
+| soothe-night-time.jpg | Soothe Nighttime, Bausch & Lomb (638d3c3f-9960-43da-956e-0e28c77f533e) | carton front panel (cropped) |
+| retaine-pm.jpg | Retaine PM, OcuSoft (ac75e5c9-94ae-698d-40da-dffe4458a098) | carton front panel (cropped) |
 
 Supplied by Dr. Katz: besivance.png, ciloxan.webp, diclofenac.webp,
 iyuzeh.png, ilevro.png, omlonti.png, xelpros.jpg, miebo.png, vevye.png,
