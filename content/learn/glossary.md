@@ -3,7 +3,7 @@ title = "Glossary of Eye Terms"
 description = "Plain-language meanings of the words you hear at an eye visit, from angle and astigmatism to visual field and YAG, with links to the pages that explain more."
 template = "page.html"
 date = 2026-11-13
-updated = 2026-11-13
+updated = 2026-11-17
 weight = 910
 # Parked: not built or linked until terms in the articles link to it (see
 # "Ideas parked for later" in README.md). Remove this line to publish.
@@ -128,6 +128,8 @@ The words below come up at eye visits and on the pages of this site. Each has a 
 ## L {#l}
 
 **Lens.** The clear structure behind the iris that fine-tunes the eye's focus. When it clouds, it is a cataract.
+
+**Light adjustable lens.** A lens implant whose power is fine-tuned with ultraviolet light treatments after cataract surgery, then locked in. More: [Choosing a Lens Implant](@/learn/lens-implants.md)
 
 ## M {#m}
 

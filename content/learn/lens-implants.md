@@ -1,21 +1,21 @@
 +++
 title = "Choosing a Lens Implant"
-description = "Monofocal, toric, extended depth and multifocal lens implants for cataract surgery: what each does for far, arm's length and near vision, and the trade-offs."
+description = "Monofocal, toric, extended depth, multifocal and light adjustable lens implants: what each does without glasses, and a picker for your eyes."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-14
+updated = 2026-11-17
 weight = 103
 
 [extra]
 article = true
 topic = "cataract"
 group = ""
-scripts = ["js/iol.js"]
+scripts = ["js/iol.js", "js/iolpicker-rules.js", "js/iolpicker.js"]
 +++
 
 In [cataract surgery](@/learn/cataract-surgery.md) the cloudy natural lens is replaced by a clear artificial one, an **intraocular lens** or implant. The implant stays in the eye for life. Its type and its power are chosen before surgery, and together they decide what you will see clearly without glasses afterward: far, arm's length, near, or some of each.
 
-Choose a lens below to see three everyday distances through it. Turn on **At night** to see halos around lights, and **This eye has astigmatism** to see what a toric lens corrects.
+Further down, [Which lens might fit you](#which-lens-might-fit-you) sorts the options by what you want and the health of your eye. Choose a lens below to see three everyday distances through it. Turn on **At night** to see halos around lights, and **This eye has astigmatism** to see what a toric lens corrects.
 
 <div id="jk-iol" class="jk-iol" data-base="../../images/vision/">
   <p class="jk-vis__noscript">The comparison needs JavaScript. Each kind of lens is described in words below.</p>
@@ -56,6 +56,17 @@ A **multifocal** lens (bifocal or trifocal) splits light between distances using
 - **Slightly less contrast**, because the light is shared. This matters in dim light, and it matters more when the eye has another condition that reduces contrast.
 - **They depend on a healthy eye.** A multifocal lens works best when the cornea, the macula and the optic nerve are healthy.
 
+## Light adjustable lenses
+
+A **light adjustable lens** is a monofocal lens whose power can be changed after surgery. Once the eye has healed, usually two to three weeks later, you try out the vision. Then, over a few short visits, the surgeon shines a measured pattern of ultraviolet light on the lens through a dilated pupil to fine-tune its power, correcting leftover nearsightedness, farsightedness or astigmatism. A final treatment locks the power in for good.
+
+- **You can try the result before it is final.** One eye can be set a little for near, so you can test monovision ("blended vision") and change your mind.
+- **It helps when the power is hard to predict**, such as after LASIK, PRK or RK.
+- **UV-protective glasses** must be worn during all waking hours, indoors and out, from surgery until a day after the final lock-in, usually some weeks. Ordinary sunglasses are not enough: daylight could change the lens unpredictably.
+- **It is not for everyone.** It is not used with macular disease, with medicines that make the skin or eyes sensitive to light, after a herpes infection of the eye, with eyes that shake (nystagmus), or when the pupil does not dilate well enough for the treatments.
+
+Like other lenses aimed at reducing glasses, it usually carries an extra charge.
+
 ## When a simpler lens is wiser
 
 A monofocal or toric lens is usually recommended when the eye has, or is likely to develop, a condition that reduces contrast or affects the center of vision:
@@ -63,8 +74,19 @@ A monofocal or toric lens is usually recommended when the eye has, or is likely 
 - [Glaucoma](@/learn/what-is-glaucoma.md), especially moderate or advanced, since glaucoma already lowers contrast and future visual field tests are easiest to interpret with a monofocal lens. Extended depth lenses are sometimes considered in mild, stable glaucoma.
 - [Macular degeneration](@/learn/macular-degeneration.md), [diabetic eye disease](@/learn/diabetic-retinopathy.md) or a membrane on the retina
 - Significant [dry eye](@/learn/what-is-dry-eye.md) or corneal disease such as [Fuchs dystrophy](@/learn/fuchs-dystrophy.md) or [keratoconus](@/learn/keratoconus.md)
-- Previous laser vision correction (LASIK or PRK), where the lens power is harder to predict
+- Previous laser vision correction (LASIK or PRK), where the lens power is harder to predict (a light adjustable lens is one answer to that)
+- A lazy eye (amblyopia), which gains little from a lens that splits focus
 - A lot of night driving, or work that needs the sharpest possible contrast
+
+## Which lens might fit you
+
+Answer a few questions about what you want after surgery, and check any eye conditions you have. Every kind of lens is sorted into good fits, possible with trade-offs, and usually not advised, with the reasons.
+
+<div id="jk-iolp" class="jk-tears jk-iolp">
+  <p class="jk-vis__noscript">The picker needs JavaScript. The sections above cover the same choices.</p>
+</div>
+
+<p class="jk-note">This is a starting point for a talk with your surgeon, not a decision. It cannot know your measurements or everything about your eyes, and many conditions not listed also affect the choice. Each lens name links to its section above.</p>
 
 ## How the power is chosen
 
@@ -78,12 +100,13 @@ Even with the best result, most people use glasses for something: reading glasse
 
 ## Cost
 
-In the United States, a standard monofocal lens is covered by Medicare and most insurance. Toric, extended depth and multifocal lenses usually carry an extra out-of-pocket charge, because they are aimed at reducing the need for glasses. Ask for the cost in advance.
+In the United States, a standard monofocal lens is covered by Medicare and most insurance. Toric, extended depth, multifocal and light adjustable lenses usually carry an extra out-of-pocket charge, because they are aimed at reducing the need for glasses. The amount varies, so ask for the cost in advance.
 
 ## Questions worth asking
 
 - Which lenses are a good fit for my eyes, and which would you avoid?
 - Do I have enough astigmatism for a toric lens to help?
 - Would monovision suit me, and could I try it with contact lenses first?
+- Would a light adjustable lens help in my case?
 - What will I still need glasses for with each option?
 - What would the lens cost me?
