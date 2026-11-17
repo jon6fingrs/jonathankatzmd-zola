@@ -14,7 +14,7 @@
   if (!root || !R) return;
 
   var QUESTIONS = [
-    { key: 'glasses', label: 'After surgery, what would you like to do without glasses?', values: [['readers', 'See far; reading glasses are fine'], ['computer', 'Far and computer or dashboard'], ['none', 'As little glasses as possible, reading too']] },
+    { key: 'glasses', label: 'After surgery, what would you like to do without glasses?', values: [['readers', 'See far; reading glasses are fine'], ['near', 'Read up close; glasses for distance'], ['computer', 'Far and computer or dashboard'], ['none', 'As little glasses as possible, reading too']] },
     { key: 'night', label: 'Do you drive a lot at night, or would halos around lights bother you?', values: [['', 'No'], ['1', 'Yes']] },
     { key: 'monovision', label: 'Have you tried monovision with contact lenses (one eye for distance, one for near)?', values: [['never', 'Never tried'], ['liked', 'Yes, liked it'], ['disliked', 'Yes, did not like it']] },
     { key: 'adjust', label: 'Would you come back for several short light treatments, and wear UV-protective glasses for a few weeks, to fine-tune the result?', values: [['', 'Not sure'], ['yes', 'Yes'], ['no', 'No']] },
