@@ -140,6 +140,11 @@ test('a little astigmatism is treated with the laser, not a toric lens, unless t
   const little = { ...base, astig: 'little' };
   assert.strictEqual(lens(little, 'distance').toric, false);
   assert.strictEqual(lens(little, 'distance').laser, true);
+  for (const l of T.pick({ ...little, glasses: 'none' }).lenses) {
+    assert.strictEqual(l.toric, false, l.id);
+    if (l.verdict !== 'avoid') assert.strictEqual(l.laserAstig, l.id !== 'lal', l.id);
+  }
+  assert.strictEqual(lens({ ...little, conditions: cond('bleb') }, 'distance').laserAstig, false);
   assert.match(T.pick(little).notes.join(' '), /1 diopter/);
   const noLaser = { ...little, conditions: cond('bleb') };
   assert.strictEqual(lens(noLaser, 'distance').toric, true);

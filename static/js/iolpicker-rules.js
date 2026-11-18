@@ -212,7 +212,9 @@
       var toric = ok && astig && (a.astig === 'more' || noLaser.length > 0);
       var wants = ok && (astig || LASER_LENSES.indexOf(l.id) >= 0);
       return { id: l.id, name: l.name, anchor: l.anchor, extra: l.extra, what: l.what, verdict: o.verdict, why: why, toric: toric,
-        wantsLaser: wants, laser: wants && !noLaser.length };
+        wantsLaser: wants, laser: wants && !noLaser.length,
+        // the laser's curved cuts treat a little astigmatism instead of a toric lens
+        laserAstig: ok && astig && a.astig === 'little' && !noLaser.length };
     });
     var wouldLaser = lenses.some(function (l) { return l.wantsLaser; });
     var groups = ['good', 'possible', 'avoid'].map(function (v) {
