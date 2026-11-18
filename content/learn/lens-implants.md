@@ -98,9 +98,20 @@ Measurements taken before surgery, mainly the **length of the eye** and the **cu
 
 Even with the best result, most people use glasses for something: reading glasses with a monofocal lens, or glasses for fine print, night driving or long computer work with the others. Your final prescription is checked about a month after surgery, once the eye has settled.
 
+## Laser-assisted cataract surgery
+
+In **laser-assisted cataract surgery**, a femtosecond laser does some of the first steps before the surgeon takes over: it makes the round opening in the front of the lens capsule, the small incisions, and cuts that soften the cataract so less ultrasound is needed to remove it. It can also make small curved cuts in the cornea that reduce mild astigmatism. The rest of the operation is the same.
+
+- **With a toric or multifocal lens**, the laser is usually part of the surgery. A precisely sized and centered opening helps these lenses sit where they should.
+- **With Fuchs dystrophy or a very dense cataract**, needing less ultrasound energy is gentler on the cornea.
+- **For most eyes, it does not give better vision.** Large trials comparing it with standard surgery found that, on average, vision and safety afterward are about the same.
+- **It is not used** when the pupil does not dilate well enough, a corneal scar would block the laser, the laser's suction ring could press on a trabeculectomy bleb or tube shunt, or you cannot lie flat and still for a few minutes. Standard surgery works well in those eyes.
+
+It adds a few minutes to the visit, and it usually carries an extra charge, often included in the price of a toric or multifocal lens.
+
 ## Cost
 
-In the United States, a standard monofocal lens is covered by Medicare and most insurance. Toric, extended depth, multifocal and light adjustable lenses usually carry an extra out-of-pocket charge, because they are aimed at reducing the need for glasses. The amount varies, so ask for the cost in advance.
+In the United States, a standard monofocal lens is covered by Medicare and most insurance. Toric, extended depth, multifocal and light adjustable lenses usually carry an extra out-of-pocket charge, because they are aimed at reducing the need for glasses, and so does laser-assisted surgery. The amount varies, so ask for the cost in advance.
 
 ## Questions worth asking
 
@@ -108,5 +119,6 @@ In the United States, a standard monofocal lens is covered by Medicare and most 
 - Do I have enough astigmatism for a toric lens to help?
 - Would monovision suit me, and could I try it with contact lenses first?
 - Would a light adjustable lens help in my case?
+- Will my surgery be laser-assisted, and what does that add for my eye?
 - What will I still need glasses for with each option?
 - What would the lens cost me?

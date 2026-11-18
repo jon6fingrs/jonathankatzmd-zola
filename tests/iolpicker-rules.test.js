@@ -114,3 +114,29 @@ test('the page marks toric versions as often costing extra', () => {
   const js = require('fs').readFileSync(require('path').join(__dirname, '..', 'static', 'js', 'iolpicker.js'), 'utf8');
   assert.match(js, /l\.extra \|\| l\.toric/);
 });
+
+test('laser-assisted surgery goes with toric and multifocal lenses unless the eye rules it out', () => {
+  const lens = (a, id) => T.pick(a).lenses.find((l) => l.id === id);
+  const healthy = { ...base, glasses: 'none', astig: 'yes' };
+  assert.strictEqual(lens(healthy, 'multifocal').laser, true);
+  assert.strictEqual(lens(healthy, 'distance').laser, true, 'toric version');
+  assert.strictEqual(lens({ ...base, astig: 'no' }, 'distance').laser, false, 'plain monofocal');
+  assert.strictEqual(lens(healthy, 'lal').laser, false);
+  for (const c of ['pupil', 'scar', 'bleb', 'flat']) {
+    const a = { ...healthy, conditions: cond(c) };
+    assert.ok(T.pick(a).lenses.every((l) => !l.laser), c);
+    assert.match(T.pick(a).notes.join(' '), /would not be used/, c);
+  }
+  // ruling out the laser does not change any lens's verdict, except where the
+  // condition itself matters to the lens (a corneal scar)
+  for (const c of ['bleb', 'flat']) {
+    const before = T.pick(healthy).lenses.map((l) => l.verdict);
+    assert.deepStrictEqual(T.pick({ ...healthy, conditions: cond(c) }).lenses.map((l) => l.verdict), before, c);
+  }
+});
+
+test('a corneal scar rules out multifocal and extended depth lenses', () => {
+  const a = { ...base, glasses: 'none', conditions: cond('scar') };
+  assert.strictEqual(verdict(a, 'multifocal'), 'avoid');
+  assert.strictEqual(verdict(a, 'edof'), 'avoid');
+});
