@@ -61,8 +61,7 @@
       ['dryeye', 'Significant dry eye'],
       ['fuchs', 'Fuchs dystrophy or another corneal disease'],
       ['keratoconus', 'Keratoconus or an irregular cornea'],
-      ['scar', 'A corneal scar or haze'],
-      ['refractive', 'Past LASIK, PRK or RK']] },
+      ['scar', 'A corneal scar or haze']] },
     { group: 'Other', items: [
       ['amblyopia', 'A lazy eye (amblyopia)'],
       ['uveitis', 'Uveitis (inflammation inside the eye)'],
@@ -80,7 +79,8 @@
 
   // answers: { glasses: 'readers' | 'near' | 'computer' | 'none', night: bool,
   //   monovision: 'liked' | 'disliked' | 'never', adjust: 'yes' | 'no' | '',
-  //   astig: 'little' | 'more' | 'no' | 'unknown', conditions: { id: true } }
+  //   astig: 'little' | 'more' | 'no' | 'unknown', refractive: 'no' | 'lasik' | 'rk',
+  //   conditions: { id: true } }
   function pick(a) {
     a = a || {};
     var c = a.conditions || {}, has = function (k) { return !!c[k]; };
@@ -97,23 +97,27 @@
     if (a.glasses === 'none') {
       say('distance', 'possible', 'You would still need reading glasses.');
       say('enhanced', 'possible', 'Reading glasses are still needed for near.');
-      say('lal', 'possible', 'It can be set for some near in one eye, but reading glasses are often still needed.');
+      if (a.monovision !== 'disliked') say('lal', 'good', 'Can be set up as monovision, one eye for distance and one for near, and fine-tuned once you try it.');
+      else say('lal', 'possible', 'Without monovision it is set for one distance, so reading glasses would be needed.');
       say('edof', 'possible', 'Light reading glasses are often still needed for small print.');
       say('multifocal', 'good', 'Gives the most freedom from glasses, including reading.');
     } else if (a.glasses === 'computer') {
       say('distance', 'possible', 'A computer or dashboard is usable but softer without glasses.');
       say('enhanced', 'good', 'A little more range at arm’s length than a standard monofocal.');
       say('edof', 'good', 'Covers distance to arm’s length.');
+      if (a.monovision !== 'disliked') say('lal', 'good', 'Can be fine-tuned for distance in one eye and arm’s length in the other once you try it.');
+      else say('lal', 'possible', 'Fine-tuned for distance, a computer would be softer without glasses.');
       say('multifocal', 'possible', 'Covers arm’s length, but brings more halos than you may need.');
     } else if (a.glasses === 'near') {
       say('near', 'good', 'Matches what you want: reading without glasses, glasses for driving and distance.');
       say('distance', 'possible', 'Set for distance, you would need glasses to read instead.');
       say('enhanced', 'possible', 'Usually set for distance, so you would need glasses to read.');
-      say('lal', 'possible', 'Can be set for near, and fine-tuned once you try it.');
+      say('lal', 'good', 'Can be set for near, and fine-tuned once you try it.');
       say('edof', 'possible', 'Aimed at distance and arm’s length; small print would still need glasses.');
       say('multifocal', 'avoid', 'If glasses for distance are fine, a monofocal set for near gives sharp reading without the halos.');
     } else {
       say('distance', 'good', 'Matches what you want: clear distance, reading glasses for near.');
+      say('lal', 'good', 'Its power is checked and fine-tuned after surgery, so it is the surest way to sharp distance vision.');
       say('edof', 'possible', 'More range than you need, with some halos.');
       say('multifocal', 'avoid', 'If reading glasses are fine, the halos and lower contrast are not worth it.');
     }
@@ -135,7 +139,7 @@
 
     if (a.adjust === 'yes') say('lal', 'good', 'You are willing to come back for the light treatments and wear UV-protective glasses until it is locked in.');
     else if (a.adjust === 'no') say('lal', 'avoid', 'It needs several extra visits and UV-protective glasses for all waking hours for some weeks.');
-    else say('lal', 'possible', 'It needs several extra visits and UV-protective glasses for all waking hours for some weeks.');
+    else say('lal', 'good', 'It needs several extra visits and UV-protective glasses for all waking hours for some weeks.');
 
     // The eye
     if (has('glaucoma-adv')) {
@@ -166,10 +170,14 @@
       say('multifocal', 'avoid', 'An irregular cornea scatters light, and a multifocal adds to it.');
       say('edof', 'avoid', 'An irregular cornea scatters light, and these lenses add to it.');
     }
-    if (has('refractive')) {
-      say('multifocal', 'possible', 'After laser or RK the lens power is harder to predict, and the earlier surgery can add to halos.');
-      say('edof', 'possible', 'After laser or RK the lens power is harder to predict.');
-      say('lal', 'good', 'After laser or RK the power is harder to predict; this lens can be adjusted afterward.');
+    if (a.refractive === 'lasik') {
+      say('multifocal', 'possible', 'After LASIK or PRK the lens power is harder to predict, and the reshaped cornea can add to halos.');
+      say('edof', 'possible', 'After LASIK or PRK the lens power is harder to predict.');
+      say('lal', 'good', 'After LASIK or PRK the power is harder to predict; this lens can be adjusted afterward.');
+    } else if (a.refractive === 'rk') {
+      say('multifocal', 'avoid', 'After RK the cornea is irregular and vision can change through the day; a multifocal makes both worse.');
+      say('edof', 'possible', 'After RK the lens power is harder to predict, and vision can change through the day.');
+      say('lal', 'good', 'After RK the power is hard to predict; this lens can be adjusted afterward.');
     }
     if (has('amblyopia')) {
       say('multifocal', 'avoid', 'An eye that has always seen less gains little from a multifocal, and loses contrast.');
@@ -222,6 +230,7 @@
     if (has('fuchs') && !noLaser.length) notes.push('With Fuchs dystrophy, laser-assisted surgery can lower the ultrasound energy needed, which is gentler on the cornea. Ask whether it suits you whatever the lens.');
     if (has('glaucoma-mild') || has('glaucoma-adv')) notes.push('With glaucoma, a monofocal lens also keeps future visual field tests easiest to read.');
     if (has('amblyopia')) notes.push('A lens implant cannot fix a lazy eye: vision in that eye after surgery is usually about what it was with glasses before the cataract.');
+    if (a.refractive === 'lasik' || a.refractive === 'rk') notes.push('If you have the records of your ' + (a.refractive === 'rk' ? 'RK' : 'LASIK or PRK') + ' (the prescription before it, if nothing else), bring them: they help choose the lens power.');
     if (has('dryeye')) notes.push('Treat dry eye before the measurements for surgery; it can throw them off.');
     if (has('other')) notes.push('Many other conditions affect the choice of lens. Your surgeon will take them into account.');
     notes.push('Lenses beyond a standard monofocal, toric versions and laser-assisted surgery may involve an out-of-pocket expense. It varies, so ask the surgeon’s office.');

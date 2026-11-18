@@ -60,6 +60,7 @@ A **multifocal** lens (bifocal or trifocal) splits light between distances using
 
 A **light adjustable lens** is a monofocal lens whose power can be changed after surgery. Once the eye has healed, usually two to three weeks later, you try out the vision. Then, over a few short visits, the surgeon shines a measured pattern of ultraviolet light on the lens through a dilated pupil to fine-tune its power, correcting leftover nearsightedness, farsightedness or astigmatism. A final treatment locks the power in for good.
 
+- **It is the surest way to land the target**, whether that is sharp distance, near, or monovision, because the power is checked and adjusted after surgery rather than predicted beforehand.
 - **You can try the result before it is final.** One eye can be set a little for near, so you can test monovision ("blended vision") and change your mind.
 - **It helps when the power is hard to predict**, such as after LASIK, PRK or RK.
 - **UV-protective glasses** must be worn during all waking hours, indoors and out, from surgery until a day after the final lock-in, usually some weeks. Ordinary sunglasses are not enough: daylight could change the lens unpredictably.
@@ -80,7 +81,7 @@ A monofocal or toric lens is usually recommended when the eye has, or is likely 
 
 ## Which lens might fit you
 
-Answer a few questions about what you want after surgery, and check any eye conditions you have. Every kind of lens is sorted into good fits, possible with trade-offs, and usually not advised, with the reasons.
+Answer a few questions about what you want after surgery and about your eyes, and check any eye conditions you have. Every kind of lens is sorted into good fits, possible with trade-offs, and usually not advised, with the reasons.
 
 <div id="jk-iolp" class="jk-tears jk-iolp">
   <p class="jk-vis__noscript">The picker needs JavaScript. The sections above cover the same choices.</p>
@@ -92,7 +93,7 @@ Answer a few questions about what you want after surgery, and check any eye cond
 
 {{<figure src="images/learn/iol-measure.svg" alt="The eye cut in half, with an arrow along its length from the cornea to the retina, and a dashed curve following the front of the cornea." caption="Before surgery the length of the eye and the curve of the cornea are measured. Together they set the power of the lens implant. Simplified, not to scale." />}}
 
-Measurements taken before surgery, mainly the **length of the eye** and the **curve of the cornea**, go into formulas that pick the implant's power. They are very accurate, but not perfect: a small difference from the target is common and is corrected with glasses. The measurements are less certain after LASIK or with a very long or short eye. Contact lenses change the shape of the cornea, so you may be asked to leave them out for some days before measuring. [Preparing for Cataract Surgery](@/learn/preparing-for-cataract-surgery.md) covers this and the rest of the lead-up.
+Measurements taken before surgery, mainly the **length of the eye** and the **curve of the cornea**, go into formulas that pick the implant's power. They are very accurate, but not perfect: a small difference from the target is common and is corrected with glasses. The measurements are less certain after LASIK, PRK or RK, or with a very long or short eye. If you have had one of those, bring any records you have, especially your glasses prescription from before it. Contact lenses change the shape of the cornea, so you may be asked to leave them out for some days before measuring. [Preparing for Cataract Surgery](@/learn/preparing-for-cataract-surgery.md) covers this and the rest of the lead-up.
 
 ## Glasses afterward
 

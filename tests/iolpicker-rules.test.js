@@ -64,7 +64,8 @@ test('the light adjustable lens follows its labeling', () => {
     assert.strictEqual(verdict({ ...base, adjust: 'yes', conditions: cond(c) }, 'lal'), 'avoid', c);
   }
   assert.strictEqual(verdict({ ...base, adjust: 'no' }, 'lal'), 'avoid');
-  assert.strictEqual(verdict({ ...base, adjust: 'yes', conditions: cond('refractive') }, 'lal'), 'good');
+  assert.strictEqual(verdict({ ...base, adjust: 'yes', refractive: 'lasik' }, 'lal'), 'good');
+  assert.strictEqual(verdict({ ...base, adjust: 'yes', refractive: 'rk' }, 'lal'), 'good');
 });
 
 test('astigmatism marks toric versions, except the light adjustable lens and ruled-out lenses', () => {
@@ -150,4 +151,18 @@ test('a corneal scar rules out multifocal and extended depth lenses', () => {
   const a = { ...base, glasses: 'none', conditions: cond('scar') };
   assert.strictEqual(verdict(a, 'multifocal'), 'avoid');
   assert.strictEqual(verdict(a, 'edof'), 'avoid');
+});
+
+test('the light adjustable lens is a good fit for sharp distance, near, or monovision, unless the patient will not do the visits', () => {
+  for (const glasses of ['readers', 'near', 'computer', 'none']) {
+    assert.strictEqual(verdict({ ...base, glasses }, 'lal'), 'good', glasses);
+    assert.strictEqual(verdict({ ...base, glasses, adjust: 'no' }, 'lal'), 'avoid', glasses);
+  }
+  assert.strictEqual(verdict({ ...base, glasses: 'none', monovision: 'disliked' }, 'lal'), 'possible');
+});
+
+test('past LASIK or PRK makes multifocals possible; past RK rules them out', () => {
+  assert.strictEqual(verdict({ ...base, glasses: 'none', refractive: 'lasik' }, 'multifocal'), 'possible');
+  assert.strictEqual(verdict({ ...base, glasses: 'none', refractive: 'rk' }, 'multifocal'), 'avoid');
+  assert.match(T.pick({ ...base, refractive: 'rk' }).notes.join(' '), /records/);
 });
