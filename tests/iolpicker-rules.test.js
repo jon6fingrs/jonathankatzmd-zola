@@ -196,3 +196,23 @@ test('a little glare at night keeps extended depth a good fit and a multifocal p
   assert.strictEqual(verdict(any, 'edof'), 'possible');
   assert.strictEqual(verdict({ ...any, glasses: 'none' }, 'multifocal'), 'avoid');
 });
+
+test('one eye only makes multifocal and extended depth possible, with a note on matching the other eye', () => {
+  const a = { ...base, glasses: 'none', eyes: 'one' };
+  assert.strictEqual(verdict(a, 'multifocal'), 'possible');
+  assert.strictEqual(verdict({ ...a, glasses: 'computer' }, 'edof'), 'possible');
+  assert.match(T.pick(a).notes.join(' '), /match/);
+});
+
+test('an only seeing eye rules out monovision but not multifocal or extended depth', () => {
+  const a = { ...base, glasses: 'none', eyes: 'only', monovision: 'liked' };
+  assert.strictEqual(verdict(a, 'monovision'), 'avoid');
+  assert.strictEqual(verdict(a, 'multifocal'), 'possible');
+  assert.strictEqual(verdict({ ...a, glasses: 'computer' }, 'edof'), 'possible');
+  assert.match(T.pick(a).notes.join(' '), /extra care/);
+});
+
+test('both eyes changes nothing', () => {
+  const before = T.pick({ ...base, glasses: 'none' }).lenses.map((l) => l.verdict);
+  assert.deepStrictEqual(T.pick({ ...base, glasses: 'none', eyes: 'both' }).lenses.map((l) => l.verdict), before);
+});
