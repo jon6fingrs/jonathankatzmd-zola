@@ -67,7 +67,8 @@
         o += '<div class="jk-tears__card jk-iolp__card"><strong><a href="#' + l.anchor + '">' + esc(l.name) + '</a></strong>';
         var tags = [];
         if (l.toric) tags.push('toric version');
-        if (l.laser) tags.push('laser-assisted');
+        if (l.laserAstig) tags.push('laser treats astigmatism');
+        else if (l.laser) tags.push('laser-assisted');
         if (l.extra || l.toric || l.laser) tags.push('often extra cost');
         if (tags.length) o += ' <span class="jk-iolp__tags">' + tags.map(function (t) { return '<span class="jk-iolp__tag">' + esc(t) + '</span>'; }).join('') + '</span>';
         o += '<p>' + esc(l.what) + '</p>';
