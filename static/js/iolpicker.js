@@ -18,7 +18,7 @@
     { key: 'night', label: 'Do you drive a lot at night, or would halos around lights bother you?', values: [['', 'No'], ['1', 'Yes']] },
     { key: 'monovision', label: 'Have you tried monovision with contact lenses (one eye for distance, one for near)?', values: [['never', 'Never tried'], ['liked', 'Yes, liked it'], ['disliked', 'Yes, did not like it']] },
     { key: 'adjust', label: 'Would you come back for several short light treatments, and wear UV-protective glasses for a few weeks, to fine-tune the result?', values: [['', 'Not sure'], ['yes', 'Yes'], ['no', 'No']] },
-    { key: 'astig', label: 'Have you been told you have astigmatism?', values: [['unknown', 'Not sure'], ['yes', 'Yes'], ['no', 'No']] }
+    { key: 'astig', label: 'Have you been told you have astigmatism?', values: [['unknown', 'Not sure'], ['no', 'No'], ['little', 'Yes, a little'], ['more', 'Yes, more than a little']] }
   ];
   var HEADS = {
     good: ['Good fits', 'Match what you want, with nothing in your answers against them.'],
@@ -67,7 +67,7 @@
         var tags = [];
         if (l.toric) tags.push('toric version');
         if (l.laser) tags.push('laser-assisted');
-        if (l.extra || l.toric) tags.push('often extra cost');
+        if (l.extra || l.toric || l.laser) tags.push('often extra cost');
         if (tags.length) o += ' <span class="jk-iolp__tags">' + tags.map(function (t) { return '<span class="jk-iolp__tag">' + esc(t) + '</span>'; }).join('') + '</span>';
         o += '<p>' + esc(l.what) + '</p>';
         if (l.why.length) o += '<ul class="jk-iolp__why">' + l.why.map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('') + '</ul>';

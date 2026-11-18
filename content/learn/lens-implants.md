@@ -40,7 +40,7 @@ Some newer monofocal lenses, often called **enhanced monofocal** lenses, are sha
 
 ## Toric lenses
 
-**Astigmatism** means the front of the eye is curved more like a football than a basketball, which smears vision in one direction. A **toric** lens has astigmatism correction built in. It has small marks at its edge so the surgeon can turn it to line up with your astigmatism. Without it, an eye with significant astigmatism would need glasses for clear distance vision even after surgery.
+**Astigmatism** means the front of the eye is curved more like a football than a basketball, which smears vision in one direction. A **toric** lens has astigmatism correction built in. It has small marks at its edge so the surgeon can turn it to line up with your astigmatism. Without it, an eye with significant astigmatism would need glasses for clear distance vision even after surgery. Small amounts, up to about 1 diopter, are usually corrected instead with curved laser cuts in the cornea during [laser-assisted surgery](#laser-assisted-cataract-surgery), without a toric lens.
 
 Toric versions exist of most kinds of lens, including extended depth and multifocal lenses, and are used whenever one of those is chosen for an eye with significant astigmatism, since leaving the astigmatism would undo much of the benefit. A toric lens can occasionally rotate in the first weeks and need a small procedure to turn it back.
 
@@ -100,14 +100,14 @@ Even with the best result, most people use glasses for something: reading glasse
 
 ## Laser-assisted cataract surgery
 
-In **laser-assisted cataract surgery**, a femtosecond laser does some of the first steps before the surgeon takes over: it makes the round opening in the front of the lens capsule, the small incisions, and cuts that soften the cataract so less ultrasound is needed to remove it. It can also make small curved cuts in the cornea that reduce mild astigmatism. The rest of the operation is the same.
+In **laser-assisted cataract surgery**, a femtosecond laser does some of the first steps before the surgeon takes over: it makes the round opening in the front of the lens capsule, the small incisions, and cuts that soften the cataract so less ultrasound is needed to remove it. It can also make small curved cuts in the cornea that correct a little astigmatism, up to about 1 diopter, without a toric lens; more than that needs a toric lens. The rest of the operation is the same.
 
-- **With a toric or multifocal lens**, the laser is usually part of the surgery. A precisely sized and centered opening helps these lenses sit where they should.
+- **With a toric, extended depth, multifocal or light adjustable lens**, and for a little astigmatism, the laser is usually part of the surgery. A precisely sized and centered opening helps these lenses sit where they should.
 - **With Fuchs dystrophy or a very dense cataract**, needing less ultrasound energy is gentler on the cornea.
 - **For most eyes, it does not give better vision.** Large trials comparing it with standard surgery found that, on average, vision and safety afterward are about the same.
 - **It is not used** when the pupil does not dilate well enough, a corneal scar would block the laser, the laser's suction ring could press on a trabeculectomy bleb or tube shunt, or you cannot lie flat and still for a few minutes. Standard surgery works well in those eyes.
 
-It adds a few minutes to the visit, and it usually carries an extra charge, often included in the price of a toric or multifocal lens.
+It adds a few minutes to the visit, and it usually carries an extra charge, often included in the price of the lens.
 
 ## Cost
 

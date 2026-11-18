@@ -5,13 +5,15 @@
  * The rules follow the page's own text: monofocal lenses suit every eye;
  * extended depth and multifocal lenses need a healthy cornea, macula and
  * optic nerve, and bring halos; monovision is best tried with contact
- * lenses first; toric versions are added for astigmatism. The light
+ * lenses first; toric versions are added for more than a little
+ * astigmatism, and up to about 1 diopter is treated with the laser. The light
  * adjustable lens follows its FDA labeling: UV-protective glasses during all
  * waking hours until the power is locked in, and not for macular disease,
  * light-sensitizing medicines, herpes of the eye or nystagmus. The light
  * treatments are given through a dilated pupil.
  *
- * Laser-assisted surgery is assumed with a toric or multifocal lens, unless
+ * Laser-assisted surgery is assumed with a toric, extended depth, multifocal
+ * or light adjustable lens, and for a little astigmatism, unless
  * something in the eye rules the laser out (poor dilation, a corneal scar,
  * a bleb or tube shunt, trouble lying flat or still); the lens is then
  * placed with standard surgery and its verdict does not change.
@@ -73,10 +75,12 @@
   ];
 
   var RANK = { good: 0, possible: 1, avoid: 2 };
+  // lenses placed with laser-assisted surgery whatever the astigmatism
+  var LASER_LENSES = ['edof', 'multifocal', 'lal'];
 
   // answers: { glasses: 'readers' | 'near' | 'computer' | 'none', night: bool,
   //   monovision: 'liked' | 'disliked' | 'never', adjust: 'yes' | 'no' | '',
-  //   astig: 'yes' | 'no' | 'unknown', conditions: { id: true } }
+  //   astig: 'little' | 'more' | 'no' | 'unknown', conditions: { id: true } }
   function pick(a) {
     a = a || {};
     var c = a.conditions || {}, has = function (k) { return !!c[k]; };
@@ -194,21 +198,27 @@
       // keeps only the reasons against it
       var why = o.why.filter(function (w) { return o.verdict !== 'avoid' || w.verdict === 'avoid'; })
         .sort(function (x, y) { return RANK[y.verdict] - RANK[x.verdict]; }).map(function (w) { return w.text; });
-      var toric = a.astig === 'yes' && o.verdict !== 'avoid' && l.id !== 'lal';
+      var ok = o.verdict !== 'avoid', astig = (a.astig === 'little' || a.astig === 'more') && l.id !== 'lal';
+      // a little astigmatism is treated with laser cuts; without the laser,
+      // or with more, a toric lens
+      var toric = ok && astig && (a.astig === 'more' || noLaser.length > 0);
+      var wants = ok && (astig || LASER_LENSES.indexOf(l.id) >= 0);
       return { id: l.id, name: l.name, anchor: l.anchor, extra: l.extra, what: l.what, verdict: o.verdict, why: why, toric: toric,
-        laser: o.verdict !== 'avoid' && (toric || l.id === 'multifocal') && !noLaser.length };
+        wantsLaser: wants, laser: wants && !noLaser.length };
     });
-    var wouldLaser = lenses.some(function (l) { return l.verdict !== 'avoid' && (l.toric || l.id === 'multifocal'); });
+    var wouldLaser = lenses.some(function (l) { return l.wantsLaser; });
     var groups = ['good', 'possible', 'avoid'].map(function (v) {
       return { verdict: v, lenses: lenses.filter(function (l) { return l.verdict === v; }) };
     });
 
     var notes = [];
-    if (a.astig === 'yes') notes.push('With astigmatism, a toric version of the lens corrects it; the light adjustable lens can correct it with its light treatments.');
-    if (a.astig === 'yes' && has('keratoconus')) notes.push('A toric lens corrects only regular astigmatism, so it may help less with an irregular cornea.');
-    if (a.astig === 'unknown') notes.push('Your measurements before surgery will show whether you have enough astigmatism for a toric lens to help.');
-    if (wouldLaser && !noLaser.length) notes.push('Toric and multifocal lenses are usually placed with laser-assisted surgery, which helps center them precisely. For most eyes, vision afterward is about the same as with standard surgery.');
-    if (wouldLaser && noLaser.length) notes.push('Laser-assisted surgery would not be used, because ' + noLaser.join(', and ') + '. Toric and multifocal lenses are then placed with standard surgery, which works well.');
+    if (a.astig === 'more') notes.push('With more than a little astigmatism, a toric version of the lens corrects it; the light adjustable lens corrects it with its light treatments.');
+    if (a.astig === 'little' && !noLaser.length) notes.push('A little astigmatism, up to about 1 diopter, is usually corrected with small curved laser cuts in the cornea during laser-assisted surgery, without a toric lens. The light adjustable lens can also correct it with its light treatments.');
+    if (a.astig === 'little' && noLaser.length) notes.push('Without the laser, a little astigmatism is corrected with a toric version of the lens instead.');
+    if ((a.astig === 'little' || a.astig === 'more') && has('keratoconus')) notes.push('Toric lenses and laser cuts correct only regular astigmatism, so they may help less with an irregular cornea.');
+    if (a.astig === 'unknown') notes.push('Your measurements before surgery will show how much astigmatism you have: up to about 1 diopter is usually corrected with the laser, and more with a toric lens.');
+    if (wouldLaser && !noLaser.length) notes.push('Toric, extended depth, multifocal and light adjustable lenses, and laser treatment of astigmatism, go with laser-assisted surgery, which helps center the lens precisely. For most eyes, vision afterward is about the same as with standard surgery.');
+    if (wouldLaser && noLaser.length) notes.push('Laser-assisted surgery would not be used, because ' + noLaser.join(', and ') + '. The lens is then placed with standard surgery, which works well.');
     if (has('fuchs') && !noLaser.length) notes.push('With Fuchs dystrophy, laser-assisted surgery can lower the ultrasound energy needed, which is gentler on the cornea. Ask whether it suits you whatever the lens.');
     if (has('glaucoma-mild') || has('glaucoma-adv')) notes.push('With glaucoma, a monofocal lens also keeps future visual field tests easiest to read.');
     if (has('amblyopia')) notes.push('A lens implant cannot fix a lazy eye: vision in that eye after surgery is usually about what it was with glasses before the cataract.');
