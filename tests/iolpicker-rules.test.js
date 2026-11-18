@@ -183,3 +183,7 @@ test('monovision never tried is never a good fit: surgery should not be the firs
   const lal = T.pick({ ...base, glasses: 'none', monovision: 'never' }).lenses.find((x) => x.id === 'lal');
   assert.match(lal.why.join(' '), /changed if you do not like it/);
 });
+
+test('no enhanced monofocal: it is offered as a standard monofocal, not a lens for range', () => {
+  assert.ok(!T.LENSES.some((l) => /enhanced/i.test(l.id + l.name)));
+});

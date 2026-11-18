@@ -32,7 +32,7 @@ A **monofocal** lens focuses at one distance. It is the standard lens, the one m
 - **Set for distance**, the most common choice: driving, television and faces across a room are clear without glasses. Reading glasses are needed for near, and arm's length (a computer or the car dashboard) is usable but softer.
 - **Set for near:** reading is clear without glasses, and glasses are worn for distance. Some people who have been nearsighted all their lives, and are used to reading without glasses, prefer this.
 
-Some newer monofocal lenses, often called **enhanced monofocal** lenses, are shaped to give a little more range at arm's length than a standard monofocal, while keeping its sharpness and low glare. The gain is modest, and they are not the same as extended depth of focus lenses, which stretch the range further.
+You may hear of **enhanced monofocal** lenses, marketed as giving a little more range at arm's length than a standard monofocal. In practice they work like a standard monofocal: any extra range is small and not something to count on, so they are not worth paying extra for. If you want real range without glasses, the options are [monovision](#monovision), an [extended depth](#extended-depth-of-focus-lenses) or [multifocal](#multifocal-lenses) lens, or a [light adjustable lens](#light-adjustable-lenses).
 
 ## Monovision
 
