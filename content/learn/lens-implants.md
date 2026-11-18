@@ -79,6 +79,12 @@ A monofocal or toric lens is usually recommended when the eye has, or is likely 
 - A lazy eye (amblyopia), which gains little from a lens that splits focus
 - A lot of night driving, or work that needs the sharpest possible contrast
 
+## One eye, or an only eye
+
+When only one eye is having surgery, the lens is chosen to work with the other eye. If the other eye needs strong glasses, the new eye is often set to match it; otherwise a contact lens may be needed to balance the two, or it may be worth having surgery on both eyes. Multifocal and extended depth lenses work best when both eyes have one.
+
+If the eye having surgery is your only seeing eye, monovision is not possible, and there is no other eye to make up for the halos or lower contrast of a multifocal or extended depth lens. These lenses are not ruled out if the eye is healthy, but the choice deserves extra thought, and the surgery is planned with extra care.
+
 ## Which lens might fit you
 
 Answer a few questions about what you want after surgery and about your eyes, and check any eye conditions you have. Every kind of lens is sorted into good fits, possible with trade-offs, and usually not advised, with the reasons.
