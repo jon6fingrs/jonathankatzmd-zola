@@ -15,7 +15,7 @@
 
   var QUESTIONS = [
     { key: 'glasses', label: 'After surgery, what would you like to do without glasses?', values: [['readers', 'See far; reading glasses are fine'], ['near', 'Read up close; glasses for distance'], ['computer', 'Far and computer or dashboard'], ['none', 'As little glasses as possible, reading too']] },
-    { key: 'night', label: 'Do you drive a lot at night, or would halos around lights bother you?', values: [['', 'No'], ['1', 'Yes']] },
+    { key: 'night', label: 'How much would glare or halos around lights at night bother you?', values: [['', 'Not at all'], ['some', 'A little would be OK'], ['yes', 'Any would bother me, or I drive a lot at night']] },
     { key: 'monovision', label: 'Have you tried monovision with contact lenses (one eye for distance, one for near)?', values: [['never', 'Never tried'], ['liked', 'Yes, liked it'], ['disliked', 'Yes, did not like it']] },
     { key: 'adjust', label: 'Would you come back for several short light treatments, and wear UV-protective glasses for a few weeks, to fine-tune the result?', values: [['', 'Not sure'], ['yes', 'Yes'], ['no', 'No']] },
     { key: 'refractive', label: 'Have you had laser vision correction or RK?', values: [['no', 'No'], ['lasik', 'LASIK or PRK'], ['rk', 'RK (radial cuts)']] },
@@ -57,7 +57,7 @@
     });
     var n = Object.keys(state.conditions).length;
     count.textContent = n ? '(' + n + ' checked)' : '(none checked)';
-    var res = R.pick({ glasses: state.glasses, night: !!state.night, monovision: state.monovision, adjust: state.adjust, astig: state.astig, refractive: state.refractive, conditions: state.conditions });
+    var res = R.pick({ glasses: state.glasses, night: state.night, monovision: state.monovision, adjust: state.adjust, astig: state.astig, refractive: state.refractive, conditions: state.conditions });
     var o = '';
     if (!res.groups[0].lenses.length) o += '<p class="jk-iolp__none">No lens fits everything you want. The trade-offs below are the ones to talk through with your surgeon.</p>';
     res.groups.forEach(function (g) {
