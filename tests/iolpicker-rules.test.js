@@ -161,7 +161,8 @@ test('the light adjustable lens is a good fit for sharp distance, near, or monov
   assert.strictEqual(verdict({ ...base, glasses: 'none', monovision: 'disliked' }, 'lal'), 'possible');
 });
 
-test('past LASIK or PRK makes multifocals possible; past RK rules them out', () => {
+test('past LASIK or PRK makes multifocals possible and leaves extended depth a good fit; past RK rules multifocals out', () => {
+  assert.strictEqual(verdict({ ...base, glasses: 'computer', refractive: 'lasik' }, 'edof'), 'good');
   assert.strictEqual(verdict({ ...base, glasses: 'none', refractive: 'lasik' }, 'multifocal'), 'possible');
   assert.strictEqual(verdict({ ...base, glasses: 'none', refractive: 'rk' }, 'multifocal'), 'avoid');
   assert.match(T.pick({ ...base, refractive: 'rk' }).notes.join(' '), /records/);

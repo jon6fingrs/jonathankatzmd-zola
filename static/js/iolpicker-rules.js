@@ -172,7 +172,7 @@
     }
     if (a.refractive === 'lasik') {
       say('multifocal', 'possible', 'After LASIK or PRK the lens power is harder to predict, and the reshaped cornea can add to halos.');
-      say('edof', 'possible', 'After LASIK or PRK the lens power is harder to predict.');
+      say('edof', 'good', 'Often a good choice after LASIK or PRK, with fewer halos than a multifocal on a reshaped cornea. The lens power is harder to predict, so glasses or a small touch-up may be needed.');
       say('lal', 'good', 'After LASIK or PRK the power is harder to predict; this lens can be adjusted afterward.');
     } else if (a.refractive === 'rk') {
       say('multifocal', 'avoid', 'After RK the cornea is irregular and vision can change through the day; a multifocal makes both worse.');
