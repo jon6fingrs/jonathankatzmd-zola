@@ -3,7 +3,7 @@ title = "Cataract Surgery"
 description = "What a cataract is, when surgery makes sense, lens implant choices, the day of surgery and the four-week recovery, and what changes if you have glaucoma."
 template = "page.html"
 date = 2026-10-02
-updated = 2026-11-14
+updated = 2026-11-18
 weight = 100
 
 [extra]
@@ -29,7 +29,7 @@ There is no harm in waiting as long as the cataract is not interfering with your
 The artificial lens (intraocular lens, or IOL) is chosen for your eye using measurements taken before surgery.
 
 - **Monofocal** lenses give clear vision at one distance, usually far, with reading glasses for near. This is the standard lens covered by insurance.
-- **Toric** lenses correct astigmatism so that distance vision is sharper without glasses.
+- **Toric** lenses correct astigmatism so that distance vision is sharper without glasses. A little astigmatism, up to about 1 diopter, can instead be corrected with small laser cuts in the cornea during [laser-assisted surgery](@/learn/lens-implants.md#laser-assisted-cataract-surgery).
 - **Multifocal and extended-depth-of-focus** lenses reduce the need for glasses at more than one distance, with trade-offs such as halos at night.
 - **Monovision** sets one eye for distance and the other for near using monofocal lenses.
 
@@ -50,6 +50,8 @@ The animation shows the operation the way the surgeon sees it through the micros
 ## The day of surgery
 
 Surgery is at an outpatient surgery center. The eye is numbed with drops or gel and you are given light sedation; you are awake but relaxed and will not see the surgery itself, only lights and colors. Through an incision about two millimeters wide, the surgeon opens the front of the lens capsule, breaks the cloudy lens up with ultrasound and removes it, and places the folded implant into the capsule where it unfolds. The incision seals itself, usually without stitches. The operation takes about 10 to 20 minutes, and you are at the center for two to three hours in all. You go home with a shield and need a driver.
+
+In **laser-assisted** surgery, a laser makes the capsule opening and incisions and softens the cataract first, and the surgeon then finishes in the same way. It is usually part of the surgery with a toric, extended depth, multifocal or light adjustable lens, where its precision helps the lens sit where it should. It can also correct a little astigmatism, up to about 1 diopter, with small curved cuts in the cornea, and it can be gentler on the cornea in Fuchs dystrophy. For most eyes, large trials found vision afterward about the same as with standard surgery. More: [Laser-assisted cataract surgery](@/learn/lens-implants.md#laser-assisted-cataract-surgery)
 
 If a glaucoma procedure ([MIGS](@/learn/migs.md)) is planned at the same time, it is done through the same incision and adds a few minutes.
 
