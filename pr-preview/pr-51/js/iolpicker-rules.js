@@ -33,8 +33,6 @@
   var LENSES = [
     { id: 'distance', name: 'Monofocal, set for distance', anchor: 'monofocal-lenses', extra: false,
       what: 'Sharp distance vision with the least glare. Reading glasses for near.' },
-    { id: 'enhanced', name: 'Enhanced monofocal', anchor: 'monofocal-lenses', extra: false,
-      what: 'Like a monofocal, with a little more range at arm’s length. Reading glasses for near.' },
     { id: 'near', name: 'Monofocal, set for near', anchor: 'monofocal-lenses', extra: false,
       what: 'Reading without glasses; glasses for driving and distance.' },
     { id: 'monovision', name: 'Monovision', anchor: 'monovision', extra: false,
@@ -96,7 +94,6 @@
     // What you want afterward
     if (a.glasses === 'none') {
       say('distance', 'possible', 'You would still need reading glasses.');
-      say('enhanced', 'possible', 'Reading glasses are still needed for near.');
       if (a.monovision === 'never') say('lal', 'good', 'Can be set up as monovision after surgery and changed if you do not like it, so you can try monovision without committing to it.');
       else if (a.monovision === 'liked') say('lal', 'good', 'Can be set up as monovision, one eye for distance and one for near, and fine-tuned once you try it.');
       else say('lal', 'possible', 'Without monovision it is set for one distance, so reading glasses would be needed.');
@@ -104,7 +101,6 @@
       say('multifocal', 'good', 'Gives the most freedom from glasses, including reading.');
     } else if (a.glasses === 'computer') {
       say('distance', 'possible', 'A computer or dashboard is usable but softer without glasses.');
-      say('enhanced', 'good', 'A little more range at arm’s length than a standard monofocal.');
       say('edof', 'good', 'Covers distance to arm’s length.');
       if (a.monovision !== 'disliked') say('lal', 'good', 'Can be fine-tuned for distance in one eye and arm’s length in the other once you try it.');
       else say('lal', 'possible', 'Fine-tuned for distance, a computer would be softer without glasses.');
@@ -112,7 +108,6 @@
     } else if (a.glasses === 'near') {
       say('near', 'good', 'Matches what you want: reading without glasses, glasses for driving and distance.');
       say('distance', 'possible', 'Set for distance, you would need glasses to read instead.');
-      say('enhanced', 'possible', 'Usually set for distance, so you would need glasses to read.');
       say('lal', 'good', 'Can be set for near, and fine-tuned once you try it.');
       say('edof', 'possible', 'Aimed at distance and arm’s length; small print would still need glasses.');
       say('multifocal', 'avoid', 'If glasses for distance are fine, a monofocal set for near gives sharp reading without the halos.');
