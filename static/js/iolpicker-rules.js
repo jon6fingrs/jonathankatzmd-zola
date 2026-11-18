@@ -75,7 +75,8 @@
   // lenses placed with laser-assisted surgery whatever the astigmatism
   var LASER_LENSES = ['edof', 'multifocal', 'lal'];
 
-  // answers: { glasses: 'readers' | 'near' | 'computer' | 'none', night: bool,
+  // answers: { glasses: 'readers' | 'near' | 'computer' | 'none',
+  //   night: '' | 'some' | 'yes' (glare at night: fine / a little is OK / any would bother; true means 'yes'),
   //   monovision: 'liked' | 'disliked' | 'never', adjust: 'yes' | 'no' | '',
   //   astig: 'little' | 'more' | 'no' | 'unknown', refractive: 'no' | 'lasik' | 'rk',
   //   conditions: { id: true } }
@@ -119,9 +120,15 @@
     }
     if (a.glasses !== 'near') say('near', 'possible', 'Suits people who have been nearsighted all their lives and like to read without glasses; glasses are needed for driving.');
 
-    if (a.night) {
-      say('multifocal', 'avoid', 'Halos around lights at night are common, and you drive a lot at night or worry about them.');
-      say('edof', 'possible', 'Some designs give mild halos at night; designs without rings give fewer.');
+    var night = a.night === true || a.night === 'yes' ? 'yes' : a.night === 'some' ? 'some' : '';
+    if (night === 'some') {
+      say('multifocal', 'possible', 'Halos around lights at night are common and more than a little; most people adapt over months, but some stay bothered.');
+      say('edof', 'good', 'Some people notice mild halos at night, far less than with a multifocal.');
+    } else if (night === 'yes') {
+      say('multifocal', 'avoid', 'Halos around lights at night are common, and you drive a lot at night or would be bothered by them.');
+      say('edof', 'possible', 'Some designs give mild halos at night, far less than a multifocal; designs without rings give the fewest.');
+    }
+    if (night) {
       if (a.monovision !== 'disliked') say('monovision', 'good', 'No halos. Both eyes together are a little less sharp at night; some people keep glasses for night driving.');
     }
 

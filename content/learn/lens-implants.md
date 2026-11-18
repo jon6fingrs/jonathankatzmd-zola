@@ -46,7 +46,7 @@ Toric versions exist of most kinds of lens, including extended depth and multifo
 
 ## Extended depth of focus lenses
 
-An **extended depth of focus** (EDOF) lens stretches the range of clear vision from distance to arm's length. Most people can drive, use a computer and see a dashboard without glasses, and use light reading glasses for small print. Some notice mild halos or glare around lights at night. Designs differ: some use fine rings, like a multifocal, and give more near vision with more halos; others are shaped without rings and give fewer halos with a little less near vision.
+An **extended depth of focus** (EDOF) lens stretches the range of clear vision from distance to arm's length. Most people can drive, use a computer and see a dashboard without glasses, and use light reading glasses for small print. Some notice mild halos or glare around lights at night, far less than with a multifocal lens. Designs differ: some use fine rings, like a multifocal, and give more near vision with more halos; others are shaped without rings and give fewer halos with a little less near vision.
 
 ## Multifocal lenses
 

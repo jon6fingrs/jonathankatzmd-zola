@@ -187,3 +187,12 @@ test('monovision never tried is never a good fit: surgery should not be the firs
 test('no enhanced monofocal: it is offered as a standard monofocal, not a lens for range', () => {
   assert.ok(!T.LENSES.some((l) => /enhanced/i.test(l.id + l.name)));
 });
+
+test('a little glare at night keeps extended depth a good fit and a multifocal possible', () => {
+  const some = { ...base, glasses: 'computer', night: 'some' };
+  assert.strictEqual(verdict(some, 'edof'), 'good');
+  assert.strictEqual(verdict({ ...some, glasses: 'none' }, 'multifocal'), 'possible');
+  const any = { ...base, glasses: 'computer', night: 'yes' };
+  assert.strictEqual(verdict(any, 'edof'), 'possible');
+  assert.strictEqual(verdict({ ...any, glasses: 'none' }, 'multifocal'), 'avoid');
+});
