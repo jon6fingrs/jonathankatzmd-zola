@@ -98,3 +98,12 @@ test('wanting to read without glasses, with glasses for distance, points to a mo
   assert.strictEqual(verdict(a, 'multifocal'), 'avoid');
   assert.notStrictEqual(verdict({ ...a, conditions: cond(...ALL) }, 'near'), 'avoid');
 });
+
+test('monovision liked in contacts is a good fit for someone wanting fewer glasses, even with night driving', () => {
+  for (const glasses of ['none', 'computer']) {
+    const a = { ...base, glasses, night: true, monovision: 'liked' };
+    assert.strictEqual(verdict(a, 'monovision'), 'good', glasses);
+    assert.strictEqual(verdict(a, 'multifocal'), 'avoid', glasses);
+  }
+  assert.strictEqual(verdict({ ...base, glasses: 'none', night: true, monovision: 'never' }, 'monovision'), 'possible');
+});
