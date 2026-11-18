@@ -109,3 +109,8 @@ test('monovision is a good fit for someone wanting fewer glasses, even with nigh
   assert.strictEqual(verdict({ ...base, glasses: 'none', night: true, monovision: 'never' }, 'monovision'), 'good');
   assert.strictEqual(verdict({ ...base, glasses: 'none', monovision: 'disliked' }, 'monovision'), 'avoid');
 });
+
+test('the page marks toric versions as often costing extra', () => {
+  const js = require('fs').readFileSync(require('path').join(__dirname, '..', 'static', 'js', 'iolpicker.js'), 'utf8');
+  assert.match(js, /l\.extra \|\| l\.toric/);
+});
