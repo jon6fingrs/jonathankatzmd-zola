@@ -66,7 +66,7 @@
         o += '<div class="jk-tears__card jk-iolp__card"><strong><a href="#' + l.anchor + '">' + esc(l.name) + '</a></strong>';
         var tags = [];
         if (l.toric) tags.push('toric version');
-        if (l.extra) tags.push('often extra cost');
+        if (l.extra || l.toric) tags.push('often extra cost');
         if (tags.length) o += ' <span class="jk-iolp__tags">' + tags.map(function (t) { return '<span class="jk-iolp__tag">' + esc(t) + '</span>'; }).join('') + '</span>';
         o += '<p>' + esc(l.what) + '</p>';
         if (l.why.length) o += '<ul class="jk-iolp__why">' + l.why.map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('') + '</ul>';
