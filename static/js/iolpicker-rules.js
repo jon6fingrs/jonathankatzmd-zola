@@ -4,8 +4,8 @@
  *
  * The rules follow the page's own text: monofocal lenses suit every eye;
  * extended depth and multifocal lenses need a healthy cornea, macula and
- * optic nerve, and bring halos; monovision is best tried with contact
- * lenses first; toric versions are added for more than a little
+ * optic nerve, and bring halos; monovision is a good fit only once it has
+ * been tried and liked with contact lenses, because it is permanent; toric versions are added for more than a little
  * astigmatism, and up to about 1 diopter is treated with the laser. The light
  * adjustable lens follows its FDA labeling: UV-protective glasses during all
  * waking hours until the power is locked in, and not for macular disease,
@@ -97,7 +97,8 @@
     if (a.glasses === 'none') {
       say('distance', 'possible', 'You would still need reading glasses.');
       say('enhanced', 'possible', 'Reading glasses are still needed for near.');
-      if (a.monovision !== 'disliked') say('lal', 'good', 'Can be set up as monovision, one eye for distance and one for near, and fine-tuned once you try it.');
+      if (a.monovision === 'never') say('lal', 'good', 'Can be set up as monovision after surgery and changed if you do not like it, so you can try monovision without committing to it.');
+      else if (a.monovision === 'liked') say('lal', 'good', 'Can be set up as monovision, one eye for distance and one for near, and fine-tuned once you try it.');
       else say('lal', 'possible', 'Without monovision it is set for one distance, so reading glasses would be needed.');
       say('edof', 'possible', 'Light reading glasses are often still needed for small print.');
       say('multifocal', 'good', 'Gives the most freedom from glasses, including reading.');
@@ -134,8 +135,7 @@
     }
     if (a.monovision === 'liked') say('monovision', 'good', 'You have liked monovision with contact lenses.');
     else if (a.monovision === 'disliked') say('monovision', 'avoid', 'You did not like monovision with contact lenses.');
-    else if (a.glasses === 'none' || a.glasses === 'computer') say('monovision', 'good', 'Best tried with contact lenses first, to be sure it suits you.');
-    else say('monovision', 'possible', 'Best tried with contact lenses first.');
+    else say('monovision', 'possible', 'Not everyone adapts: the eyes no longer work together the same way. Many people love it, but some cannot get used to it. Because it is permanent, try it with contact lenses before surgery; surgery should not be the first time.');
 
     if (a.adjust === 'yes') say('lal', 'good', 'You are willing to come back for the light treatments and wear UV-protective glasses until it is locked in.');
     else if (a.adjust === 'no') say('lal', 'avoid', 'It needs several extra visits and UV-protective glasses for all waking hours for some weeks.');
@@ -214,7 +214,8 @@
       return { id: l.id, name: l.name, anchor: l.anchor, extra: l.extra, what: l.what, verdict: o.verdict, why: why, toric: toric,
         wantsLaser: wants, laser: wants && !noLaser.length,
         // the laser's curved cuts treat a little astigmatism instead of a toric lens
-        laserAstig: ok && astig && a.astig === 'little' && !noLaser.length };
+        laserAstig: ok && astig && a.astig === 'little' && !noLaser.length,
+        tryFirst: l.id === 'monovision' && a.monovision === 'never' && ok };
     });
     var wouldLaser = lenses.some(function (l) { return l.wantsLaser; });
     var groups = ['good', 'possible', 'avoid'].map(function (v) {

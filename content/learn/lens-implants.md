@@ -36,7 +36,7 @@ Some newer monofocal lenses, often called **enhanced monofocal** lenses, are sha
 
 ## Monovision
 
-**Monovision** uses monofocal lenses with one eye set for distance and the other for near (or arm's length). The brain learns to use whichever eye is clear for the task. Done well, it gives as much freedom from glasses as a multifocal lens, with a good range from distance to near, and without the halos or loss of contrast. The trade-offs are slightly less depth perception and a little less sharpness with both eyes together, and glasses may still help for night driving or long reading. It suits people who have used monovision with contact lenses before, and it is often tried with contact lenses first.
+**Monovision** uses monofocal lenses with one eye set for distance and the other for near (or arm's length). The brain learns to use whichever eye is clear for the task. Done well, it gives as much freedom from glasses as a multifocal lens, with a good range from distance to near, and without the halos or loss of contrast. The trade-offs are slightly less depth perception and a little less sharpness with both eyes together, and glasses may still help for night driving or long reading. It is not for everyone: the two eyes no longer work together the same way. Many people love it, but some cannot get used to it. It suits people who have used monovision with contact lenses and liked it. If you have not, try it with contact lenses before surgery; because the result is permanent, surgery should not be the first time. A [light adjustable lens](#light-adjustable-lenses) is another way to try it, since it can be changed after surgery.
 
 ## Toric lenses
 

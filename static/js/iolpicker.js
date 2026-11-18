@@ -66,6 +66,7 @@
       g.lenses.forEach(function (l) {
         o += '<div class="jk-tears__card jk-iolp__card"><strong><a href="#' + l.anchor + '">' + esc(l.name) + '</a></strong>';
         var tags = [];
+        if (l.tryFirst) tags.push('try with contacts first');
         if (l.toric) tags.push('toric version');
         if (l.laserAstig) tags.push('laser treats astigmatism');
         else if (l.laser) tags.push('laser-assisted');

@@ -56,7 +56,7 @@ test('monovision follows the contact lens trial', () => {
   assert.strictEqual(verdict({ ...base, monovision: 'liked' }, 'monovision'), 'good');
   assert.strictEqual(verdict({ ...base, monovision: 'disliked' }, 'monovision'), 'avoid');
   assert.strictEqual(verdict({ ...base, monovision: 'never' }, 'monovision'), 'possible');
-  assert.strictEqual(verdict({ ...base, glasses: 'none', monovision: 'never' }, 'monovision'), 'good');
+  assert.strictEqual(verdict({ ...base, glasses: 'none', monovision: 'never' }, 'monovision'), 'possible');
 });
 
 test('the light adjustable lens follows its labeling', () => {
@@ -101,13 +101,13 @@ test('wanting to read without glasses, with glasses for distance, points to a mo
   assert.notStrictEqual(verdict({ ...a, conditions: cond(...ALL) }, 'near'), 'avoid');
 });
 
-test('monovision is a good fit for someone wanting fewer glasses, even with night driving, unless disliked', () => {
+test('monovision is a good fit for someone wanting fewer glasses, even with night driving, once tried and liked', () => {
   for (const glasses of ['none', 'computer']) {
     const a = { ...base, glasses, night: true, monovision: 'liked' };
     assert.strictEqual(verdict(a, 'monovision'), 'good', glasses);
     assert.strictEqual(verdict(a, 'multifocal'), 'avoid', glasses);
   }
-  assert.strictEqual(verdict({ ...base, glasses: 'none', night: true, monovision: 'never' }, 'monovision'), 'good');
+  assert.strictEqual(verdict({ ...base, glasses: 'none', night: true, monovision: 'never' }, 'monovision'), 'possible');
   assert.strictEqual(verdict({ ...base, glasses: 'none', monovision: 'disliked' }, 'monovision'), 'avoid');
 });
 
@@ -171,4 +171,15 @@ test('past LASIK or PRK makes multifocals possible and leaves extended depth a g
   assert.strictEqual(verdict({ ...base, glasses: 'none', refractive: 'lasik' }, 'multifocal'), 'possible');
   assert.strictEqual(verdict({ ...base, glasses: 'none', refractive: 'rk' }, 'multifocal'), 'avoid');
   assert.match(T.pick({ ...base, refractive: 'rk' }).notes.join(' '), /records/);
+});
+
+test('monovision never tried is never a good fit: surgery should not be the first time', () => {
+  for (const glasses of ['readers', 'near', 'computer', 'none']) {
+    const l = T.pick({ ...base, glasses, monovision: 'never' }).lenses.find((x) => x.id === 'monovision');
+    assert.strictEqual(l.verdict, 'possible', glasses);
+    assert.strictEqual(l.tryFirst, true, glasses);
+    assert.match(l.why.join(' '), /contact lenses before surgery/);
+  }
+  const lal = T.pick({ ...base, glasses: 'none', monovision: 'never' }).lenses.find((x) => x.id === 'lal');
+  assert.match(lal.why.join(' '), /changed if you do not like it/);
 });
