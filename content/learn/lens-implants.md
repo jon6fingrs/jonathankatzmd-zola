@@ -3,7 +3,7 @@ title = "Choosing a Lens Implant"
 description = "Monofocal, toric, extended depth, multifocal and light adjustable lens implants: what each does without glasses, and a picker for your eyes."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-17
+updated = 2026-11-18
 weight = 103
 
 [extra]
@@ -36,7 +36,7 @@ Some newer monofocal lenses, often called **enhanced monofocal** lenses, are sha
 
 ## Monovision
 
-**Monovision** uses monofocal lenses with one eye set for distance and the other for near (or arm's length). The brain learns to use whichever eye is clear for the task. Many people get through most of the day without glasses. The trade-offs are slightly less depth perception and a little less sharpness with both eyes together, and glasses may still help for night driving or long reading. It suits people who have used monovision with contact lenses before, and it is often tried with contact lenses first.
+**Monovision** uses monofocal lenses with one eye set for distance and the other for near (or arm's length). The brain learns to use whichever eye is clear for the task. Done well, it gives as much freedom from glasses as a multifocal lens, with a good range from distance to near, and without the halos or loss of contrast. The trade-offs are slightly less depth perception and a little less sharpness with both eyes together, and glasses may still help for night driving or long reading. It suits people who have used monovision with contact lenses before, and it is often tried with contact lenses first.
 
 ## Toric lenses
 
