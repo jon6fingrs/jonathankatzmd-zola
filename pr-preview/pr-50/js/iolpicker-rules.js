@@ -110,9 +110,13 @@
     if (a.night) {
       say('multifocal', 'avoid', 'Halos around lights at night are common, and you drive a lot at night or worry about them.');
       say('edof', 'possible', 'Some designs give mild halos at night; designs without rings give fewer.');
-      say('monovision', 'possible', 'Both eyes together are a little less sharp, which shows most at night.');
+      if (a.monovision === 'liked') say('monovision', 'good', 'No halos. Both eyes together are a little less sharp at night; some people keep glasses for night driving.');
+      else say('monovision', 'possible', 'Both eyes together are a little less sharp, which shows most at night.');
     }
 
+    if ((a.glasses === 'none' || a.glasses === 'computer') && a.monovision !== 'disliked') {
+      say('monovision', a.monovision === 'liked' ? 'good' : 'possible', 'Gets most people through the day without glasses, without the halos of multifocal or extended depth lenses.');
+    }
     if (a.monovision === 'liked') say('monovision', 'good', 'You have liked monovision with contact lenses.');
     else if (a.monovision === 'disliked') say('monovision', 'avoid', 'You did not like monovision with contact lenses.');
     else say('monovision', 'possible', 'Best tried with contact lenses first.');
