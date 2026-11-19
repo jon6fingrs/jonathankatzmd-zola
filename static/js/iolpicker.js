@@ -47,7 +47,7 @@
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
-  var h = '<div class="jk-iolp__bar"><button type="button" class="jk-chip jk-chip--sm" id="jk-iolp-wide" aria-pressed="false">Side by side</button></div>' +
+  var h = '<div class="jk-iolp__bar"><button type="button" class="jk-chip jk-chip--sm jk-iolp__barprint" data-print>Print summary</button><button type="button" class="jk-chip jk-chip--sm" id="jk-iolp-wide" aria-pressed="false">Side by side</button></div>' +
     '<div class="jk-iolp__layout"><div class="jk-iolp__ask"><div class="jk-tears__qs"><h3 class="jk-tears__head">What you want afterward</h3>';
   QUESTIONS.forEach(function (q) {
     if (q.key === 'eyes') h += '<h3 class="jk-tears__head jk-iolp__sub">Your eyes</h3>';
