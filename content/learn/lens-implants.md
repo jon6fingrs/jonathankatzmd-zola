@@ -3,7 +3,7 @@ title = "Choosing a Lens Implant"
 description = "Monofocal, toric, extended depth, multifocal and light adjustable lens implants: what each does without glasses, and a picker for your eyes."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-18
+updated = 2026-11-19
 weight = 103
 
 [extra]
@@ -75,7 +75,7 @@ A monofocal or toric lens is usually recommended when the eye has, or is likely 
 - [Glaucoma](@/learn/what-is-glaucoma.md), especially moderate or advanced, since glaucoma already lowers contrast and future visual field tests are easiest to interpret with a monofocal lens. Extended depth lenses are sometimes considered in mild, stable glaucoma.
 - [Macular degeneration](@/learn/macular-degeneration.md), [diabetic eye disease](@/learn/diabetic-retinopathy.md) or a membrane on the retina
 - Significant [dry eye](@/learn/what-is-dry-eye.md) or corneal disease such as [Fuchs dystrophy](@/learn/fuchs-dystrophy.md) or [keratoconus](@/learn/keratoconus.md)
-- Previous laser vision correction (LASIK or PRK), where the lens power is harder to predict (a light adjustable lens is one answer to that)
+- Previous laser vision correction (LASIK or PRK), where the lens power is harder to predict (a light adjustable lens is one answer to that). It also matters which way the eye was treated: after treatment for nearsightedness an extended depth lens can work well, while after treatment for farsightedness multifocal lenses are usually avoided. The lens design is matched to how the cornea was reshaped.
 - A lazy eye (amblyopia), which gains little from a lens that splits focus
 - A lot of night driving, or work that needs the sharpest possible contrast
 
@@ -91,6 +91,14 @@ Answer a few questions about what you want after surgery and about your eyes, an
 
 <div id="jk-iolp" class="jk-tears jk-iolp">
   <p class="jk-vis__noscript">The picker needs JavaScript. The sections above cover the same choices.</p>
+</div>
+
+<div class="jk-iolp__head" hidden>
+  <div class="jk-printhead">
+    <div class="jk-printhead__name">Jonathan Katz, MD</div>
+    <div class="jk-printhead__sub">Ophthalmologist &middot; Glaucoma Specialist</div>
+    <div class="jk-printhead__sub">Katzen Eye Group &middot; 410-821-9490 &middot; jonathankatzmd.com</div>
+  </div>
 </div>
 
 <p class="jk-note">This is a starting point for a talk with your surgeon, not a decision. It cannot know your measurements or everything about your eyes, and many conditions not listed also affect the choice. Each lens name links to its section above.</p>
