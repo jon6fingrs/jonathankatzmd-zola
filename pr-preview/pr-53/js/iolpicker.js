@@ -9,7 +9,9 @@
  * (the only live region) shows the outcome without scrolling and links to
  * the details. Tags every recommended lens shares are shown once above the
  * cards; lenses usually not advised are a short list, not cards. "Start
- * over" clears the answers between patients.
+ * over" clears the answers between patients. On wide screens (from 1100px,
+ * see custom.css) the picker can go side by side: questions on the left,
+ * results on the right kept in view; the choice is remembered per browser.
  *
  * "Print a one-page summary" builds a separate sheet (letterhead from the
  * page's hidden .jk-iolp__head, blank lines for name and eye, the answers,
@@ -45,7 +47,8 @@
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
-  var h = '<div class="jk-tears__qs"><h3 class="jk-tears__head">What you want afterward</h3>';
+  var h = '<div class="jk-iolp__bar"><button type="button" class="jk-chip jk-chip--sm" id="jk-iolp-wide" aria-pressed="false">Side by side</button></div>' +
+    '<div class="jk-iolp__layout"><div class="jk-iolp__ask"><div class="jk-tears__qs"><h3 class="jk-tears__head">What you want afterward</h3>';
   QUESTIONS.forEach(function (q) {
     if (q.key === 'eyes') h += '<h3 class="jk-tears__head jk-iolp__sub">Your eyes</h3>';
     h += '<div class="jk-tears__q"><span class="jk-vis__lab" id="jk-iq-' + q.key + '">' + esc(q.label) + '</span><div class="jk-chips" role="group" aria-labelledby="jk-iq-' + q.key + '">';
@@ -60,11 +63,22 @@
     });
     h += '</fieldset>';
   });
-  h += '</details></div><p class="jk-iolp__summary" id="jk-iolp-sum" aria-live="polite"></p><div class="jk-tears__out" id="jk-iolp-out" tabindex="-1"></div>';
+  h += '</details></div></div><div class="jk-iolp__res"><p class="jk-iolp__summary" id="jk-iolp-sum" aria-live="polite"></p><div class="jk-tears__out" id="jk-iolp-out" tabindex="-1"></div></div></div>';
   root.innerHTML = h;
   var out = document.getElementById('jk-iolp-out');
   var count = document.getElementById('jk-iolp-count');
   var sum = document.getElementById('jk-iolp-sum');
+  var wideBtn = document.getElementById('jk-iolp-wide');
+  // side by side on wide screens: on unless this browser turned it off
+  function setWide(on, save) {
+    root.classList.toggle('is-wide', on);
+    wideBtn.setAttribute('aria-pressed', String(on));
+    wideBtn.classList.toggle('is-active', on);
+    if (save) { try { localStorage.setItem('jk-iolp-wide', on ? '1' : '0'); } catch (e) {} }
+  }
+  var wideSaved = null;
+  try { wideSaved = localStorage.getItem('jk-iolp-wide'); } catch (e) {}
+  setWide(wideSaved !== '0', false);
 
   function tagsFor(l) {
     var tags = [];
@@ -96,7 +110,7 @@
     var res = R.pick(answers());
     var good = res.groups[0].lenses, maybe = res.groups[1].lenses, avoid = res.groups[2].lenses;
     sum.innerHTML = (good.length ? '<b>Good fits:</b> ' + esc(names(good)) : '<b>No lens fits everything you want.</b>') +
-      ' <span>\u00b7 Possible: ' + maybe.length + ' \u00b7 Not advised: ' + avoid.length + '</span> <a href="#jk-iolp-out" data-jump>See details</a>';
+      ' <span>\u00b7 Possible: ' + maybe.length + ' \u00b7 Not advised: ' + avoid.length + '</span> <a href="#jk-iolp-out" data-jump>See details</a> <a href="#" data-print>Print summary</a>';
     var shared = sharedTags(res);
     var o = '';
     if (!good.length) o += '<p class="jk-iolp__none">No lens fits everything you want. The trade-offs below are the ones to talk through with your surgeon.</p>';
@@ -181,7 +195,8 @@
   }
   window.addEventListener('afterprint', function () { document.documentElement.classList.remove('jk-iolp-printing'); });
   root.addEventListener('click', function (e) {
-    if (e.target.closest('#jk-iolp-print')) { printSheet(); return; }
+    if (e.target.closest('#jk-iolp-print, [data-print]')) { e.preventDefault(); printSheet(); return; }
+    if (e.target.closest('#jk-iolp-wide')) { setWide(!root.classList.contains('is-wide'), true); return; }
     if (e.target.closest('#jk-iolp-reset')) {
       reset();
       root.querySelectorAll('.jk-iolp__check input').forEach(function (c) { c.checked = false; });
