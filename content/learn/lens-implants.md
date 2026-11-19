@@ -3,7 +3,7 @@ title = "Choosing a Lens Implant"
 description = "Monofocal, toric, extended depth, multifocal and light adjustable lens implants: what each does without glasses, and a picker for your eyes."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-18
+updated = 2026-11-19
 weight = 103
 
 [extra]
@@ -91,6 +91,14 @@ Answer a few questions about what you want after surgery and about your eyes, an
 
 <div id="jk-iolp" class="jk-tears jk-iolp">
   <p class="jk-vis__noscript">The picker needs JavaScript. The sections above cover the same choices.</p>
+</div>
+
+<div class="jk-iolp__head" hidden>
+  <div class="jk-printhead">
+    <div class="jk-printhead__name">Jonathan Katz, MD</div>
+    <div class="jk-printhead__sub">Ophthalmologist &middot; Glaucoma Specialist</div>
+    <div class="jk-printhead__sub">Katzen Eye Group &middot; 410-821-9490 &middot; jonathankatzmd.com</div>
+  </div>
 </div>
 
 <p class="jk-note">This is a starting point for a talk with your surgeon, not a decision. It cannot know your measurements or everything about your eyes, and many conditions not listed also affect the choice. Each lens name links to its section above.</p>
