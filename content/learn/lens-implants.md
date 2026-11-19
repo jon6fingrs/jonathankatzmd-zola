@@ -75,7 +75,7 @@ A monofocal or toric lens is usually recommended when the eye has, or is likely 
 - [Glaucoma](@/learn/what-is-glaucoma.md), especially moderate or advanced, since glaucoma already lowers contrast and future visual field tests are easiest to interpret with a monofocal lens. Extended depth lenses are sometimes considered in mild, stable glaucoma.
 - [Macular degeneration](@/learn/macular-degeneration.md), [diabetic eye disease](@/learn/diabetic-retinopathy.md) or a membrane on the retina
 - Significant [dry eye](@/learn/what-is-dry-eye.md) or corneal disease such as [Fuchs dystrophy](@/learn/fuchs-dystrophy.md) or [keratoconus](@/learn/keratoconus.md)
-- Previous laser vision correction (LASIK or PRK), where the lens power is harder to predict (a light adjustable lens is one answer to that)
+- Previous laser vision correction (LASIK or PRK), where the lens power is harder to predict (a light adjustable lens is one answer to that). It also matters which way the eye was treated: after treatment for nearsightedness an extended depth lens can work well, while after treatment for farsightedness multifocal lenses are usually avoided. The lens design is matched to how the cornea was reshaped.
 - A lazy eye (amblyopia), which gains little from a lens that splits focus
 - A lot of night driving, or work that needs the sharpest possible contrast
 

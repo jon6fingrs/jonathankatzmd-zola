@@ -65,6 +65,7 @@ test('the light adjustable lens follows its labeling', () => {
   }
   assert.strictEqual(verdict({ ...base, adjust: 'no' }, 'lal'), 'avoid');
   assert.strictEqual(verdict({ ...base, adjust: 'yes', refractive: 'lasik' }, 'lal'), 'good');
+  assert.strictEqual(verdict({ ...base, adjust: 'yes', refractive: 'hyperopic' }, 'lal'), 'good');
   assert.strictEqual(verdict({ ...base, adjust: 'yes', refractive: 'rk' }, 'lal'), 'good');
 });
 
@@ -167,8 +168,8 @@ test('the light adjustable lens is a good fit for sharp distance, near, or monov
 });
 
 test('past LASIK or PRK makes multifocals possible and leaves extended depth a good fit; past RK rules multifocals out', () => {
-  assert.strictEqual(verdict({ ...base, glasses: 'computer', refractive: 'lasik' }, 'edof'), 'good');
-  assert.strictEqual(verdict({ ...base, glasses: 'none', refractive: 'lasik' }, 'multifocal'), 'possible');
+  assert.strictEqual(verdict({ ...base, glasses: 'computer', refractive: 'myopic' }, 'edof'), 'good');
+  assert.strictEqual(verdict({ ...base, glasses: 'none', refractive: 'myopic' }, 'multifocal'), 'possible');
   assert.strictEqual(verdict({ ...base, glasses: 'none', refractive: 'rk' }, 'multifocal'), 'avoid');
   assert.match(T.pick({ ...base, refractive: 'rk' }).notes.join(' '), /records/);
 });
@@ -215,4 +216,19 @@ test('an only seeing eye rules out monovision but not multifocal or extended dep
 test('both eyes changes nothing', () => {
   const before = T.pick({ ...base, glasses: 'none' }).lenses.map((l) => l.verdict);
   assert.deepStrictEqual(T.pick({ ...base, glasses: 'none', eyes: 'both' }).lenses.map((l) => l.verdict), before);
+});
+
+test('after LASIK or PRK for farsightedness, a multifocal is not advised and extended depth is only possible', () => {
+  const a = { ...base, glasses: 'computer', refractive: 'hyperopic' };
+  assert.strictEqual(verdict(a, 'edof'), 'possible');
+  assert.strictEqual(verdict({ ...a, glasses: 'none' }, 'multifocal'), 'avoid');
+  assert.match(T.pick(a).notes.join(' '), /positive spherical aberration/);
+  assert.match(T.pick({ ...a, refractive: 'myopic' }).notes.join(' '), /negative spherical aberration/);
+});
+
+test('LASIK or PRK, not sure which: extended depth and multifocal both possible', () => {
+  const a = { ...base, glasses: 'computer', refractive: 'lasik' };
+  assert.strictEqual(verdict(a, 'edof'), 'possible');
+  assert.strictEqual(verdict({ ...a, glasses: 'none' }, 'multifocal'), 'possible');
+  assert.match(T.pick(a).notes.join(' '), /records/);
 });
