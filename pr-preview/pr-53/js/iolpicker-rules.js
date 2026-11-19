@@ -78,7 +78,8 @@
   // answers: { glasses: 'readers' | 'near' | 'computer' | 'none',
   //   night: '' | 'some' | 'yes' (glare at night: fine / a little is OK / any would bother; true means 'yes'),
   //   monovision: 'liked' | 'disliked' | 'never', adjust: 'yes' | 'no' | '',
-  //   astig: 'little' | 'more' | 'no' | 'unknown', refractive: 'no' | 'lasik' | 'rk',
+  //   astig: 'little' | 'more' | 'no' | 'unknown',
+  //   refractive: 'no' | 'myopic' | 'hyperopic' | 'lasik' (LASIK or PRK, not sure which) | 'rk',
   //   eyes: 'both' | 'one' (only one eye having surgery) | 'only' (an only seeing eye),
   //   conditions: { id: true } }
   function pick(a) {
@@ -181,9 +182,18 @@
       say('multifocal', 'possible', 'With only one seeing eye, there is no other eye to make up for halos or lower contrast.');
       say('edof', 'possible', 'With only one seeing eye, there is no other eye to make up for any halos or lower contrast.');
     }
-    if (a.refractive === 'lasik') {
+    var lasik = a.refractive === 'myopic' || a.refractive === 'hyperopic' || a.refractive === 'lasik';
+    if (a.refractive === 'myopic') {
       say('multifocal', 'possible', 'After LASIK or PRK the lens power is harder to predict, and the reshaped cornea can add to halos.');
-      say('edof', 'good', 'Often a good choice after LASIK or PRK, with fewer halos than a multifocal on a reshaped cornea. The lens power is harder to predict, so glasses or a small touch-up may be needed.');
+      say('edof', 'good', 'Often a good choice after LASIK or PRK for nearsightedness, with fewer halos than a multifocal on a reshaped cornea. The lens power is harder to predict, so glasses or a small touch-up may be needed.');
+    } else if (a.refractive === 'hyperopic') {
+      say('multifocal', 'avoid', 'After LASIK or PRK for farsightedness, the reshaped cornea adds blur and halos that a multifocal cannot make up for.');
+      say('edof', 'possible', 'Less predictable after LASIK or PRK for farsightedness; whether it can work depends on the corneal measurements.');
+    } else if (a.refractive === 'lasik') {
+      say('multifocal', 'possible', 'After LASIK or PRK the lens power is harder to predict, and the reshaped cornea can add to halos.');
+      say('edof', 'possible', 'Often a good choice after LASIK or PRK for nearsightedness, less so after treatment for farsightedness; your records or corneal scans will show which you had.');
+    }
+    if (lasik) {
       say('lal', 'good', 'After LASIK or PRK the power is harder to predict; this lens can be adjusted afterward.');
     } else if (a.refractive === 'rk') {
       say('multifocal', 'avoid', 'After RK the cornea is irregular and vision can change through the day; a multifocal makes both worse.');
@@ -246,7 +256,9 @@
     if (has('amblyopia')) notes.push('A lens implant cannot fix a lazy eye: vision in that eye after surgery is usually about what it was with glasses before the cataract.');
     if (a.eyes === 'one') notes.push('With surgery in one eye only, the lens is chosen to work with the other eye. If the other eye needs strong glasses, the new eye is often set to match it; otherwise a contact lens may be needed to balance the two, or it may be worth having surgery on both eyes.');
     if (a.eyes === 'only') notes.push('Surgery on an only seeing eye is planned with extra care. Ask your surgeon how they approach it.');
-    if (a.refractive === 'lasik' || a.refractive === 'rk') notes.push('If you have the records of your ' + (a.refractive === 'rk' ? 'RK' : 'LASIK or PRK') + ' (the prescription before it, if nothing else), bring them: they help choose the lens power.');
+    if (a.refractive === 'myopic') notes.push('After LASIK or PRK for nearsightedness, a lens designed to offset the optics of the flattened cornea (one with negative spherical aberration) is usually chosen.');
+    if (a.refractive === 'hyperopic') notes.push('After LASIK or PRK for farsightedness, a lens with no or positive spherical aberration is usually chosen to suit the steepened cornea.');
+    if (lasik || a.refractive === 'rk') notes.push('If you have the records of your ' + (a.refractive === 'rk' ? 'RK' : 'LASIK or PRK') + ' (the prescription before it, if nothing else), bring them: they help choose the lens power.');
     if (has('dryeye')) notes.push('Treat dry eye before the measurements for surgery; it can throw them off.');
     if (has('other')) notes.push('Many other conditions affect the choice of lens. Your surgeon will take them into account.');
     notes.push('Lenses beyond a standard monofocal, toric versions and laser-assisted surgery may involve an out-of-pocket expense. It varies, so ask the surgeon’s office.');
