@@ -224,16 +224,25 @@
 
   /*
    * Split the schedule into periods with the same daily routine. The
-   * routine changes when a taper steps down; ordinary stop dates don't
-   * start a new period (the drop list says when each one stops).
+   * routine changes when a taper steps down, and the day after a drop's
+   * last day while other drops go on, so the printed routine never lists a
+   * drop the patient has already stopped.
    * Returns [{ start, end (Date | null = open), segs: [active at start] }];
    * one open period when nothing is tapered.
    */
   function periods(segs, today) {
     var seen = {}, cuts = [];
+    function cut(day) {
+      var t = day.getTime();
+      if (day > today && !seen[t]) { seen[t] = true; cuts.push(day); }
+    }
     segs.forEach(function (s) {
-      var t = s.start.getTime();
-      if (s.taper && s.start > today && !seen[t]) { seen[t] = true; cuts.push(s.start); }
+      if (s.taper) cut(s.start);
+      // a drop that stops while others go on: the routine changes the next day
+      if (s.end) {
+        var next = addDays(s.end, 1);
+        if (segs.some(function (o) { return o !== s && o.start <= next && (!o.end || o.end >= next); })) cut(next);
+      }
     });
     cuts.sort(function (a, b) { return a - b; });
     var starts = [today].concat(cuts);

@@ -64,7 +64,8 @@ test('a different taper in each eye', () => {
   assert.deepEqual(p.questions, []);
   assert.deepEqual(dosesOn(p.segs, d('2026-10-24')), { [PRED + '|R']: 2, [PRED + '|L']: 2 });
   assert.deepEqual(dosesOn(p.segs, d('2026-10-27')), { [PRED + '|R']: 2, [PRED + '|L']: 1 });
-  assert.equal(P.periods(p.segs, TODAY).length, 3);   // Oct 16, Oct 23, Oct 26
+  // Oct 16, Oct 23, Oct 26, and Oct 30 when the right eye has finished
+  assert.deepEqual(P.periods(p.segs, TODAY).map(x => x.start.toISOString().slice(5, 10)), ['10-16', '10-23', '10-26', '10-30']);
 });
 
 test('taper ending in an ongoing dose', () => {
@@ -100,7 +101,8 @@ test('same drug in different eyes, or different drugs, are not a taper', () => {
   const p = P.plan([row(4, 'Right Eye', '2026-10-22'), row(2, 'Left Eye', '2026-10-29'), row(2, 'Right Eye', '2026-10-29', 'Ketorolac')], TODAY);
   assert.deepEqual(p.questions, []);
   assert.ok(p.segs.every(s => s.start.getTime() === TODAY.getTime()));
-  assert.equal(P.periods(p.segs, TODAY).length, 1);
+  // no taper, but the routine still changes when the right-eye Pred stops
+  assert.deepEqual(P.periods(p.segs, TODAY).map(x => x.start.toISOString().slice(5, 10)), ['10-16', '10-23']);
 });
 
 test('past stop dates are reported; reopening mid-taper starts at the current step', () => {
@@ -292,4 +294,29 @@ test('calendar: a dose after midnight is on the next date', () => {
   assert.deepEqual(ics.match(/DTSTART:[^\r]*/g), ['DTSTART:20261025T023000', 'DTSTART:20261024T235500']);
   assert.deepEqual(ics.match(/DTEND:[^\r]*/g), ['DTEND:20261025T024000', 'DTEND:20261024T235900']);
   assert.match(ics, /UNTIL=20261031T235959/);
+});
+
+test('a drop that stops while others go on gets a routine without it', () => {
+  // Pred 1x/day for a week alongside two ongoing glaucoma drops
+  const p = P.plan([row(2, 'Right Eye', '', 'Combigan'), row(2, 'Right Eye', '', 'Simbrinza'), row(1, 'Right Eye', '2026-10-22')], TODAY);
+  const per = P.periods(p.segs, TODAY);
+  assert.deepEqual(per.map(x => x.start.toISOString().slice(5, 10)), ['10-16', '10-23']);
+  assert.equal(per[0].end.toISOString().slice(0, 10), '2026-10-22');
+  assert.equal(per[1].end, null);
+  assert.ok(per[0].segs.some(s => s.entry.generic === PRED));
+  assert.ok(!per[1].segs.some(s => s.entry.generic === PRED));
+});
+
+test('a taper that ends while other drops go on: each step, then a routine without it', () => {
+  const p = P.plan([row(2, 'Right Eye', '', 'Combigan'), row(2, 'Right Eye', '2026-10-22'), row(1, 'Right Eye', '2026-10-29')], TODAY);
+  const per = P.periods(p.segs, TODAY);
+  assert.deepEqual(per.map(x => x.start.toISOString().slice(5, 10)), ['10-16', '10-23', '10-30']);
+  assert.equal(per[1].end.toISOString().slice(0, 10), '2026-10-29');   // the last step has an end, not "from"
+  assert.equal(per[2].end, null);
+  assert.ok(!per[2].segs.some(s => s.entry.generic === PRED));
+});
+
+test('a drop that stops with nothing else going on does not add an empty routine', () => {
+  const p = P.plan([row(1, 'Right Eye', '2026-10-22')], TODAY);
+  assert.equal(P.periods(p.segs, TODAY).length, 1);
 });
