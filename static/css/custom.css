@@ -1209,8 +1209,6 @@ input[type="date"]::-webkit-date-and-time-value { text-align: left; }
 .jk-page--article .jk-page__body .jk-iolp__grphint, .jk-iolp__grphint { margin: -.4rem 0 .6rem; font-size: .92rem; color: var(--jk-muted); }
 .jk-page--article .jk-page__body .jk-iolp__none, .jk-iolp__none { margin: 0 0 .8rem; font-weight: 500; }
 .jk-iolp__grp--possible .jk-tears__card { border-left-color: #c48a1a; }
-.jk-iolp__grp--avoid .jk-tears__card { border-left-color: #9aa3ad; }
-.jk-iolp__grp--avoid .jk-iolp__card strong a { color: var(--jk-muted); }
 .jk-iolp__card strong a { text-decoration: none; }
 .jk-iolp__card strong a:hover { text-decoration: underline; }
 .jk-iolp__tags { display: inline-flex; flex-wrap: wrap; gap: .3rem; vertical-align: middle; }
@@ -1219,49 +1217,72 @@ input[type="date"]::-webkit-date-and-time-value { text-align: left; }
 .jk-iolp__why li { margin-bottom: .2rem; }
 @media print { .jk-iolp__conds { break-inside: avoid; } .jk-iolp__conds:not([open]) { display: none; } .jk-iolp__card { break-inside: avoid; } .jk-iolp__grp .jk-tears__head, .jk-iolp__grphint { break-after: avoid; } }
 
+/* lens picker: live summary, shared tags, not-advised list */
+.jk-page--article .jk-page__body .jk-iolp__summary, .jk-iolp__summary { margin: 1rem 0 0; padding: .6rem .8rem; border-radius: 8px; background: var(--jk-bg); border: 1px solid var(--jk-line); font-size: .95rem; line-height: 1.45; }
+.jk-iolp__summary span { color: var(--jk-muted); }
+.jk-iolp__summary a { white-space: nowrap; font-weight: 500; }
+.jk-iolp .jk-tears__out:focus { outline: none; }
+.jk-page--article .jk-page__body .jk-iolp__shared, .jk-iolp__shared { margin: 0 0 .9rem; display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; font-size: .92rem; }
+.jk-iolp__shared > span:first-child { color: var(--jk-muted); margin-right: .2rem; }
+.jk-page--article .jk-page__body .jk-iolp__avoid, .jk-iolp__avoid { margin: .2rem 0 0; padding-left: 1.1rem; font-size: .95rem; color: var(--jk-muted); }
+.jk-iolp__avoid li { margin-bottom: .35rem; }
+.jk-iolp__avoid a { font-weight: 600; }
+@media print { .jk-iolp__summary { display: none; } }
+
 /* Lens picker one-page summary (static/js/iolpicker.js): built on demand and
    appended to <body>; prints alone while html.jk-iolp-printing is set */
 .jk-page--article .jk-page__body .jk-iolp__printrow, .jk-iolp__printrow { margin: 1rem 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .7rem; }
 .jk-iolp__printrow span { color: var(--jk-muted); font-size: .92rem; }
+/* the sheet is styled the same on screen and paper, so iolpicker.js can
+   measure it (.is-measuring, off-screen at the printed width) and pick a type
+   size that fits one Letter page: normal, .is-long, or .is-tight */
 .jk-iolp-sheet { display: none; }
+.jk-iolp-sheet.is-measuring { display: block; position: absolute; left: -10000px; top: 0; width: 7.3in; visibility: hidden; }
 @media print {
   .jk-iolp__printrow { display: none !important; }
   html.jk-iolp-printing body > * { display: none !important; }
   html.jk-iolp-printing body > .jk-iolp-sheet { display: block !important; }
-  .jk-iolp-sheet { color: #000; font-size: 9.5pt; line-height: 1.3; font-variant-ligatures: none; }
-  .jk-iolp-sheet * { color: #000 !important; }
-  .jk-iolp-sheet .jk-printhead { margin: 0 0 .5rem; padding-bottom: .35rem; }
-  .jk-iolp-sheet .jk-printhead__name { font-size: 17pt; }
-  .jk-iolp-sheet .jk-printhead__sub { font-size: 9pt; margin-top: .1rem; }
-  .jk-iolp-sheet h1 { font-family: var(--jk-body); font-size: 13.5pt; font-weight: 700; margin: .2rem 0 .35rem; }
-  .jk-iolp-sheet h2 { font-family: var(--jk-body); font-size: 10.5pt; font-weight: 700; margin: .55rem 0 .25rem; padding-bottom: .1rem; border-bottom: 1px solid #000; }
-  .jk-iolp-sheet p { margin: 0; }
-  .jk-iolp-sheet i { display: inline-block; border-bottom: 1px solid #000; min-width: 1.6in; height: 1em; vertical-align: baseline; font-style: normal; }
-  .jk-iolp-sheet__box { display: inline-block; width: .8em; height: .8em; border: 1px solid #000; vertical-align: -.05em; margin-left: .15em; }
-  .jk-iolp-sheet__fill, .jk-iolp-sheet__plan p { display: flex; flex-wrap: wrap; gap: .3rem 1.4rem; margin: .25rem 0; }
-  .jk-iolp-sheet__fill i { min-width: 2in; }
-  .jk-iolp-sheet__ans { display: grid; grid-template-columns: 1fr 1fr; gap: .1rem 1.2rem; margin: 0; }
-  .jk-iolp-sheet__ans > div { display: flex; gap: .4rem; }
-  .jk-iolp-sheet__ans dt { font-weight: 600; flex: 0 0 auto; }
-  .jk-iolp-sheet__ans dt::after { content: ":"; }
-  .jk-iolp-sheet__ans dd { margin: 0; }
-  .jk-iolp-sheet__wide { grid-column: 1 / -1; }
-  .jk-iolp-sheet__cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 .9rem; }
-  .jk-iolp-sheet__lens { margin: 0 0 .35rem; break-inside: avoid; }
-  .jk-iolp-sheet__lens b { display: block; }
-  .jk-iolp-sheet__tags { display: block; font-size: 8.5pt; font-style: italic; }
-  .jk-iolp-sheet__lens p, .jk-iolp-sheet__none { font-size: 9pt; }
-  .jk-iolp-sheet__notes { margin: 0; padding-left: 1.1rem; font-size: 9pt; columns: 2; column-gap: 1.6rem; }
-  .jk-iolp-sheet__notes li { margin: 0 0 .15rem; break-inside: avoid; }
-  .jk-iolp-sheet.is-long { font-size: 8.5pt; line-height: 1.25; }
-  .jk-iolp-sheet.is-long .jk-iolp-sheet__lens p, .jk-iolp-sheet.is-long .jk-iolp-sheet__notes { font-size: 8pt; }
-  .jk-iolp-sheet.is-long .jk-printhead__name { font-size: 15pt; }
-  .jk-iolp-sheet.is-long h2 { margin-top: .4rem; }
-  .jk-iolp-sheet__plan { border: 1px solid #000; padding: .1rem .6rem .35rem; margin-top: .6rem; break-inside: avoid; }
-  .jk-iolp-sheet__plan h2 { border: 0; margin-top: .3rem; }
-  .jk-iolp-sheet__plan i { min-width: 2.4in; }
-  .jk-iolp-sheet__foot { margin-top: .5rem !important; font-size: 8pt; }
 }
+.jk-iolp-sheet .jk-printhead { display: block; text-align: center; border-bottom: 2px solid #000; }
+.jk-iolp-sheet .jk-printhead__name { font-family: var(--jk-display); font-weight: 400; text-transform: uppercase; letter-spacing: .03em; line-height: 1.1; }
+.jk-iolp-sheet { color: #000; font-size: 9.5pt; line-height: 1.3; font-variant-ligatures: none; }
+.jk-iolp-sheet * { color: #000 !important; }
+.jk-iolp-sheet .jk-printhead { margin: 0 0 .5rem; padding-bottom: .35rem; }
+.jk-iolp-sheet .jk-printhead__name { font-size: 17pt; }
+.jk-iolp-sheet .jk-printhead__sub { font-size: 9pt; margin-top: .1rem; }
+.jk-iolp-sheet h1 { font-family: var(--jk-body); font-size: 13.5pt; font-weight: 700; margin: .2rem 0 .35rem; }
+.jk-iolp-sheet h2 { font-family: var(--jk-body); font-size: 10.5pt; font-weight: 700; margin: .55rem 0 .25rem; padding-bottom: .1rem; border-bottom: 1px solid #000; }
+.jk-iolp-sheet p { margin: 0; }
+.jk-iolp-sheet i { display: inline-block; border-bottom: 1px solid #000; min-width: 1.6in; height: 1em; vertical-align: baseline; font-style: normal; }
+.jk-iolp-sheet__box { display: inline-block; width: .8em; height: .8em; border: 1px solid #000; vertical-align: -.05em; margin-left: .15em; }
+.jk-iolp-sheet__fill, .jk-iolp-sheet__plan p { display: flex; flex-wrap: wrap; gap: .3rem 1.4rem; margin: .25rem 0; }
+.jk-iolp-sheet__fill i { min-width: 2in; }
+.jk-iolp-sheet__ans { display: grid; grid-template-columns: 1fr 1fr; gap: .1rem 1.2rem; margin: 0; }
+.jk-iolp-sheet__ans > div { display: flex; gap: .4rem; }
+.jk-iolp-sheet__ans dt { font-weight: 600; flex: 0 0 auto; }
+.jk-iolp-sheet__ans dt::after { content: ":"; }
+.jk-iolp-sheet__ans dd { margin: 0; }
+.jk-iolp-sheet__wide { grid-column: 1 / -1; }
+.jk-iolp-sheet__cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 .9rem; }
+.jk-iolp-sheet__lens { margin: 0 0 .35rem; break-inside: avoid; }
+.jk-iolp-sheet__lens b { display: block; }
+.jk-iolp-sheet__tags { display: block; font-size: 8.5pt; font-style: italic; }
+.jk-iolp-sheet__lens p, .jk-iolp-sheet__none { font-size: 9pt; }
+.jk-iolp-sheet__notes { margin: 0; padding-left: 1.1rem; font-size: 9pt; columns: 2; column-gap: 1.6rem; }
+.jk-iolp-sheet__notes li { margin: 0 0 .15rem; break-inside: avoid; }
+.jk-iolp-sheet.is-long { font-size: 8.5pt; line-height: 1.25; }
+.jk-iolp-sheet.is-long .jk-iolp-sheet__lens p, .jk-iolp-sheet.is-long .jk-iolp-sheet__notes { font-size: 8pt; }
+.jk-iolp-sheet.is-long .jk-printhead__name { font-size: 15pt; }
+.jk-iolp-sheet.is-long h2 { margin-top: .4rem; }
+.jk-iolp-sheet__plan { border: 1px solid #000; padding: .1rem .6rem .35rem; margin-top: .6rem; break-inside: avoid; }
+.jk-iolp-sheet__plan h2 { border: 0; margin-top: .3rem; }
+.jk-iolp-sheet__plan i { min-width: 2.4in; }
+.jk-iolp-sheet__shared { margin: .45rem 0 0; }
+.jk-iolp-sheet__foot { margin-top: .5rem !important; font-size: 8pt; }
+.jk-iolp-sheet.is-tight { font-size: 8pt; line-height: 1.2; }
+.jk-iolp-sheet.is-tight .jk-iolp-sheet__lens p, .jk-iolp-sheet.is-tight .jk-iolp-sheet__notes, .jk-iolp-sheet.is-tight .jk-iolp-sheet__tags { font-size: 7.5pt; }
+.jk-iolp-sheet.is-tight h2 { margin-top: .3rem; }
+.jk-iolp-sheet.is-tight .jk-iolp-sheet__plan { margin-top: .4rem; }
 
 /* Amsler grid (learn/macular-degeneration, static/js/amsler.js) */
 .jk-amsler { margin: 1.5rem 0 2rem; background: #fff; border: 1px solid var(--jk-line); border-radius: 10px; padding: 1rem; text-align: center; }

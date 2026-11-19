@@ -5,7 +5,11 @@
  * The rules are in iolpicker-rules.js, which is tested.
  *
  * The questions are built once; only the result is redrawn, so the open
- * checklist and focus stay put.
+ * checklist and focus stay put. A one-line summary under the questions
+ * (the only live region) shows the outcome without scrolling and links to
+ * the details. Tags every recommended lens shares are shown once above the
+ * cards; lenses usually not advised are a short list, not cards. "Start
+ * over" clears the answers between patients.
  *
  * "Print a one-page summary" builds a separate sheet (letterhead from the
  * page's hidden .jk-iolp__head, blank lines for name and eye, the answers,
@@ -34,7 +38,10 @@
     possible: ['Possible, with trade-offs', 'Could work; the reasons say what to weigh.'],
     avoid: ['Usually not advised', 'Something in your answers argues against these.']
   };
-  var state = { glasses: 'readers', night: '', monovision: 'never', adjust: '', astig: 'unknown', refractive: 'no', eyes: 'both', conditions: {} };
+  var DEFAULTS = { glasses: 'readers', night: '', monovision: 'never', adjust: '', astig: 'unknown', refractive: 'no', eyes: 'both' };
+  var state = {};
+  function reset() { Object.keys(DEFAULTS).forEach(function (k) { state[k] = DEFAULTS[k]; }); state.conditions = {}; }
+  reset();
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
@@ -53,10 +60,11 @@
     });
     h += '</fieldset>';
   });
-  h += '</details></div><div class="jk-tears__out" id="jk-iolp-out" aria-live="polite"></div>';
+  h += '</details></div><p class="jk-iolp__summary" id="jk-iolp-sum" aria-live="polite"></p><div class="jk-tears__out" id="jk-iolp-out" tabindex="-1"></div>';
   root.innerHTML = h;
   var out = document.getElementById('jk-iolp-out');
   var count = document.getElementById('jk-iolp-count');
+  var sum = document.getElementById('jk-iolp-sum');
 
   function tagsFor(l) {
     var tags = [];
@@ -67,6 +75,13 @@
     if (l.extra || l.toric || l.laser) tags.push('often extra cost');
     return tags;
   }
+  // tags that every recommended lens (good or possible) carries, shown once
+  function sharedTags(res) {
+    var ls = res.groups[0].lenses.concat(res.groups[1].lenses);
+    if (ls.length < 2) return [];
+    return tagsFor(ls[0]).filter(function (t) { return ls.every(function (l) { return tagsFor(l).indexOf(t) >= 0; }); });
+  }
+  function names(ls) { return ls.map(function (l) { return l.name; }).join(', '); }
   function answers() {
     return { glasses: state.glasses, night: state.night, monovision: state.monovision, adjust: state.adjust, astig: state.astig, refractive: state.refractive, eyes: state.eyes, conditions: state.conditions };
   }
@@ -79,14 +94,25 @@
     var n = Object.keys(state.conditions).length;
     count.textContent = n ? '(' + n + ' checked)' : '(none checked)';
     var res = R.pick(answers());
+    var good = res.groups[0].lenses, maybe = res.groups[1].lenses, avoid = res.groups[2].lenses;
+    sum.innerHTML = (good.length ? '<b>Good fits:</b> ' + esc(names(good)) : '<b>No lens fits everything you want.</b>') +
+      ' <span>\u00b7 Possible: ' + maybe.length + ' \u00b7 Not advised: ' + avoid.length + '</span> <a href="#jk-iolp-out" data-jump>See details</a>';
+    var shared = sharedTags(res);
     var o = '';
-    if (!res.groups[0].lenses.length) o += '<p class="jk-iolp__none">No lens fits everything you want. The trade-offs below are the ones to talk through with your surgeon.</p>';
+    if (!good.length) o += '<p class="jk-iolp__none">No lens fits everything you want. The trade-offs below are the ones to talk through with your surgeon.</p>';
+    if (shared.length) o += '<p class="jk-iolp__shared"><span>All recommended lenses:</span> ' + shared.map(function (t) { return '<span class="jk-iolp__tag">' + esc(t) + '</span>'; }).join('') + '</p>';
     res.groups.forEach(function (g) {
       if (!g.lenses.length) return;
+      if (g.verdict === 'avoid') {
+        o += '<div class="jk-iolp__grp jk-iolp__grp--avoid"><h3 class="jk-tears__head">' + HEADS.avoid[0] + '</h3><ul class="jk-iolp__avoid">';
+        g.lenses.forEach(function (l) { o += '<li><a href="#' + l.anchor + '">' + esc(l.name) + '</a>: ' + esc(l.why[0] || '') + '</li>'; });
+        o += '</ul></div>';
+        return;
+      }
       o += '<div class="jk-iolp__grp jk-iolp__grp--' + g.verdict + '"><h3 class="jk-tears__head">' + HEADS[g.verdict][0] + '</h3><p class="jk-iolp__grphint">' + HEADS[g.verdict][1] + '</p><div class="jk-tears__cards">';
       g.lenses.forEach(function (l) {
         o += '<div class="jk-tears__card jk-iolp__card"><strong><a href="#' + l.anchor + '">' + esc(l.name) + '</a></strong>';
-        var tags = tagsFor(l);
+        var tags = tagsFor(l).filter(function (t) { return shared.indexOf(t) < 0; });
         if (tags.length) o += ' <span class="jk-iolp__tags">' + tags.map(function (t) { return '<span class="jk-iolp__tag">' + esc(t) + '</span>'; }).join('') + '</span>';
         o += '<p>' + esc(l.what) + '</p>';
         if (l.why.length) o += '<ul class="jk-iolp__why">' + l.why.map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('') + '</ul>';
@@ -95,7 +121,7 @@
       o += '</div></div>';
     });
     o += '<ul class="jk-tears__notes">' + res.notes.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>';
-    o += '<p class="jk-iolp__printrow"><button type="button" class="btn btn-outline-primary" id="jk-iolp-print">Print a one-page summary</button> <span>for the patient or the chart</span></p>';
+    o += '<p class="jk-iolp__printrow"><button type="button" class="btn btn-outline-primary" id="jk-iolp-print">Print a one-page summary</button> <button type="button" class="btn btn-outline-secondary" id="jk-iolp-reset">Start over</button></p>';
     out.innerHTML = o;
   }
 
@@ -116,12 +142,14 @@
     var conds = [];
     R.CONDITIONS.forEach(function (g) { g.items.forEach(function (it) { if (state.conditions[it[0]]) conds.push(it[1]); }); });
     s += '<div class="jk-iolp-sheet__wide"><dt>Eye conditions</dt><dd>' + esc(conds.length ? conds.join('; ') : 'None checked') + '</dd></div></dl>';
+    var shared = sharedTags(res);
+    if (shared.length) s += '<p class="jk-iolp-sheet__shared"><b>All recommended lenses:</b> ' + esc(shared.join(' \u00b7 ')) + '</p>';
     s += '<div class="jk-iolp-sheet__cols">';
     res.groups.forEach(function (g) {
       s += '<div><h2>' + HEADS[g.verdict][0] + '</h2>';
       if (!g.lenses.length) s += '<p class="jk-iolp-sheet__none">None</p>';
       g.lenses.forEach(function (l) {
-        var tags = tagsFor(l);
+        var tags = g.verdict === 'avoid' ? [] : tagsFor(l).filter(function (t) { return shared.indexOf(t) < 0; });
         s += '<div class="jk-iolp-sheet__lens"><b>' + box + ' ' + esc(l.name) + '</b>' +
           (tags.length ? '<span class="jk-iolp-sheet__tags">' + esc(tags.join(' \u00b7 ')) + '</span>' : '') +
           '<p>' + esc(l.why[0] || l.what) + '</p></div>';
@@ -137,9 +165,14 @@
     var el = document.getElementById('jk-iolp-sheet');
     if (!el) { el = document.createElement('div'); el.id = 'jk-iolp-sheet'; el.className = 'jk-iolp-sheet'; document.body.appendChild(el); }
     el.innerHTML = s;
-    // a long sheet (many conditions and notes) gets smaller type to stay on one page
-    var words = conds.join(' ').length + res.notes.join(' ').length;
-    el.classList.toggle('is-long', words > 900);
+    // fit one Letter page: measure at the printed width (7.3in) against the
+    // printable height (9.8in, less a little slack), stepping the type down
+    el.classList.remove('is-long', 'is-tight');
+    el.classList.add('is-measuring');
+    var limit = 9.6 * 96;
+    if (el.offsetHeight > limit) el.classList.add('is-long');
+    if (el.offsetHeight > limit) { el.classList.remove('is-long'); el.classList.add('is-tight'); }
+    el.classList.remove('is-measuring');
   }
   function printSheet() {
     sheet();
@@ -149,6 +182,20 @@
   window.addEventListener('afterprint', function () { document.documentElement.classList.remove('jk-iolp-printing'); });
   root.addEventListener('click', function (e) {
     if (e.target.closest('#jk-iolp-print')) { printSheet(); return; }
+    if (e.target.closest('#jk-iolp-reset')) {
+      reset();
+      root.querySelectorAll('.jk-iolp__check input').forEach(function (c) { c.checked = false; });
+      root.querySelector('.jk-iolp__conds').open = false;
+      render();
+      root.scrollIntoView({ block: 'start' });
+      return;
+    }
+    if (e.target.closest('[data-jump]')) {
+      e.preventDefault();
+      out.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      out.focus({ preventScroll: true });
+      return;
+    }
     var b = e.target.closest('[data-q]');
     if (!b) return;
     state[b.getAttribute('data-q')] = b.getAttribute('data-v');
