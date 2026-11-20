@@ -18,6 +18,18 @@
  * a bleb or tube shunt, trouble lying flat or still); the lens is then
  * placed with standard surgery and its verdict does not change.
  *
+ * Practice options (pick's second argument; this page passes none, which
+ * offers everything): a practice can leave out lenses it does not offer
+ * (the monofocal set for distance is always offered) and laser-assisted
+ * surgery. Lenses left out are dropped from the result, the notes only
+ * mention what is offered, and conditionsFor() and questionApplies() leave
+ * out what then no longer matters.
+ *
+ * Shared engine: the generic Lens Implant Planner (github.com/jon6fingrs/
+ * iol-picker) copies this file as it is, every day, and runs its own tests on
+ * it. Keep the options working and the file free of DOM and page-specific
+ * code. QUESTIONS lives here so both pages ask the same questions.
+ *
  * Every lens gets a verdict, 'good', 'possible' or 'avoid', with the
  * reasons. The worst reason wins. It is a starting point for a talk with the
  * surgeon, and the page says so.
@@ -46,11 +58,13 @@
   ];
 
   // The checklist, grouped. A condition's effect on each lens is in pick().
+  // A third entry lists what the condition matters to ('lal', 'laser'); it is
+  // left off the checklist when the practice offers none of them.
   var CONDITIONS = [
     { group: 'Glaucoma', items: [
       ['glaucoma-mild', 'Glaucoma, mild and stable'],
       ['glaucoma-adv', 'Glaucoma, moderate or advanced'],
-      ['bleb', 'Past trabeculectomy or tube shunt']] },
+      ['bleb', 'Past trabeculectomy or tube shunt', ['laser']]] },
     { group: 'Retina', items: [
       ['amd', 'Macular degeneration'],
       ['diabetic', 'Diabetic eye disease or swelling of the macula'],
@@ -63,17 +77,66 @@
     { group: 'Other', items: [
       ['amblyopia', 'A lazy eye (amblyopia)'],
       ['uveitis', 'Uveitis (inflammation inside the eye)'],
-      ['pupil', 'A pupil that does not dilate well (pseudoexfoliation, or medicines such as Flomax)'],
-      ['herpes', 'Herpes (cold sore virus) infection of the eye'],
-      ['nystagmus', 'Eyes that shake or wobble (nystagmus)'],
-      ['flat', 'Trouble lying flat or keeping still for a few minutes'],
-      ['photo', 'A medicine that makes you sensitive to sunlight (such as doxycycline, amiodarone or hydrochlorothiazide)'],
+      ['pupil', 'A pupil that does not dilate well (pseudoexfoliation, or medicines such as Flomax)', ['lal', 'laser']],
+      ['herpes', 'Herpes (cold sore virus) infection of the eye', ['lal']],
+      ['nystagmus', 'Eyes that shake or wobble (nystagmus)', ['lal']],
+      ['flat', 'Trouble lying flat or keeping still for a few minutes', ['laser']],
+      ['photo', 'A medicine that makes you sensitive to sunlight (such as doxycycline, amiodarone or hydrochlorothiazide)', ['lal']],
       ['other', 'Something else not listed']] }
   ];
+
+  // The questions, in order: key (the answer's name in pick()), short (its
+  // label on a printout), label, and values [answer, chip text]. DEFAULTS
+  // are the answers before anyone chooses.
+  var QUESTIONS = [
+    { key: 'glasses', short: 'Without glasses', label: 'After surgery, what would you like to do without glasses?', values: [['readers', 'See far; reading glasses are fine'], ['near', 'Read up close; glasses for distance'], ['computer', 'Far and computer or dashboard'], ['none', 'As little glasses as possible, reading too']] },
+    { key: 'night', short: 'Glare at night', label: 'How much would glare or halos around lights at night bother you?', values: [['', 'Not at all'], ['some', 'A little would be OK'], ['yes', 'Any would bother me, or I drive a lot at night']] },
+    { key: 'monovision', short: 'Monovision in contacts', label: 'Have you tried monovision with contact lenses (one eye for distance, one for near)?', values: [['never', 'Never tried'], ['liked', 'Yes, liked it'], ['disliked', 'Yes, did not like it']] },
+    { key: 'adjust', short: 'Light treatments', label: 'Would you come back for several short light treatments, and wear UV-protective glasses for a few weeks, to fine-tune the result?', values: [['', 'Not sure'], ['yes', 'Yes'], ['no', 'No']] },
+    { key: 'eyes', short: 'Eyes having surgery', label: 'Which eyes are having cataract surgery?', values: [['both', 'Both eyes'], ['one', 'Just one eye'], ['only', 'My only seeing eye']] },
+    { key: 'refractive', short: 'LASIK, PRK or RK', label: 'Have you had laser vision correction or RK?', values: [['no', 'No'], ['myopic', 'LASIK or PRK for nearsightedness'], ['hyperopic', 'LASIK or PRK for farsightedness'], ['lasik', 'LASIK or PRK, not sure which'], ['rk', 'RK (radial cuts)']] },
+    { key: 'astig', short: 'Astigmatism', label: 'Have you been told you have astigmatism?', values: [['unknown', 'Not sure'], ['no', 'No'], ['little', 'Yes, a little'], ['more', 'Yes, more than a little']] }
+  ];
+  var DEFAULTS = { glasses: 'readers', night: '', monovision: 'never', adjust: '', astig: 'unknown', refractive: 'no', eyes: 'both' };
 
   var RANK = { good: 0, possible: 1, avoid: 2 };
   // lenses placed with laser-assisted surgery whatever the astigmatism
   var LASER_LENSES = ['edof', 'multifocal', 'lal'];
+  var IDS = LENSES.map(function (l) { return l.id; });
+
+  // Practice options, cleaned up: { lenses: [ids offered], laser: bool }.
+  // The monofocal set for distance is always offered.
+  function options(o) {
+    o = o || {};
+    var offered = Array.isArray(o.lenses) ? IDS.filter(function (id) { return o.lenses.indexOf(id) >= 0; }) : IDS.slice();
+    if (offered.indexOf('distance') < 0) offered.unshift('distance');
+    return { lenses: offered, laser: o.laser !== false };
+  }
+
+  // the checklist groups with conditions that matter to nothing offered left out
+  function conditionsFor(o) {
+    o = options(o);
+    var on = { lal: o.lenses.indexOf('lal') >= 0, laser: o.laser };
+    return CONDITIONS.map(function (g) {
+      return { group: g.group, items: g.items.filter(function (it) {
+        return !it[2] || it[2].some(function (k) { return on[k]; });
+      }) };
+    }).filter(function (g) { return g.items.length; });
+  }
+
+  // which questions apply to what the practice offers
+  function questionApplies(key, o) {
+    o = options(o);
+    var has = function (id) { return o.lenses.indexOf(id) >= 0; };
+    if (key === 'adjust') return has('lal');
+    if (key === 'monovision') return has('monovision') || has('lal');
+    return true;
+  }
+
+  function list(words) {
+    if (words.length < 2) return words.join('');
+    return words.slice(0, -1).join(', ') + ' and ' + words[words.length - 1];
+  }
 
   // answers: { glasses: 'readers' | 'near' | 'computer' | 'none',
   //   night: '' | 'some' | 'yes' (glare at night: fine / a little is OK / any would bother; true means 'yes'),
@@ -82,16 +145,19 @@
   //   refractive: 'no' | 'myopic' | 'hyperopic' | 'lasik' (LASIK or PRK, not sure which) | 'rk',
   //   eyes: 'both' | 'one' (only one eye having surgery) | 'only' (an only seeing eye),
   //   conditions: { id: true } }
-  function pick(a) {
+  // opts: practice options, see options()
+  function pick(a, opts) {
     a = a || {};
+    var o = options(opts);
+    var offers = function (id) { return o.lenses.indexOf(id) >= 0; };
     var c = a.conditions || {}, has = function (k) { return !!c[k]; };
     var macula = has('amd') || has('diabetic') || has('erm');
     var out = {};
     LENSES.forEach(function (l) { out[l.id] = { verdict: 'good', why: [] }; });
     function say(id, verdict, why) {
-      var o = out[id];
-      if (RANK[verdict] > RANK[o.verdict]) o.verdict = verdict;
-      if (why) o.why.push({ verdict: verdict, text: why });
+      var r = out[id];
+      if (RANK[verdict] > RANK[r.verdict]) r.verdict = verdict;
+      if (why) r.why.push({ verdict: verdict, text: why });
     }
 
     // What you want afterward
@@ -130,8 +196,8 @@
       say('multifocal', 'avoid', 'Halos around lights at night are common, and you drive a lot at night or would be bothered by them.');
       say('edof', 'possible', 'Some designs give mild halos at night, far less than a multifocal; designs without rings give the fewest.');
     }
-    if (night) {
-      if (a.monovision !== 'disliked') say('monovision', 'good', 'No halos. Both eyes together are a little less sharp at night; some people keep glasses for night driving.');
+    if (night && a.monovision !== 'disliked') {
+      say('monovision', 'good', 'No halos. Both eyes together are a little less sharp at night; some people keep glasses for night driving.');
     }
 
     if ((a.glasses === 'none' || a.glasses === 'computer') && a.monovision !== 'disliked') {
@@ -216,26 +282,30 @@
 
     // why the laser would not be used, if anything rules it out
     var noLaser = [];
-    if (has('pupil')) noLaser.push('the pupil does not dilate enough for it');
-    if (has('scar')) noLaser.push('a corneal scar can block the laser');
-    if (has('bleb')) noLaser.push('its suction ring could press on a bleb or tube shunt');
-    if (has('flat')) noLaser.push('it needs you to lie flat and still for a few minutes');
+    if (o.laser) {
+      if (has('pupil')) noLaser.push('the pupil does not dilate enough for it');
+      if (has('scar')) noLaser.push('a corneal scar can block the laser');
+      if (has('bleb')) noLaser.push('its suction ring could press on a bleb or tube shunt');
+      if (has('flat')) noLaser.push('it needs you to lie flat and still for a few minutes');
+    }
+    // the laser is offered and nothing in the eye rules it out
+    var laserOK = o.laser && !noLaser.length;
 
-    var lenses = LENSES.map(function (l) {
-      var o = out[l.id];
+    var lenses = LENSES.filter(function (l) { return offers(l.id); }).map(function (l) {
+      var r = out[l.id];
       // the reasons that decided the verdict come first; a lens ruled out
       // keeps only the reasons against it
-      var why = o.why.filter(function (w) { return o.verdict !== 'avoid' || w.verdict === 'avoid'; })
+      var why = r.why.filter(function (w) { return r.verdict !== 'avoid' || w.verdict === 'avoid'; })
         .sort(function (x, y) { return RANK[y.verdict] - RANK[x.verdict]; }).map(function (w) { return w.text; });
-      var ok = o.verdict !== 'avoid', astig = (a.astig === 'little' || a.astig === 'more') && l.id !== 'lal';
+      var ok = r.verdict !== 'avoid', astig = (a.astig === 'little' || a.astig === 'more') && l.id !== 'lal';
       // a little astigmatism is treated with laser cuts; without the laser,
       // or with more, a toric lens
-      var toric = ok && astig && (a.astig === 'more' || noLaser.length > 0);
-      var wants = ok && (astig || LASER_LENSES.indexOf(l.id) >= 0);
-      return { id: l.id, name: l.name, anchor: l.anchor, extra: l.extra, what: l.what, verdict: o.verdict, why: why, toric: toric,
-        wantsLaser: wants, laser: wants && !noLaser.length,
+      var toric = ok && astig && (a.astig === 'more' || !laserOK);
+      var wants = o.laser && ok && (astig || LASER_LENSES.indexOf(l.id) >= 0);
+      return { id: l.id, name: l.name, anchor: l.anchor, extra: l.extra, what: l.what, verdict: r.verdict, why: why, toric: toric,
+        wantsLaser: wants, laser: wants && laserOK,
         // the laser's curved cuts treat a little astigmatism instead of a toric lens
-        laserAstig: ok && astig && a.astig === 'little' && !noLaser.length,
+        laserAstig: ok && astig && a.astig === 'little' && laserOK,
         tryFirst: l.id === 'monovision' && a.monovision === 'never' && ok };
     });
     var wouldLaser = lenses.some(function (l) { return l.wantsLaser; });
@@ -243,15 +313,22 @@
       return { verdict: v, lenses: lenses.filter(function (l) { return l.verdict === v; }) };
     });
 
+    var lal = offers('lal');
     var notes = [];
-    if (a.astig === 'more') notes.push('With more than a little astigmatism, a toric version of the lens corrects it; the light adjustable lens corrects it with its light treatments.');
-    if (a.astig === 'little' && !noLaser.length) notes.push('A little astigmatism, up to about 1 diopter, is usually corrected with small curved laser cuts in the cornea during laser-assisted surgery, without a toric lens. The light adjustable lens can also correct it with its light treatments.');
-    if (a.astig === 'little' && noLaser.length) notes.push('Without the laser, a little astigmatism is corrected with a toric version of the lens instead.');
-    if ((a.astig === 'little' || a.astig === 'more') && has('keratoconus')) notes.push('Toric lenses and laser cuts correct only regular astigmatism, so they may help less with an irregular cornea.');
-    if (a.astig === 'unknown') notes.push('Your measurements before surgery will show how much astigmatism you have: up to about 1 diopter is usually corrected with the laser, and more with a toric lens.');
-    if (wouldLaser && !noLaser.length) notes.push('Toric, extended depth, multifocal and light adjustable lenses, and laser treatment of astigmatism, go with laser-assisted surgery, which helps center the lens precisely. For most eyes, vision afterward is about the same as with standard surgery.');
+    if (a.astig === 'more') notes.push('With more than a little astigmatism, a toric version of the lens corrects it' + (lal ? '; the light adjustable lens corrects it with its light treatments.' : '.'));
+    if (a.astig === 'little' && laserOK) notes.push('A little astigmatism, up to about 1 diopter, is usually corrected with small curved laser cuts in the cornea during laser-assisted surgery, without a toric lens.' + (lal ? ' The light adjustable lens can also correct it with its light treatments.' : ''));
+    if (a.astig === 'little' && !laserOK) notes.push((o.laser ? 'Without the laser, a little astigmatism is corrected with a toric version of the lens instead.' : 'A little astigmatism is usually corrected with a toric version of the lens.') + (lal ? ' The light adjustable lens can also correct it with its light treatments.' : ''));
+    if ((a.astig === 'little' || a.astig === 'more') && has('keratoconus')) notes.push('Toric lenses' + (o.laser ? ' and laser cuts' : '') + ' correct only regular astigmatism, so they may help less with an irregular cornea.');
+    if (a.astig === 'unknown') notes.push(o.laser
+      ? 'Your measurements before surgery will show how much astigmatism you have: up to about 1 diopter is usually corrected with the laser, and more with a toric lens.'
+      : 'Your measurements before surgery will show how much astigmatism you have, and whether a toric version of the lens would help.');
+    if (wouldLaser && laserOK) {
+      var withLaser = ['toric'].concat(LASER_LENSES.filter(offers).map(function (id) { return { edof: 'extended depth', multifocal: 'multifocal', lal: 'light adjustable' }[id]; }));
+      var t = list(withLaser) + ' lenses, and laser treatment of astigmatism, go with laser-assisted surgery, which helps center the lens precisely. For most eyes, vision afterward is about the same as with standard surgery.';
+      notes.push(t.charAt(0).toUpperCase() + t.slice(1));
+    }
     if (wouldLaser && noLaser.length) notes.push('Laser-assisted surgery would not be used, because ' + noLaser.join(', and ') + '. The lens is then placed with standard surgery, which works well.');
-    if (has('fuchs') && !noLaser.length) notes.push('With Fuchs dystrophy, laser-assisted surgery can lower the ultrasound energy needed, which is gentler on the cornea. Ask whether it suits you whatever the lens.');
+    if (has('fuchs') && laserOK) notes.push('With Fuchs dystrophy, laser-assisted surgery can lower the ultrasound energy needed, which is gentler on the cornea. Ask whether it suits you whatever the lens.');
     if (has('glaucoma-mild') || has('glaucoma-adv')) notes.push('With glaucoma, a monofocal lens also keeps future visual field tests easiest to read.');
     if (has('amblyopia')) notes.push('A lens implant cannot fix a lazy eye: vision in that eye after surgery is usually about what it was with glasses before the cataract.');
     if (a.eyes === 'one') notes.push('With surgery in one eye only, the lens is chosen to work with the other eye. If the other eye needs strong glasses, the new eye is often set to match it; otherwise a contact lens may be needed to balance the two, or it may be worth having surgery on both eyes.');
@@ -261,9 +338,10 @@
     if (lasik || a.refractive === 'rk') notes.push('If you have the records of your ' + (a.refractive === 'rk' ? 'RK' : 'LASIK or PRK') + ' (the prescription before it, if nothing else), bring them: they help choose the lens power.');
     if (has('dryeye')) notes.push('Treat dry eye before the measurements for surgery; it can throw them off.');
     if (has('other')) notes.push('Many other conditions affect the choice of lens. Your surgeon will take them into account.');
-    notes.push('Lenses beyond a standard monofocal, toric versions and laser-assisted surgery may involve an out-of-pocket expense. It varies, so ask the surgeon’s office.');
+    notes.push('Lenses beyond a standard monofocal, toric versions' + (o.laser ? ' and laser-assisted surgery' : '') + ' may involve an out-of-pocket expense. It varies, so ask the surgeon’s office.');
     return { groups: groups, lenses: lenses, notes: notes };
   }
 
-  return { pick: pick, LENSES: LENSES, CONDITIONS: CONDITIONS };
+  return { pick: pick, options: options, conditionsFor: conditionsFor, questionApplies: questionApplies,
+    LENSES: LENSES, CONDITIONS: CONDITIONS, QUESTIONS: QUESTIONS, DEFAULTS: DEFAULTS };
 });
