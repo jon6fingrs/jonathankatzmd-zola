@@ -335,3 +335,14 @@ test('timolol defaults to once a day in the morning; other glaucoma drops once a
   assert.equal(def('Brimonidine 0.1%'), 2);
   assert.equal(def('Acetazolamide 500 mg ER Capsule'), 'qam');
 });
+
+test('five-minute spacing is only between drops in the same eye', () => {
+  // Simbrinza both eyes, then latanoprost left and Rocklatan right: the two go in together
+  assert.deepEqual(P.staggerSteps([['R', 'L'], ['L'], ['R']]), [0, 1, 1]);
+  // one drop per eye at bedtime: no wait at all
+  assert.deepEqual(P.staggerSteps([['L'], ['R']]), [0, 0]);
+  // same eye still waits
+  assert.deepEqual(P.staggerSteps([['R'], ['R'], ['R']]), [0, 1, 2]);
+  // a later drop fills an earlier gap in the other eye
+  assert.deepEqual(P.staggerSteps([['R'], ['R'], ['L']]), [0, 1, 0]);
+});
