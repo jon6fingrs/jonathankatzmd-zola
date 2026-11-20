@@ -37,10 +37,17 @@ test('macular disease, moderate glaucoma, corneal disease and keratoconus rule o
   }
 });
 
-test('mild glaucoma rules out a multifocal but leaves extended depth possible', () => {
+test('mild glaucoma rules out a multifocal but leaves extended depth where the wishes put it, with a note on the design', () => {
   const a = { ...base, glasses: 'computer', conditions: cond('glaucoma-mild') };
   assert.strictEqual(verdict(a, 'multifocal'), 'avoid');
-  assert.strictEqual(verdict(a, 'edof'), 'possible');
+  assert.strictEqual(verdict(a, 'edof'), 'good');
+  assert.strictEqual(verdict({ ...a, glasses: 'readers' }, 'edof'), 'possible');
+  assert.match(T.pick(a).notes.join(' '), /design without rings/);
+  // moderate or advanced glaucoma still rules it out, and the note goes
+  const adv = { ...a, conditions: cond('glaucoma-mild', 'glaucoma-adv') };
+  assert.strictEqual(verdict(adv, 'edof'), 'avoid');
+  assert.doesNotMatch(T.pick(adv).notes.join(' '), /design without rings/);
+  assert.doesNotMatch(T.pick(a, { lenses: ['distance'] }).notes.join(' '), /design without rings/);
 });
 
 test('night driving or a lazy eye rules out a multifocal', () => {
