@@ -320,3 +320,29 @@ test('a drop that stops with nothing else going on does not add an empty routine
   const p = P.plan([row(1, 'Right Eye', '2026-10-22')], TODAY);
   assert.equal(P.periods(p.segs, TODAY).length, 1);
 });
+
+test('timolol defaults to once a day in the morning; other glaucoma drops once a day at bedtime', () => {
+  const data = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'static', 'data', 'eye-drops.json'), 'utf8'));
+  const by = Object.fromEntries(data.map((x) => [x.generic, x]));
+  const oral = (x) => x.color === 'Tablet' || x.color === 'Capsule';
+  const def = (g) => P.defaultTimes(by[g], oral(by[g]));
+  assert.equal(def('Timolol'), 'qam');
+  assert.equal(def('Timolol PF'), 'qam');
+  for (const g of ['Timolol', 'Timolol PF', 'Carteolol', 'Brimonidine/Timolol', 'Dorzolamide/Timolol']) assert.equal(P.onceADay(by[g], false, 1), 'qam', g);
+  // prostaglandins and netarsudil stay at bedtime
+  for (const g of ['Latanoprost', 'Travoprost', 'Bimatoprost 0.01%', 'Netarsudil', 'Netarsudil/Latanoprost', 'Latanoprostene Bunod']) assert.equal(def(g), 'qpm', g);
+  // other ranges still start at the lower end
+  assert.equal(def('Brimonidine 0.1%'), 2);
+  assert.equal(def('Acetazolamide 500 mg ER Capsule'), 'qam');
+});
+
+test('five-minute spacing is only between drops in the same eye', () => {
+  // Simbrinza both eyes, then latanoprost left and Rocklatan right: the two go in together
+  assert.deepEqual(P.staggerSteps([['R', 'L'], ['L'], ['R']]), [0, 1, 1]);
+  // one drop per eye at bedtime: no wait at all
+  assert.deepEqual(P.staggerSteps([['L'], ['R']]), [0, 0]);
+  // same eye still waits
+  assert.deepEqual(P.staggerSteps([['R'], ['R'], ['R']]), [0, 1, 2]);
+  // a later drop fills an earlier gap in the other eye
+  assert.deepEqual(P.staggerSteps([['R'], ['R'], ['L']]), [0, 1, 0]);
+});

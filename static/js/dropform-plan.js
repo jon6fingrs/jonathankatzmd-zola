@@ -256,7 +256,51 @@
     }).filter(function (p) { return p.segs.length; });
   }
 
+  /*
+   * Default "How often" for a drug from the reference table (d: an
+   * eye-drops.json entry; oral: it is a pill). The first "Nx/day" in its
+   * dosage ("4x/day", "Up to 4x/day" -> 4), or the lower end of a range
+   * ("2-3x/day" -> 2); anything else ("Variable", "As needed") -> once a day.
+   * So timolol ("1-2x/day") defaults to once a day, in the morning.
+   * Once a day is the evening for glaucoma drops (prostaglandins,
+   * netarsudil and their combinations are taken at bedtime) and the
+   * morning for everything else, including beta-blockers such as timolol,
+   * which lower pressure little overnight.
+   */
+  var BETA_BLOCKER = /timolol|carteolol|betaxolol|levobunolol|metipranolol/i;
+  function onceDaily(d, oral) {
+    if (oral || !/Glaucoma/.test((d && d.use) || '')) return 'qam';
+    return BETA_BLOCKER.test((d && d.generic) || '') ? 'qam' : 'qpm';
+  }
+  function onceADay(d, oral, times) { return times === 1 ? onceDaily(d, oral) : times; }
+  function defaultTimes(d, oral) {
+    var m = /(\d+)(?:\s*-\s*\d+)?x\/day/i.exec((d && d.dosage) || '');
+    return onceADay(d, oral, Math.min(8, Math.max(1, m ? +m[1] : 1)));
+  }
+
+  /*
+   * Five-minute spacing within one time slot. The wait is between drops in
+   * the same eye, so drops in different eyes can go in together. sides: for
+   * each drop in priority order, the eyes it goes in (['R'], ['L'],
+   * ['R','L']). Returns each drop's step (0, 1, 2 ...): the earliest step
+   * where no drop already placed shares an eye with it.
+   */
+  function staggerSteps(sides) {
+    var taken = [];   // taken[step] = { R: true, L: true }
+    return sides.map(function (eyes) {
+      for (var k = 0; ; k++) {
+        var at = taken[k] = taken[k] || {};
+        if (!eyes.some(function (e) { return at[e]; })) {
+          eyes.forEach(function (e) { at[e] = true; });
+          return k;
+        }
+      }
+    });
+  }
+
   return {
+    staggerSteps: staggerSteps,
+    onceDaily: onceDaily, onceADay: onceADay, defaultTimes: defaultTimes,
     parseFreq: parseFreq, dosesPerDay: dosesPerDay, dosesOnDoseDay: dosesOnDoseDay, freqLabel: freqLabel,
     fixedTimes: fixedTimes, fitDay: fitDay, DAY_DEFAULT: DAY_DEFAULT, AWAKE_MIN: AWAKE_MIN, AWAKE_MAX: AWAKE_MAX, makeDay: makeDay, parseDay: parseDay, dayParam: dayParam, isDefaultDay: isDefaultDay,
     everyDays: everyDays, firstDoseDay: firstDoseDay, lastDoseDay: lastDoseDay,

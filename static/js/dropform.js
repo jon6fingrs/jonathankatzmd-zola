@@ -24,7 +24,7 @@
   var brands = [];         // [{name, generic}]  (one entry per comma-separated brand)
   var esc = JK.esc;
 
-  var SPACING_MIN = 5;     // minutes between different drops in the same slot
+  var SPACING_MIN = 5;     // minutes between different drops in the same eye
   var day = Plan.DAY_DEFAULT;   // { wake, bed } in minutes; set on the schedule
 
   // ---------- data ----------
@@ -48,20 +48,11 @@
     brands.sort(function (a, b) { return a.name.localeCompare(b.name); });
   }
 
-  // Default "Times per day" from the table's typical dosage: the first
-  // "Nx/day" in it ("4x/day", "~4x/day, Variable", "Up to 4x/day" -> 4), or
-  // the lower end of a range ("2-3x/day" -> 2); anything else ("Variable",
-  // "As needed", none) -> once a day.
-  function defaultTimes(d) {
-    var m = /(\d+)(?:\s*-\s*\d+)?x\/day/i.exec((d && d.dosage) || '');
-    return onceADay(d, m ? Math.min(8, Math.max(1, +m[1])) : 1);
-  }
-  // Once-daily glaucoma drops (prostaglandins and their combinations) are
-  // conventionally taken at bedtime, so once a day defaults to the evening
-  // for them and the morning for everything else. Also reads links made
+  // Default "Times per day", and morning or evening for once a day: the
+  // rules are in dropform-plan.js (tested). onceADay also reads links made
   // before morning/evening existed, which say just 1.
-  function eveningDrop(d) { return !isOral(d) && /Glaucoma/.test((d && d.use) || ''); }
-  function onceADay(d, times) { return times === 1 ? (eveningDrop(d) ? 'qpm' : 'qam') : times; }
+  function defaultTimes(d) { return Plan.defaultTimes(d, isOral(d)); }
+  function onceADay(d, times) { return Plan.onceADay(d, isOral(d), times); }
 
   function fillSelect(sel, items, placeholder) {
     sel.innerHTML = '';
@@ -227,8 +218,9 @@
 
   // ---------- routine ----------
   // Assign each medication its dose times, then stagger the eye drops that
-  // share a slot by SPACING_MIN so the routine itself teaches the "wait five
-  // minutes" rule. Pills in a slot are listed first, at the slot time; they
+  // share a slot and an eye by SPACING_MIN so the routine itself teaches the
+  // "wait five minutes" rule; drops in different eyes go in together
+  // (Plan.staggerSteps). Pills in a slot are listed first, at the slot time; they
   // don't need spacing from drops. The same drop going into each eye at the
   // same time is one line ("Both Eyes"), not two drops five minutes apart.
   // segs: the plan's segments active in one period.
@@ -268,7 +260,16 @@
       var pills = items.filter(function (it) { return isOral(it.entry); }).sort(order);
       var drops = items.filter(function (it) { return !isOral(it.entry); }).sort(order);
       pills.forEach(function (it) { it.time = t; });
-      drops.forEach(function (it, i) { it.time = JK.shiftTime(t, i * SPACING_MIN); });
+      // five minutes apart only between drops in the same eye
+      var steps = Plan.staggerSteps(drops.map(function (it) {
+        var eyes = {};
+        it.segs.forEach(function (s) { eyes[s.side] = true; });
+        return Object.keys(eyes);
+      }));
+      drops.forEach(function (it, i) { it.step = steps[i]; it.time = JK.shiftTime(t, steps[i] * SPACING_MIN); });
+      drops = drops.map(function (it, i) { return { it: it, i: i }; })
+        .sort(function (a, b) { return a.it.step - b.it.step || a.i - b.i; })
+        .map(function (x) { return x.it; });
       return { time: t, drops: pills.concat(drops) };
     });
   }
@@ -377,10 +378,10 @@
     h += dayHTML();
 
     // 2. daily routine: when to use each drop, every day. Drops sharing a
-    // time slot are already staggered five minutes apart. A taper gets one
+    // time slot and an eye are already staggered five minutes apart. A taper gets one
     // routine per step, headed with its dates.
     var routines = periods.map(function (per) { return { period: per, slots: buildRoutine(per.segs, per.start) }; });
-    var note = 'Suggested times. Wait at least five minutes between different eye drops.' + (anyPill ? ' Pills can be taken with your drops; follow the pharmacy label about food.' : '');
+    var note = 'Suggested times. Wait at least five minutes between different drops in the same eye.' + (anyPill ? ' Pills can be taken with your drops; follow the pharmacy label about food.' : '');
     if (!routines.length) {
       h += '<div class="routine"><h2>Daily routine</h2><p class="routine-note">Every medication on this schedule has finished.</p></div>';
     }
