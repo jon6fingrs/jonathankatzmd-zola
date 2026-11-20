@@ -48,20 +48,11 @@
     brands.sort(function (a, b) { return a.name.localeCompare(b.name); });
   }
 
-  // Default "Times per day" from the table's typical dosage: the first
-  // "Nx/day" in it ("4x/day", "~4x/day, Variable", "Up to 4x/day" -> 4), or
-  // the lower end of a range ("2-3x/day" -> 2); anything else ("Variable",
-  // "As needed", none) -> once a day.
-  function defaultTimes(d) {
-    var m = /(\d+)(?:\s*-\s*\d+)?x\/day/i.exec((d && d.dosage) || '');
-    return onceADay(d, m ? Math.min(8, Math.max(1, +m[1])) : 1);
-  }
-  // Once-daily glaucoma drops (prostaglandins and their combinations) are
-  // conventionally taken at bedtime, so once a day defaults to the evening
-  // for them and the morning for everything else. Also reads links made
+  // Default "Times per day", and morning or evening for once a day: the
+  // rules are in dropform-plan.js (tested). onceADay also reads links made
   // before morning/evening existed, which say just 1.
-  function eveningDrop(d) { return !isOral(d) && /Glaucoma/.test((d && d.use) || ''); }
-  function onceADay(d, times) { return times === 1 ? (eveningDrop(d) ? 'qpm' : 'qam') : times; }
+  function defaultTimes(d) { return Plan.defaultTimes(d, isOral(d)); }
+  function onceADay(d, times) { return Plan.onceADay(d, isOral(d), times); }
 
   function fillSelect(sel, items, placeholder) {
     sel.innerHTML = '';

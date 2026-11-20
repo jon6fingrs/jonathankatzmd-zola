@@ -256,7 +256,32 @@
     }).filter(function (p) { return p.segs.length; });
   }
 
+  /*
+   * Default "How often" for a drug from the reference table (d: an
+   * eye-drops.json entry; oral: it is a pill). The first "Nx/day" in its
+   * dosage ("4x/day", "Up to 4x/day" -> 4), or the lower end of a range
+   * ("2-3x/day" -> 2); anything else ("Variable", "As needed") -> once a day.
+   * Timolol alone ("1-2x/day") defaults to twice a day.
+   * Once a day is the evening for glaucoma drops (prostaglandins,
+   * netarsudil and their combinations are taken at bedtime) and the
+   * morning for everything else, including beta-blockers such as timolol,
+   * which lower pressure little overnight.
+   */
+  var BETA_BLOCKER = /timolol|carteolol|betaxolol|levobunolol|metipranolol/i;
+  function onceDaily(d, oral) {
+    if (oral || !/Glaucoma/.test((d && d.use) || '')) return 'qam';
+    return BETA_BLOCKER.test((d && d.generic) || '') ? 'qam' : 'qpm';
+  }
+  function onceADay(d, oral, times) { return times === 1 ? onceDaily(d, oral) : times; }
+  function defaultTimes(d, oral) {
+    var m = /(\d+)(?:\s*-\s*(\d+))?x\/day/i.exec((d && d.dosage) || '');
+    var n = m ? +m[1] : 1;
+    if (m && m[2] && /^timolol( pf)?$/i.test((d && d.generic) || '')) n = +m[2];
+    return onceADay(d, oral, Math.min(8, Math.max(1, n)));
+  }
+
   return {
+    onceDaily: onceDaily, onceADay: onceADay, defaultTimes: defaultTimes,
     parseFreq: parseFreq, dosesPerDay: dosesPerDay, dosesOnDoseDay: dosesOnDoseDay, freqLabel: freqLabel,
     fixedTimes: fixedTimes, fitDay: fitDay, DAY_DEFAULT: DAY_DEFAULT, AWAKE_MIN: AWAKE_MIN, AWAKE_MAX: AWAKE_MAX, makeDay: makeDay, parseDay: parseDay, dayParam: dayParam, isDefaultDay: isDefaultDay,
     everyDays: everyDays, firstDoseDay: firstDoseDay, lastDoseDay: lastDoseDay,
