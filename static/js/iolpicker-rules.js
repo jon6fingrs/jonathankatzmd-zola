@@ -217,7 +217,9 @@
       say('edof', 'avoid', 'With moderate or advanced glaucoma, a lens that splits or stretches focus costs contrast the eye cannot spare.');
     } else if (has('glaucoma-mild')) {
       say('multifocal', 'avoid', 'Glaucoma already lowers contrast, and a multifocal lowers it further.');
-      say('edof', 'possible', 'Sometimes considered in mild, stable glaucoma, usually a design without rings.');
+      // mild, stable glaucoma leaves an extended depth lens where the wishes put
+      // it; the choice of design is a note
+      say('edof', 'good', 'Can be used in mild, stable glaucoma, usually a design without rings.');
     }
     if (macula) {
       say('multifocal', 'avoid', 'A multifocal needs a healthy macula to work well.');
@@ -330,6 +332,8 @@
     if (wouldLaser && noLaser.length) notes.push('Laser-assisted surgery would not be used, because ' + noLaser.join(', and ') + '. The lens is then placed with standard surgery, which works well.');
     if (has('fuchs') && laserOK) notes.push('With Fuchs dystrophy, laser-assisted surgery can lower the ultrasound energy needed, which is gentler on the cornea. Ask whether it suits you whatever the lens.');
     if (has('glaucoma-mild') || has('glaucoma-adv')) notes.push('With glaucoma, a monofocal lens also keeps future visual field tests easiest to read.');
+    var edof = lenses.filter(function (l) { return l.id === 'edof'; })[0];
+    if (has('glaucoma-mild') && !has('glaucoma-adv') && edof && edof.verdict !== 'avoid') notes.push('With mild, stable glaucoma, an extended depth lens is usually a design without rings, which costs the least contrast.');
     if (has('amblyopia')) notes.push('A lens implant cannot fix a lazy eye: vision in that eye after surgery is usually about what it was with glasses before the cataract.');
     if (a.eyes === 'one') notes.push('With surgery in one eye only, the lens is chosen to work with the other eye. If the other eye needs strong glasses, the new eye is often set to match it; otherwise a contact lens may be needed to balance the two, or it may be worth having surgery on both eyes.');
     if (a.eyes === 'only') notes.push('Surgery on an only seeing eye is planned with extra care. Ask your surgeon how they approach it.');
