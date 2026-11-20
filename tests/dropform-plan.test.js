@@ -321,13 +321,13 @@ test('a drop that stops with nothing else going on does not add an empty routine
   assert.equal(P.periods(p.segs, TODAY).length, 1);
 });
 
-test('timolol defaults to twice a day, and once a day in the morning', () => {
+test('timolol defaults to once a day in the morning; other glaucoma drops once a day at bedtime', () => {
   const data = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'static', 'data', 'eye-drops.json'), 'utf8'));
   const by = Object.fromEntries(data.map((x) => [x.generic, x]));
   const oral = (x) => x.color === 'Tablet' || x.color === 'Capsule';
   const def = (g) => P.defaultTimes(by[g], oral(by[g]));
-  assert.equal(def('Timolol'), 2);
-  assert.equal(def('Timolol PF'), 2);
+  assert.equal(def('Timolol'), 'qam');
+  assert.equal(def('Timolol PF'), 'qam');
   for (const g of ['Timolol', 'Timolol PF', 'Carteolol', 'Brimonidine/Timolol', 'Dorzolamide/Timolol']) assert.equal(P.onceADay(by[g], false, 1), 'qam', g);
   // prostaglandins and netarsudil stay at bedtime
   for (const g of ['Latanoprost', 'Travoprost', 'Bimatoprost 0.01%', 'Netarsudil', 'Netarsudil/Latanoprost', 'Latanoprostene Bunod']) assert.equal(def(g), 'qpm', g);

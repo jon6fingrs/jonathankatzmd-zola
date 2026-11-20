@@ -261,7 +261,7 @@
    * eye-drops.json entry; oral: it is a pill). The first "Nx/day" in its
    * dosage ("4x/day", "Up to 4x/day" -> 4), or the lower end of a range
    * ("2-3x/day" -> 2); anything else ("Variable", "As needed") -> once a day.
-   * Timolol alone ("1-2x/day") defaults to twice a day.
+   * So timolol ("1-2x/day") defaults to once a day, in the morning.
    * Once a day is the evening for glaucoma drops (prostaglandins,
    * netarsudil and their combinations are taken at bedtime) and the
    * morning for everything else, including beta-blockers such as timolol,
@@ -274,10 +274,8 @@
   }
   function onceADay(d, oral, times) { return times === 1 ? onceDaily(d, oral) : times; }
   function defaultTimes(d, oral) {
-    var m = /(\d+)(?:\s*-\s*(\d+))?x\/day/i.exec((d && d.dosage) || '');
-    var n = m ? +m[1] : 1;
-    if (m && m[2] && /^timolol( pf)?$/i.test((d && d.generic) || '')) n = +m[2];
-    return onceADay(d, oral, Math.min(8, Math.max(1, n)));
+    var m = /(\d+)(?:\s*-\s*\d+)?x\/day/i.exec((d && d.dosage) || '');
+    return onceADay(d, oral, Math.min(8, Math.max(1, m ? +m[1] : 1)));
   }
 
   return {

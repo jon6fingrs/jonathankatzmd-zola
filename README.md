@@ -400,7 +400,7 @@ changes on purpose, change the article and the test together.
   photos.
 - Dose-time defaults (`JK.doseTimes` in `schedule-common.js`; once-daily
   glaucoma drops at 21:00 except beta-blockers such as timolol, which are
-  in the morning, and timolol defaulting to twice a day, all in
+  in the morning (timolol defaults to once a day, in the morning), all in
   `defaultTimes`/`onceDaily` in `dropform-plan.js`, tested; every hour /
   every 2 hours run 8 AM to 10 PM) are conventions, not prescriptions;
   adjust there if the practice prefers different times.
