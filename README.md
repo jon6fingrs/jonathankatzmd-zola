@@ -419,7 +419,7 @@ changes on purpose, change the article and the test together.
   adjust there if the practice prefers different times.
 
 - Heights in `custom.css` are measured by hand to stop content jumping
-  while the page loads: `.jk-chips:not(.is-built)` (the medication
+  while the page loads: `.jk-dropfilters .jk-chips:not(.is-built)` (the medication
   reference's filter chips, which `droptable.js` adds) and
   `#jk-dropform-rows:empty` (the schedule builder's first row, which
   `dropform.js` adds). `.jk-vis` also reserves 1000px for the vision
