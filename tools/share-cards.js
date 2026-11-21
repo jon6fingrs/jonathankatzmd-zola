@@ -77,7 +77,18 @@ async function grab(page, slug) {
     await page.waitForTimeout(1500);
     return page.locator('#jk-sink .jk-sink__pic svg').first().screenshot();
   }
+  if (await page.locator('#jk-cat').count()) {
+    // a moderate nuclear cataract, from the front
+    await page.$eval('#jk-cat-sev', (e) => { e.value = 70; e.dispatchEvent(new Event('input', { bubbles: true })); });
+    await page.waitForTimeout(300);
+    return page.locator('#jk-cat .jk-cat__svg[data-for="front"] svg').screenshot();
+  }
   if (await page.locator('#jk-lpi, #jk-yag').count()) {
+    // the YAG demo starts clear: let the capsule cloud over before the laser
+    if (await page.locator('#jk-yag-cloud').count()) {
+      await page.click('#jk-yag-cloud');
+      await page.waitForTimeout(6000);
+    }
     const fire = page.locator('#jk-lpi-fire, #jk-yag-fire').first();
     await fire.click();
     await page.waitForTimeout(9000);

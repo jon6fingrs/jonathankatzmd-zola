@@ -1218,6 +1218,23 @@ input[type="date"]::-webkit-date-and-time-value { text-align: left; }
 .jk-yag__blur { inset: -4%; width: 108%; height: 108%; filter: blur(2.6px) contrast(.72) brightness(1.1) saturate(.85); }
 .jk-yag__veil { position: absolute; inset: 0; }
 .jk-yag__scenes { justify-content: center; margin-top: .5rem; }
+
+/* cataract demo (static/js/cataract.js): reuses the .jk-lpi layout and the
+   YAG photo stack; the eye panel switches between two drawings */
+.jk-cat__eye[data-eye="front"] .jk-cat__svg[data-for="cross"],
+.jk-cat__eye[data-eye="cross"] .jk-cat__svg[data-for="front"] { display: none; }
+.jk-cat__blur { inset: -4%; width: 108%; height: 108%; }
+.jk-cat__controls { display: grid; gap: .6rem; max-width: 46rem; margin: .9rem auto 0; }
+.jk-cat__row { display: grid; gap: .35rem; justify-items: center; }
+.jk-cat__lab { font-size: .9rem; font-weight: 600; color: var(--jk-muted); }
+.jk-cat__row .jk-chips { justify-content: center; }
+.jk-cat__slider { display: flex; align-items: center; gap: .75rem; width: 100%; max-width: 28rem; }
+.jk-cat__slider input { flex: 1 1 auto; min-width: 0; min-height: 44px; accent-color: var(--jk-accent); }
+.jk-cat__stage { flex: 0 0 7.5rem; font-weight: 600; }
+@media print {
+  .jk-cat__controls, .jk-cat__eye + .jk-chips, .jk-cat .jk-yag__scenes { display: none; }
+  .jk-cat__eye .jk-cat__svg[data-for] { display: block !important; }
+}
 @media (min-width: 768px) {
   /* the photo is wider than the eye drawing is tall: centre it in its column */
   .jk-lpi__view:has(.jk-yag__photo) { display: flex; flex-direction: column; justify-content: center; }

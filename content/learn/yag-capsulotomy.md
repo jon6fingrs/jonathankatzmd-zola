@@ -3,7 +3,7 @@ title = "YAG Capsulotomy"
 description = "YAG capsulotomy: a quick office laser that clears the cloudy capsule behind a lens implant after cataract surgery. The visit, recovery and risks."
 template = "page.html"
 date = 2026-11-10
-updated = 2026-11-11
+updated = 2026-11-21
 weight = 110
 
 [extra]
@@ -16,7 +16,7 @@ js = "js/yag.js"
 
 Months or years after [cataract surgery](@/learn/cataract-surgery.md), vision can turn hazy again. The cataract has not come back. The thin capsule that holds the lens implant has turned cloudy behind it, which is often called a "secondary cataract". A **YAG laser capsulotomy** makes a clear opening in the center of that capsule. It takes a few minutes in the office, has no cuts or stitches, and usually brings vision back to where it was after the cataract surgery.
 
-Press **Fire laser** to see what happens, in the eye and in what you see.
+Press **Show the clouding** to watch the capsule cloud over in the years after cataract surgery, then **Fire laser** to clear it. Both views follow along: the eye, and what you see.
 
 <div id="jk-yag" class="jk-lpi" data-base="../../images/vision/">
   <p class="jk-vis__noscript">The animation needs JavaScript. The picture and the explanation below cover the same thing.</p>
