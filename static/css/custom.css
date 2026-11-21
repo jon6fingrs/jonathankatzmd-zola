@@ -32,6 +32,29 @@
   descent-override: 40.8%;
   line-gap-override: 0%;
 }
+/* Same idea for Roboto (body text and titles). Widths are the median
+   Roboto/Arial ratio over the Learn page titles: 99% regular, 93.6% bold.
+   Unmatched, bold Arial is wide enough to wrap a title onto a second line
+   until Roboto arrives. Android has no Arial, so it skips these and uses
+   its own Roboto. */
+@font-face {
+  font-family: "Roboto Fallback";
+  font-weight: 400;
+  src: local("Arial"), local("ArialMT"), local("Helvetica"), local("Liberation Sans");
+  size-adjust: 99%;
+  ascent-override: 93.6%;
+  descent-override: 24.6%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Roboto Fallback";
+  font-weight: 700;
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Helvetica Bold"), local("Liberation Sans Bold");
+  size-adjust: 93.6%;
+  ascent-override: 99%;
+  descent-override: 26.1%;
+  line-gap-override: 0%;
+}
 @font-face {
   font-family: "Roboto";
   font-style: normal;
@@ -64,7 +87,7 @@
   --jk-head-a: #f2f4f7;   /* header gradient, left  */
   --jk-head-b: #7d8da6;   /* header gradient, right */
   --jk-display: "Oswald", "Oswald Fallback", sans-serif;
-  --jk-body: "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --jk-body: "Roboto", "Roboto Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 /* Bootstrap's default blue (#0d6efd) and grey (#6c757d) fall just short of
