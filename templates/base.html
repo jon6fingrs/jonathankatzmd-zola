@@ -22,7 +22,13 @@
   <title>{% block title %}{{ pg_title }}{% endblock title %}</title>
   <meta name="description" content="{{ pg_desc }}">
   <meta name="theme-color" content="#7d8da6">
-  <link rel="canonical" href="{{ current_url | default(value=config.base_url) }}">
+  {#- The 404 page has no current_url. It gets no canonical or og:url: pointing
+      them at the home page would tell search engines the error page is the
+      home page. #}
+  {%- set canonical_url = current_url | default(value="") %}
+  {%- if canonical_url %}
+  <link rel="canonical" href="{{ canonical_url }}">
+  {%- endif %}
 
   {#- Fonts are self-hosted (static/fonts/, @font-face in custom.css). Preload the
       two weights needed for first paint: the masthead and body text. #}
@@ -41,13 +47,16 @@
   <link rel="icon" type="image/png" sizes="32x32" href="{{ icon32.url }}">
   <link rel="icon" type="image/png" sizes="192x192" href="{{ icon192.url }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ icon180.url }}">
+  <link rel="manifest" href="{{ get_url(path='site.webmanifest') }}">
 
   {#- Open Graph / Twitter cards so shared links get a preview. #}
   <meta property="og:type" content="{% if og_card and page is defined %}article{% else %}website{% endif %}">
   <meta property="og:site_name" content="{{ config.title }}">
   <meta property="og:title" content="{{ pg_title }}">
   <meta property="og:description" content="{{ pg_desc }}">
-  <meta property="og:url" content="{{ current_url | default(value=config.base_url) }}">
+  {%- if canonical_url %}
+  <meta property="og:url" content="{{ canonical_url }}">
+  {%- endif %}
   <meta property="og:image" content="{{ get_url(path=og_image) }}">
   {%- if og_card %}
   <meta property="og:image:width" content="1200">

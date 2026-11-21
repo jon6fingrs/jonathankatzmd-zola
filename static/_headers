@@ -19,15 +19,22 @@ https://:version.:project.pages.dev/*
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
   Strict-Transport-Security: max-age=31536000
 
+# CSS, JS and vendor files are always linked with get_url(..., cachebust=true),
+# which adds ?h=<hash>: a changed file gets a new URL, so browsers can keep
+# each one for a year without checking. A new <script>/<link> to these
+# folders must use cachebust=true too, or visitors keep the old file.
+# processed_images/ names carry a hash already. Fonts have none, so they get
+# a year without "immutable"; a changed font needs a new file name.
+# (Functions such as /js/vx.js set their own headers; these rules skip them.)
 /css/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=31536000, immutable
 /js/*
-  Cache-Control: public, max-age=604800
-/fonts/*
-  Cache-Control: public, max-age=604800
-/images/*
-  Cache-Control: public, max-age=604800
-/processed_images/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=31536000, immutable
 /vendor/*
+  Cache-Control: public, max-age=31536000, immutable
+/processed_images/*
+  Cache-Control: public, max-age=31536000, immutable
+/fonts/*
+  Cache-Control: public, max-age=31536000
+/images/*
   Cache-Control: public, max-age=604800

@@ -50,6 +50,12 @@ https://thehelpfulidiot.com/moving-four-websites-off-my-home-server-to-cloudflar
   or it will be blocked on the live site (previews on GitHub Pages ignore
   `_headers`, so they will not show the problem).
 
+## Don't re-suggest
+
+README.md, "Settled design decisions", lists changes the owner has already
+turned down: an `<h1>` on pages whose header names them, and visible
+labels on the contact form. Leave them out of audits and reviews.
+
 ## Before calling a change done
 
 - CI is green on the PR.

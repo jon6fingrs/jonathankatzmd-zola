@@ -308,6 +308,19 @@ page follows and new work should too:
   `minmax(0, 1fr)` columns or long drug names will overflow.
 - **Print always uses the table layout** with `pt` units (see below).
 
+## Settled design decisions (don't suggest changing these)
+
+The owner has turned these down, some more than once. Leave them out of
+audits and reviews, even when a tool such as axe or Lighthouse flags them.
+
+- **No `<h1>` on pages whose header already names them** (About, Contact,
+  Tools, Learn, topic hubs, tool pages, Privacy, Search, Handouts). The
+  header shows the site title with the page name under it, so an `<h1>` would
+  put the title on the page twice. axe's `page-has-heading-one` warning on
+  these pages is expected. Learn articles and the 404 page keep their `<h1>`.
+- **The contact form uses placeholders, not visible labels.** That is how
+  it is meant to look.
+
 ## Architecture decisions worth knowing before changing anything
 
 **Tera 2 syntax.** Zola 0.23 ships Tera 2. `{% macro %}` files, the
@@ -404,6 +417,22 @@ changes on purpose, change the article and the test together.
   `defaultTimes`/`onceDaily` in `dropform-plan.js`, tested; every hour /
   every 2 hours run 8 AM to 10 PM) are conventions, not prescriptions;
   adjust there if the practice prefers different times.
+
+- Heights in `custom.css` are measured by hand to stop content jumping
+  while the page loads: `.jk-dropfilters .jk-chips:not(.is-built)` (the medication
+  reference's filter chips, which `droptable.js` adds) and
+  `#jk-dropform-rows:empty` (the schedule builder's first row, which
+  `dropform.js` adds). `.jk-vis` also reserves 1000px for the vision
+  simulator, which is always taller once built. If the drug categories or the row's fields change,
+  re-measure them at the widths in the comments; a stale value only brings
+  back a small jump.
+- `static/.well-known/security.txt` (how to report a security problem)
+  has an `Expires` date, 2027-11-20. Move it a year ahead before then;
+  an expired file is ignored by the people who read it.
+- `static/site.webmanifest` names the site and its icons for phones'
+  "Add to Home Screen". Its icons are static files
+  (`images/icon-192.png`, made from `logo.png`, and `logo.png` itself), so
+  a new logo means re-making `icon-192.png` too.
 
 ## Ideas parked for later
 

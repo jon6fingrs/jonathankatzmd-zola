@@ -1,0 +1,6 @@
+# How to report a security problem with this site (RFC 9116).
+# Renew Expires before it passes (see README, "Known rough edges").
+Contact: https://jonathankatzmd.com/contact/
+Expires: 2027-11-20T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://jonathankatzmd.com/.well-known/security.txt

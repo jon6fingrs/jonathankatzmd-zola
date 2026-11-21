@@ -118,6 +118,18 @@
       });
   });
 
+  // "Clear" asks first once anything has been typed, so a mis-tap next to
+  // Submit can't wipe a written message. Hooked to the button's click, not
+  // the form's reset event: form.reset() after a successful send must not ask.
+  var clearBtn = document.getElementById('jk-contact-clear');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function (e) {
+      var typed = ['name', 'email', 'message'].some(function (n) { return form.elements[n].value.trim(); }) ||
+        (phoneEl && phoneEl.value.trim());
+      if (typed && !window.confirm('Clear your message?')) e.preventDefault();
+    });
+  }
+
   fetchToken().catch(function () {});
   setInterval(function () { fetchToken().catch(function () {}); }, REFRESH_MS);
 })();
