@@ -1005,6 +1005,14 @@ input[type="date"]::-webkit-date-and-time-value { text-align: left; }
    draggable divider (see the comment block at the top of vision.js).
    =================================================================== */
 .jk-vis { margin: 1.5rem 0 2rem; position: relative; }
+/* vision.js builds the simulator (Vision Loss and Glasses Prescription)
+   after the page paints. Built, it is at least ~1300px tall at every width
+   on both pages, so reserving 1000px puts the text
+   below it off-screen from the start and nothing visible jumps. Without
+   JavaScript only the short <noscript> note shows, so no reservation. */
+.jk-vis { min-height: 1000px; }
+@media (scripting: none) { .jk-vis { min-height: 0; } }
+@media print { .jk-vis { min-height: 0; } }
 /* break out of the reading column so the picture is as wide as the window allows */
 .jk-page--article .jk-vis { width: min(100vw - 2rem, 960px); left: 50%; transform: translateX(-50%); }
 .jk-vis__defs { position: absolute; width: 0; height: 0; overflow: hidden; }
