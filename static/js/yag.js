@@ -6,11 +6,14 @@
  *   the view    an everyday photo as the patient sees it: hazy before,
  *               clear after (scene photos shared with the vision simulator)
  *
- * "Fire laser" plays one timeline: the aiming beam, then SHOTS pulses in a
- * cross pattern, each widening the opening in the capsule while the view
- * clears. Every frame is drawn by stage(t), a pure function of the time in
- * ms, so "before" is stage(0), "after" is stage(T_END), and reduced motion
- * jumps between the two.
+ * One timeline, in two parts. "Show the clouding" plays t = -T_CLOUD to 0:
+ * the capsule is clear just after cataract surgery and slowly turns hazy,
+ * pearls appearing on it while the view fogs. It stops there, on the cloudy
+ * capsule, so "Fire laser" can play t = 0 to T_END: the aiming beam, then
+ * SHOTS pulses in a cross pattern, each widening the opening in the capsule
+ * while the view clears. Every frame is drawn by stage(t), a pure function
+ * of the time in ms, so "clear" is stage(-T_CLOUD), "cloudy" is stage(0),
+ * "after" is stage(T_END), and reduced motion jumps between them.
  *
  * The hazy view is one pre-filtered copy of the photo that only changes
  * opacity. Animating the blur itself re-rasterizes every frame and flickers
@@ -42,6 +45,8 @@
   var C = [280, 215], R_PUPIL = 96, R_OPEN = 60;
   var SHOTS = [[0, -1], [0, 1], [-1, 0], [1, 0], [-0.7, -0.7], [0.7, 0.7], [0.7, -0.7], [-0.7, 0.7]];
   var T_FIRST = 900, T_GAP = 420, T_END = T_FIRST + SHOTS.length * T_GAP + 900;
+  var T_CLOUD = 5200; // the clouding, before the laser (t < 0)
+  var N_PEARLS = 46;
 
   function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
   function ramp(t, a, b) { return clamp((t - a) / (b - a), 0, 1); }
@@ -94,9 +99,9 @@
       // inside the pupil: the dark eye, the cloudy capsule, the opening, the implant's edge
       + '<circle cx="' + C[0] + '" cy="' + C[1] + '" r="' + R_PUPIL + '" fill="url(#yag-clear)"/>'
       + '<g clip-path="url(#yag-pupil)">'
-      + '<circle cx="' + C[0] + '" cy="' + C[1] + '" r="' + R_PUPIL + '" fill="url(#yag-haze)" opacity="0.93"/>'
-      + '<g fill="#f8fafc" stroke="#94a3b8" stroke-width="1" opacity="0.85">';
-    for (i = 0; i < 46; i++) { // pearls and wrinkles of the cloudy capsule
+      + '<circle id="yag-hazecirc" cx="' + C[0] + '" cy="' + C[1] + '" r="' + R_PUPIL + '" fill="url(#yag-haze)" opacity="0.93"/>'
+      + '<g id="yag-pearls" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" opacity="0.85">';
+    for (i = 0; i < N_PEARLS; i++) { // pearls and wrinkles of the cloudy capsule
       an = rnd() * Math.PI * 2;
       var rr = Math.sqrt(rnd()) * (R_PUPIL - 6);
       h += '<circle cx="' + (C[0] + rr * Math.cos(an)).toFixed(1) + '" cy="' + (C[1] + rr * Math.sin(an)).toFixed(1) + '" r="' + (2.5 + rnd() * 5).toFixed(1) + '"/>';
@@ -113,6 +118,7 @@
       // labels
       + txt(20, 400, 'Iris', 'start') + lead(62, 392, C[0] - 104, C[1] + 60)
       + txt(540, 400, 'Edge of the lens implant', 'end') + lead(420, 378, C[0] + 61, C[1] + 61)
+      + '<g id="yag-lab-clear">' + txt(20, 34, 'Clear capsule', 'start', BLUE) + txt(20, 60, 'behind the implant', 'start', BLUE, 400) + lead(196, 54, C[0] - 40, C[1] - 40, BLUE) + '</g>'
       + '<g id="yag-lab-before">' + txt(20, 34, 'Cloudy capsule', 'start', '#475569') + txt(20, 60, 'behind the implant', 'start', '#475569', 400) + lead(196, 54, C[0] - 40, C[1] - 40, '#475569') + '</g>'
       + '<g id="yag-lab-after">' + txt(20, 34, 'Clear opening', 'start', BLUE) + txt(20, 60, 'in the capsule', 'start', BLUE, 400) + lead(180, 54, C[0] - 22, C[1] - 22, BLUE) + '</g>'
       + '</svg>';
@@ -121,7 +127,9 @@
 
   // ---------- markup ----------
   var STEPS = {
-    before: '<strong>Before.</strong> The thin capsule that holds the lens implant has turned cloudy. Light scatters on its way through, so vision is hazy and lights glare.',
+    clear: '<strong>After cataract surgery.</strong> The lens implant sits inside the thin, clear capsule that held the natural lens. Light passes straight through it, and vision is sharp.',
+    clouding: '<strong>Months or years later.</strong> A few lens cells left on the capsule slowly spread across the back of it, turning it hazy and wrinkled. The change is gradual, so the haze and glare creep up.',
+    before: '<strong>Cloudy capsule.</strong> The thin capsule that holds the lens implant has turned cloudy. Light scatters on its way through, so vision is hazy and lights glare.',
     laser: '<strong>The laser.</strong> A few quick pulses, each a tiny spark, open the center of the capsule. Nothing touches the eye, and the implant stays where it is.',
     after: '<strong>After.</strong> Light passes straight through the opening. The capsule does not grow back there, so the laser rarely needs repeating.'
   };
@@ -141,6 +149,7 @@
   h += '</div></figure>'
     + '</div>'
     + '<div class="jk-lpi__controls">'
+    + '<button type="button" class="btn btn-primary" id="jk-yag-cloud">&#9654; Show the clouding</button>'
     + '<button type="button" class="btn btn-primary jk-lpi__fire" id="jk-yag-fire">&#9889; Fire laser</button>'
     + '<button type="button" class="btn btn-outline-secondary" id="jk-yag-reset" disabled>Start over</button>'
     + '<button type="button" class="btn btn-outline-secondary jk-lpi__full" id="jk-yag-full" hidden>Full screen</button>'
@@ -150,8 +159,8 @@
 
   function $(id) { return document.getElementById(id); }
   var el = {
-    views: root.querySelector('.jk-lpi__views'), fire: $('jk-yag-fire'), reset: $('jk-yag-reset'), full: $('jk-yag-full'), step: $('jk-yag-step'),
-    open: $('yag-open'), aim: $('yag-aim'), flash: $('yag-flash'), labBefore: $('yag-lab-before'), labAfter: $('yag-lab-after'), bits: $('yag-bits'),
+    views: root.querySelector('.jk-lpi__views'), cloud: $('jk-yag-cloud'), fire: $('jk-yag-fire'), reset: $('jk-yag-reset'), full: $('jk-yag-full'), step: $('jk-yag-step'),
+    open: $('yag-open'), aim: $('yag-aim'), flash: $('yag-flash'), labClear: $('yag-lab-clear'), labBefore: $('yag-lab-before'), haze: $('yag-hazecirc'), labAfter: $('yag-lab-after'), bits: $('yag-bits'),
     photo: root.querySelector('.jk-yag__photo'), clear: $('jk-yag-clear'), blur: $('jk-yag-blur'), hazy: $('jk-yag-hazy'), veil: $('jk-yag-veil'), tag: $('jk-yag-tag')
   };
 
@@ -159,6 +168,7 @@
   var BITS = (function () { var r = lcg(9), a = []; for (var i = 0; i < SHOTS.length * 2; i++) a.push([r() - 0.5, 0.5 + r(), 2 + r() * 2.5]); return a; })();
   el.bits.innerHTML = BITS.map(function (b) { return '<circle r="' + b[2].toFixed(1) + '" fill="#e2e8f0" stroke="#94a3b8" stroke-width="0.8"/>'; }).join('');
   var bitEls = el.bits.querySelectorAll('circle');
+  var pearlEls = $('yag-pearls').querySelectorAll('circle');
 
   function loadScene() {
     var src = BASE + scene.file;
@@ -182,6 +192,14 @@
   var stepShown = '';
   function shotPos(i) { return [C[0] + SHOTS[i][0] * 30, C[1] + SHOTS[i][1] * 30]; }
   function stage(t) {
+    // how cloudy (t < 0 is the clouding): the haze thickens while pearls
+    // appear one by one over the last three quarters of it
+    var cloud = t >= 0 ? 1 : ramp(t, -T_CLOUD, 0);
+    el.haze.style.opacity = (0.93 * ease(cloud)).toFixed(3);
+    for (var j = 0; j < pearlEls.length; j++) {
+      var at = 0.25 + 0.7 * j / pearlEls.length;
+      pearlEls[j].style.opacity = ease(ramp(cloud, at, at + 0.08)).toFixed(3);
+    }
     // how open: each shot adds a share, eased over 350ms
     var open = 0, pulse = 0, cur = -1, i;
     for (i = 0; i < SHOTS.length; i++) {
@@ -208,37 +226,50 @@
       bitEls[i].style.opacity = (0.9 * (1 - q)).toFixed(2);
     }
 
-    el.labBefore.style.opacity = (1 - ease(ramp(t, T_FIRST, T_FIRST + 500))).toFixed(3);
+    el.labClear.style.opacity = (1 - ease(ramp(cloud, 0.15, 0.5))).toFixed(3);
+    el.labBefore.style.opacity = (ease(ramp(cloud, 0.55, 0.9)) * (1 - ease(ramp(t, T_FIRST, T_FIRST + 500)))).toFixed(3);
     el.labAfter.style.opacity = ease(ramp(t, T_END - 800, T_END)).toFixed(3);
 
-    // the view clears as the opening grows
-    el.hazy.style.opacity = (1 - ease(open)).toFixed(3);
-    var tag = open < 0.02 ? 'Cloudy capsule' : open > 0.98 ? 'After the laser' : 'Clearing';
+    // the view fogs as the capsule clouds, and clears as the opening grows
+    el.hazy.style.opacity = (ease(cloud) * (1 - ease(open))).toFixed(3);
+    var tag = t < 0 ? (cloud < 0.02 ? 'After cataract surgery' : 'Clouding over')
+      : open < 0.02 ? 'Cloudy capsule' : open > 0.98 ? 'After the laser' : 'Clearing';
     if (el.tag.textContent !== tag) el.tag.textContent = tag;
 
-    var step = t <= 0 ? 'before' : t < T_END - 700 ? 'laser' : 'after';
+    var step = t <= -T_CLOUD ? 'clear' : t < 0 ? 'clouding' : t === 0 ? 'before' : t < T_END - 700 ? 'laser' : 'after';
     if (step !== stepShown) { stepShown = step; el.step.innerHTML = STEPS[step]; }
   }
 
   // ---------- controls ----------
+  // states: 'clear' (start), 'before' (cloudy, ready for the laser),
+  // 'after', and 'playing' while either part runs
   var raf = 0, playing = false;
-  function setButtons(state) { el.fire.disabled = state !== 'before'; el.reset.disabled = state === 'before'; }
-  function fire() {
+  function setButtons(state) {
+    el.cloud.disabled = state !== 'clear';
+    el.fire.disabled = state !== 'before';
+    el.reset.disabled = state === 'clear' || state === 'playing';
+  }
+  // plays stage() from `from` to `to` ms, then settles in state `done`
+  function run(from, to, done) {
     if (playing) return;
-    if (REDUCED) { stage(T_END); setButtons('after'); return; }
+    if (REDUCED) { stage(to); setButtons(done); return; }
     playing = true; setButtons('playing');
     var t0 = 0;
     function tick(now) {
       if (!t0) t0 = now;
-      var t = now - t0;
-      stage(Math.max(1, Math.min(T_END, t)));
-      if (t >= T_END) { playing = false; setButtons('after'); return; }
+      var t = from + now - t0;
+      // t === 0 only as the resting cloudy frame, never mid-play
+      stage(t >= to ? to : t === 0 ? 1 : t);
+      if (t >= to) { playing = false; setButtons(done); return; }
       raf = requestAnimationFrame(tick);
     }
     raf = requestAnimationFrame(tick);
   }
-  function reset() { cancelAnimationFrame(raf); playing = false; stage(0); setButtons('before'); }
+  function cloudOver() { run(-T_CLOUD, 0, 'before'); }
+  function fire() { run(0, T_END, 'after'); }
+  function reset() { cancelAnimationFrame(raf); playing = false; stage(-T_CLOUD); setButtons('clear'); }
 
+  el.cloud.addEventListener('click', cloudOver);
   el.fire.addEventListener('click', fire);
   el.reset.addEventListener('click', reset);
   root.addEventListener('click', function (e) {
@@ -270,7 +301,7 @@
   }
 
   loadScene();
-  stage(0);
-  setButtons('before');
+  stage(-T_CLOUD);
+  setButtons('clear');
   root.classList.add('is-ready');
 })();

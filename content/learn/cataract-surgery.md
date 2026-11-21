@@ -3,7 +3,7 @@ title = "Cataract Surgery"
 description = "What a cataract is, when surgery makes sense, lens implant choices, the day of surgery and the four-week recovery, and what changes if you have glaucoma."
 template = "page.html"
 date = 2026-10-02
-updated = 2026-11-18
+updated = 2026-11-21
 weight = 100
 
 [extra]
@@ -16,7 +16,7 @@ scripts = ["js/procedure-cataract.js", "js/procedure.js"]
 
 A **cataract** is clouding of the eye's natural lens, which sits behind the pupil and focuses light onto the retina. Almost everyone develops some cataract with age; it becomes a problem when it blurs vision, dulls colors, causes glare from headlights or sunlight, or changes your glasses prescription frequently. Cataract surgery replaces the cloudy lens with a clear artificial one and is among the most common and successful operations performed.
 
-The [vision loss simulator](@/learn/vision-loss.md) shows what a cataract does to an everyday scene, including the glare from lights at night.
+[What Is a Cataract?](@/learn/what-is-a-cataract.md) shows how a cataract develops and what it does to vision, and the [vision loss simulator](@/learn/vision-loss.md) shows it in other everyday scenes, including the glare from lights at night.
 
 {{<figure src="images/learn/cataract-lens.svg" alt="Two cross-sections: on the left a cloudy natural lens behind the iris, on the right a thin clear lens implant held inside the same lens capsule." caption="Cataract surgery removes the cloudy lens and places a clear implant in the same capsule, behind the iris. Simplified, not to scale." />}}
 
