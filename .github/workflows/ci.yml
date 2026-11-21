@@ -55,11 +55,14 @@ jobs:
             process.exit(bad ? 1 : 0);
           '
 
+      # include-hidden-files: upload-artifact skips dot-folders by default,
+      # which would drop public/.well-known/ (security.txt) from the deploy.
       - name: Upload built site
         uses: actions/upload-artifact@v4
         with:
           name: public
           path: public/
+          include-hidden-files: true
           retention-days: 7
 
   deploy:
