@@ -20,6 +20,18 @@
   font-display: swap;
   src: url("../fonts/oswald-latin-400-normal.woff2") format("woff2");
 }
+/* Stand-in for Oswald while it loads. Arial scaled to Oswald's width (its
+   capitals are ~71% as wide) with Oswald's ascent and descent, so swapping
+   to Oswald doesn't move the header or headings. Overrides are divided by
+   size-adjust because the browser applies it to them too. */
+@font-face {
+  font-family: "Oswald Fallback";
+  src: local("Arial"), local("ArialMT"), local("Helvetica"), local("Liberation Sans"), local("Roboto");
+  size-adjust: 71%;
+  ascent-override: 167.6%;
+  descent-override: 40.8%;
+  line-gap-override: 0%;
+}
 @font-face {
   font-family: "Roboto";
   font-style: normal;
@@ -51,8 +63,46 @@
   --jk-bg: #f4f6f8;
   --jk-head-a: #f2f4f7;   /* header gradient, left  */
   --jk-head-b: #7d8da6;   /* header gradient, right */
-  --jk-display: "Oswald", "Arial Narrow", sans-serif;
+  --jk-display: "Oswald", "Oswald Fallback", sans-serif;
   --jk-body: "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* Bootstrap's default blue (#0d6efd) and grey (#6c757d) fall just short of
+   4.5:1 contrast on the page background (--jk-bg). Links and buttons use the
+   site accent (4.79:1 on --jk-bg, white on it 5.19:1) and the muted grey. */
+:root {
+  --bs-link-color: #2a6ebb;
+  --bs-link-color-rgb: 42, 110, 187;
+  --bs-link-hover-color: #1f538e;
+  --bs-link-hover-color-rgb: 31, 83, 142;
+}
+.btn-primary {
+  --bs-btn-bg: #2a6ebb; --bs-btn-border-color: #2a6ebb;
+  --bs-btn-hover-bg: #235d9f; --bs-btn-hover-border-color: #235d9f;
+  --bs-btn-active-bg: #1f538e; --bs-btn-active-border-color: #1f538e;
+  --bs-btn-disabled-bg: #2a6ebb; --bs-btn-disabled-border-color: #2a6ebb;
+  --bs-btn-focus-shadow-rgb: 42, 110, 187;
+}
+.btn-outline-primary {
+  --bs-btn-color: #2a6ebb; --bs-btn-border-color: #2a6ebb;
+  --bs-btn-hover-bg: #2a6ebb; --bs-btn-hover-border-color: #2a6ebb;
+  --bs-btn-active-bg: #235d9f; --bs-btn-active-border-color: #235d9f;
+  --bs-btn-disabled-color: #2a6ebb; --bs-btn-disabled-border-color: #2a6ebb;
+  --bs-btn-focus-shadow-rgb: 42, 110, 187;
+}
+.btn-secondary {
+  --bs-btn-bg: #5b6573; --bs-btn-border-color: #5b6573;
+  --bs-btn-hover-bg: #4b5461; --bs-btn-hover-border-color: #4b5461;
+  --bs-btn-active-bg: #414955; --bs-btn-active-border-color: #414955;
+  --bs-btn-disabled-bg: #5b6573; --bs-btn-disabled-border-color: #5b6573;
+  --bs-btn-focus-shadow-rgb: 91, 101, 115;
+}
+.btn-outline-secondary {
+  --bs-btn-color: #5b6573; --bs-btn-border-color: #5b6573;
+  --bs-btn-hover-bg: #5b6573; --bs-btn-hover-border-color: #5b6573;
+  --bs-btn-active-bg: #4b5461; --bs-btn-active-border-color: #4b5461;
+  --bs-btn-disabled-color: #5b6573; --bs-btn-disabled-border-color: #5b6573;
+  --bs-btn-focus-shadow-rgb: 91, 101, 115;
 }
 
 html { scroll-behavior: smooth; }
@@ -179,6 +229,7 @@ body { color: var(--jk-ink); font-family: var(--jk-body); }
 /* hamburger — three bars; the theme animates them into an X when open */
 .jk-toggler { border: 0; background: transparent; padding: .4rem .1rem !important; }
 .jk-toggler:focus { box-shadow: none; outline: 0; }
+.jk-toggler:focus-visible { outline: 3px solid var(--jk-accent); outline-offset: 3px; border-radius: 4px; }
 .jk-toggler .navbar-toggler-icon {
   display: block;
   width: 30px; height: 3px;
@@ -421,6 +472,16 @@ body { color: var(--jk-ink); font-family: var(--jk-body); }
 }
 .jk-search input:focus { outline: 2px solid var(--jk-accent); outline-offset: 1px; border-color: var(--jk-accent); }
 .jk-chips { display: flex; flex-wrap: wrap; gap: .45rem; }
+/* droptable.js adds a chip per drug category after the page paints; reserve
+   about the room they take so the list below doesn't jump. Heights are the
+   filled row, measured at the widths where it wraps onto one fewer line.
+   If categories are added and it grows, nothing breaks; the list just
+   moves a little again until these are re-measured. */
+.jk-chips:not(.is-built) { min-height: 220px; }
+@media (min-width: 344px) { .jk-chips:not(.is-built) { min-height: 182px; } }
+@media (min-width: 408px) { .jk-chips:not(.is-built) { min-height: 144px; } }
+@media (min-width: 528px) { .jk-chips:not(.is-built) { min-height: 106px; } }
+@media (min-width: 730px) { .jk-chips:not(.is-built) { min-height: 68px; } }
 .jk-chip {
   border: 1px solid var(--jk-line); background: #fff; color: var(--jk-ink);
   border-radius: 999px; padding: .4rem .85rem; font-size: .9rem; line-height: 1.1;
@@ -496,8 +557,8 @@ body { color: var(--jk-ink); font-family: var(--jk-body); }
   white-space: nowrap;
 }
 .jk-sort::after { content: "\2195"; opacity: .35; margin-left: .3em; font-size: .85em; }
-.jk-sort[aria-sort="ascending"]::after { content: "\2191"; opacity: .9; }
-.jk-sort[aria-sort="descending"]::after { content: "\2193"; opacity: .9; }
+th[aria-sort="ascending"] .jk-sort::after { content: "\2191"; opacity: .9; }
+th[aria-sort="descending"] .jk-sort::after { content: "\2193"; opacity: .9; }
 .jk-td-generic { font-weight: 600; }
 .jk-datatable .jk-td-generic, .jk-datatable .jk-td-color { font-size: 1.02rem; }
 .jk-datatable .jk-td-color { white-space: nowrap; }
@@ -545,6 +606,12 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
 /* eye drop schedule builder: one fieldset per drop; fields stack on
    phones and flow into a row from 768px up */
 .jk-dropform { max-width: 1100px; }
+/* dropform.js adds the first row after the page paints; reserve its height
+   so the buttons and footer don't jump down (one row's measured height plus
+   its bottom margin). Re-measure if the row's fields change. */
+#jk-dropform-rows:empty { min-height: calc(549px + .9rem); }
+@media (min-width: 768px) { #jk-dropform-rows:empty { min-height: calc(162px + .9rem); } }
+@media (min-width: 1200px) { #jk-dropform-rows:empty { min-height: calc(141px + .9rem); } }
 .jk-droprow {
   display: grid; grid-template-columns: 1fr; gap: .7rem .8rem;
   border: 1px solid var(--jk-line); border-radius: 10px; background: #fff;
@@ -569,6 +636,11 @@ img.jk-drop:focus-visible { outline: 2px solid var(--jk-accent); }
   color: #b42318; padding: .45rem .8rem; font-size: .9rem;
 }
 .jk-rowbtn:hover { border-color: #b42318; }
+/* From 1200px the form uses 1100px, wider than the 900px text column, so
+   its seven fields fit their contents ("1 (morning)", a full stop date). */
+@media (min-width: 1200px) {
+  .jk-page__body > .jk-dropform { width: 1100px; max-width: none; margin-left: -100px; margin-right: -100px; }
+}
 @media (min-width: 768px) {
   .jk-droprow { grid-template-columns: 2fr 1.4fr 1fr .95fr 1fr 1.1fr auto; align-items: end; }
   .jk-droprow__legend { grid-column: 1 / -1; }

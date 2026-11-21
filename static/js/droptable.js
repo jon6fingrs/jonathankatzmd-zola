@@ -31,6 +31,8 @@
     b.textContent = u === 'Non-steroidal Anti-inflammatory' ? 'NSAID' : u;
     chipRow.insertBefore(b, pfChip);
   });
+  // Drops the height reserved for these chips in custom.css.
+  chipRow.classList.add('is-built');
   var chips = Array.prototype.slice.call(chipRow.querySelectorAll('.jk-chip'));
   var countEl = document.getElementById('jk-drops-count');
   var emptyEl = document.getElementById('jk-drops-empty');
@@ -135,9 +137,11 @@
     btn.addEventListener('click', function () {
       var col = +btn.getAttribute('data-sort');
       if (col === sortCol) sortDir = -sortDir; else { sortCol = col; sortDir = 1; }
+      // aria-sort belongs on the column header, not the button inside it.
       sortBtns.forEach(function (b) {
-        if (b === btn) b.setAttribute('aria-sort', sortDir === 1 ? 'ascending' : 'descending');
-        else b.removeAttribute('aria-sort');
+        var th = b.closest('th');
+        if (b === btn) th.setAttribute('aria-sort', sortDir === 1 ? 'ascending' : 'descending');
+        else th.removeAttribute('aria-sort');
       });
       sortRows();
     });

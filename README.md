@@ -418,6 +418,21 @@ changes on purpose, change the article and the test together.
   every 2 hours run 8 AM to 10 PM) are conventions, not prescriptions;
   adjust there if the practice prefers different times.
 
+- Two heights in `custom.css` are measured by hand to stop content jumping
+  while the page loads: `.jk-chips:not(.is-built)` (the medication
+  reference's filter chips, which `droptable.js` adds) and
+  `#jk-dropform-rows:empty` (the schedule builder's first row, which
+  `dropform.js` adds). If the drug categories or the row's fields change,
+  re-measure them at the widths in the comments; a stale value only brings
+  back a small jump.
+- `static/.well-known/security.txt` (how to report a security problem)
+  has an `Expires` date, 2027-11-20. Move it a year ahead before then;
+  an expired file is ignored by the people who read it.
+- `static/site.webmanifest` names the site and its icons for phones'
+  "Add to Home Screen". Its icons are static files
+  (`images/icon-192.png`, made from `logo.png`, and `logo.png` itself), so
+  a new logo means re-making `icon-192.png` too.
+
 ## Ideas parked for later
 
 The owner has seen these and chose to wait. Ask before starting any of them.

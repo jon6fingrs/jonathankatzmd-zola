@@ -16,7 +16,7 @@ scripts = ["vendor/qrcode.js", "js/schedule-common.js", "js/vision.js"]
 Different eye conditions damage vision in different patterns, and the pattern tells your doctor where the problem is. Trouble at the front of the eye (the cornea or the lens) blurs the whole picture. Trouble at the center of the retina takes the middle of the view. Glaucoma takes the edges. A stroke can remove one whole side. The simulator below applies each of these to an everyday scene so you can see the difference, and so family members can understand what someone they care for is experiencing.
 
 <div id="jk-vision" class="jk-vis" data-base="../../images/vision/">
-  <p class="jk-vis__noscript">The simulator needs JavaScript. Each condition is also described in words below.</p>
+  <noscript><p class="jk-vis__noscript">The simulator needs JavaScript. Each condition is also described in words below.</p></noscript>
 </div>
 
 For conditions that get worse over time (glaucoma, cataract, macular degeneration, diabetic retinopathy and retinal detachment), press **Play** to watch the change from early to advanced. It is sped up: in real life it takes months or years, or hours to days for a detachment.
