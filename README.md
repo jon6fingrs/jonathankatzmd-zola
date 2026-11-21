@@ -308,6 +308,19 @@ page follows and new work should too:
   `minmax(0, 1fr)` columns or long drug names will overflow.
 - **Print always uses the table layout** with `pt` units (see below).
 
+## Settled design decisions (don't suggest changing these)
+
+The owner has turned these down, some more than once. Leave them out of
+audits and reviews, even when a tool such as axe or Lighthouse flags them.
+
+- **No `<h1>` on pages whose header already names them** (About, Contact,
+  Tools, Learn, topic hubs, tool pages, Privacy, Search, Handouts). The
+  header shows the site title with the page name under it, so an `<h1>` would
+  put the title on the page twice. axe's `page-has-heading-one` warning on
+  these pages is expected. Learn articles and the 404 page keep their `<h1>`.
+- **The contact form uses placeholders, not visible labels.** That is how
+  it is meant to look.
+
 ## Architecture decisions worth knowing before changing anything
 
 **Tera 2 syntax.** Zola 0.23 ships Tera 2. `{% macro %}` files, the
