@@ -1,21 +1,21 @@
 +++
 title = "Choosing a Lens Implant"
-description = "Monofocal, toric, extended depth, multifocal and light adjustable lens implants: what each does without glasses, and a picker for your eyes."
+description = "Monofocal, toric, extended depth, multifocal and light adjustable lens implants: what each does without glasses, and what decides which one fits."
 template = "page.html"
 date = 2026-11-11
-updated = 2026-11-19
+updated = 2026-11-22
 weight = 103
 
 [extra]
 article = true
 topic = "cataract"
 group = ""
-scripts = ["js/iol.js", "js/iolpicker-rules.js", "js/iolpicker.js"]
+scripts = ["js/iol.js"]
 +++
 
 In [cataract surgery](@/learn/cataract-surgery.md) the cloudy natural lens is replaced by a clear artificial one, an **intraocular lens** or implant. The implant stays in the eye for life. Its type and its power are chosen before surgery, and together they decide what you will see clearly without glasses afterward: far, arm's length, near, or some of each.
 
-Further down, [Which lens might fit you](#which-lens-might-fit-you) sorts the options by what you want and the health of your eye. Choose a lens below to see three everyday distances through it. Turn on **At night** to see halos around lights, and **This eye has astigmatism** to see what a toric lens corrects.
+Choose a lens below to see three everyday distances through it. Turn on **At night** to see halos around lights, and **This eye has astigmatism** to see what a toric lens corrects.
 
 <div id="jk-iol" class="jk-iol" data-base="../../images/vision/">
   <p class="jk-vis__noscript">The comparison needs JavaScript. Each kind of lens is described in words below.</p>
@@ -87,21 +87,7 @@ If the eye having surgery is your only seeing eye, monovision is not possible, a
 
 ## Which lens might fit you
 
-Answer a few questions about what you want after surgery and about your eyes, and check any eye conditions you have. Every kind of lens is sorted into good fits, possible with trade-offs, and usually not advised, with the reasons.
-
-<div id="jk-iolp" class="jk-tears jk-iolp">
-  <p class="jk-vis__noscript">The picker needs JavaScript. The sections above cover the same choices.</p>
-</div>
-
-<div class="jk-iolp__head" hidden>
-  <div class="jk-printhead">
-    <div class="jk-printhead__name">Jonathan Katz, MD</div>
-    <div class="jk-printhead__sub">Ophthalmologist &middot; Glaucoma Specialist</div>
-    <div class="jk-printhead__sub">Katzen Eye Group &middot; 410-821-9490 &middot; jonathankatzmd.com</div>
-  </div>
-</div>
-
-<p class="jk-note">This is a starting point for a talk with your surgeon, not a decision. It cannot know your measurements or everything about your eyes, and many conditions not listed also affect the choice. Each lens name links to its section above.</p>
+The right lens depends on two things: what you want to do without glasses afterward, and the health of your eyes. At your visit, your surgeon or a member of the team may go through a short questionnaire with you that covers both, including the eye conditions above, and sorts the lenses into good fits, those possible with trade-offs, and those usually not advised. It is a starting point for the choice you make together, not a decision on its own, because it cannot know your measurements.
 
 ## How the power is chosen
 
