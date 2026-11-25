@@ -92,6 +92,24 @@
   ]
  },
  {
+  "generic": "Betaxolol 0.25%",
+  "brand": "Betoptic S",
+  "color": "Blue",
+  "use": "Glaucoma",
+  "dosage": "2x/day",
+  "notes": "Suspension, shake well",
+  "photos": []
+ },
+ {
+  "generic": "Betaxolol 0.5%",
+  "brand": "Betoptic",
+  "color": "Yellow",
+  "use": "Glaucoma",
+  "dosage": "2x/day",
+  "notes": "Generic",
+  "photos": []
+ },
+ {
   "generic": "Bimatoprost 0.01%",
   "brand": "Lumigan",
   "color": "Teal/Green",
