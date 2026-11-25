@@ -92,6 +92,17 @@
   ]
  },
  {
+  "generic": "Betaxolol",
+  "brand": "Betoptic",
+  "color": "Blue",
+  "use": "Glaucoma",
+  "dosage": "2x/day",
+  "notes": "Generic, Cap color may vary by maker",
+  "photos": [
+   "betaxolol.jpg"
+  ]
+ },
+ {
   "generic": "Bimatoprost 0.01%",
   "brand": "Lumigan",
   "color": "Teal/Green",

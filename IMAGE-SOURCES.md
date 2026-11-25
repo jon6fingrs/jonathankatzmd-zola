@@ -43,6 +43,7 @@ with tube and bottle, trimmed of white margin),
 tobramycin.jpg (Sandoz tobramycin 0.3% carton and bottle, trimmed of white margin),
 ketotifen.jpg (Alcon Zaditor carton and bottle, trimmed of white margin),
 olopatadine.jpg (Alcon Pataday Extra Strength carton and bottle; the mirror reflection below it removed and the transparent background made white),
+betaxolol.jpg (Falcon/Alcon betaxolol 0.5% carton and bottle, NDC 61314-245-02),
 vuity.webp, methazolamide-50.jpg (Sandoz 50 mg tablet, "GG 181", which matches
 the Sandoz methazolamide label on DailyMed).
 The remaining photos date from the WordPress site (see fetch-assets.sh).
